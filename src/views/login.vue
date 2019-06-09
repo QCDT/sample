@@ -45,7 +45,11 @@
             <img src="@/assets/img/saomiao.gif" />
           </div>
         </div>
+<<<<<<< HEAD
         <button class="loginBtn" @click="loginIng">登录</button>
+=======
+        <button class="loginBtn">登录</button>
+>>>>>>> f4a5008891a2e01d0cca32dcd08658d2b81e4aee
       </div>
     </div>
     <div class="footer">
@@ -72,9 +76,12 @@ export default {
   methods: {
     loginTab () {
       this.LoginTab = !this.LoginTab
+<<<<<<< HEAD
     },
     loginIng () {
       this.$router.push('/Home')
+=======
+>>>>>>> f4a5008891a2e01d0cca32dcd08658d2b81e4aee
     }
   }
 }
