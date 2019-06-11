@@ -1,6 +1,6 @@
 <template>
   <div>
-        <h6>test</h6>
+        <h6>分析</h6>
   </div>
 </template>
 <script>

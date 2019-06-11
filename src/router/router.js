@@ -1,24 +1,25 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import login from '@/views/login.vue'
-import Home from '@/views/Home.vue'
-
+// import Home from '@/views/Home.vue'
+import  {navBar} from '@/router/nav'
 Vue.use(Router)
 
 export default new Router({
-  mode: 'history',
-  base: process.env.BASE_URL,
-  routes: [
+    mode: 'history',
+    base: process.env.BASE_URL,
+    routes: [
+        ...navBar,
     {
       path: '/',
       name: 'login',
       component: login
     },
-    {
-      path: '/Home',
-      name: 'home',
-      component: Home
-    }
+    // {
+    //   path: '/Home',
+    //   name: 'home',
+    //   component: Home
+    // }
     // {
     //   path: '/about',
     //   name: 'about',

@@ -48,11 +48,6 @@
         <button class="loginBtn" @click="loginIng">登录</button>
       </div>
     </div>
-    <div class="footer">
-      <span>技术支持: 惠通启恒医疗科技(北京)有限公司 </span>
-      <span>联系电话 010-68683182</span>
-      <span>E-mail：service@huitonghealthcare.com</span>
-    </div>
   </div>
 </template>
 <script>
