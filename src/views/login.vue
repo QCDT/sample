@@ -179,8 +179,8 @@ export default {
   }
 
   .center {
-    flex: 1;
-    background-color: #999;
+    // flex: 1;
+    // background-color: #999;
     display: flex;
     align-items: center;
   }
