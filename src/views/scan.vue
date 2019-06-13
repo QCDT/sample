@@ -305,7 +305,7 @@ export default {
   overflow: hidden;
 
   border-radius: 0 0.625rem 0.625rem 0;
-  transition: all 0.75s ease-in-out;
+  transition: all 0.9s ease-in-out;
   ul {
     display: flex;
 
