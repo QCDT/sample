@@ -10,12 +10,10 @@
                 <div class="navbar">
                     <div class="navbar-top">
                         <h1>智能样本管理系统</h1>
-
                         <h2>
                             <p>轻松管理您的样本</p>
                             <span>Get your sample easily</span>
                         </h2>
-
                         <h3>解放军总医院</h3>
                     </div>
                     <div class="nav">
@@ -78,26 +76,22 @@ export default {
             show: false,
             showIndex: -1,
             homeLink: [
-                { link: "home", text: "首页" },
-                { link: "scan", text: "扫描" },
-                { link: "query", text: "查询" },
-                { link: "check", text: "盘点" },
-                { link: "set", text: "设置" },
-                { link: "analyze", text: "数据分析" }
+                { link: "/home", text: "首页" },
+                { link: "/scan", text: "扫描" },
+                { link: "/query", text: "查询" },
+                { link: "/check", text: "盘点" },
+                { link: "/set", text: "设置" },
+                { link: "/analyze", text: "数据分析" }
             ]
         };
     },
-
     methods: {
-        test() {
+      test () {
             console.log("1: ", 1);
-        },
-        testclick() {
+      },
+      testclick() {
             console.log("111: ", 111);
-        }
+      }
     }
-};
+}
 </script>
-<style scoped lang='less'>
-
-</style>

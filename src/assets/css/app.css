@@ -1,4 +1,6 @@
-
+@import './header.css';
 @import './login.css';
 @import './Home.css';
-@import './header.css'
+@import './set.css';
+@import './cardReader.css';
+

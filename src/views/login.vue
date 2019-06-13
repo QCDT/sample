@@ -28,7 +28,7 @@
             </span>
             <span class="toggleText" @click="loginTab()">
               <img src="@/assets/img/codeImg.png" v-show="LoginTab" />
-              <img src="@/assets/img/computer.png" v-show="!LoginTab" />
+              <img src="@/assets/img/computerlogin.png" v-show="!LoginTab" />
             </span>
           </div>
         </div>
@@ -48,6 +48,8 @@
         <button class="loginBtn" @click="loginIng">登录</button>
       </div>
     </div>
+    <footer>
+    </footer>
   </div>
 </template>
 <script>

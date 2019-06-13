@@ -5,13 +5,9 @@
 </template>
 <script>
 export default {
-props:{},
-components:{},
-data() {  return {};},
- methods: {},
-computed: {},
+  components: {},
+  data () { return {} },
+  methods: {},
+  computed: {}
 }
 </script>
-<style scoped lang='scss'>
-
-</style>
