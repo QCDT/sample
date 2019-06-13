@@ -1,6 +1,6 @@
 <template>
   <div>
-        <h6>盘点</h6>
+        <h6>患者caixue</h6>
   </div>
 </template>
 <script>

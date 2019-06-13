@@ -1,4 +1,6 @@
 
 @import './login.css';
 @import './Home.css';
-@import './header.css'
+@import './header.css';
+
+@import './reset.css'
