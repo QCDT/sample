@@ -1,43 +1,43 @@
 <template>
   <div>
-      <ul class="setList">
-        <li
-          @click="setCut(index)"
-          v-for="(item,index) in setList"
-          :key="index"
-          :class="{current: active==index}"
-          >
-          <div class="setItem">
-            <router-link :to="item.link">
-              <img :src= item.imgUrl>
-            </router-link>
-            <p>{{item.setTitle}}</p>
-            <p>{{item.setTitleE}}</p>
-          </div>
-        </li>
-      </ul>
-      <ul class="secondMenu" v-show='active === 0'>
-        <li  v-for="(item,index) in setListItemA" :key="index">
-          <div class="setItem">
-              <router-link :to="item.link">
-                <img :src= item.imgUrl>
-              </router-link>
-              <p>{{item.setTitle}}</p>
-              <p>{{item.setTitleE}}</p>
-          </div>
-        </li>
-      </ul>
-      <ul class="secondMenu" v-show='active === 1'>
-        <li  v-for="(item,index) in setListItemB" :key="index">
-          <div class="setItem">
-            <router-link :to="item.link">
-              <img :src= item.imgUrl>
-            </router-link>
-            <p>{{item.setTitle}}</p>
-            <p>{{item.setTitleE}}</p>
-          </div>
-        </li>
-      </ul>
+    <ul class="setList">
+      <li
+        @click="setCut(index)"
+        v-for="(item,index) in setList"
+        :key="index"
+        :class="{current: active==index}"
+      >
+        <div class="setItem">
+          <router-link :to="item.link">
+            <img :src="item.imgUrl">
+          </router-link>
+          <p>{{item.setTitle}}</p>
+          <p>{{item.setTitleE}}</p>
+        </div>
+      </li>
+    </ul>
+    <ul class="secondMenu" v-show="active === 0">
+      <li v-for="(item,index) in setListItemA" :key="index">
+        <div class="setItem">
+          <router-link :to="item.link">
+            <img :src="item.imgUrl">
+          </router-link>
+          <p>{{item.setTitle}}</p>
+          <p>{{item.setTitleE}}</p>
+        </div>
+      </li>
+    </ul>
+    <ul class="secondMenu" v-show="active === 1">
+      <li v-for="(item,index) in setListItemB" :key="index">
+        <div class="setItem">
+          <router-link :to="item.link">
+            <img :src="item.imgUrl">
+          </router-link>
+          <p>{{item.setTitle}}</p>
+          <p>{{item.setTitleE}}</p>
+        </div>
+      </li>
+    </ul>
   </div>
 </template>
 <script>
@@ -46,7 +46,7 @@ export default {
   components: {},
   data () {
     return {
-      active: -1,  
+      active: -1,
       setList: [
         {
           imgUrl: require('@/assets/img/computer.png'),

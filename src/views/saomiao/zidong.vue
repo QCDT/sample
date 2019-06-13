@@ -1,14 +1,18 @@
 <template>
   <div>
-        <h6>盘点</h6>
+    <h6>自动</h6>
   </div>
 </template>
 <script>
 export default {
   props: {},
   components: {},
-  data () { return {} },
+  data () {
+    return {}
+  },
   methods: {},
   computed: {}
 }
 </script>
+<style scoped lang='scss'>
+</style>

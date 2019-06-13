@@ -1,6 +1,6 @@
 <template>
   <div>
-        <h6>盘点</h6>
+        <h6>离心机</h6>
   </div>
 </template>
 <script>
@@ -12,3 +12,6 @@ export default {
   computed: {}
 }
 </script>
+<style scoped lang='scss'>
+
+</style>
