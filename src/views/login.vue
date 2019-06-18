@@ -89,6 +89,7 @@ export default {
     loginTab () {
       this.LoginTab = !this.LoginTab
     },
+<<<<<<< HEAD
     imgLoad() {
 				this.$nextTick(function() {
           this.bannerHeight = this.$refs.image.height
@@ -110,6 +111,187 @@ export default {
               alert('用户名或密码错误')
             }else {
                this.$router.push('/Home');
+=======
+    loginIng () {
+      this.$router.push('/Home')
+    }
+  }
+}
+</script>
+<style lang='less'>
+.loginWrap {
+  background: url("~@/assets/img/background.jpg") no-repeat;
+  background-size: cover;
+
+  // 顶部
+  .loginHeader {
+    padding: 0 30px;
+
+    img {
+      width: 190px;
+      height: 71px;
+
+      vertical-align: middle;
+    }
+
+    span {
+      display: inline-block;
+
+      margin-left: 30px;
+      padding-left: 20px;
+
+      vertical-align: middle;
+
+      border-left: 1px solid #aaa;
+
+      font-size: 20px;
+      line-height: 40px;
+
+      em {
+        display: block;
+
+        font-size: 16px;
+        font-style: normal;
+        line-height: 20px;
+      }
+    }
+  }
+
+  .bannerWrap {
+    position: relative;
+
+    h1 {
+      font-size: 35px;
+    }
+    img {
+      width: 1920px;
+      height: 500px;
+    }
+  }
+
+  .footer {
+    display: flex;
+    justify-content: space-around;
+    width: 1200px;
+    margin: 0 auto;
+    align-items: center;
+    font-size: 16px;
+
+    .footer-sing {
+      display: flex;
+      align-items: flex-end;
+    }
+    h1{
+        font-size: 16px;
+         color: #505050;
+    }
+    span{
+        text-indent: .5em;
+         color: #505050;
+
+    }
+  }
+}
+
+// 布局
+.loginWrap {
+  display: flex;
+  flex-direction: column;
+
+  width: 100vw;
+  height: 100vh;
+
+  .top {
+    height: 100px;
+    line-height: 100px;
+  }
+
+  .center {
+      overflow: hidden;
+    // flex: 1;
+    // background-color: #999;
+   
+    display: flex;
+    align-items: center;
+  }
+
+  .bottom {
+    height: 70px;
+  }
+  /**
+ * @description: 登录窗口相对于轮播图定位
+ * @param {type}
+ * @return:
+ */
+  .carousel {
+    position: relative;
+    width: inherit;
+    overflow: hidden;
+    .loginContent {
+      position: absolute;
+      z-index: 2;
+      top: 22%;
+      right: 3%;
+
+      width: 350px;
+      padding: 0 20px 15px 20px;
+
+      background: white;
+
+      .loginTitle {
+        height: 62px;
+
+        .titleLeft {
+          float: left;
+
+          margin-top: 20px;
+
+          font-size: 18px;
+        }
+
+        .titleRight {
+          float: right;
+
+          margin-top: 7px;
+
+          span {
+            position: relative;
+
+            display: inline-block;
+
+            img {
+              vertical-align: middle;
+            }
+
+            em {
+              position: absolute;
+              top: 5px;
+              left: 21px;
+
+              color: #00a0e9;
+
+              font-size: 12px;
+              font-style: normal;
+            }
+          }
+
+          .togglePic {
+            top: 8px;
+
+            width: 121px;
+            height: 28px;
+
+            background: url("~@/assets/img/tishi.png");
+            background-size: 121px 28px;
+          }
+
+          .toggleText {
+            cursor: pointer;
+
+            img {
+              width: 47px;
+              height: 47px;
+>>>>>>> zhanglan
             }
       }).catch((error)=>{
                 console.log(error);

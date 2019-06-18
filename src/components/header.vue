@@ -10,7 +10,6 @@
         <div class="navbar">
           <div class="navbar-top">
             <h1>智能样本管理系统</h1>
-
             <h2>
               <p>轻松管理您的样本</p>
               <span>Get your sample easily</span>
@@ -36,6 +35,7 @@
       <!-- 右边:退出 -->
       <div class="right">
         <small>Sampleguide 3.0</small>
+        <router-link :to="{name:'test'}" tag="div">test</router-link>
         <div class="iconWrap">
           <div class="item" @mouseenter="showIndex=1" @mouseleave="showIndex=-1">
             <img src="@/assets/img/header_user1.png" alt>
@@ -68,50 +68,51 @@
 </template>
 <script>
 export default {
-  data () {
+  data() {
     return {
       active: 0,
       show: false,
       showIndex: -1,
       homeLink: [
-        { link: '/home', text: '首页' },
-        { link: '/scan', text: '扫描' },
-        { link: '/query', text: '查询' },
-        { link: '/check', text: '盘点' },
-        { link: '/set', text: '设置' },
-        { link: '/analyze', text: '数据分析' }
+        { link: "/home", text: "首页" },
+        { link: "/scan", text: "扫描" },
+        { link: "/query", text: "查询" },
+        { link: "/check", text: "盘点" },
+        { link: "/set", text: "设置" },
+        { link: "/analyze", text: "数据分析" }
       ]
-    }
+    };
   },
 
   methods: {
-    test () {
-      console.log('1: ', 1)
+    test() {
+      console.log("1: ", 1);
     },
-    testclick () {
-      console.log('111: ', 111)
+    testclick() {
+      console.log("111: ", 111);
     },
-    setActive () {
+    setActive() {
       let routName = {
-        '/home': 0,
-        '/scan': 1,
-        '/query': 2,
-        '/check': 3,
-        '/set': 4,
-        '/analyze': 5
-      }
-      this.active = routName[this.$route.path]
+        home: 0,
+        Home: 0,
+        scan: 1,
+        query: 2,
+        check: 3,
+        set: 4,
+        analyze: 5
+      };
+      this.$router.path;
+      console.log("this.$route.path: ", this.$route.path.split("/")[1]);
+      this.active = routName[this.$route.path.split("/")[1]];
+      //   let reg = /^\/.+/;
+      //   console.log("this.$route.path.match(reg): ", this.$route.path.match(reg));
+      //   this.active = routName[this.$route.path.match(reg)[0]];
     }
   },
-  created () {
-    /**
-     * @description: 刷新之后,首页,扫描,查询等路游焦点对不上的话就修改这里
-     * @param {type}
-     * @return:
-     */
-    this.setActive()
+  created() {
+    this.setActive(); // 设置焦点
   }
-}
+};
 </script>
 <style scoped lang='less'>
 #zl {
@@ -131,10 +132,11 @@ export default {
     width: 1105px;
 
     .logo {
-      margin-right: 5px;
-
       display: flex;
       align-items: center;
+
+      margin-right: 5px;
+
       cursor: pointer;
 
       > img {
@@ -156,20 +158,26 @@ export default {
       margin-bottom: 5px;
 
       cursor: default;
+
       h1 {
+        white-space: nowrap;
         //   只能样本管理系统
+
         color: #878a95;
-        white-space: nowrap;
       }
+
       h2 {
-        // background-color: #333;
-        white-space: nowrap;
         display: flex;
         align-items: flex-start;
+        // background-color: #333;
+
+        white-space: nowrap;
+
         font-weight: 500;
 
         span {
           color: #878a95;
+
           font-size: 1em;
         }
       }
@@ -309,6 +317,7 @@ export default {
 
       > p {
         position: absolute;
+        z-index: 99;
         top: 30px;
 
         display: none;
@@ -348,6 +357,7 @@ export default {
 
   .logout {
     z-index: 99; //不能正常出发移入移出时,把这个数字调大一些试试
+
     transform: translateX(5px);
   }
 }
