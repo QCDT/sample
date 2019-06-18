@@ -1,6 +1,6 @@
 <template>
   <div>
-    <ul class="setList">
+    <ul class="setList"> <!-- 设置页 一级导航 -->
       <li
         @click="setCut(index)"
         v-for="(item,index) in setList"
@@ -16,7 +16,7 @@
         </div>
       </li>
     </ul>
-    <ul class="secondMenu" v-show="active === 0">
+    <ul class="secondMenu" v-show="active === 0"> <!-- 设置页 硬件设置的二级导航 -->
       <li v-for="(item,index) in setListItemA" :key="index">
         <div class="setItem">
           <router-link :to="item.link">
@@ -27,7 +27,7 @@
         </div>
       </li>
     </ul>
-    <ul class="secondMenu" v-show="active === 1">
+    <ul class="secondMenu" v-show="active === 1"> <!-- 设置页 贮藏设备设置的二级导航 -->
       <li v-for="(item,index) in setListItemB" :key="index">
         <div class="setItem">
           <router-link :to="item.link">
@@ -47,7 +47,7 @@ export default {
   data () {
     return {
       active: -1,
-      setList: [
+      setList: [ //设置一级导航的数据
         {
           imgUrl: require('@/assets/img/computer.png'),
           setTitle: '硬件设置',
@@ -79,7 +79,7 @@ export default {
           link: 'set/UserConfiguration'
         }
       ],
-      setListItemA: [
+      setListItemA: [// 硬件设置的数据
         {
           imgUrl: require('@/assets/img/card_setting.png'),
           setTitle: '读卡器设置',
@@ -99,7 +99,7 @@ export default {
           link: 'set/Centrifuge'
         }
       ],
-      setListItemB: [
+      setListItemB: [ // 贮藏设置的数据
         {
           imgUrl: require('@/assets/img/card_setting.png'),
           setTitle: '冰箱设置',
@@ -110,13 +110,9 @@ export default {
     }
   },
   methods: {
-    setCut (index) {
+    setCut (index) { // 设置二级路由的显示与隐藏
       this.active = index
-      if (index === 0) {
-        this.setListItemShowA = true
-      } else if (index === 1) {
-        this.setListItemShowB = true
-      }
+      console.log(this.active)
     }
   },
   computed: {}

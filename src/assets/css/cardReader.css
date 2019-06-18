@@ -1,32 +1,48 @@
 .cardWrap {
   width: 100%;
 }
+.cardWrap .btns {
+  width: 100%;
+  text-align: center;
+  margin-top: 25px;
+}
+.cardWrap .btns .btn {
+  width: 120px;
+}
 .cardWrap .parameterWrap {
-  width: 700px;
+  width: 950px;
   height: 80px;
   border: 1px solid #999999;
   position: relative;
   margin: 0 auto;
+  margin-top: 35px;
+  display: flex;
+  justify-content: space-around;
 }
 .cardWrap .parameterWrap .parameter {
-  font-size: 16px;
-  margin-top: 3%;
+  font-size: 14px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+.cardWrap .parameterWrap .parameter .parameterItem {
   display: flex;
   justify-content: space-around;
   align-items: center;
 }
 .cardWrap .parameterWrap .parameter .type {
-  margin: 0 15px;
-  font-size: 18px;
+  font-size: 14px;
+  width: 70px;
+  margin-left: 15px;
 }
 .cardWrap .parameterWrap .parameter .btn {
   margin-left: 15px;
 }
 .cardWrap .parameterWrap strong {
   position: absolute;
-  font-size: 20px;
+  font-size: 16px;
   top: -15px;
-  left: 45%;
+  left: 42%;
   background: white;
   display: inline-block;
   line-height: 20px;

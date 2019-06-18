@@ -24,9 +24,51 @@ export default new Router({
       component: login
     },
     {
+      path: '/set/DataSetting',
+      components: {
+        default: DataSetting,
+        navbar: Header
+      }
+    },
+    {
+      path: '/set/ProjectSetting',
+      components: {
+        default: ProjectSetting,
+        navbar: Header
+      }
+    },
+    {
+      path: '/set/UserConfiguration',
+      components: {
+        default: UserConfiguration,
+        navbar: Header
+      }
+    },
+    {
       path: '/set/cardReader',
       components: {
         default: cardReader,
+        navbar: Header
+      }
+    },
+    {
+      path: '/set/Printer',
+      components: {
+        default: Printer,
+        navbar: Header
+      }
+    },
+    {
+      path: '/set/Centrifuge',
+      components: {
+        default: Centrifuge,
+        navbar: Header
+      }
+    },
+    {
+      path: '/set/refrigerator',
+      components: {
+        default: refrigerator,
         navbar: Header
       }
     },
@@ -39,25 +81,11 @@ export default new Router({
       }
     },
     {
-      path: '/set/Printer',
-      components: {
-        default: Printer,
-        navbar: Header
-      }
-    },
-    {
       path: '/scan/fenzu',
       name: 'fenzu',
       components: {
         default: () => import('@/views/saomiao/fenzu.vue'),
         navbar: Header
-      }
-    },
-    {
-      path: '/set/DataSetting',
-      components: {
-        default: DataSetting,
-        navBar: Header
       }
     },
     {
@@ -69,38 +97,10 @@ export default new Router({
       }
     },
     {
-      path: '/set/ProjectSetting',
-      components: {
-        default: ProjectSetting,
-        navbar: Header
-      }
-    },
-    {
       path: '/scan/zidong',
       name: 'zidong',
       components: {
         default: () => import('@/views/saomiao/zidong.vue'),
-        navbar: Header
-      }
-    },
-    {
-      path: '/set/refrigerator',
-      components: {
-        default: refrigerator,
-        navbar: Header
-      }
-    },
-    {
-      path: '/set/Centrifuge',
-      components: {
-        default: Centrifuge,
-        navbar: Header
-      }
-    },
-    {
-      path: '/set/UserConfiguration',
-      components: {
-        default: UserConfiguration,
         navbar: Header
       }
     },
