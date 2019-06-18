@@ -1,14 +1,13 @@
 import Home from '@/views/Home.vue'
 import Header from '@/components/header.vue'
 import check from '@/views/check.vue'
-import query from '@/views/query.vue'
-import scan from '@/views/scan.vue'
+import query from '@/views/Query/index.vue'
+import scan from '@/views/Scan/index.vue'
 import set from '@/views/set.vue'
 import analyze from '@/views/analyze.vue'
-
 export const navBar = [
   {
-    path: '/Home',
+    path: '/home',
     components: {
       default: Home,
       navbar: Header
@@ -34,6 +33,7 @@ export const navBar = [
       default: scan,
       navbar: Header
     }
+
   },
   {
     path: '/set',

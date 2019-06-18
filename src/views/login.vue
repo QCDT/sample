@@ -179,8 +179,10 @@ export default {
   }
 
   .center {
+      overflow: hidden;
     // flex: 1;
     // background-color: #999;
+   
     display: flex;
     align-items: center;
   }

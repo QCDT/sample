@@ -54,15 +54,16 @@
       </div>
     </div>
     <div class="fenzu-bot">
-      返回按钮
+      <goBack></goBack>
       <!-- 复用返回按钮 -->
     </div>
   </div>
 </template>
 <script>
-/* eslint-disable */ 
+import goBack from "@/components/tmp/zhanglan/go-1.vue";
+
 export default {
- 
+  components: { goBack },
   data() {
     return {
       // El UI
@@ -75,7 +76,7 @@ export default {
       //   value4: "",
       checked: true,
       tableData: [
-        { 
+        {
           coding: "123", // 序号编码
           name: "Mark", // 样本名称
           address: "海尔冰箱3-1-101海尔冰箱", // 位置信息
@@ -221,5 +222,4 @@ export default {
     }
   }
 }
-
 </style>
