@@ -1,0 +1,31 @@
+.DataSettingWrap {
+  width: 100%;
+  margin-top: 20px;
+  font-size: 16px;
+}
+.DataSettingWrap .DataSettingContent {
+  margin: 0 auto;
+  width: 95%;
+}
+.DataSettingWrap .DataSettingContent .DataSettingTitle {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
+.DataSettingWrap .DataSettingContent .DataSettingTitle .DataInfo {
+  border-left: 2px solid #00c9ff;
+  padding-left: 5px;
+  font-size: 16px;
+}
+.DataSettingWrap .DataSettingContent .addBox .addContent {
+  margin-top: 10px;
+}
+.DataSettingWrap .DataSettingContent .addBox .addContent span {
+  margin-right: 10px;
+  display: inline-block;
+  width: 80px;
+  text-align: right;
+}
+.DataSettingWrap .DataSettingContent .addBox .addContent .addInput {
+  width: 15vw;
+}

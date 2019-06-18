@@ -1,5 +1,4 @@
 <template>
-<<<<<<< HEAD
  <div>
      <div class="userWrap">
         <div class="userTitle">
@@ -224,21 +223,3 @@ export default {
     }
 }
 </script>
-=======
-  <div>
-        <h6>??????????</h6>
-  </div>
-</template>
-<script>
-export default {
-props:{},
-components:{},
-data() {  return {};},
- methods: {},
-computed: {},
-}
-</script>
-<style scoped lang='less'>
-
-</style>
->>>>>>> zhanglan

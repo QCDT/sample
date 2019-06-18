@@ -110,11 +110,6 @@ export default {
     };
   },
   methods: {
-<<<<<<< HEAD
-    setCut (index) { // 设置二级路由的显示与隐藏
-      this.active = index
-      console.log(this.active)
-=======
     setCut(index) {
       this.active = index;
       if (index === 0) {
@@ -122,7 +117,6 @@ export default {
       } else if (index === 1) {
         this.setListItemShowB = true;
       }
->>>>>>> zhanglan
     }
   },
   computed: {}

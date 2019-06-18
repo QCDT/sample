@@ -5,9 +5,9 @@ import login from '@/views/login.vue'
 import Header from '@/components/header.vue'
 import DataSetting from '@/views/set/DataSetting'
 import ProjectSetting from '@/views/set/ProjectSetting/index.vue'
-import UserConfiguration from '@/views/set/UserConfiguration'
+import UserConfiguration from '@/views/set/UserConfiguration.vue'
 import cardReader from '@/views/set/cardReader'
-import Printer from '@/views/set/Printer'
+import Printer from '@/views/set/Printer.vue'
 import Centrifuge from '@/views/set/Centrifuge'
 import refrigerator from '@/views/set/refrigerator'
 
@@ -34,11 +34,7 @@ export default new Router({
     {
       path: '/set/ProjectSetting',
       components: {
-<<<<<<< HEAD
         default: ProjectSetting,
-=======
-        default: () => import('@/views/Scan/saomiao/caixue.vue'),
->>>>>>> zhanglan
         navbar: Header
       }
     },
@@ -52,10 +48,7 @@ export default new Router({
     {
       path: '/set/cardReader',
       components: {
-<<<<<<< HEAD
-        default: cardReader,
-=======
-        default: () => import('@/views/Scan/saomiao/fenzu.vue'),
+        default: () => import('@/views/set/cardReader.vue'),
         navbar: Header
       }
     },
@@ -64,7 +57,6 @@ export default new Router({
       name: 'detection',
       components: {
         default: () => import('@/views/Scan/saomiao/Detection/index.vue'),
->>>>>>> zhanglan
         navbar: Header
       }
     },
@@ -78,11 +70,7 @@ export default new Router({
     {
       path: '/set/Centrifuge',
       components: {
-<<<<<<< HEAD
-        default: Centrifuge,
-=======
-        default: () => import('@/views/Scan/saomiao/zhuanyun.vue'),
->>>>>>> zhanglan
+        default: () => import('@/views/set/Centrifuge.vue'),
         navbar: Header
       }
     },
@@ -97,11 +85,7 @@ export default new Router({
       path: '/scan/caixue',
       name: 'caixue',
       components: {
-<<<<<<< HEAD
-        default: () => import('@/views/saomiao/caixue.vue'),
-=======
-        default: () => import('@/views/Scan/saomiao/zidong.vue'),
->>>>>>> zhanglan
+        default: () => import('@/views/Scan/saomiao/caixue'),
         navbar: Header
       }
     },
@@ -109,7 +93,7 @@ export default new Router({
       path: '/scan/fenzu',
       name: 'fenzu',
       components: {
-        default: () => import('@/views/saomiao/fenzu.vue'),
+        default: () => import('@/views/Scan/saomiao/fenzu.vue'),
         navbar: Header
       }
     },
@@ -117,7 +101,7 @@ export default new Router({
       path: '/scan/zhuanyun',
       name: 'zhuanyun',
       components: {
-        default: () => import('@/views/saomiao/zhuanyun.vue'),
+        default: () => import('@/views/Scan/saomiao/zhuanyun.vue'),
         navbar: Header
       }
     },
@@ -125,7 +109,7 @@ export default new Router({
       path: '/scan/zidong',
       name: 'zidong',
       components: {
-        default: () => import('@/views/saomiao/zidong.vue'),
+        default: () => import('@/views/Scan/saomiao/zidong.vue'),
         navbar: Header
       }
     },
