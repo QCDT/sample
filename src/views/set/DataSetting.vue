@@ -1,7 +1,7 @@
 <template>
-  <div class="DataSettingWrap">
-      <div class="DataSettingContent">
-        <div class="DataSettingTitle"> <!-- 数据设置的header -->
+  <div class="SettingWrap">
+      <div class="SettingContent">
+        <div class="SettingTitle"> <!-- 数据设置的header -->
             <span class="DataInfo">备份表单信息</span>
             <div>
                 <el-button type="primary" size="mini" @click="addbackups">添加</el-button>

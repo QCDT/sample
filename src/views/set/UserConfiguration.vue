@@ -61,19 +61,19 @@
         <el-dialog
             :title='addUserType? "添加角色": "修改角色"'
             :visible.sync="RoleDialogVisible"
-            width="30%"
+            width="40%"
             center>
             <div>
-                <div>
+                <div class="roleDialogVisible">
                     <span>角色名</span>
-                    <el-input  placeholder="请输入内容" size="mini" class="addInput" clearable></el-input>
+                    <i><el-input  placeholder="请输入内容" size="mini" class="addInput" clearable></el-input></i>
                 </div>
                 <div>
-                    <div>
+                    <div class="jurisdiction">
                         <span>权限操作</span>
                     </div>
                     <div>
-                        <el-checkbox v-model="item.checked" v-for="(item,index) in authority"  :key="index">{{item.title}}</el-checkbox>
+                        <el-checkbox v-model="item.checked" v-for="(item,index) in authority"  :key="index" class="jurisdictionType">{{item.title}}</el-checkbox>
                     </div>
                 </div>
             </div>
@@ -85,35 +85,35 @@
         <el-dialog
             :title="addUserType? '添加用户': '修改用户'"
             :visible.sync="UserDialogVisible"
-            width="30%"
+            width="35%"
             center>
-            <div>
+            <div class="dialogContentWrap">
                 <div class="dialogContent">
                     <span>用户名</span>
-                    <el-input v-model="userName" placeholder="请输入内容" size="mini" class="addInput" clearable></el-input>
+                    <i><el-input v-model="userName" placeholder="请输入内容" size="mini" class="addInput" clearable></el-input></i>
                 </div>
                 <div class="dialogContent">
                     <span>密码</span>
-                    <el-input v-model="userPassword" placeholder="请输入密码" size="mini" class="addInput" clearable  show-password></el-input>
+                    <i><el-input v-model="userPassword" placeholder="请输入密码" size="mini" class="addInput" clearable  show-password></el-input></i>
                 </div>
                 <div class="dialogContent">
                     <span>确认密码</span>
-                    <el-input v-model="repeatPassword" placeholder="请输入密码" size="mini" class="addInput" clearable  show-password></el-input>
+                    <i><el-input v-model="repeatPassword" placeholder="请输入密码" size="mini" class="addInput" clearable  show-password></el-input></i>
                 </div>
                 <div class="dialogContent">
                     <span>角色</span>
-                    <el-input v-model="userName" placeholder="请输入内容" size="mini" class="addInput" clearable></el-input>
+                    <i><el-input v-model="userName" placeholder="请输入内容" size="mini" class="addInput" clearable></el-input></i>
                 </div>
                 <div class="dialogContent">
                     <span>实验室</span>
-                    <div>
+                    <i>
                         <el-checkbox v-model="firstLevel">一期临床实验室</el-checkbox>
                         <el-checkbox v-model="secondLevel">二期临床实验室</el-checkbox>
-                    </div>
+                    </i>
                 </div>
                 <div class="dialogContent">
                     <span>谁可以看</span>
-                    <el-input  placeholder="请输入内容" size="mini" class="addInput" clearable  show-password></el-input>
+                    <i><el-input  placeholder="请输入内容" size="mini" class="addInput" clearable  show-password></el-input></i>
                 </div>
             </div>
             <span slot="footer" class="dialog-footer">
@@ -211,6 +211,7 @@ export default {
         },
         handleDelete (index, row) {
             console,log(index, row)
+            
         },
         AddType () { // 添加方法
             if(this.userType){
