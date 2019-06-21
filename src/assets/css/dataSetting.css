@@ -1,0 +1,32 @@
+.SettingWrap {
+  width: 100%;
+  margin-top: 20px;
+  font-size: 16px;
+}
+.SettingWrap .SettingContent {
+  margin: 0 auto;
+  width: 95%;
+}
+.SettingWrap .SettingContent .SettingTitle {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
+.SettingWrap .SettingContent .SettingTitle .DataInfo {
+  border-left: 2px solid #00c9ff;
+  padding-left: 5px;
+  font-size: 16px;
+  line-height: 28px;
+}
+.SettingWrap .SettingContent .addBox .addContent {
+  margin-top: 10px;
+}
+.SettingWrap .SettingContent .addBox .addContent span {
+  margin-right: 10px;
+  display: inline-block;
+  width: 80px;
+  text-align: right;
+}
+.SettingWrap .SettingContent .addBox .addContent .addInput {
+  width: 15vw;
+}
