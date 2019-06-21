@@ -1,0 +1,39 @@
+.printerWrap {
+  width: 100%;
+}
+.printerTitle {
+  font-size: 18px;
+  margin: 20px 0;
+  text-align: center;
+}
+.printerContent {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+.printerContent .printerLeft {
+  margin-top: 60px;
+  margin-right: 20px;
+  text-align: center;
+}
+.printerContent .printerLeft p {
+  margin-top: 10px;
+  text-align: left;
+}
+.printerContent .printerLeft p .printContent {
+  width: 130px;
+}
+.printerContent .printerLeft .btn {
+  margin-top: 20px;
+}
+.printerContent .printerLeft .choiceType {
+  font-size: 14PX;
+  margin-right: 15px;
+}
+.printerContent .printerLeft .selectBox {
+  width: 170px;
+}
+.printerContent .printerRight img {
+  width: 300px;
+  height: 350px;
+}
