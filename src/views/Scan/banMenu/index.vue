@@ -35,50 +35,50 @@
 </template>
 <script>
 export default {
-  data() {
+  data () {
     return {
       //  左边导航: 长度 方向 图片
       L_Chang: 96,
       L_FangXiang: false,
       L_Pic: [
         //   转运 分组合演 患者采血 自动录入 离心机
-        { pic: require("@/assets/img/zhuangyun1.png"), linkName: "zhuanyun" },
-        { pic: require("@/assets/img/fenzuheyan1.png"), linkName: "fenzu" },
-        { pic: require("@/assets/img/huanzhecaixue.png"), linkName: "caixue" },
-        { pic: require("@/assets/img/zidongluru.png"), linkName: "zidong" },
-        { pic: require("@/assets/img/lixinji1.png"), linkName: "lixin" }
+        { pic: require('@/assets/img/zhuangyun1.png'), linkName: 'zhuanyun' },
+        { pic: require('@/assets/img/fenzuheyan1.png'), linkName: 'fenzu' },
+        { pic: require('@/assets/img/huanzhecaixue.png'), linkName: 'caixue' },
+        { pic: require('@/assets/img/zidongluru.png'), linkName: 'zidong' },
+        { pic: require('@/assets/img/lixinji1.png'), linkName: 'lixin' }
       ],
       //   右边
       R_Chang: 96,
       R_FangXiang: true,
       R_Pic: [
         //   转运 分组合演 患者采血 自动录入 离心机
-        { pic: require("@/assets/img/yangpinjiance.png"), linkName: "detection" }
+        { pic: require('@/assets/img/yangpinjiance.png'), linkName: 'detection' }
       ]
-    };
+    }
   },
   methods: {
     //   左边导航栏
-    L_toggle() {
+    L_toggle () {
       if (this.L_FangXiang) {
-        this.L_Chang = 100;
-        this.L_FangXiang = false;
+        this.L_Chang = 100
+        this.L_FangXiang = false
       } else {
-        this.L_Chang = 0;
-        this.L_FangXiang = true;
+        this.L_Chang = 0
+        this.L_FangXiang = true
       }
     },
-    R_toggle() {
+    R_toggle () {
       if (this.R_FangXiang) {
-        this.R_Chang = 0;
-        this.R_FangXiang = false;
+        this.R_Chang = 0
+        this.R_FangXiang = false
       } else {
-        this.R_Chang = 100;
-        this.R_FangXiang = true;
+        this.R_Chang = 100
+        this.R_FangXiang = true
       }
     }
   }
-};
+}
 </script>
 <style scoped lang='less'>
 // 布局[左右不同之处]

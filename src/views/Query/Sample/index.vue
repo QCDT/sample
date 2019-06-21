@@ -81,164 +81,164 @@
   </div>
 </template>
 <script>
-import goBack from "@/components/tmp/zhanglan/go-1";
+import goBack from '@/components/tmp/zhanglan/go-1'
 export default {
   props: {},
   components: { goBack },
-  data() {
+  data () {
     return {
       // 备注
-      mark: "",
+      mark: '',
       // 点阵数据
       matrixData: [
         [
-          { bgc: "#111" },
-          { bgc: "#777" },
-          { bgc: "#555" },
-          { bgc: "#777" },
-          { bgc: "#555" },
-          { bgc: "#777" },
-          { bgc: "#555" },
-          { bgc: "#777" },
-          { bgc: "#555" },
-          { bgc: "#777" }
+          { bgc: '#111' },
+          { bgc: '#777' },
+          { bgc: '#555' },
+          { bgc: '#777' },
+          { bgc: '#555' },
+          { bgc: '#777' },
+          { bgc: '#555' },
+          { bgc: '#777' },
+          { bgc: '#555' },
+          { bgc: '#777' }
         ],
         [
-          { bgc: "#222" },
-          { bgc: "#777" },
-          { bgc: "#555" },
-          { bgc: "#777" },
-          { bgc: "#555" },
-          { bgc: "#777" },
-          { bgc: "#555" },
-          { bgc: "#777" },
-          { bgc: "#555" },
-          { bgc: "#777" }
+          { bgc: '#222' },
+          { bgc: '#777' },
+          { bgc: '#555' },
+          { bgc: '#777' },
+          { bgc: '#555' },
+          { bgc: '#777' },
+          { bgc: '#555' },
+          { bgc: '#777' },
+          { bgc: '#555' },
+          { bgc: '#777' }
         ],
         [
-          { bgc: "#333" },
-          { bgc: "#f42" },
-          { bgc: "#555" },
-          { bgc: "#777" },
-          { bgc: "#555" },
-          { bgc: "#777" },
-          { bgc: "#555" },
-          { bgc: "#777" },
-          { bgc: "#555" },
-          { bgc: "#777" }
+          { bgc: '#333' },
+          { bgc: '#f42' },
+          { bgc: '#555' },
+          { bgc: '#777' },
+          { bgc: '#555' },
+          { bgc: '#777' },
+          { bgc: '#555' },
+          { bgc: '#777' },
+          { bgc: '#555' },
+          { bgc: '#777' }
         ],
         [
-          { bgc: "#444" },
-          { bgc: "#f99" },
-          { bgc: "#555" },
-          { bgc: "#777" },
-          { bgc: "#555" },
-          { bgc: "#777" },
-          { bgc: "#555" },
-          { bgc: "#777" },
-          { bgc: "#555" },
-          { bgc: "#777" }
+          { bgc: '#444' },
+          { bgc: '#f99' },
+          { bgc: '#555' },
+          { bgc: '#777' },
+          { bgc: '#555' },
+          { bgc: '#777' },
+          { bgc: '#555' },
+          { bgc: '#777' },
+          { bgc: '#555' },
+          { bgc: '#777' }
         ],
         [
-          { bgc: "#000" },
-          { bgc: "#777" },
-          { bgc: "#555" },
-          { bgc: "#777" },
-          { bgc: "#555" },
-          { bgc: "#777" },
-          { bgc: "#555" },
-          { bgc: "#777" },
-          { bgc: "#555" },
-          { bgc: "#777" }
+          { bgc: '#000' },
+          { bgc: '#777' },
+          { bgc: '#555' },
+          { bgc: '#777' },
+          { bgc: '#555' },
+          { bgc: '#777' },
+          { bgc: '#555' },
+          { bgc: '#777' },
+          { bgc: '#555' },
+          { bgc: '#777' }
         ],
         [
-          { bgc: "#555" },
-          { bgc: "#777" },
-          { bgc: "#555" },
-          { bgc: "#777" },
-          { bgc: "#555" },
-          { bgc: "#777" },
-          { bgc: "#555" },
-          { bgc: "#777" },
-          { bgc: "#555" },
-          { bgc: "#777" }
+          { bgc: '#555' },
+          { bgc: '#777' },
+          { bgc: '#555' },
+          { bgc: '#777' },
+          { bgc: '#555' },
+          { bgc: '#777' },
+          { bgc: '#555' },
+          { bgc: '#777' },
+          { bgc: '#555' },
+          { bgc: '#777' }
         ],
         [
-          { bgc: "#555" },
-          { bgc: "#777" },
-          { bgc: "#555" },
-          { bgc: "#777" },
-          { bgc: "#555" },
-          { bgc: "#777" },
-          { bgc: "#555" },
-          { bgc: "#777" },
-          { bgc: "#555" },
-          { bgc: "#777" }
+          { bgc: '#555' },
+          { bgc: '#777' },
+          { bgc: '#555' },
+          { bgc: '#777' },
+          { bgc: '#555' },
+          { bgc: '#777' },
+          { bgc: '#555' },
+          { bgc: '#777' },
+          { bgc: '#555' },
+          { bgc: '#777' }
         ],
         [
-          { bgc: "#555" },
-          { bgc: "blue" },
-          { bgc: "#555" },
-          { bgc: "#777" },
-          { bgc: "#555" },
-          { bgc: "#777" },
-          { bgc: "#555" },
-          { bgc: "#777" },
-          { bgc: "#555" },
-          { bgc: "#777" }
+          { bgc: '#555' },
+          { bgc: 'blue' },
+          { bgc: '#555' },
+          { bgc: '#777' },
+          { bgc: '#555' },
+          { bgc: '#777' },
+          { bgc: '#555' },
+          { bgc: '#777' },
+          { bgc: '#555' },
+          { bgc: '#777' }
         ],
         [
-          { bgc: "#555" },
-          { bgc: "#777" },
-          { bgc: "#555" },
-          { bgc: "#777" },
-          { bgc: "#555" },
-          { bgc: "#777" },
-          { bgc: "#555" },
-          { bgc: "#777" },
-          { bgc: "#555" },
-          { bgc: "#777" }
+          { bgc: '#555' },
+          { bgc: '#777' },
+          { bgc: '#555' },
+          { bgc: '#777' },
+          { bgc: '#555' },
+          { bgc: '#777' },
+          { bgc: '#555' },
+          { bgc: '#777' },
+          { bgc: '#555' },
+          { bgc: '#777' }
         ],
         [
-          { bgc: "#555" },
-          { bgc: "yellow" },
-          { bgc: "#555" },
-          { bgc: "#777" },
-          { bgc: "#555" },
-          { bgc: "#777" },
-          { bgc: "#555" },
-          { bgc: "#777" },
-          { bgc: "#555" },
-          { bgc: "#777" }
+          { bgc: '#555' },
+          { bgc: 'yellow' },
+          { bgc: '#555' },
+          { bgc: '#777' },
+          { bgc: '#555' },
+          { bgc: '#777' },
+          { bgc: '#555' },
+          { bgc: '#777' },
+          { bgc: '#555' },
+          { bgc: '#777' }
         ]
       ],
-      activeName: "second",
+      activeName: 'second',
       centerData: [
-        { key: "RFID编号", value: "E00401509346E824", type: "text" },
-        { key: "*样本名称", value: "NMDP-D1-101-0h", type: "text" },
-        { key: "样本类别", value: "全血", type: "text" },
-        { key: "样本来源", value: " ", type: "text" },
-        { key: "采样日期", value: " ", type: "text" },
-        { key: "录入日期", value: "2019-05-8 16:06:04 ", type: "text" },
-        { key: "过期日期", value: " ", type: "text" },
-        { key: "提前报警天数", value: " ", type: "text" },
-        { key: "管帽色", value: " ", type: "text" },
-        { key: "项目编号", value: " ", type: "text" },
-        { key: "方案编号", value: "BJK-PK-NMDP ", type: "text" },
-        { key: "剂量计", value: "8mg", type: "text" },
-        { key: "受试者号", value: "101", type: "text" },
-        { key: "实验采血日期", value: "Day 1 0h ", type: "text" },
-        { key: "基质描述", value: "Blood", type: "text" }
+        { key: 'RFID编号', value: 'E00401509346E824', type: 'text' },
+        { key: '*样本名称', value: 'NMDP-D1-101-0h', type: 'text' },
+        { key: '样本类别', value: '全血', type: 'text' },
+        { key: '样本来源', value: ' ', type: 'text' },
+        { key: '采样日期', value: ' ', type: 'text' },
+        { key: '录入日期', value: '2019-05-8 16:06:04 ', type: 'text' },
+        { key: '过期日期', value: ' ', type: 'text' },
+        { key: '提前报警天数', value: ' ', type: 'text' },
+        { key: '管帽色', value: ' ', type: 'text' },
+        { key: '项目编号', value: ' ', type: 'text' },
+        { key: '方案编号', value: 'BJK-PK-NMDP ', type: 'text' },
+        { key: '剂量计', value: '8mg', type: 'text' },
+        { key: '受试者号', value: '101', type: 'text' },
+        { key: '实验采血日期', value: 'Day 1 0h ', type: 'text' },
+        { key: '基质描述', value: 'Blood', type: 'text' }
       ]
-    };
+    }
   },
   methods: {
-    handleClick(tab, event) {
-      console.log(tab, event);
+    handleClick (tab, event) {
+      console.log(tab, event)
     }
   },
   computed: {}
-};
+}
 </script>
 <style scoped lang='less'>
 .yangben-wrap {

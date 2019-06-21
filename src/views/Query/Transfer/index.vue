@@ -7,7 +7,7 @@
         <!-- <formTopContent :count="tableData.length" :switchSaoMiao="switchSaoMiao">
           <el-switch v-model="switchSaoMiao" slot="saomiao"></el-switch>
           <el-switch v-model="switchGuanLi" slot="guanli"></el-switch>
-        </formTopContent> -->
+        </formTopContent>-->
         <!-- row-style  cell-style 表格样式 -->
         <el-table
           :row-style="{height:'32px',textAlign: 'center',padding:'0px',}"
@@ -27,15 +27,13 @@
           </el-table-column>
           <el-table-column prop="name" label="样本名称" width="120"></el-table-column>
           <el-table-column prop="address" label="位置信息" show-overflow-tooltip></el-table-column>
-      
         </el-table>
- 
       </div>
     </div>
     <!-- 右边 -->
     <div class="right-box">
-        <h1>选择修改位置</h1>
-            <div class="input-item">
+      <h1>选择修改位置</h1>
+      <div class="input-item">
         <span>*样本类别</span>
         <el-select size="mini" v-model="value" placeholder="请选择">
           <el-option
@@ -45,54 +43,96 @@
             :value="item.value"
           ></el-option>
         </el-select>
-        <el-input size="mini" v-model="input" placeholder></el-input>
-        <i class="icon icon-tianjia"></i>
+        <span>*层数</span>
+        <el-select size="mini" v-model="value" placeholder="请选择">
+          <el-option
+            v-for="item in options"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          ></el-option>
+        </el-select>
+      </div>
+      <div class="input-item">
+        <span>*抽屉</span>
+        <el-select size="mini" v-model="value" placeholder="请选择">
+          <el-option
+            v-for="item in options"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          ></el-option>
+        </el-select>
+        <span>*样本盒</span>
+        <el-select size="mini" v-model="value" placeholder="请选择">
+          <el-option
+            v-for="item in options"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          ></el-option>
+        </el-select>
+      </div>
+
+      <div class="row">
+        <htTbody></htTbody>
       </div>
     </div>
+
     <goBack></goBack>
   </div>
 </template>
 <script>
-import goBack from "@/components/tmp/zhanglan/go-1";
+import goBack from '@/components/tmp/zhanglan/go-1'
+import htTbody from './tbody'
 export default {
   props: {},
-  components: { goBack },
-  data() {
+  components: { goBack, htTbody },
+  data () {
     return {
-        
       tableData: [
         {
-          coding: "123", // 序号编码
-          name: "Mark", // 样本名称
-          address: "海尔冰箱3-1-101海尔冰箱", // 位置信息
-          status: "正常", // 状态
-          info: "详细信息", // 详细信息
-          caozuo: "操作" // 操作
+          coding: '123', // 序号编码
+          name: 'Mark', // 样本名称
+          address: '海尔冰箱3-1-101海尔冰箱', // 位置信息
+          status: '正常', // 状态
+          info: '详细信息', // 详细信息
+          caozuo: '操作' // 操作
         }
       ],
       multipleSelection: [],
-    };
+      options: [
+        {
+          value: '选项5',
+          label: '北京烤鸭'
+        }
+      ],
+      value: ''
+    }
   },
   methods: {
-       getRowClass({ rowIndex }) {
+    getRowClass ({ rowIndex }) {
       if (rowIndex == 0) {
         return {
-          background: "#3cd7ff",
-          padding: "0px 0",
-          height: "30px",
-          lineHeight: "1.875rem",
-          fontWeight: "900",
-          fontSize: "1rem",
-          color: "#fff",
-          textAlign: "center"
-        };
+          background: '#3cd7ff',
+          padding: '0px 0',
+          height: '30px',
+          lineHeight: '1.875rem',
+          fontWeight: '900',
+          fontSize: '1rem',
+          color: '#fff',
+          textAlign: 'center'
+        }
       } else {
-        return "";
+        return ''
       }
     },
+    handleSelectionChange (val) {
+      this.multipleSelection = val
+    }
   },
   computed: {}
-};
+}
 </script>
 <style scoped lang='less'>
 .transfer-wrap {
@@ -106,15 +146,15 @@ export default {
   width: 60%;
   padding: 0 20px;
 
-  background-color: #888;
+  // background-color: #888;
 }
 
 .right-box {
   width: 50%;
 
-  background-color: #999;
+  // background-color: #999;
 }
- .input-item {
+.input-item {
   display: flex;
   align-items: center;
 
@@ -123,7 +163,8 @@ export default {
   span {
     padding: 0 10px;
     //   width: 6em;
-    //   text-align-last: justify;
+    width: 4rem;
+    text-align-last: justify;
 
     white-space: nowrap;
   }

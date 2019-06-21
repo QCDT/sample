@@ -5,16 +5,16 @@
   </div>
 </template>
 <script>
-import goBack from "@/components/tmp/zhanglan/go-1";
+import goBack from '@/components/tmp/zhanglan/go-1'
 export default {
   props: {},
   components: { goBack },
-  data() {
-    return {};
+  data () {
+    return {}
   },
   methods: {},
   computed: {}
-};
+}
 </script>
 <style scoped lang='scss'>
 </style>

@@ -12,28 +12,28 @@
   </div>
 </template>
 <script>
-import tmptaggle from "./caixue/tmptaggle";
-import goBack from "@/components/tmp/zhanglan/go-1";
+import tmptaggle from './caixue/tmptaggle'
+import goBack from '@/components/tmp/zhanglan/go-1'
 export default {
   props: {},
   components: { tmptaggle, goBack },
-  data() {
+  data () {
     return {
       left: {
-        mainPic: require("@/assets/img/caixue_huanzhe1.png"),
-        link_1: "/home",
-        link_2: "/home"
+        mainPic: require('@/assets/img/caixue_huanzhe1.png'),
+        link_1: '/home',
+        link_2: '/home'
       },
       right: {
-        mainPic: require("@/assets/img/caixue_addPatient.png"),
-        link_1: "/home",
-        link_2: "/home"
+        mainPic: require('@/assets/img/caixue_addPatient.png'),
+        link_1: '/home',
+        link_2: '/home'
       }
-    };
+    }
   },
   methods: {},
   computed: {}
-};
+}
 </script>
 <style scoped lang='less'>
 .caixue-wrap {

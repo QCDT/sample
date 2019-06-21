@@ -268,41 +268,41 @@
   </div>
 </template>
 <script>
-import tmpinput from "@/components/tmp/zhanglan/tmp-empty-input";
+import tmpinput from '@/components/tmp/zhanglan/tmp-empty-input'
 export default {
   components: { tmpinput },
-  data() {
+  data () {
     return {
       //   高级搜索的展示与隐藏
       height: 0,
       //
-      input: "",
-      input1: "",
-      input2: "",
-      input3: "",
-      value1: "",
+      input: '',
+      input1: '',
+      input2: '',
+      input3: '',
+      value1: '',
       //   试管类别
       options: [
         {
-          value: "选项1",
-          label: "苹果"
+          value: '选项1',
+          label: '苹果'
         },
         {
-          value: "选项5",
-          label: "香蕉"
+          value: '选项5',
+          label: '香蕉'
         }
       ],
-      value: ""
-    };
+      value: ''
+    }
   },
   methods: {
-    showGaoJi() {
-      console.log("111111: ", 111111);
-      this.height = this.height == 0 ? "160px" : 0;
+    showGaoJi () {
+      console.log('111111: ', 111111)
+      this.height = this.height == 0 ? '160px' : 0
     }
   },
   computed: {}
-};
+}
 </script>
 <style scoped lang='less'>
 .query-wrap {

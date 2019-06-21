@@ -52,6 +52,7 @@ export default new Router({
         navbar: Header
       }
     },
+    // 检测计划
     {
       path: '/scan/detection',
       name: 'detection',
@@ -60,6 +61,7 @@ export default new Router({
         navbar: Header
       }
     },
+
     {
       path: '/set/Printer',
       components: {
@@ -93,15 +95,60 @@ export default new Router({
       path: '/scan/fenzu',
       name: 'fenzu',
       components: {
-        default: () => import('@/views/Scan/saomiao/fenzu.vue'),
+        default: () => import('@/views/Scan/saomiao/FenZuHeYan/index.vue'),
         navbar: Header
       }
     },
     {
-      path: '/scan/zhuanyun',
+      path: '/scan/transport',
       name: 'zhuanyun',
       components: {
         default: () => import('@/views/Scan/saomiao/zhuanyun.vue'),
+        navbar: Header
+      }
+    },
+    // 转入
+    {
+      path: '/scan/transport/in',
+      name: 'zhuanru',
+      components: {
+        default: () => import('@/views/Scan-Transport-In/index.vue'),
+        navbar: Header
+      }
+    },
+    // 转出
+    {
+      path: '/scan/transport/out',
+      name: 'zhuanchu',
+      components: {
+        default: () => import('@/views/Scan-Transport-Out/index.vue'),
+        navbar: Header
+      }
+    },
+    // 转出里边的修改
+    {
+      path: '/scan/transport/out/change',
+      name: 'outchange',
+      components: {
+        default: () => import('@/views/Scan-Transport-Out-Change/index.vue'),
+        navbar: Header
+      }
+    },
+    // 修改转运样本盒
+    {
+      path: '/scan/transport/out/change/eidt',
+      name: 'outchangeedit',
+      components: {
+        default: () => import('@/views/Scan-Transport-Out-Change-Edit/index.vue'),
+        navbar: Header
+      }
+    },
+    // 盘点
+    {
+      path: '/scan/transport/out/change/eidt/check',
+      name: 'check',
+      components: {
+        default: () => import('@/views/Scan-Transport-Out-Change-Check/index.vue'),
         navbar: Header
       }
     },

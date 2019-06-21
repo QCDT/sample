@@ -100,14 +100,14 @@ export default {
     return ({
       devicetypeValue: '大读卡器',
       OpentypeValue: 'COM',
-      comBaudRateValue:'38400',
-      comFrameStructureValue:'8E1',
-      comPortValue:'COM10',
-      netIpAddress:'192.168.1.22',
+      comBaudRateValue: '38400',
+      comFrameStructureValue: '8E1',
+      comPortValue: 'COM10',
+      netIpAddress: '192.168.1.22',
       netPort: '9099',
       comdisabled: false,
       netdisabled: false,
-      comPort:[
+      comPort: [
         {
           value: 'COM1',
           label: 'COM1'
@@ -203,18 +203,18 @@ export default {
           label: '8O1'
         }
       ],
-      comBaudRate:[
+      comBaudRate: [
         {
           value: '9600',
-          label:'9600'
+          label: '9600'
         },
         {
           value: '38400',
           label: '38400'
         },
         {
-          value:'115200',
-          label:'115200'
+          value: '115200',
+          label: '115200'
         }
       ],
       devicetype: [
@@ -248,9 +248,9 @@ export default {
     })
   },
   methods: {
-    changeCutDown(){
+    changeCutDown () {
       // if(this.devicetypeValue == '大读卡器'){
-      //   this.OpentypeValue = ''       
+      //   this.OpentypeValue = ''
       // }
     }
   }

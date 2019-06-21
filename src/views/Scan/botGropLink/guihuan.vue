@@ -23,30 +23,30 @@
   </div>
 </template>
 <script>
-import tmpButton from "@/components/tmp/zhanglan/tmpButton";
+import tmpButton from '@/components/tmp/zhanglan/tmpButton'
 export default {
   props: {},
   components: { tmpButton },
-  data() {
+  data () {
     return {
-      ghName: "",
-      textarea: ""
-    };
+      ghName: '',
+      textarea: ''
+    }
   },
   methods: {
-    eGuiHuan() {
-      console.log("111: ", 111);
+    eGuiHuan () {
+      console.log('111: ', 111)
       this.$notify.info({
-        title: "消息",
+        title: '消息',
         message: {
-          "归还人:": this.ghName,
-          "备注:": this.textarea
+          '归还人:': this.ghName,
+          '备注:': this.textarea
         }
-      });
+      })
     }
   },
   computed: {}
-};
+}
 </script>
 <style scoped lang='less'>
 .guihuan-wrap {

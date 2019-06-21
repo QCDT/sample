@@ -12,12 +12,12 @@ export default {
     number: Number
   },
   components: {},
-  data() {
-    return {};
+  data () {
+    return {}
   },
   methods: {},
   computed: {}
-};
+}
 </script>
 <style scoped lang='less'>
 span {

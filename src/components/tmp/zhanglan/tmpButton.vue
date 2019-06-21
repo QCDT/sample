@@ -18,12 +18,14 @@ export default {
 button {
   outline: none;
   border: 0;
-  width: 100px;
-  line-height: 25px;
+  min-width: 100px;
+//   line-height: 25px;
   text-align: center;
   background-color: #3cd7ff;
+  white-space: nowrap;
   color: #fff;
   font-size: 15px;
+ 
   border-radius: 5px;
   cursor: pointer;
 }

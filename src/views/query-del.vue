@@ -355,32 +355,32 @@
   </div>
 </template>
 <script>
-import tmpinput from "@/views/query/input";
+import tmpinput from '@/views/query/input'
 export default {
   props: {},
   components: { tmpinput },
-  data() {
+  data () {
     return {
       //   高级搜索的展示与隐藏
       height: 0,
       //
-      input: "",
-      input1: "",
-      input2: "",
-      input3: "",
-      value1: "",
+      input: '',
+      input1: '',
+      input2: '',
+      input3: '',
+      value1: '',
       //   试管类别
       options: [
         {
-          value: "选项1",
-          label: "苹果"
+          value: '选项1',
+          label: '苹果'
         },
         {
-          value: "选项5",
-          label: "香蕉"
+          value: '选项5',
+          label: '香蕉'
         }
       ],
-      value: "",
+      value: '',
       // 试管类别 ↑↑↑↑↑↑
       // El UI
       // 开关的值
@@ -388,70 +388,70 @@ export default {
 
       value1: false,
       value2: false,
-      value3: "",
-      value4: "",
+      value3: '',
+      value4: '',
 
       tableData: [
         {
-          coding: "123", // 序号编码
-          name: "Mark", // 样本名称
-          address: "海尔冰箱3-1-101海尔冰箱", // 位置信息
-          status: "正常", // 状态
-          info: "详细", // 详细信息
-          caozuo: "操作" // 操作
+          coding: '123', // 序号编码
+          name: 'Mark', // 样本名称
+          address: '海尔冰箱3-1-101海尔冰箱', // 位置信息
+          status: '正常', // 状态
+          info: '详细', // 详细信息
+          caozuo: '操作' // 操作
         }
       ],
       multipleSelection: []
       //   ↑ 表单
-    };
+    }
   },
   methods: {
-    showGaoJi() {
-      console.log("111111: ", 111111);
-      this.height = this.height == 0 ? "160px" : 0;
+    showGaoJi () {
+      console.log('111111: ', 111111)
+      this.height = this.height == 0 ? '160px' : 0
     },
     // El UI ...
-    toggleSelection(rows) {
+    toggleSelection (rows) {
       if (rows) {
         rows.forEach(row => {
-          this.$refs.multipleTable.toggleRowSelection(row);
-        });
+          this.$refs.multipleTable.toggleRowSelection(row)
+        })
       } else {
-        this.$refs.multipleTable.clearSelection();
+        this.$refs.multipleTable.clearSelection()
       }
     },
-    handleSelectionChange(val) {
-      this.multipleSelection = val;
+    handleSelectionChange (val) {
+      this.multipleSelection = val
     },
     /**
      * @description: 设置表头样式
      * @param {type}
      * @return:
      */
-    getRowClass({ rowIndex }) {
+    getRowClass ({ rowIndex }) {
       if (rowIndex == 0) {
         return {
-          background: "#3cd7ff",
-          padding: "0px 0",
-          height: "30px",
-          lineHeight: "1.875rem",
-          fontWeight: "900",
-          fontSize: "1rem",
-          color: "#fff",
-          textAlign: "center"
-        };
+          background: '#3cd7ff',
+          padding: '0px 0',
+          height: '30px',
+          lineHeight: '1.875rem',
+          fontWeight: '900',
+          fontSize: '1rem',
+          color: '#fff',
+          textAlign: 'center'
+        }
       } else {
-        return "";
+        return ''
       }
     },
     // 操作事件
-    handleClick(row) {
-      console.log(row);
+    handleClick (row) {
+      console.log(row)
     }
     //  ↑
   },
   computed: {}
-};
+}
 </script>
 <style scoped lang='less'>
 .query-wrap {

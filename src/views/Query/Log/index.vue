@@ -42,65 +42,65 @@
   </div>
 </template>
 <script>
-import goBack from "@/components/tmp/zhanglan/go-1";
-import FormTopMenu from "./FormTopMenu";
+import goBack from '@/components/tmp/zhanglan/go-1'
+import FormTopMenu from './FormTopMenu'
 export default {
   props: {},
   components: { goBack, FormTopMenu },
-  data() {
+  data () {
     return {
       // ↓   表单
       tableData: [
         {
-          coding: "123", // 序号编码
-          RFID: "RFID编码", // RFID编码
-          ope: "操作", // 操作
-          opePerson: "操作人", // 操作人
-          opeTime: "操作时间", // 操作时间人
-          person: "去走人/归还人", // 取走人/归还人
-          expTime: "预期归还日期", // 预期归还日期
-          location: "样本位置", // 样本位置
-          loanMark: "借出归还备注", // 借出归还备注
-          expMark: "预期归还备注", // 预期归还备注
-         
+          coding: '123', // 序号编码
+          RFID: 'RFID编码', // RFID编码
+          ope: '操作', // 操作
+          opePerson: '操作人', // 操作人
+          opeTime: '操作时间', // 操作时间人
+          person: '去走人/归还人', // 取走人/归还人
+          expTime: '预期归还日期', // 预期归还日期
+          location: '样本位置', // 样本位置
+          loanMark: '借出归还备注', // 借出归还备注
+          expMark: '预期归还备注' // 预期归还备注
+
         }
       ],
       multipleSelection: []
       //   ↑ 表单
-    };
+    }
   },
   methods: {
     // El UI ...
-    toggleSelection(rows) {
+    toggleSelection (rows) {
       if (rows) {
         rows.forEach(row => {
-          this.$refs.multipleTable.toggleRowSelection(row);
-        });
+          this.$refs.multipleTable.toggleRowSelection(row)
+        })
       } else {
-        this.$refs.multipleTable.clearSelection();
+        this.$refs.multipleTable.clearSelection()
       }
     },
-    handleSelectionChange(val) {
-      this.multipleSelection = val;
+    handleSelectionChange (val) {
+      this.multipleSelection = val
     },
     //  表头样式
-    getRowClass({ rowIndex }) {
+    getRowClass ({ rowIndex }) {
       if (rowIndex == 0) {
         return {
-          background: "#3cd7ff",
-          padding: "0px 0px",
-          height: "30px",
+          background: '#3cd7ff',
+          padding: '0px 0px',
+          height: '30px',
 
-          fontWeight: "600",
+          fontWeight: '600',
 
-          color: "#fff",
-          textAlign: "center"
-        };
+          color: '#fff',
+          textAlign: 'center'
+        }
       }
     }
   },
   computed: {}
-};
+}
 </script>
 <style scoped lang='less'>
 .log-index {

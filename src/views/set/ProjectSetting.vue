@@ -73,38 +73,38 @@
   </div>
 </template>
 <script>
-import itemSum from "@/components/tmp/zhanglan/item-sum";
-import goBack from "@/components/tmp/zhanglan/go-1";
-import masking from "@/views/set/ProjectSetting/masking";
-import fromName from "@/components/tmp/zhanglan/fromName";
+import itemSum from '@/components/tmp/zhanglan/item-sum'
+import goBack from '@/components/tmp/zhanglan/go-1'
+import masking from '@/views/set/ProjectSetting/masking'
+import fromName from '@/components/tmp/zhanglan/fromName'
 export default {
   components: { itemSum, goBack, masking, fromName },
-  data() {
+  data () {
     return {
       // 删除按钮 确认框
       dialogVisible: false,
-      test: "",
+      test: '',
       // 蒙版的开关
       showMaskF: false,
       // 蒙版的表单数据
-      MASK_name: "新建项目",
-      MASK_btn: "创建",
+      MASK_name: '新建项目',
+      MASK_btn: '创建',
       MASK_event: true, // true创建项目 false 为修改项目
-      MASK_cha_index: -1, //修改的哪一行
+      MASK_cha_index: -1, // 修改的哪一行
       //   MASK_del_index: -1, //删除的哪一行
       MASK_items: [
-        { text: "项目名称", name: "项目名称", key: "name", value: "1" },
-        { text: "方案号", fangan: "方案号", key: "fangan", value: "2" },
-        { text: "申办方", shenban: "申办方", key: "shenban", value: "3" },
-        { text: "负责人", persorn: "负责人", key: "persorn", value: "4" },
-        { text: "药物名称", yaowu: "药物", key: "yaowu", value: "5" }
+        { text: '项目名称', name: '项目名称', key: 'name', value: '1' },
+        { text: '方案号', fangan: '方案号', key: 'fangan', value: '2' },
+        { text: '申办方', shenban: '申办方', key: 'shenban', value: '3' },
+        { text: '负责人', persorn: '负责人', key: 'persorn', value: '4' },
+        { text: '药物名称', yaowu: '药物', key: 'yaowu', value: '5' }
       ],
       MASK_value: {
-        name: "替格瑞洛", // 项目名称
-        fangan: "SN-YQ-2018005/V 1.0", // 方案号
-        shenban: "石药集团中奇制药技术", // 申办方
-        persorn: "李四", // 负责人
-        yaowu: "CSPCHA115胶囊" // 药物名称
+        name: '替格瑞洛', // 项目名称
+        fangan: 'SN-YQ-2018005/V 1.0', // 方案号
+        shenban: '石药集团中奇制药技术', // 申办方
+        persorn: '李四', // 负责人
+        yaowu: 'CSPCHA115胶囊' // 药物名称
       },
       /**
        * @description: groupChang:控制拉条的长度,它是一个
@@ -120,130 +120,130 @@ export default {
 
       value1: false,
       value2: false,
-      value3: "",
-      value4: "",
+      value3: '',
+      value4: '',
 
       tableData: [
         {
-          id: "1",
-          name: "替格瑞洛", // 项目名称
-          fangan: "SN-YQ-2018005/V 1.0", // 方案号
-          shenban: "石药集团中奇制药技术", // 申办方
-          persorn: "李四", // 负责人
-          yaowu: "CSPCHA115胶囊" // 药物名称
+          id: '1',
+          name: '替格瑞洛', // 项目名称
+          fangan: 'SN-YQ-2018005/V 1.0', // 方案号
+          shenban: '石药集团中奇制药技术', // 申办方
+          persorn: '李四', // 负责人
+          yaowu: 'CSPCHA115胶囊' // 药物名称
         }
       ],
       multipleSelection: []
-    };
+    }
   },
 
   methods: {
     // El UI ...
-    toggleSelection(rows) {
+    toggleSelection (rows) {
       if (rows) {
         rows.forEach(row => {
-          this.$refs.multipleTable.toggleRowSelection(row);
-        });
+          this.$refs.multipleTable.toggleRowSelection(row)
+        })
       } else {
-        this.$refs.multipleTable.clearSelection();
+        this.$refs.multipleTable.clearSelection()
       }
     },
-    handleSelectionChange(val) {
-      this.multipleSelection = val;
+    handleSelectionChange (val) {
+      this.multipleSelection = val
     },
     /**
      * @description: 设置表头样式
      * @param {type}
      * @return:
      */
-    getRowClass({ rowIndex }) {
+    getRowClass ({ rowIndex }) {
       if (rowIndex == 0) {
         return {
-          background: "#3cd7ff",
-          padding: "0px 0",
-          height: "30px",
-          lineHeight: "1.875rem",
-          fontWeight: "900",
-          fontSize: "1rem",
-          color: "#fff",
-          textAlign: "center"
-        };
+          background: '#3cd7ff',
+          padding: '0px 0',
+          height: '30px',
+          lineHeight: '1.875rem',
+          fontWeight: '900',
+          fontSize: '1rem',
+          color: '#fff',
+          textAlign: 'center'
+        }
       } else {
-        return "";
+        return ''
       }
     },
     // EL UI操作事件
-    changProject(row, index) {
+    changProject (row, index) {
       // row 当前行的数据,index 当前行的索引
-      this.MASK_name = "修改项目";
-      this.MASK_btn = "修改";
-      this.MASK_event = false; // true 为创建 false 为修改
-      this.MASK_cha_index = index; //修改的哪一行
-      console.log("修改蒙版数据: ", "修改项目");
+      this.MASK_name = '修改项目'
+      this.MASK_btn = '修改'
+      this.MASK_event = false // true 为创建 false 为修改
+      this.MASK_cha_index = index // 修改的哪一行
+      console.log('修改蒙版数据: ', '修改项目')
 
-      this.MASK_value = this.tableData[index];
-      this.showMaskF = true;
+      this.MASK_value = this.tableData[index]
+      this.showMaskF = true
     },
-    clearProject(row, index) {
-      this.tableData.splice(index, 1);
-      this.dialogVisible = false;
+    clearProject (row, index) {
+      this.tableData.splice(index, 1)
+      this.dialogVisible = false
     },
     // 显示蒙版-->新建项目的点击按钮
-    newProject() {
-      this.MASK_name = "新建项目";
-      this.MASK_btn = "创建";
-      this.MASK_event = true; // true 为创建 false 为修改
-      this.showMaskF = true;
+    newProject () {
+      this.MASK_name = '新建项目'
+      this.MASK_btn = '创建'
+      this.MASK_event = true // true 为创建 false 为修改
+      this.showMaskF = true
     },
     // 蒙版里的事件
-    maskProject() {
+    maskProject () {
       // 蒙版事件: 修改 OR 创建
-      this.MASK_event ? this.addProject() : this.putProject();
+      this.MASK_event ? this.addProject() : this.putProject()
     },
-    addProject() {
-      console.log(": ", "创建项目");
-      console.log("this.MASK_items: ", this.MASK_value);
-      this.tableData.push(JSON.parse(JSON.stringify(this.MASK_value)));
-      alert("添加成功");
-      this.MASK_value = {};
-      this.clearFromBack();
+    addProject () {
+      console.log(': ', '创建项目')
+      console.log('this.MASK_items: ', this.MASK_value)
+      this.tableData.push(JSON.parse(JSON.stringify(this.MASK_value)))
+      alert('添加成功')
+      this.MASK_value = {}
+      this.clearFromBack()
     },
-    putProject() {
-      console.log("修改数据: ");
+    putProject () {
+      console.log('修改数据: ')
       this.tableData[this.MASK_cha_index] = JSON.parse(
         JSON.stringify(this.MASK_value)
-      );
-      alert("修改成功");
-      this.MASK_value = {};
-      this.clearFromBack();
+      )
+      alert('修改成功')
+      this.MASK_value = {}
+      this.clearFromBack()
     },
-    clearFromBack() {
-      this.showMaskF = false;
-      console.log(": ", "返回事件");
+    clearFromBack () {
+      this.showMaskF = false
+      console.log(': ', '返回事件')
     },
 
-    open() {
-      this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
+    open () {
+      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
       })
         .then(() => {
-          this.clearProject(); //执行删除事件
+          this.clearProject() // 执行删除事件
           this.$message({
-            type: "success",
-            message: "删除成功!"
-          });
+            type: 'success',
+            message: '删除成功!'
+          })
         })
         .catch(() => {
           this.$message({
-            type: "info",
-            message: "已取消删除"
-          });
-        });
+            type: 'info',
+            message: '已取消删除'
+          })
+        })
     }
   }
-};
+}
 </script>
 <style scoped lang='less'>
 .bot {

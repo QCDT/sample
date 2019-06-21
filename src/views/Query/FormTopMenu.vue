@@ -75,14 +75,14 @@
   </div>
 </template>
 <script>
-import tmpinput from "@/components/tmp/zhanglan/tmp-empty-input";
+import tmpinput from '@/components/tmp/zhanglan/tmp-empty-input'
 export default {
   props: {
     count: Number,
     multipleSelection: { type: Array, default: () => [] }
   },
   components: { tmpinput },
-  data() {
+  data () {
     return {
       //   ↓  导出
       /**
@@ -90,51 +90,51 @@ export default {
        * json_data:将要导出的表格数据
        */
       json_fields: {
-        序号: "coding",
-        管帽颜色: "color",
-        样本信息: "sample",
-        录入人: "enterName",
-        录入日期: "enterTime",
-        采样信息: "sampl",
-        样本来源: "source",
-        过期日期: "pastTime",
-        位置信息: "location",
-        状态: "status",
-        类别: "classify",
-        借出人: "loanPerson",
-        借出日期: "loanTime"
+        序号: 'coding',
+        管帽颜色: 'color',
+        样本信息: 'sample',
+        录入人: 'enterName',
+        录入日期: 'enterTime',
+        采样信息: 'sampl',
+        样本来源: 'source',
+        过期日期: 'pastTime',
+        位置信息: 'location',
+        状态: 'status',
+        类别: 'classify',
+        借出人: 'loanPerson',
+        借出日期: 'loanTime'
       },
       json_data: [
-        { name: "张三", sex: "男", phone: { mobile: "13333333333" } },
-        { name: "张四", sex: "男", phone: { mobile: "15555555555" } }
+        { name: '张三', sex: '男', phone: { mobile: '13333333333' } },
+        { name: '张四', sex: '男', phone: { mobile: '15555555555' } }
       ],
-      json_meta: [[{ " key ": " charset ", " value ": " utf- 8 " }]],
+      json_meta: [[{ ' key ': ' charset ', ' value ': ' utf- 8 ' }]],
       //   ↑  导出
       //  ↓   打印样式设置
       options: [
         {
-          value: "选项1",
-          label: "苹果"
+          value: '选项1',
+          label: '苹果'
         },
         {
-          value: "选项5",
-          label: "香蕉"
+          value: '选项5',
+          label: '香蕉'
         }
       ],
-      value: ""
+      value: ''
       //   ↑
-    };
+    }
   },
   methods: {
-    isEmpty() {
-      console.log("999123: ");
+    isEmpty () {
+      console.log('999123: ')
       this.multipleSelection.length == 0
-        ? this.$message("请选择要导出的数据")
-        : 0;
+        ? this.$message('请选择要导出的数据')
+        : 0
     }
   },
   computed: {}
-};
+}
 </script>
 <style scoped lang='less'>
 .selection-box {

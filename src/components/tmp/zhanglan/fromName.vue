@@ -8,15 +8,7 @@
   </div>
 </template>
 <script>
-export default {
-  props: {},
-  components: {},
-  data() {
-    return {};
-  },
-  methods: {},
-  computed: {}
-};
+export default {}
 </script>
 <style scoped lang='less'>
 .from-name {

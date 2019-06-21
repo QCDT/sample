@@ -6,22 +6,22 @@
   </div>
 </template>
 <script>
-import XLSX from "xlsx";
-import impExcel from "@/components/tmp/zhanglan/impExcel";
-import expExcel from "@/components/tmp/zhanglan/expExcel";
+import XLSX from 'xlsx'
+import impExcel from '@/components/tmp/zhanglan/impExcel'
+import expExcel from '@/components/tmp/zhanglan/expExcel'
 export default {
   props: {},
   components: { impExcel, expExcel },
-  data() {
-    return {};
+  data () {
+    return {}
   },
   methods: {
-    res111(v) {
-      console.log("v: ", v);
+    res111 (v) {
+      console.log('v: ', v)
     }
   },
   computed: {}
-};
+}
 </script>
 <style scoped lang='less'>
 </style>

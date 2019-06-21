@@ -20,15 +20,15 @@
 export default {
   props: {
     count: Number,
-    switchSaoMiao:Boolean
+    switchSaoMiao: Boolean
   },
   components: {},
-  data() {
-    return {};
+  data () {
+    return {}
   },
   methods: {},
   computed: {}
-};
+}
 </script>
 <style scoped lang='less'>
 .selection-box {

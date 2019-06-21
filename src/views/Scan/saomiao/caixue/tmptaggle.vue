@@ -25,19 +25,19 @@ export default {
     link_2: String
   },
   components: {},
-  data() {
-    return { showL: false };
+  data () {
+    return { showL: false }
   },
   methods: {
-    toggleLeft() {
-      this.showL = !this.showL;
+    toggleLeft () {
+      this.showL = !this.showL
     },
-    toggleRight() {
-      this.showR = !this.showR;
+    toggleRight () {
+      this.showR = !this.showR
     }
   },
   computed: {}
-};
+}
 </script>
 <style scoped lang='less'>
 .tmptaggle-wrap {

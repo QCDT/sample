@@ -1,13 +1,13 @@
 <template>
   <div>
-    <div class="sample-tmp" v-if="!switchSaoMiao">
+    <div class="sample-tmp" v-show="!switchSaoMiao">
       <div class="pic">
         <img src="@/assets/img/sample.gif" alt>
       </div>
       <h1>扫描样本</h1>
       <span>请将样本放置在读写器上，然后点击上方按钮开始扫描</span>
     </div>
-    <div class="sample-tmp"  v-if="switchSaoMiao">
+    <div class="sample-tmp"  v-show="switchSaoMiao">
       <div class="pic">
         <img src="@/assets/img/saomiao_scanbox.gif" alt>
       </div>
@@ -22,12 +22,12 @@ export default {
     switchSaoMiao: Boolean
   },
   components: {},
-  data() {
-    return {};
+  data () {
+    return {}
   },
   methods: {},
   computed: {}
-};
+}
 </script>
 <style scoped lang='less'>
 .sample-tmp {

@@ -44,7 +44,7 @@
             </el-dialog>
         </div>
         <div>       <!-- 表格结构 样式中 :cell-style 单元格样式 :row-style 行样式 :header-cell-style 表头单元格样式 -->
-            <el-table 
+            <el-table
                 ref="multipleTable"
                 :data="tableData"
                 tooltip-effect="dark"
@@ -97,35 +97,35 @@
 </template>
 <script>
 export default {
-    data () {
-        return {
-            centerDialogVisible: false, // 添加按钮的弹窗显示与隐藏
-            tableData: [ // 备份信息数据
-                {
-                  date: '2019-03-08 15:04:53',
-                  username: 'admin',
-                  filename: 'sample',
-                  address: 'D:/backUpDB/20190308150447_sample.sql'
-                },
-                {
-                  date: '2019-03-08 15:04:53',
-                  username: 'admin',
-                  filename: 'sample',
-                  address: 'D:/backUpDB/20190308150447_sample.sql'
-                }, 
-                {
-                  date: '2019-03-08 15:04:53',
-                  username: 'admin',
-                  filename: 'sample',
-                  address: 'D:/backUpDB/20190308150447_sample.sql'
-                }
-            ]
+  data () {
+    return {
+      centerDialogVisible: false, // 添加按钮的弹窗显示与隐藏
+      tableData: [ // 备份信息数据
+        {
+          date: '2019-03-08 15:04:53',
+          username: 'admin',
+          filename: 'sample',
+          address: 'D:/backUpDB/20190308150447_sample.sql'
+        },
+        {
+          date: '2019-03-08 15:04:53',
+          username: 'admin',
+          filename: 'sample',
+          address: 'D:/backUpDB/20190308150447_sample.sql'
+        },
+        {
+          date: '2019-03-08 15:04:53',
+          username: 'admin',
+          filename: 'sample',
+          address: 'D:/backUpDB/20190308150447_sample.sql'
         }
-    },
-    methods:{
-        addbackups () {
-            this.centerDialogVisible = true;
-        }
+      ]
     }
+  },
+  methods: {
+    addbackups () {
+      this.centerDialogVisible = true
+    }
+  }
 }
 </script>

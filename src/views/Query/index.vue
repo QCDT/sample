@@ -61,72 +61,72 @@
   </div>
 </template>
 <script>
-import Search from "./Search";
-import FormTopMenu from "./FormTopMenu";
+import Search from './Search'
+import FormTopMenu from './FormTopMenu'
 export default {
   props: {},
   components: { Search, FormTopMenu },
-  data() {
+  data () {
     return {
       // ↓   表单
       tableData: [
         {
-          coding: "123", // 序号编码
-          color: "Mark", // 管帽颜色
-          sample: "海尔冰箱3-1-101海尔冰箱", // 样本信息
-          enterName: "录入人", // 录入人
-          enterTime: "录入日期", // 录入日期
-          sampl: "采样信息", // 采样信息
-          source: "样本来源", // 样本来源
-          pastTime: "过期日期", // 过期日期
-          location: "位置信息", // 位置信息
-          status: "状态", // 状态
-          classify: "类别", // 类别
-          loanPerson: "借出人", // 借出人
-          loanTime: "2019" // 借出日期
+          coding: '123', // 序号编码
+          color: 'Mark', // 管帽颜色
+          sample: '海尔冰箱3-1-101海尔冰箱', // 样本信息
+          enterName: '录入人', // 录入人
+          enterTime: '录入日期', // 录入日期
+          sampl: '采样信息', // 采样信息
+          source: '样本来源', // 样本来源
+          pastTime: '过期日期', // 过期日期
+          location: '位置信息', // 位置信息
+          status: '状态', // 状态
+          classify: '类别', // 类别
+          loanPerson: '借出人', // 借出人
+          loanTime: '2019' // 借出日期
         }
       ],
       multipleSelection: []
       //   ↑ 表单
-    };
+    }
   },
   methods: {
     // El UI ...
-    toggleSelection(rows) {
+    toggleSelection (rows) {
       if (rows) {
         rows.forEach(row => {
-          this.$refs.multipleTable.toggleRowSelection(row);
-        });
+          this.$refs.multipleTable.toggleRowSelection(row)
+        })
       } else {
-        this.$refs.multipleTable.clearSelection();
+        this.$refs.multipleTable.clearSelection()
       }
     },
-    handleSelectionChange(val) {
-      this.multipleSelection = val;
+    handleSelectionChange (val) {
+      this.multipleSelection = val
     },
     //  表头样式
-    getRowClass({ rowIndex }) {
+    getRowClass ({ rowIndex }) {
       if (rowIndex == 0) {
         return {
-          background: "#3cd7ff",
-          padding: "0px 0px",
-          height: "30px",
+          background: '#3cd7ff',
+          padding: '0px 0px',
+          height: '30px',
 
-          fontWeight: "600",
+          fontWeight: '600',
 
-          color: "#fff",
-          textAlign: "center"
-        };
+          color: '#fff',
+          textAlign: 'center'
+        }
       }
     },
     // 表格里的事件 ↓ row:行数据 index:索引
-    handleClick(row, index) {
-      console.log(row, index);
+    handleClick (row, index) {
+      console.log(row, index)
     }
     //  ↑
   },
   computed: {}
-};
+}
 </script>
 <style scoped lang='less'>
 // 表单

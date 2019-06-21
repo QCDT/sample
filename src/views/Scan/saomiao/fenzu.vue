@@ -60,11 +60,11 @@
   </div>
 </template>
 <script>
-import goBack from "@/components/tmp/zhanglan/go-1.vue";
+import goBack from '@/components/tmp/zhanglan/go-1.vue'
 
 export default {
   components: { goBack },
-  data() {
+  data () {
     return {
       // El UI
       // 开关的值
@@ -77,84 +77,84 @@ export default {
       checked: true,
       tableData: [
         {
-          coding: "123", // 序号编码
-          name: "Mark", // 样本名称
-          address: "海尔冰箱3-1-101海尔冰箱", // 位置信息
-          status: "正常", // 状态
-          info: "详细信息", // 详细信息
-          caozuo: "操作" // 操作
+          coding: '123', // 序号编码
+          name: 'Mark', // 样本名称
+          address: '海尔冰箱3-1-101海尔冰箱', // 位置信息
+          status: '正常', // 状态
+          info: '详细信息', // 详细信息
+          caozuo: '操作' // 操作
         },
         {
-          coding: "123", // 序号编码
-          name: "Mark", // 样本名称
-          address: "海尔冰箱3-1-101海尔冰箱", // 位置信息
-          status: "正常", // 状态
-          info: "详细信息", // 详细信息
-          caozuo: "操作" // 操作
+          coding: '123', // 序号编码
+          name: 'Mark', // 样本名称
+          address: '海尔冰箱3-1-101海尔冰箱', // 位置信息
+          status: '正常', // 状态
+          info: '详细信息', // 详细信息
+          caozuo: '操作' // 操作
         },
         {
-          coding: "123", // 序号编码
-          name: "Mark", // 样本名称
-          address: "海尔冰箱3-1-101海尔冰箱", // 位置信息
-          status: "正常", // 状态
-          info: "详细信息", // 详细信息
-          caozuo: "操作" // 操作
+          coding: '123', // 序号编码
+          name: 'Mark', // 样本名称
+          address: '海尔冰箱3-1-101海尔冰箱', // 位置信息
+          status: '正常', // 状态
+          info: '详细信息', // 详细信息
+          caozuo: '操作' // 操作
         },
         {
-          coding: "123", // 序号编码
-          name: "Mark", // 样本名称
-          address: "海尔冰箱3-1-101海尔冰箱", // 位置信息
-          status: "正常", // 状态
-          info: "详细信息", // 详细信息
-          caozuo: "操作" // 操作
+          coding: '123', // 序号编码
+          name: 'Mark', // 样本名称
+          address: '海尔冰箱3-1-101海尔冰箱', // 位置信息
+          status: '正常', // 状态
+          info: '详细信息', // 详细信息
+          caozuo: '操作' // 操作
         }
       ],
       multipleSelection: []
-    };
+    }
   },
   methods: {
     // El UI ...
-    toggleSelection(rows) {
+    toggleSelection (rows) {
       if (rows) {
         rows.forEach(row => {
-          this.$refs.multipleTable.toggleRowSelection(row);
-        });
+          this.$refs.multipleTable.toggleRowSelection(row)
+        })
       } else {
-        this.$refs.multipleTable.clearSelection();
+        this.$refs.multipleTable.clearSelection()
       }
     },
-    handleSelectionChange(val) {
-      this.multipleSelection = val;
+    handleSelectionChange (val) {
+      this.multipleSelection = val
     },
     /**
      * @description: 设置表头样式
      * @param {type}
      * @return:
      */
-    getRowClass({ rowIndex }) {
+    getRowClass ({ rowIndex }) {
       if (rowIndex == 0) {
         return {
-          background: "#3cd7ff",
-          padding: "0px 0",
-          height: "30px",
-          lineHeight: "1.875rem",
-          fontWeight: "900",
-          fontSize: "1rem",
-          color: "#fff",
-          textAlign: "center"
-        };
+          background: '#3cd7ff',
+          padding: '0px 0',
+          height: '30px',
+          lineHeight: '1.875rem',
+          fontWeight: '900',
+          fontSize: '1rem',
+          color: '#fff',
+          textAlign: 'center'
+        }
       } else {
-        return "";
+        return ''
       }
     },
     // 操作事件
 
-    handleClick(row) {
-      console.log(row);
+    handleClick (row) {
+      console.log(row)
     }
   },
   computed: {}
-};
+}
 </script>
 <style scoped lang='less'>
 // 结构

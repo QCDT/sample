@@ -16,7 +16,7 @@
 export default {
   props: {},
   components: {},
-  data() {
+  data () {
     return {
       //   ↓  导出
       /**
@@ -24,24 +24,24 @@ export default {
        * json_data:将要导出的表格数据
        */
       json_fields: {
-        姓名: "name",
-        性别: "sex",
-        电话: { field: "phone.mobile", callback: value => `${value}` }
+        姓名: 'name',
+        性别: 'sex',
+        电话: { field: 'phone.mobile', callback: value => `${value}` }
       },
       json_data: [
-        { name: "张三", sex: "男", phone: { mobile: "13333333333" } },
-        { name: "张四", sex: "男", phone: { mobile: "15555555555" } }
+        { name: '张三', sex: '男', phone: { mobile: '13333333333' } },
+        { name: '张四', sex: '男', phone: { mobile: '15555555555' } }
       ],
-      json_meta: [[{ " key ": " charset ", " value ": " utf- 8 " }]]
+      json_meta: [[{ ' key ': ' charset ', ' value ': ' utf- 8 ' }]]
       //   ↑  导出
-    };
+    }
   },
   methods: {},
   computed: {},
-  created() {
- 
+  created () {
+
   }
-};
+}
 </script>
 <style scoped lang='scss'>
 </style>

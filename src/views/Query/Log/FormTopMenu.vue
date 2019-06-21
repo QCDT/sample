@@ -34,7 +34,7 @@ export default {
     multipleSelection: { type: Array, default: () => [] }
   },
   components: {},
-  data() {
+  data () {
     return {
       //   ↓  导出
       /**
@@ -42,38 +42,38 @@ export default {
        * json_data:将要导出的表格数据
        */
       json_fields: {
-        序号: "coding",
-        RFID编码: "RFID",
-        操作: "ope",
-        操作人: "opePerson",
-        操作时间: "opeTime",
-        "去走人/归还人": "person",
-        预期归还日期: "expTime",
-        样本位置: "location",
-        借出归还备注: "loanMark",
-        预期归还备注: "expMark"
+        序号: 'coding',
+        RFID编码: 'RFID',
+        操作: 'ope',
+        操作人: 'opePerson',
+        操作时间: 'opeTime',
+        '去走人/归还人': 'person',
+        预期归还日期: 'expTime',
+        样本位置: 'location',
+        借出归还备注: 'loanMark',
+        预期归还备注: 'expMark'
 
         // 性别: "sex",
         // 电话: { field: "phone.mobile", callback: value => `${value}` }
       },
       json_data: [
-        { name: "张三", sex: "男", phone: { mobile: "13333333333" } },
-        { name: "张四", sex: "男", phone: { mobile: "15555555555" } }
+        { name: '张三', sex: '男', phone: { mobile: '13333333333' } },
+        { name: '张四', sex: '男', phone: { mobile: '15555555555' } }
       ],
-      json_meta: [[{ " key ": " charset ", " value ": " utf- 8 " }]]
+      json_meta: [[{ ' key ': ' charset ', ' value ': ' utf- 8 ' }]]
       //   ↑  导出
-    };
+    }
   },
   methods: {
-    isEmpty() {
-      console.log("999123: ");
+    isEmpty () {
+      console.log('999123: ')
       this.multipleSelection.length == 0
-        ? this.$message("请选择要导出的数据")
-        : 0;
+        ? this.$message('请选择要导出的数据')
+        : 0
     }
   },
   computed: {}
-};
+}
 </script>
 <style scoped lang='less'>
 .title {

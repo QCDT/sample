@@ -24,7 +24,7 @@
   </div>
 </template>
 <script>
-import masking from "@/views/set/ProjectSetting/masking";
+import masking from '@/views/set/ProjectSetting/masking'
 export default {
   props: {
     MASK_btn: String,
@@ -33,39 +33,39 @@ export default {
     MASK_items: { type: Array, default: () => [] }
   },
   components: { masking },
-  data() {
+  data () {
     return {
       MASK_value: {
-        name: "替格瑞洛", // 项目名称
-        fangan: "SN-YQ-2018005/V 1.0", // 方案号
-        shenban: "石药集团中奇制药技术", // 申办方
-        persorn: "李四", // 负责人
-        yaowu: "CSPCHA115胶囊" // 药物名称
+        name: '替格瑞洛', // 项目名称
+        fangan: 'SN-YQ-2018005/V 1.0', // 方案号
+        shenban: '石药集团中奇制药技术', // 申办方
+        persorn: '李四', // 负责人
+        yaowu: 'CSPCHA115胶囊' // 药物名称
       }
-    };
+    }
   },
   methods: {
-    clearFromBack() {
-      console.log(": ", "返回事件");
+    clearFromBack () {
+      console.log(': ', '返回事件')
     },
-    handleClose(done) {
-      this.$confirm("确认关闭？")
+    handleClose (done) {
+      this.$confirm('确认关闭？')
         .then(_ => {
-          this.$emit("closeProject");
+          this.$emit('closeProject')
           //   done();
         })
-        .catch(_ => {});
+        .catch(_ => {})
     },
     // 项目:创建,修改
-    maskProject() {
-      this.$emit("maskProject", JSON.parse(JSON.stringify(this.MASK_value)));
+    maskProject () {
+      this.$emit('maskProject', JSON.parse(JSON.stringify(this.MASK_value)))
       //   this.$emit("maskProject", this.MASK_value);
-      this.MASK_value = {};
-      console.log("111111111111111111111: ", 111111111111111111111);
+      this.MASK_value = {}
+      console.log('111111111111111111111: ', 111111111111111111111)
     }
   },
   computed: {}
-};
+}
 </script>
 <style scoped lang='less'>
 .test {

@@ -161,26 +161,26 @@
   </div>
 </template>
 <script>
-import goBack from "@/components/tmp/zhanglan/go-1";
+import goBack from '@/components/tmp/zhanglan/go-1'
 export default {
   props: {},
   components: { goBack },
-  data() {
+  data () {
     return {
-      input: "",
-      mark: "",
+      input: '',
+      mark: '',
       options: [
         {
-          value: "血浆",
-          label: "血浆"
+          value: '血浆',
+          label: '血浆'
         }
       ],
-      value: ""
-    };
+      value: ''
+    }
   },
   methods: {},
   computed: {}
-};
+}
 </script>
 <style scoped lang='less'>
 .change-wrap {
@@ -208,8 +208,8 @@ export default {
 
   span {
     padding: 0 10px;
-    //   width: 6em;
-    //   text-align-last: justify;
+    //   width: 6rem;
+    text-align-last: justify;
 
     white-space: nowrap;
   }
@@ -228,7 +228,9 @@ export default {
   flex-direction: column;
   justify-content: space-evenly;
 
-  width: 60px;
+  //   width: 60px;
+  width: 4rem;
+
   height: 150px;
 
   cursor: pointer;
@@ -237,6 +239,7 @@ export default {
   font-size: 13px;
 
   span {
+
     display: flex;
     align-items: center;
     justify-content: center;

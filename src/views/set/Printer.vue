@@ -38,62 +38,62 @@
 </template>
 <script>
 export default {
-    data () {
-      return {
-        printValue: '',
-        printType: [
-          {
-            value: '样本',
-            label: '样本'
-          },
-          {
-            value: '样本盒',
-            label: '样本盒'
-          }
-        ],
-        printContentA: [
-          {
-            title: '样本名称',
-            checked : false
-          },
-          {
-            title: '录入人名称',
-            checked: false
-          },
-          {
-            title: '冰箱名称',
-            checked: false
-          }
-        ],
-        printContentB: [
-          {
-            title: '录入时间',
-            checked : false
-          },
-          {
-            title: '采样时间',
-            checked: false
-          },
-          {
-            title: '过期时间',
-            checked: false
-          }
-        ],
-        printContentC: [
-          {
-            title: '样本来源',
-            checked : false
-          },
-          {
-            title: '样本类别',
-            checked: false
-          },
-          {
-            title: '样本位置',
-            checked: false
-          }
-        ],
-      }
+  data () {
+    return {
+      printValue: '',
+      printType: [
+        {
+          value: '样本',
+          label: '样本'
+        },
+        {
+          value: '样本盒',
+          label: '样本盒'
+        }
+      ],
+      printContentA: [
+        {
+          title: '样本名称',
+          checked: false
+        },
+        {
+          title: '录入人名称',
+          checked: false
+        },
+        {
+          title: '冰箱名称',
+          checked: false
+        }
+      ],
+      printContentB: [
+        {
+          title: '录入时间',
+          checked: false
+        },
+        {
+          title: '采样时间',
+          checked: false
+        },
+        {
+          title: '过期时间',
+          checked: false
+        }
+      ],
+      printContentC: [
+        {
+          title: '样本来源',
+          checked: false
+        },
+        {
+          title: '样本类别',
+          checked: false
+        },
+        {
+          title: '样本位置',
+          checked: false
+        }
+      ]
     }
+  }
 }
 </script>

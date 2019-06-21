@@ -22,7 +22,7 @@
             </div>
         </div>
         <div class="userList">
-            <el-table 
+            <el-table
                 ref="multipleTable"
                 :data="tableData"
                 style="width: 100%"
@@ -126,100 +126,100 @@
 </template>
 <script>
 export default {
-    data () {
-        return{
-            userName: '', // 用户名
-            roleName: '', // 角色名
-            userPassword: '', //密码
-            repeatPassword: '',// 二次密码
-            firstLevel: false,// 
-            secondLevel: false,
-            RoleDialogVisible: false, // 角色设置的弹窗
-            UserDialogVisible: false, // 用户设置的弹窗
-            userType: true, // 切换用户设置和角色设置
-            addUserType: true, // 添加和修改弹窗的切换
-            tableData: [ // 搜索后数据
-                {
-                  username: 'admin',
-                  rolename: '管理员'
-                },
-                {
-                  username: 'admin',
-                  rolename: '管理员'
-                }, 
-                {
-                  username: 'admin',
-                  rolename: '管理员'
-                }
-            ],
-            authority:[ // 角色权限设置数据
-                {
-                  title: '新建，修改样本',
-                  checked: false
-                },
-                {
-                  title: '样本的借出和归还',
-                  checked: false
-                },
-                {
-                  title: '销毁样本和样本盒',
-                  checked: false
-                },
-                {
-                  title: '导出Excel',
-                  checked: false
-                },
-                {
-                  title: '转移样本和样本盒',
-                  checked: false
-                },
-                {
-                  title: '查看日志信息',
-                  checked: false
-                },
-                {
-                  title: '读卡器参数设置',
-                  checked: false
-                },
-                {
-                  title: '冰箱设置',
-                  checked: false
-                },
-                {
-                  title: '管理用户',
-                  checked: false
-                },
-                {
-                  title: '转运',
-                  checked: false
-                }
-            ]
+  data () {
+    return {
+      userName: '', // 用户名
+      roleName: '', // 角色名
+      userPassword: '', // 密码
+      repeatPassword: '', // 二次密码
+      firstLevel: false, //
+      secondLevel: false,
+      RoleDialogVisible: false, // 角色设置的弹窗
+      UserDialogVisible: false, // 用户设置的弹窗
+      userType: true, // 切换用户设置和角色设置
+      addUserType: true, // 添加和修改弹窗的切换
+      tableData: [ // 搜索后数据
+        {
+          username: 'admin',
+          rolename: '管理员'
+        },
+        {
+          username: 'admin',
+          rolename: '管理员'
+        },
+        {
+          username: 'admin',
+          rolename: '管理员'
         }
-    },
-    methods: {
-        TabUser () { // 用户切换和角色切换的方法
-            this.userType = !this.userType
+      ],
+      authority: [ // 角色权限设置数据
+        {
+          title: '新建，修改样本',
+          checked: false
         },
-        handleEdit (index, row) {
-            console.log(index,row)
-            if(this.userType){
-                this.UserDialogVisible = true
-            }else{
-                this.RoleDialogVisible = true
-            }
-            this.addUserType = false
+        {
+          title: '样本的借出和归还',
+          checked: false
         },
-        handleDelete (index, row) {
-            console,log(index, row)
+        {
+          title: '销毁样本和样本盒',
+          checked: false
         },
-        AddType () { // 添加方法
-            if(this.userType){
-                this.UserDialogVisible = true
-            }else{
-                this.RoleDialogVisible = true
-            }
-            this.addUserType = true
+        {
+          title: '导出Excel',
+          checked: false
+        },
+        {
+          title: '转移样本和样本盒',
+          checked: false
+        },
+        {
+          title: '查看日志信息',
+          checked: false
+        },
+        {
+          title: '读卡器参数设置',
+          checked: false
+        },
+        {
+          title: '冰箱设置',
+          checked: false
+        },
+        {
+          title: '管理用户',
+          checked: false
+        },
+        {
+          title: '转运',
+          checked: false
         }
+      ]
     }
+  },
+  methods: {
+    TabUser () { // 用户切换和角色切换的方法
+      this.userType = !this.userType
+    },
+    handleEdit (index, row) {
+      console.log(index, row)
+      if (this.userType) {
+        this.UserDialogVisible = true
+      } else {
+        this.RoleDialogVisible = true
+      }
+      this.addUserType = false
+    },
+    handleDelete (index, row) {
+      console, log(index, row)
+    },
+    AddType () { // 添加方法
+      if (this.userType) {
+        this.UserDialogVisible = true
+      } else {
+        this.RoleDialogVisible = true
+      }
+      this.addUserType = true
+    }
+  }
 }
 </script>

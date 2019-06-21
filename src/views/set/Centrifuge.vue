@@ -36,7 +36,7 @@
                   slot="elUI"
                   v-model="MASK_value.eqNumber"
                   clearable
-                  size="mini" 
+                  size="mini"
                   style="width:170px"
                 ></el-input>
               </tmpinput>
@@ -176,106 +176,106 @@
   </div>
 </template>
 <script>
-import itemSum from "@/components/tmp/zhanglan/item-sum";
-import goBack from "@/components/tmp/zhanglan/go-1";
-import masking from "@/views/set/ProjectSetting/masking";
-import fromName from "@/components/tmp/zhanglan/fromName";
-import tmpinput from "@/components/tmp/zhanglan/tmp-empty-input"; 
+import itemSum from '@/components/tmp/zhanglan/item-sum'
+import goBack from '@/components/tmp/zhanglan/go-1'
+import masking from '@/views/set/ProjectSetting/masking'
+import fromName from '@/components/tmp/zhanglan/fromName'
+import tmpinput from '@/components/tmp/zhanglan/tmp-empty-input'
 export default {
   components: { itemSum, goBack, masking, fromName, tmpinput },
-  data() {
+  data () {
     return {
       //   试管类别
       options: [
         {
-          value: "苹果", //js拿到的数据
-          label: "苹果" //下拉菜单里展示的字
+          value: '苹果', // js拿到的数据
+          label: '苹果' // 下拉菜单里展示的字
         },
         {
-          value: "香蕉",
-          label: "香蕉"
+          value: '香蕉',
+          label: '香蕉'
         }
       ],
-      value123: "",
+      value123: '',
       // 试管类别 ↑↑↑↑↑↑
       // 删除按钮 确认框
       dialogVisible: false,
-      test: "",
+      test: '',
       // 蒙版的开关
       showMaskF: false,
       // 蒙版的表单数据
-      MASK_name: "添加离心机",
-      MASK_btn: "保存",
+      MASK_name: '添加离心机',
+      MASK_btn: '保存',
       MASK_event: true, // true创建项目 false 为修改项目
-      MASK_cha_index: -1, //修改的哪一行
+      MASK_cha_index: -1, // 修改的哪一行
       //   MASK_del_index: -1, //删除的哪一行
       MASK_items: [
         {
-          text: "选择实验室",
-          name: "实验室",
-          key: "laboratory",
-          value: "1",
-          type: "select"
+          text: '选择实验室',
+          name: '实验室',
+          key: 'laboratory',
+          value: '1',
+          type: 'select'
         },
         {
-          text: "设备编号",
-          fangan: "设备编号",
-          key: "eqNumber",
-          value: "2",
-          type: "input"
+          text: '设备编号',
+          fangan: '设备编号',
+          key: 'eqNumber',
+          value: '2',
+          type: 'input'
         },
         {
-          text: "设备名称",
-          shenban: "设备名称",
-          key: "eqName",
-          value: "3",
-          type: "input"
+          text: '设备名称',
+          shenban: '设备名称',
+          key: 'eqName',
+          value: '3',
+          type: 'input'
         },
         {
-          text: "设备品牌",
-          persorn: "品牌",
-          key: "brand",
-          value: "4",
-          type: "select"
+          text: '设备品牌',
+          persorn: '品牌',
+          key: 'brand',
+          value: '4',
+          type: 'select'
         },
         {
-          text: "设备型号",
-          persorn: "型号",
-          key: "type",
-          value: "5",
-          type: "input"
+          text: '设备型号',
+          persorn: '型号',
+          key: 'type',
+          value: '5',
+          type: 'input'
         },
         {
-          text: "离心时间",
-          persorn: "时间",
-          key: "time",
-          value: "6",
-          type: "input"
+          text: '离心时间',
+          persorn: '时间',
+          key: 'time',
+          value: '6',
+          type: 'input'
         },
         {
-          text: "设备转速",
-          persorn: "转速",
-          key: "revSpeed",
-          value: "7",
-          type: "input"
+          text: '设备转速',
+          persorn: '转速',
+          key: 'revSpeed',
+          value: '7',
+          type: 'input'
         },
         {
-          text: "设备温度",
-          persorn: "温度",
-          key: "temp",
-          value: "8",
-          type: "input"
+          text: '设备温度',
+          persorn: '温度',
+          key: 'temp',
+          value: '8',
+          type: 'input'
         }
       ],
       MASK_value: {
-        laboratory: "I期临床实验室", // 实验室
-        eqNumber: "001", // 设备编号
-        eqName: "设备名称", // 设备名称
-        brand: "品牌", // 品牌
-        type: "型号", // 型号
-        time: "时间", // 时间
-        revSpeed: "转速", // 转速
-        temp: "温度" // 温度
+        laboratory: 'I期临床实验室', // 实验室
+        eqNumber: '001', // 设备编号
+        eqName: '设备名称', // 设备名称
+        brand: '品牌', // 品牌
+        type: '型号', // 型号
+        time: '时间', // 时间
+        revSpeed: '转速', // 转速
+        temp: '温度' // 温度
       },
       /**
        * @description: groupChang:控制拉条的长度,它是一个
@@ -291,133 +291,133 @@ export default {
 
       value1: false,
       value2: false,
-      value3: "",
-      value4: "",
+      value3: '',
+      value4: '',
 
       tableData: [
         {
-          id: "1", //???
-          laboratory: "I期临床实验室", // 实验室
-          eqNumber: "001", // 设备编号
-          eqName: "设备名称", // 设备名称
-          brand: "品牌", // 品牌
-          type: "型号", // 型号
-          time: "时间", // 时间
-          revSpeed: "转速", // 转速
-          temp: "温度" // 温度
+          id: '1', // ???
+          laboratory: 'I期临床实验室', // 实验室
+          eqNumber: '001', // 设备编号
+          eqName: '设备名称', // 设备名称
+          brand: '品牌', // 品牌
+          type: '型号', // 型号
+          time: '时间', // 时间
+          revSpeed: '转速', // 转速
+          temp: '温度' // 温度
         }
       ],
       multipleSelection: []
-    };
+    }
   },
 
   methods: {
     // El UI ...
-    toggleSelection(rows) {
+    toggleSelection (rows) {
       if (rows) {
         rows.forEach(row => {
-          this.$refs.multipleTable.toggleRowSelection(row);
-        });
+          this.$refs.multipleTable.toggleRowSelection(row)
+        })
       } else {
-        this.$refs.multipleTable.clearSelection();
+        this.$refs.multipleTable.clearSelection()
       }
     },
-    handleSelectionChange(val) {
-      this.multipleSelection = val;
+    handleSelectionChange (val) {
+      this.multipleSelection = val
     },
     /**
      * @description: 设置表头样式
      * @param {type}
      * @return:
      */
-    getRowClass({ rowIndex }) {
+    getRowClass ({ rowIndex }) {
       if (rowIndex == 0) {
         return {
-          background: "#3cd7ff",
-          padding: "0px 0",
-          height: "30px",
-          lineHeight: "1.875rem",
-          fontWeight: "900",
-          fontSize: "1rem",
-          color: "#fff",
-          textAlign: "center"
-        };
+          background: '#3cd7ff',
+          padding: '0px 0',
+          height: '30px',
+          lineHeight: '1.875rem',
+          fontWeight: '900',
+          fontSize: '1rem',
+          color: '#fff',
+          textAlign: 'center'
+        }
       } else {
-        return "";
+        return ''
       }
     },
     // EL UI操作事件
-    changProject(row, index) {
+    changProject (row, index) {
       // row 当前行的数据,index 当前行的索引
-      this.MASK_name = "修改项目";
-      this.MASK_btn = "修改";
-      this.MASK_event = false; // true 为创建 false 为修改
-      this.MASK_cha_index = index; //修改的哪一行
-      console.log("修改蒙版数据: ", "修改项目");
+      this.MASK_name = '修改项目'
+      this.MASK_btn = '修改'
+      this.MASK_event = false // true 为创建 false 为修改
+      this.MASK_cha_index = index // 修改的哪一行
+      console.log('修改蒙版数据: ', '修改项目')
 
-      this.MASK_value = this.tableData[index];
-      this.showMaskF = true;
+      this.MASK_value = this.tableData[index]
+      this.showMaskF = true
     },
-    clearProject(row, index) {
-      this.tableData.splice(index, 1);
-      this.dialogVisible = false;
+    clearProject (row, index) {
+      this.tableData.splice(index, 1)
+      this.dialogVisible = false
     },
     // 显示蒙版-->添加离心机的点击按钮
-    newProject() {
-      this.MASK_name = "添加离心机";
-      this.MASK_btn = "保存";
-      this.MASK_event = true; // true 为创建 false 为修改
-      this.showMaskF = true;
+    newProject () {
+      this.MASK_name = '添加离心机'
+      this.MASK_btn = '保存'
+      this.MASK_event = true // true 为创建 false 为修改
+      this.showMaskF = true
     },
     // 蒙版里的事件
-    maskProject() {
+    maskProject () {
       // 蒙版事件: 修改 OR 创建
-      this.MASK_event ? this.addProject() : this.putProject();
+      this.MASK_event ? this.addProject() : this.putProject()
     },
-    addProject() {
-      console.log(": ", "创建项目");
-      console.log("this.MASK_items: ", this.MASK_value);
-      this.tableData.push(JSON.parse(JSON.stringify(this.MASK_value)));
-      alert("添加成功");
-      this.MASK_value = {};
-      this.clearFromBack();
+    addProject () {
+      console.log(': ', '创建项目')
+      console.log('this.MASK_items: ', this.MASK_value)
+      this.tableData.push(JSON.parse(JSON.stringify(this.MASK_value)))
+      alert('添加成功')
+      this.MASK_value = {}
+      this.clearFromBack()
     },
-    putProject() {
-      console.log("修改数据: ");
+    putProject () {
+      console.log('修改数据: ')
       this.tableData[this.MASK_cha_index] = JSON.parse(
         JSON.stringify(this.MASK_value)
-      );
-      alert("修改成功");
-      this.MASK_value = {};
-      this.clearFromBack();
+      )
+      alert('修改成功')
+      this.MASK_value = {}
+      this.clearFromBack()
     },
-    clearFromBack() {
-      this.showMaskF = false;
-      console.log(": ", "返回事件");
+    clearFromBack () {
+      this.showMaskF = false
+      console.log(': ', '返回事件')
     },
 
-    open() {
-      this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
+    open () {
+      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
       })
         .then(() => {
-          this.clearProject(); //执行删除事件
+          this.clearProject() // 执行删除事件
           this.$message({
-            type: "success",
-            message: "删除成功!"
-          });
+            type: 'success',
+            message: '删除成功!'
+          })
         })
         .catch(() => {
           this.$message({
-            type: "info",
-            message: "已取消删除"
-          });
-        });
+            type: 'info',
+            message: '已取消删除'
+          })
+        })
     }
   }
-};
+}
 </script>
 <style scoped lang='less'>
 .bot {
