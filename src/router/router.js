@@ -4,12 +4,13 @@ import { navBar } from '@/router/nav'
 import login from '@/views/login.vue'
 import Header from '@/components/header.vue'
 import DataSetting from '@/views/set/DataSetting'
-import ProjectSetting from '@/views/set/ProjectSetting/index.vue'
-import UserConfiguration from '@/views/set/UserConfiguration.vue'
+import ProjectSetting from '@/views/set/ProjectSetting/index'
+import UserConfiguration from '@/views/set/UserConfiguration'
 import cardReader from '@/views/set/cardReader'
-import Printer from '@/views/set/Printer.vue'
+import Printer from '@/views/set/Printer'
 import Centrifuge from '@/views/set/Centrifuge'
 import refrigerator from '@/views/set/refrigerator'
+import choicelaboratory from '@/views/set/refrigerator/choicelaboratory'
 
 Vue.use(Router)
 
@@ -23,6 +24,7 @@ export default new Router({
       name: 'login',
       component: login
     },
+    //  数据设置页
     {
       path: '/set/DataSetting',
       components: {
@@ -30,7 +32,7 @@ export default new Router({
         navbar: Header
       }
     },
-    // scan为扫描页面
+    // 项目设置页
     {
       path: '/set/ProjectSetting',
       components: {
@@ -38,6 +40,7 @@ export default new Router({
         navbar: Header
       }
     },
+    // 用户设置页
     {
       path: '/set/UserConfiguration',
       components: {
@@ -45,10 +48,51 @@ export default new Router({
         navbar: Header
       }
     },
+    // 读卡器设置
     {
       path: '/set/cardReader',
       components: {
-        default: () => import('@/views/set/cardReader.vue'),
+        default: cardReader,
+        navbar: Header
+      }
+    },
+    // 打印机设置
+    {
+      path: '/set/Printer',
+      components: {
+        default: Printer,
+        navbar: Header
+      }
+    },
+    // 离心机设置
+    {
+      path: '/set/Centrifuge',
+      components: {
+        default: Centrifuge,
+        navbar: Header
+      }
+    },
+    // 冰箱设置
+    {
+      path: '/set/refrigerator',
+      components: {
+        default: refrigerator,
+        navbar: Header
+      }
+    },
+    {
+      path: '/set/refrigerator/choicelaboratory',
+      components: {
+        default: choicelaboratory,
+        navbar: Header
+      }
+    },
+    // scan为扫描页面
+    {
+      path: '/scan/caixue',
+      name: 'caixue',
+      components: {
+        default: () => import('@/views/Scan/saomiao/caixue'),
         navbar: Header
       }
     },
@@ -58,36 +102,6 @@ export default new Router({
       name: 'detection',
       components: {
         default: () => import('@/views/Scan/saomiao/Detection/index.vue'),
-        navbar: Header
-      }
-    },
-
-    {
-      path: '/set/Printer',
-      components: {
-        default: Printer,
-        navbar: Header
-      }
-    },
-    {
-      path: '/set/Centrifuge',
-      components: {
-        default: () => import('@/views/set/Centrifuge.vue'),
-        navbar: Header
-      }
-    },
-    {
-      path: '/set/refrigerator',
-      components: {
-        default: refrigerator,
-        navbar: Header
-      }
-    },
-    {
-      path: '/scan/caixue',
-      name: 'caixue',
-      components: {
-        default: () => import('@/views/Scan/saomiao/caixue'),
         navbar: Header
       }
     },
