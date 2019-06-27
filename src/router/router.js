@@ -13,8 +13,9 @@ import refrigerator from '@/views/set/refrigerator'
 import choicelaboratory from '@/views/set/refrigerator/choicelaboratory'
 import equipmentInfo from '@/views/set/refrigerator/equipmentInfo'
 import equipmentConstruction from '@/views/set/refrigerator/equipmentConstruction'
-import singleVerification from '@/views/Scan/saomiao/caixue/singleVerification'
+// import singleVerification from '@/views/Scan/saomiao/caixue/singleVerification'
 import sampleBox from '@/views/set/sampleBox'
+
 Vue.use(Router)
 
 export default new Router({
@@ -118,15 +119,6 @@ export default new Router({
       name: 'caixue',
       components: {
         default: () => import('@/views/Scan/saomiao/caixue'),
-        navbar: Header
-      }
-    },
-    // 单人核验页面
-    {
-      path: '/scan/caixue/singleVerification',
-      name: 'caixue',
-      components: {
-        default: singleVerification,
         navbar: Header
       }
     },
