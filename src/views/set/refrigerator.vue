@@ -4,7 +4,7 @@
         <div class="SettingTitle"> <!-- 冰箱设置的header -->
             <span class="DataInfo">冰箱概况</span>
             <div>
-                <el-button type="primary" size="mini">添加</el-button>
+                <el-button type="primary" size="mini" @click="addrefrigerator">添加</el-button>
             </div>
             <el-dialog
                 title="贮藏设备信息"
@@ -108,8 +108,8 @@ export default {
     },
     methods:{
         addrefrigerator (index , row) {
-            console.log(index, row);
-            this.DialogVisible = true;
+            console.log(index, row)
+            this.$router.push('/set/refrigerator/choicelaboratory')
         }
     }
 }

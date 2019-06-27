@@ -4,13 +4,17 @@ import { navBar } from '@/router/nav'
 import login from '@/views/login.vue'
 import Header from '@/components/header.vue'
 import DataSetting from '@/views/set/DataSetting'
-import ProjectSetting from '@/views/set/ProjectSetting/index.vue'
-import UserConfiguration from '@/views/set/UserConfiguration.vue'
+import ProjectSetting from '@/views/set/ProjectSetting/index'
+import UserConfiguration from '@/views/set/UserConfiguration'
 import cardReader from '@/views/set/cardReader'
-import Printer from '@/views/set/Printer.vue'
+import Printer from '@/views/set/Printer'
 import Centrifuge from '@/views/set/Centrifuge'
 import refrigerator from '@/views/set/refrigerator'
-
+import choicelaboratory from '@/views/set/refrigerator/choicelaboratory'
+import equipmentInfo from '@/views/set/refrigerator/equipmentInfo'
+import equipmentConstruction from '@/views/set/refrigerator/equipmentConstruction'
+import singleVerification from '@/views/Scan/saomiao/caixue/singleVerification'
+import sampleBox from '@/views/set/sampleBox'
 Vue.use(Router)
 
 export default new Router({
@@ -23,6 +27,7 @@ export default new Router({
       name: 'login',
       component: login
     },
+    //  数据设置页
     {
       path: '/set/DataSetting',
       components: {
@@ -30,7 +35,7 @@ export default new Router({
         navbar: Header
       }
     },
-    // scan为扫描页面
+    // 项目设置页
     {
       path: '/set/ProjectSetting',
       components: {
@@ -38,6 +43,7 @@ export default new Router({
         navbar: Header
       }
     },
+    // 用户设置页
     {
       path: '/set/UserConfiguration',
       components: {
@@ -45,10 +51,82 @@ export default new Router({
         navbar: Header
       }
     },
+    // 读卡器设置
     {
       path: '/set/cardReader',
       components: {
-        default: () => import('@/views/set/cardReader.vue'),
+        default: cardReader,
+        navbar: Header
+      }
+    },
+    // 打印机设置
+    {
+      path: '/set/Printer',
+      components: {
+        default: Printer,
+        navbar: Header
+      }
+    },
+    // 离心机设置
+    {
+      path: '/set/Centrifuge',
+      components: {
+        default: Centrifuge,
+        navbar: Header
+      }
+    },
+    // 冰箱设置
+    {
+      path: '/set/refrigerator',
+      components: {
+        default: refrigerator,
+        navbar: Header
+      }
+    },
+    {
+      path: '/set/refrigerator/choicelaboratory',
+      components: {
+        default: choicelaboratory,
+        navbar: Header
+      }
+    },
+    {
+      path: '/set/refrigerator/equipmentInfo',
+      components: {
+        default: equipmentInfo,
+        navbar: Header
+      }
+    },
+    {
+      path: '/set/refrigerator/equipmentConstruction',
+      components: {
+        default: equipmentConstruction,
+        navbar: Header
+      }
+    },
+    // 样本盒设置
+    {
+      path: '/set/sampleBox',
+      components: {
+        default: sampleBox,
+        navbar: Header
+      }
+    },
+    // scan为扫描页面 患者采血页面
+    {
+      path: '/scan/caixue',
+      name: 'caixue',
+      components: {
+        default: () => import('@/views/Scan/saomiao/caixue'),
+        navbar: Header
+      }
+    },
+    // 单人核验页面
+    {
+      path: '/scan/caixue/singleVerification',
+      name: 'caixue',
+      components: {
+        default: singleVerification,
         navbar: Header
       }
     },
@@ -58,36 +136,6 @@ export default new Router({
       name: 'detection',
       components: {
         default: () => import('@/views/Scan/saomiao/Detection/index.vue'),
-        navbar: Header
-      }
-    },
-
-    {
-      path: '/set/Printer',
-      components: {
-        default: Printer,
-        navbar: Header
-      }
-    },
-    {
-      path: '/set/Centrifuge',
-      components: {
-        default: () => import('@/views/set/Centrifuge.vue'),
-        navbar: Header
-      }
-    },
-    {
-      path: '/set/refrigerator',
-      components: {
-        default: refrigerator,
-        navbar: Header
-      }
-    },
-    {
-      path: '/scan/caixue',
-      name: 'caixue',
-      components: {
-        default: () => import('@/views/Scan/saomiao/caixue'),
         navbar: Header
       }
     },

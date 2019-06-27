@@ -105,6 +105,12 @@ export default {
           setTitle: '冰箱设置',
           setTitleE: 'refrigerator setting',
           link: 'set/refrigerator'
+        },
+        {
+          imgUrl: require('@/assets/img/card_setting.png'),
+          setTitle: '样本盒设置',
+          setTitleE: 'sampleBox setting',
+          link: 'set/sampleBox'
         }
       ]
     }
