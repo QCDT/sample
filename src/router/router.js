@@ -15,7 +15,7 @@ import refrigerator from '@/views/set/refrigerator'
 // import equipmentConstruction from '@/views/set/refrigerator/equipmentConstruction'
 // import singleVerification from '@/views/Scan/saomiao/caixue/singleVerification'
 // import sampleBox from '@/views/set/sampleBox'
-
+import { zlRouter } from './zl'
 Vue.use(Router)
 
 export default new Router({
@@ -23,6 +23,7 @@ export default new Router({
   base: process.env.BASE_URL,
   routes: [
     ...navBar,
+    ...zlRouter,
     {
       path: '/',
       name: 'login',
@@ -422,15 +423,15 @@ export default new Router({
         default: () => import('@/views/Query/Transfer/index.vue'),
         navbar: Header
       }
-    },
-    //  ↓ test.vue
-    {
-      path: '/test',
-      name: 'test',
-      components: {
-        default: () => import('@/views/TEST.vue'),
-        navbar: Header
-      }
     }
+    //  ↓ test.vue
+    // {
+    //   path: '/test',
+    //   name: 'test',
+    //   components: {
+    //     default: () => import('@/views/TEST.vue'),
+    //     navbar: Header
+    //   }
+    // }
   ]
 })
