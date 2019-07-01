@@ -83,7 +83,6 @@
 </template>
 <script>
 export default {
-<<<<<<< HEAD
   data () {
     return {
       DialogVisible: false,
@@ -103,35 +102,6 @@ export default {
           equipmentName: '检测样本冰箱',
           trademark: 'MDF-U53V-519L',
           temperature: '-85'
-=======
-    data () {
-        return{
-            DialogVisible: false,
-            equipmentName: '',
-            trademark: '',
-            temperature: '',
-            modelNub: '',
-            tableData: [ // 冰箱信息数据
-                {
-                  laboratory: 'I期临床试验室验室',
-                  equipmentName: '检测样本冰箱',
-                  trademark: 'MDF-U53V-519L',
-                  temperature: '-85'
-                },
-                {
-                 laboratory: 'I期临床试验室验室',
-                  equipmentName: '检测样本冰箱',
-                  trademark: 'MDF-U53V-519L',
-                  temperature: '-85'
-                }
-            ]
-        }
-    },
-    methods:{
-        addrefrigerator (index , row) {
-            console.log(index, row)
-            this.$router.push('/set/refrigerator/choicelaboratory')
->>>>>>> fddbbaffeface555f96c62d3f52c96e3c779380e
         }
       ]
     }
