@@ -1,0 +1,45 @@
+.labWrap {
+  position: relative;
+}
+.labWrap .labTitle {
+  text-align: center;
+  margin-top: 30px;
+  font-size: 18px;
+}
+.labWrap .operationlab {
+  width: 90%;
+  text-align: right;
+  margin-top: 20px;
+}
+.labWrap .labList {
+  display: flex;
+  justify-content: space-around;
+  text-align: center;
+  margin-top: 30px;
+}
+.labWrap .labList li {
+  border: 1px solid transparent;
+  padding: 15px;
+}
+.labWrap .labList li .labName span {
+  margin-top: 10px;
+  display: inline-block;
+  font-size: 14px;
+}
+.labWrap .labList img {
+  width: 250px;
+  height: 200px;
+  cursor: pointer;
+}
+.labWrap .labList .active {
+  border: 1px solid #00c9ff;
+}
+.labWrap .labBtn {
+  text-align: center;
+  margin-top: 30px;
+}
+.labWrap .labNext {
+  position: absolute;
+  top: 50%;
+  right: 5%;
+}

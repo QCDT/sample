@@ -93,14 +93,14 @@ export default {
     loginTab() {
       this.LoginTab = !this.LoginTab;
     },
-    imgLoad() {
-      this.$nextTick(function() {
-        this.bannerHeight = this.$refs.image.height;
-        console.log(this.$refs.image[0].height);
-      });
-    },
-    loginIng() {
-      this.$router.push("/Home");
+    // imgLoad () {
+    //   this.$nextTick(function () {
+    //     this.bannerHeight = this.$refs.image.height
+    //     console.log(this.$refs.image[0].height)
+    //   })
+    // },
+    loginIng () {
+      this.$router.push('/Home')
       this.$axios({
         method: "post",
         url: "sampleGuide/doLogin/selectByName",

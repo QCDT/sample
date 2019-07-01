@@ -10,6 +10,11 @@ import UserConfiguration from '@/views/set/UserConfiguration.vue'
 import Printer from '@/views/set/Printer.vue'
 // import Centrifuge from '@/views/set/Centrifuge'
 import refrigerator from '@/views/set/refrigerator'
+// import choicelaboratory from '@/views/set/refrigerator/choicelaboratory'
+// import equipmentInfo from '@/views/set/refrigerator/equipmentInfo'
+// import equipmentConstruction from '@/views/set/refrigerator/equipmentConstruction'
+// import singleVerification from '@/views/Scan/saomiao/caixue/singleVerification'
+// import sampleBox from '@/views/set/sampleBox'
 
 Vue.use(Router)
 
@@ -23,6 +28,7 @@ export default new Router({
       name: 'login',
       component: login
     },
+    //  数据设置页
     {
       path: '/set/DataSetting',
       components: {
@@ -30,7 +36,7 @@ export default new Router({
         navbar: Header
       }
     },
-    // scan为扫描页面
+    // 项目设置页
     {
       path: '/set/ProjectSetting',
       components: {
@@ -38,6 +44,7 @@ export default new Router({
         navbar: Header
       }
     },
+    // 用户设置页
     {
       path: '/set/UserConfiguration',
       components: {
@@ -45,13 +52,14 @@ export default new Router({
         navbar: Header
       }
     },
-    {
-      path: '/set/cardReader',
-      components: {
-        default: () => import('@/views/set/cardReader.vue'),
-        navbar: Header
-      }
-    },
+    // 读卡器设置
+    // {
+    //   path: '/set/cardReader',
+    //   components: {
+    //     default: cardReader,
+    //     navbar: Header
+    //   }
+    // },
     // 检测计划
     {
       path: '/scan/detection',
@@ -66,13 +74,15 @@ export default new Router({
         navbar: Header
       }
     },
-    {
-      path: '/set/Centrifuge',
-      components: {
-        default: () => import('@/views/set/Centrifuge.vue'),
-        navbar: Header
-      }
-    },
+    // 离心机设置
+    // {
+    //   path: '/set/Centrifuge',
+    //   components: {
+    //     default: Centrifuge,
+    //     navbar: Header
+    //   }
+    // },
+    // 冰箱设置
     {
       path: '/set/refrigerator',
       components: {
@@ -226,7 +236,7 @@ export default new Router({
             default: () => import(/* webpackChunkName: "scan" */ '@/views/Scan-BloodCollection-CreateMore/createMore-2'),
             navbar: Header
           }
-        },
+        }
       ]
     },
     {
