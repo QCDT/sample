@@ -1,19 +1,19 @@
 <template>
   <div class="upload-tmp">
-    <span>文件导出</span>
+    <span>导入文件</span>
   </div>
 </template>
 <script>
-import tmpButton from "@/components/tmp/zhanglan/tmpButton";
+import tmpButton from '@/components/tmp/zhanglan/tmpButton'
 export default {
   props: {},
   components: { tmpButton },
-  data() {
-    return {};
+  data () {
+    return {}
   },
   methods: {},
   computed: {}
-};
+}
 </script>
 <style scoped lang='less'>
 .upload-tmp {

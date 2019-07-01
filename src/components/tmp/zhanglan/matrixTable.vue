@@ -3,7 +3,7 @@
     <table class="table" :style="{borderColor:borderColor,borderWidth:borderWidth}">
       <tr class="row" v-for="(row,index) in matrixData" :key="index">
         <td
-        
+
           v-for="(item,ind) in row"
           :key="ind"
           :style="{backgroundColor:item.bgc,borderColor:borderColor}"
@@ -15,47 +15,39 @@
 <script>
 export default {
   props: {
-      borderColor:{type:String,default:"#3cd7ff"},
-      borderWidth:{type:String,default:"2px"},
+    borderColor: { type: String, default: '#3cd7ff' },
+    borderWidth: { type: String, default: '2px' }
   },
   components: {},
-  data() {
+  data () {
     return {
       matrixData: [
-        [ { bgc: "#fff" }, { bgc: "#fff" }, { bgc: "#fff" }, { bgc: "#fff" }, { bgc: "#fff" }, { bgc: "#fff" }, { bgc: "#fff" }, { bgc: "#fff" }, { bgc: "#fff" }, { bgc: "#fff" } ],
-        [ { bgc: "#fff" }, { bgc: "#fff" }, { bgc: "#fff" }, { bgc: "#fff" }, { bgc: "#fff" }, { bgc: "#fff" }, { bgc: "#fff" }, { bgc: "#fff" }, { bgc: "#fff" }, { bgc: "#fff" } ],
-        [ { bgc: "#fff" }, { bgc: "#fff" }, { bgc: "#fff" }, { bgc: "#fff" }, { bgc: "#fff" }, { bgc: "#fff" }, { bgc: "#fff" }, { bgc: "#fff" }, { bgc: "#fff" }, { bgc: "#fff" } ],
-        [ { bgc: "#fff" }, { bgc: "#fff" }, { bgc: "#fff" }, { bgc: "#fff" }, { bgc: "#fff" }, { bgc: "#fff" }, { bgc: "#fff" }, { bgc: "#fff" }, { bgc: "#fff" }, { bgc: "#fff" } ],
-        [ { bgc: "#fff" }, { bgc: "#fff" }, { bgc: "#fff" }, { bgc: "#fff" }, { bgc: "#fff" }, { bgc: "#fff" }, { bgc: "#fff" }, { bgc: "#fff" }, { bgc: "#fff" }, { bgc: "#fff" } ],
-        [ { bgc: "#fff" }, { bgc: "#fff" }, { bgc: "#fff" }, { bgc: "#fff" }, { bgc: "#fff" }, { bgc: "#fff" }, { bgc: "#fff" }, { bgc: "#fff" }, { bgc: "#fff" }, { bgc: "#fff" } ],
-        [ { bgc: "#fff" }, { bgc: "#fff" }, { bgc: "#fff" }, { bgc: "#fff" }, { bgc: "#fff" }, { bgc: "#fff" }, { bgc: "#fff" }, { bgc: "#fff" }, { bgc: "#fff" }, { bgc: "#fff" } ],
-        [ { bgc: "#fff" }, { bgc: "#fff" }, { bgc: "#fff" }, { bgc: "#fff" }, { bgc: "#fff" }, { bgc: "#fff" }, { bgc: "#fff" }, { bgc: "#fff" }, { bgc: "#fff" }, { bgc: "#fff" } ],
-        [ { bgc: "#fff" }, { bgc: "#fff" }, { bgc: "#fff" }, { bgc: "#fff" }, { bgc: "#fff" }, { bgc: "#fff" }, { bgc: "#fff" }, { bgc: "#fff" }, { bgc: "#fff" }, { bgc: "#fff" } ],
-        [ { bgc: "#fff" }, { bgc: "#fff" }, { bgc: "#fff" }, { bgc: "#fff" }, { bgc: "#fff" }, { bgc: "#fff" }, { bgc: "#fff" }, { bgc: "#fff" }, { bgc: "#fff" }, { bgc: "#fff" } ],
-      
-    
-     
-    
-   
-      
-    
-   
- 
+        [ { bgc: '#fff' }, { bgc: '#fff' }, { bgc: '#fff' }, { bgc: '#fff' }, { bgc: '#fff' }, { bgc: '#fff' }, { bgc: '#fff' }, { bgc: '#fff' }, { bgc: '#fff' }, { bgc: '#fff' } ],
+        [ { bgc: '#fff' }, { bgc: '#fff' }, { bgc: '#fff' }, { bgc: '#fff' }, { bgc: '#fff' }, { bgc: '#fff' }, { bgc: '#fff' }, { bgc: '#fff' }, { bgc: '#fff' }, { bgc: '#fff' } ],
+        [ { bgc: '#fff' }, { bgc: '#fff' }, { bgc: '#fff' }, { bgc: '#fff' }, { bgc: '#fff' }, { bgc: '#fff' }, { bgc: '#fff' }, { bgc: '#fff' }, { bgc: '#fff' }, { bgc: '#fff' } ],
+        [ { bgc: '#fff' }, { bgc: '#fff' }, { bgc: '#fff' }, { bgc: '#fff' }, { bgc: '#fff' }, { bgc: '#fff' }, { bgc: '#fff' }, { bgc: '#fff' }, { bgc: '#fff' }, { bgc: '#fff' } ],
+        [ { bgc: '#fff' }, { bgc: '#fff' }, { bgc: '#fff' }, { bgc: '#fff' }, { bgc: '#fff' }, { bgc: '#fff' }, { bgc: '#fff' }, { bgc: '#fff' }, { bgc: '#fff' }, { bgc: '#fff' } ],
+        [ { bgc: '#fff' }, { bgc: '#fff' }, { bgc: '#fff' }, { bgc: '#fff' }, { bgc: '#fff' }, { bgc: '#fff' }, { bgc: '#fff' }, { bgc: '#fff' }, { bgc: '#fff' }, { bgc: '#fff' } ],
+        [ { bgc: '#fff' }, { bgc: '#fff' }, { bgc: '#fff' }, { bgc: '#fff' }, { bgc: '#fff' }, { bgc: '#fff' }, { bgc: '#fff' }, { bgc: '#fff' }, { bgc: '#fff' }, { bgc: '#fff' } ],
+        [ { bgc: '#fff' }, { bgc: '#fff' }, { bgc: '#fff' }, { bgc: '#fff' }, { bgc: '#fff' }, { bgc: '#fff' }, { bgc: '#fff' }, { bgc: '#fff' }, { bgc: '#fff' }, { bgc: '#fff' } ],
+        [ { bgc: '#fff' }, { bgc: '#fff' }, { bgc: '#fff' }, { bgc: '#fff' }, { bgc: '#fff' }, { bgc: '#fff' }, { bgc: '#fff' }, { bgc: '#fff' }, { bgc: '#fff' }, { bgc: '#fff' } ],
+        [ { bgc: '#fff' }, { bgc: '#fff' }, { bgc: '#fff' }, { bgc: '#fff' }, { bgc: '#fff' }, { bgc: '#fff' }, { bgc: '#fff' }, { bgc: '#fff' }, { bgc: '#fff' }, { bgc: '#fff' } ]
+
       ]
-    };
+    }
   },
   methods: {},
   computed: {}
-};
+}
 </script>
 <style scoped lang='less'>
 table {
   border-spacing: 0;
 
   border: 2px solid #43ccfe;
- 
+
   border-collapse: collapse;
- 
+
 }
 
 td {

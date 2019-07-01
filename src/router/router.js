@@ -6,9 +6,9 @@ import Header from '@/components/header.vue'
 import DataSetting from '@/views/set/DataSetting'
 import ProjectSetting from '@/views/set/ProjectSetting/index.vue'
 import UserConfiguration from '@/views/set/UserConfiguration.vue'
-import cardReader from '@/views/set/cardReader'
+// import cardReader from '@/views/set/cardReader'
 import Printer from '@/views/set/Printer.vue'
-import Centrifuge from '@/views/set/Centrifuge'
+// import Centrifuge from '@/views/set/Centrifuge'
 import refrigerator from '@/views/set/refrigerator'
 
 Vue.use(Router)
@@ -56,10 +56,7 @@ export default new Router({
     {
       path: '/scan/detection',
       name: 'detection',
-      components: {
-        default: () => import('@/views/Scan/saomiao/Detection/index.vue'),
-        navbar: Header
-      }
+      component: () => import('@/views/Scan/saomiao/Detection/index.vue')
     },
 
     {
@@ -83,19 +80,160 @@ export default new Router({
         navbar: Header
       }
     },
+    /* 患者采血 */
     {
-      path: '/scan/caixue',
+      path: '/scan/blood-collection',
       name: 'caixue',
       components: {
-        default: () => import('@/views/Scan/saomiao/caixue'),
+        default: () => import(/* webpackChunkName: "scan" */ '@/views/Scan-BloodCollection'),
         navbar: Header
       }
+    },
+    /* 单人核验 */
+    {
+      path: '/scan/blood-collection/checksingle',
+      name: 'checkSingle',
+      components: {
+        default: () => import(/* webpackChunkName: "scan" */ '@/views/Scan-BloodCollection-CheckSingle'),
+        navbar: Header
+      },
+      redirect: '/scan/blood-collection/checksingle',
+      children: [
+        {
+          /* 患者信息 */
+          path: '/scan/blood-collection/checksingle',
+          name: 'patientInformation',
+          components: {
+            default: () => import(/* webpackChunkName: "scan" */ '@/views/Scan-BloodCollection-CheckSingle/CheckSingle'),
+            navbar: Header
+          }
+        },
+        {
+          /* 订单信息 */
+          path: '/scan/blood-collection/order-information',
+          name: 'patientOrderInfo',
+          components: {
+            default: () => import(/* webpackChunkName: "scan" */ '@/views/Scan-BloodCollection-CheckSingle/PatientOrderInfo'),
+            navbar: Header
+          }
+        },
+        {
+          /* 患者核验 */
+          path: '/scan/blood-collection/order-information/check',
+          name: 'patientsCheck',
+          components: {
+            default: () => import(/* webpackChunkName: "scan" */ '@/views/Scan-BloodCollection-CheckSingle/patientsCheck'),
+            navbar: Header
+          }
+        }
+
+      ]
+    },
+    /* 多人核验 */
+    {
+      path: '/scan/blood-collection/checkmore',
+      name: 'checkMore',
+      components: {
+        default: () => import(/* webpackChunkName: "scan" */ '@/views/Scan-BloodCollection-CheckMore'),
+        navbar: Header
+      },
+      redirect: '/scan/blood-collection/checkmore-1',
+      children: [
+        {
+          path: '/scan/blood-collection/checkmore-1',
+          name: 'checkMore-1',
+          components: {
+            default: () => import(/* webpackChunkName: "scan" */ '@/views/Scan-BloodCollection-CheckMore/CheckMore-1'),
+            navbar: Header
+          }
+        },
+        {
+          path: '/scan/blood-collection/checkmore-2',
+          name: 'checkMore-2',
+          components: {
+            default: () => import(/* webpackChunkName: "scan" */ '@/views/Scan-BloodCollection-CheckMore/CheckMore-2'),
+            navbar: Header
+          }
+        },
+        {
+          path: '/scan/blood-collection/checkmore-3',
+          name: 'checkMore-3',
+          components: {
+            default: () => import(/* webpackChunkName: "scan" */ '@/views/Scan-BloodCollection-CheckMore/CheckMore-3'),
+            navbar: Header
+          }
+        }
+      ]
+    },
+    /* 创建单人核验 */
+    {
+      path: '/scan/blood-collection/createsingle',
+      name: 'createSingle',
+      components: {
+        default: () => import(/* webpackChunkName: "scan" */ '@/views/Scan-BloodCollection-CreateSingle'),
+        navbar: Header
+      },
+      redirect: '/scan/blood-collection/createsingle-1',
+      children: [
+        {
+          path: '/scan/blood-collection/createsingle-1',
+          name: 'createSingle-1',
+          components: {
+            default: () => import(/* webpackChunkName: "scan" */ '@/views/Scan-BloodCollection-CreateSingle/createSingle-1'),
+            navbar: Header
+          }
+        },
+        {
+          path: '/scan/blood-collection/createsingle-2',
+          name: 'createSingle-2',
+          components: {
+            default: () => import(/* webpackChunkName: "scan" */ '@/views/Scan-BloodCollection-CreateSingle/createSingle-2'),
+            navbar: Header
+          }
+        },
+        {
+          path: '/scan/blood-collection/createsingle-3',
+          name: 'createSingle-3',
+          components: {
+            default: () => import(/* webpackChunkName: "scan" */ '@/views/Scan-BloodCollection-CreateSingle/createSingle-3'),
+            navbar: Header
+          }
+        }
+      ]
+    },
+    /* 创建多人核验 */
+    {
+      path: '/scan/blood-collection/createmore',
+      name: 'createMore',
+      components: {
+        default: () => import(/* webpackChunkName: "scan" */ '@/views/Scan-BloodCollection-CreateMore'),
+        navbar: Header
+      },
+      redirect: '/scan/blood-collection/createmore-1',
+      children: [
+        {
+          path: '/scan/blood-collection/createmore-1',
+          name: 'createMore-1',
+          components: {
+            default: () => import(/* webpackChunkName: "scan" */ '@/views/Scan-BloodCollection-CreateMore/createMore-1'),
+            navbar: Header
+          }
+        },
+        {
+          path: '/scan/blood-collection/createmore-2',
+          name: 'createMore-2',
+          components: {
+            default: () => import(/* webpackChunkName: "scan" */ '@/views/Scan-BloodCollection-CreateMore/createMore-2'),
+            navbar: Header
+          }
+        },
+      ]
     },
     {
       path: '/scan/fenzu',
       name: 'fenzu',
       components: {
-        default: () => import('@/views/Scan/saomiao/FenZuHeYan/index.vue'),
+        default: () => import(/* webpackChunkName: "scan" */ '@/views/Scan-FenZuHeYan'),
         navbar: Header
       }
     },
@@ -103,7 +241,7 @@ export default new Router({
       path: '/scan/transport',
       name: 'zhuanyun',
       components: {
-        default: () => import('@/views/Scan/saomiao/zhuanyun.vue'),
+        default: () => import(/* webpackChunkName: "scan" */ '@/views/Scan/saomiao/zhuanyun.vue'),
         navbar: Header
       }
     },
@@ -112,7 +250,16 @@ export default new Router({
       path: '/scan/transport/in',
       name: 'zhuanru',
       components: {
-        default: () => import('@/views/Scan-Transport-In/index.vue'),
+        default: () => import(/* webpackChunkName: "scan" */ '@/views/Scan-Transport-In/index.vue'),
+        navbar: Header
+      }
+    },
+    // 转入订单信息
+    {
+      path: '/scan/transport/in/order',
+      name: 'orderinfo',
+      components: {
+        default: () => import(/* webpackChunkName: "scan" */ '@/views/Scan-Transport-In-OrderInfo'),
         navbar: Header
       }
     },
@@ -121,7 +268,7 @@ export default new Router({
       path: '/scan/transport/out',
       name: 'zhuanchu',
       components: {
-        default: () => import('@/views/Scan-Transport-Out/index.vue'),
+        default: () => import(/* webpackChunkName: "scan" */ '@/views/Scan-Transport-Out/index.vue'),
         navbar: Header
       }
     },
@@ -130,7 +277,7 @@ export default new Router({
       path: '/scan/transport/out/change',
       name: 'outchange',
       components: {
-        default: () => import('@/views/Scan-Transport-Out-Change/index.vue'),
+        default: () => import(/* webpackChunkName: "scan" */ '@/views/Scan-Transport-Out-Change/index.vue'),
         navbar: Header
       }
     },
@@ -139,7 +286,7 @@ export default new Router({
       path: '/scan/transport/out/change/eidt',
       name: 'outchangeedit',
       components: {
-        default: () => import('@/views/Scan-Transport-Out-Change-Edit/index.vue'),
+        default: () => import(/* webpackChunkName: "scan" */ '@/views/Scan-Transport-Out-Change-Edit/index.vue'),
         navbar: Header
       }
     },
@@ -148,7 +295,7 @@ export default new Router({
       path: '/scan/transport/out/change/eidt/check',
       name: 'check',
       components: {
-        default: () => import('@/views/Scan-Transport-Out-Change-Check/index.vue'),
+        default: () => import(/* webpackChunkName: "scan" */ '@/views/Scan-Transport-Out-Change-Check/index.vue'),
         navbar: Header
       }
     },
@@ -156,7 +303,7 @@ export default new Router({
       path: '/scan/zidong',
       name: 'zidong',
       components: {
-        default: () => import('@/views/Scan/saomiao/zidong.vue'),
+        default: () => import(/* webpackChunkName: "scan" */ '@/views/Scan/saomiao/zidong.vue'),
         navbar: Header
       }
     },
@@ -164,25 +311,34 @@ export default new Router({
       path: '/scan/lixin',
       name: 'lixin',
       components: {
-        default: () => import('@/views/Scan/saomiao/lixin.vue'),
+        default: () => import(/* webpackChunkName: "scan" */ '@/views/Scan/saomiao/lixin.vue'),
         navbar: Header
       }
     },
-    // 借出
+    /* 借出 */
     {
-      path: '/scan/loan123',
+      path: '/scan/loan',
       name: 'loan',
       components: {
-        default: () => import('@/views/Scan/botGropLink/Loan/index.vue'),
+        default: () => import(/* webpackChunkName: "scan" */ '@/views/Scan-Loan/index.vue'),
+        navbar: Header
+      }
+    },
+    /* 借出详情 */
+    {
+      path: '/scan/loan/particulars',
+      name: 'particulars',
+      components: {
+        default: () => import(/* webpackChunkName: "scan" */ '@/views/Scan-Loan-Particulars'),
         navbar: Header
       }
     },
     // 归还
     {
-      path: '/scan/guihuan啊士大夫立刻',
+      path: '/scan/guihuan',
       name: 'guihuan',
       components: {
-        default: () => import('@/views/Scan/botGropLink/guihuan.vue'),
+        default: () => import(/* webpackChunkName: "scan" */ '@/views/Scan-GiveBack/index.vue'),
         navbar: Header
       }
     },
@@ -191,7 +347,7 @@ export default new Router({
       path: '/scan/laji',
       name: 'laji',
       components: {
-        default: () => import('@/views/Scan/botGropLink/laji.vue'),
+        default: () => import(/* webpackChunkName: "scan" */ '@/views/Scan/botGropLink/laji.vue'),
         navbar: Header
       }
     },
@@ -200,16 +356,25 @@ export default new Router({
       path: '/scan/biaoqian',
       name: 'biaoqian',
       components: {
-        default: () => import('@/views/Scan/botGropLink/biaoqian.vue'),
+        default: () => import(/* webpackChunkName: "scan" */ '@/views/Scan/botGropLink/biaoqian.vue'),
         navbar: Header
       }
     },
-    // 转运
+    // 查询->批量录入
     {
-      path: '/scan/zhuanyunbot',
-      name: 'zhuanyunbot',
+      path: '/scan/batchEntry',
+      name: 'batchEntry',
       components: {
-        default: () => import('@/views/Scan/botGropLink/zhuanyunbot.vue'),
+        default: () => import(/* webpackChunkName: "scan" */ '@/views/Scan-BatchEntry'),
+        navbar: Header
+      }
+    },
+    // 查询->批量修改
+    {
+      path: '/scan/bulkEditing',
+      name: 'bulkEditing',
+      components: {
+        default: () => import(/* webpackChunkName: "scan" */ '@/views/Scan-BulkEditing'),
         navbar: Header
       }
     },

@@ -12,12 +12,12 @@
 export default {
   props: {},
   components: {},
-  data() {
-    return {};
+  data () {
+    return {}
   },
   methods: {},
   computed: {}
-};
+}
 </script>
 <style scoped lang='less'>
 .tmp-chunk-box {

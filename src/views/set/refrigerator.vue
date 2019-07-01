@@ -37,9 +37,9 @@
                 </span>
             </el-dialog>
         </div>
-        <div class="CentrifugeTable"> 
+        <div class="CentrifugeTable">
             <!-- 表格结构 样式中 :cell-style 单元格样式 :row-style 行样式 :header-cell-style 表头单元格样式 -->
-            <el-table 
+            <el-table
                 ref="multipleTable"
                 :data="tableData"
                 style="width: 100%"
@@ -83,34 +83,34 @@
 </template>
 <script>
 export default {
-    data () {
-        return{
-            DialogVisible: false,
-            equipmentName: '',
-            trademark: '',
-            temperature: '',
-            modelNub: '',
-            tableData: [ // 冰箱信息数据
-                {
-                  laboratory: 'I期临床试验室验室',
-                  equipmentName: '检测样本冰箱',
-                  trademark: 'MDF-U53V-519L',
-                  temperature: '-85'
-                },
-                {
-                 laboratory: 'I期临床试验室验室',
-                  equipmentName: '检测样本冰箱',
-                  trademark: 'MDF-U53V-519L',
-                  temperature: '-85'
-                }
-            ]
+  data () {
+    return {
+      DialogVisible: false,
+      equipmentName: '',
+      trademark: '',
+      temperature: '',
+      modelNub: '',
+      tableData: [ // 冰箱信息数据
+        {
+          laboratory: 'I期临床试验室验室',
+          equipmentName: '检测样本冰箱',
+          trademark: 'MDF-U53V-519L',
+          temperature: '-85'
+        },
+        {
+          laboratory: 'I期临床试验室验室',
+          equipmentName: '检测样本冰箱',
+          trademark: 'MDF-U53V-519L',
+          temperature: '-85'
         }
-    },
-    methods:{
-        addrefrigerator (index , row) {
-            console.log(index, row);
-            this.DialogVisible = true;
-        }
+      ]
     }
+  },
+  methods: {
+    addrefrigerator (index, row) {
+      console.log(index, row)
+      this.DialogVisible = true
+    }
+  }
 }
 </script>

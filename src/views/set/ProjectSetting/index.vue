@@ -20,18 +20,7 @@
     </div>
 
     <div class="form center">
-      <el-table
-        :row-style="{height:'32px',textAlign: 'center',padding:'0px',}"
-        :cell-style="{padding:'0px',textAlign: 'center'}"
-        border
-        stripe
-        ref="multipleTable"
-        :data="tableData"
-        tooltip-effect="dark"
-        :style="{width: '1296px',margin:'0 auto',}"
-        :header-cell-style="getRowClass"
-        @selection-change="handleSelectionChange"
-      >
+      <el-table :row-style="{height:'32px',textAlign: 'center',padding:'0px',}" :cell-style="{padding:'0px',textAlign: 'center'}" border stripe ref="multipleTable" :data="tableData" tooltip-effect="dark" :style="{width: '1296px',margin:'0 auto',}" :header-cell-style="getRowClass" @selection-change="handleSelectionChange" >
         <el-table-column type="index" label="序号" width="70"></el-table-column>
         <el-table-column prop="name" label="项目名称" width="120"></el-table-column>
         <el-table-column prop="fangan" label="方案号" show-overflow-tooltip></el-table-column>
@@ -108,26 +97,9 @@ export default {
     handleSelectionChange (val) {
       this.multipleSelection = val
     },
-    /**
-     * @description: 设置表头样式
-     * @param {type}
-     * @return:
-     */
+    /* 设置表头样式 */
     getRowClass ({ rowIndex }) {
-      if (rowIndex == 0) {
-        return {
-          background: '#3cd7ff',
-          padding: '0px 0',
-          height: '30px',
-          lineHeight: '1.875rem',
-          fontWeight: '900',
-          fontSize: '1rem',
-          color: '#fff',
-          textAlign: 'center'
-        }
-      } else {
-        return ''
-      }
+      return rowIndex == 0 ? this.$store.getters.formTheme : ''
     },
     // EL UI操作事件
     changProject (row, index) {
@@ -150,16 +122,42 @@ export default {
       this.dialogVisible = true
     },
     // ↓    触发蒙版里的事件:修改,创建
-    maskProject (val) { /* 修改 OR 创建 */ this.MASK_event ? this.addProject(val) : this.putProject(val) },
-    addProject (val) { /*  创建 */ this.tableData.push(val); this.$message({ message: '添加成功', type: 'success' }); this.closeProject() },
-    putProject (val) { /*  修改 */
+    maskProject (val) {
+      /* 修改 OR 创建 */ this.MASK_event
+        ? this.addProject(val)
+        : this.putProject(val)
+    },
+    addProject (val) {
+      /*  创建 */ this.tableData.push(val)
+      this.$message({ message: '添加成功', type: 'success' })
+      this.closeProject()
+    },
+    putProject (val) {
+      /*  修改 */
       console.log('998: ', 998)
       this.tableData[this.MASK_cha_index] = val
       this.closeProject()
     },
-    clearProject (row, index) { /*  删除数据 */ this.tableData.splice(index, 1) },
-    open () { /*  删除确认 */this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', { confirmButtonText: '确定', cancelButtonText: '取消', type: 'warning' }).then(() => { this.clearProject(); this.$message({ type: 'success', message: '删除成功!' }) }).catch(() => { this.$message({ type: 'info', message: '已取消删除' }) }) },
-    closeProject () { /* 取消 | 关闭创建项目的窗口 */this.dialogVisible = false }
+    clearProject (row, index) {
+      /*  删除数据 */ this.tableData.splice(index, 1)
+    },
+    open () {
+      /*  删除确认 */ this.$confirm(
+        '此操作将永久删除该文件, 是否继续?',
+        '提示',
+        { confirmButtonText: '确定', cancelButtonText: '取消', type: 'warning' }
+      )
+        .then(() => {
+          this.clearProject()
+          this.$message({ type: 'success', message: '删除成功!' })
+        })
+        .catch(() => {
+          this.$message({ type: 'info', message: '已取消删除' })
+        })
+    },
+    closeProject () {
+      /* 取消 | 关闭创建项目的窗口 */ this.dialogVisible = false
+    }
   }
 }
 </script>

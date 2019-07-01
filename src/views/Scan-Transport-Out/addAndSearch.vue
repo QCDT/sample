@@ -52,36 +52,36 @@
   </div>
 </template>
 <script>
-import fromName from "@/components/tmp/zhanglan/fromName";
-import tmpButton from "@/components/tmp/zhanglan/tmpButton";
-import masking from "@/components/tmp/zhanglan/masking";
-import addOrder from "./addOrder";
-import name from "@/components/tmp/zhanglan/tmpButton";
-import  upLoad from '@/components/tmp/zhanglan/upLoad.vue'
+import fromName from '@/components/tmp/zhanglan/fromName'
+import tmpButton from '@/components/tmp/zhanglan/tmpButton'
+import masking from '@/components/tmp/zhanglan/masking'
+import addOrder from './addOrder'
+import name from '@/components/tmp/zhanglan/tmpButton'
+import upLoad from '@/components/tmp/zhanglan/upLoad.vue'
 export default {
   props: {
     type: {
       type: String
     }
   },
-  components: { fromName, tmpButton, masking, addOrder,upLoad },
-  data() {
+  components: { fromName, tmpButton, masking, addOrder, upLoad },
+  data () {
     return {
-      input: "",
+      input: '',
       orderTmp: false
-    };
+    }
   },
   methods: {
-    addOrder() {
-      console.log("addorder: ", "添加订单");
-      this.orderTmp = true;
+    addOrder () {
+      console.log('addorder: ', '添加订单')
+      this.orderTmp = true
     },
-    closeMask() {
-      this.orderTmp = false;
+    closeMask () {
+      this.orderTmp = false
     }
   },
   computed: {}
-};
+}
 </script>
 <style scoped lang='less'>
 .btn-box {

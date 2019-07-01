@@ -75,19 +75,19 @@
   </div>
 </template>
 <script>
-import tmpChunk from "./tmp-chunk";
-import colorChunk from "@/components/tmp/zhanglan/color-chunk";
-import goBack from "@/components/tmp/zhanglan/go-1";
-import tmpButton from "@/components/tmp/zhanglan/tmpButton";
+import tmpChunk from './tmp-chunk'
+import colorChunk from '@/components/tmp/zhanglan/color-chunk'
+import goBack from '@/components/tmp/zhanglan/go-1'
+import tmpButton from '@/components/tmp/zhanglan/tmpButton'
 export default {
   props: {},
   components: { tmpChunk, colorChunk, goBack, tmpButton },
-  data() {
-    return {};
+  data () {
+    return {}
   },
   methods: {},
   computed: {}
-};
+}
 </script>
 <style scoped lang='less'>
 .check-index {
@@ -121,7 +121,7 @@ td {
 .check-info{
     display: flex;
     flex-direction: column;
-    
+
     align-items: center;
     padding-top: 20px;
     h1{
@@ -145,7 +145,7 @@ td {
         margin-bottom: 20px;
             color: orangered;
             font-size: 12px;
-        
+
         display: flex;
         align-items: center;
         .icon{

@@ -5,7 +5,9 @@
 </template>
 <script>
 export default {
-  props: {},
+  props: {
+    bgc: String// .in 背景色
+  },
   components: {},
   data () {
     return {}

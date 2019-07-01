@@ -6,18 +6,18 @@
   </div>
 </template>
 <script>
-import transferOrder from "../Scan-Transport-Out-Change/transferOrder";
-import test from "../Scan-Transport-Out-Change/transferOrder";
+import transferOrder from '../Scan-Transport-Out-Change/transferOrder'
+import test from '../Scan-Transport-Out-Change/transferOrder'
 
 export default {
   props: {},
   components: { transferOrder, test },
-  data() {
-    return {};
+  data () {
+    return {}
   },
   methods: {},
   computed: {}
-};
+}
 </script>
 <style scoped lang='less'>
 .add-order-tmp {

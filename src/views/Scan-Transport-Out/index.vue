@@ -60,80 +60,80 @@
   </div>
 </template>
 <script>
-import addAndSearch from "./addAndSearch";
-import fromName from "@/components/tmp/zhanglan/fromName";
+import addAndSearch from './addAndSearch'
+import fromName from '@/components/tmp/zhanglan/fromName'
 export default {
   props: {},
   components: { fromName, addAndSearch },
-  data() {
+  data () {
     return {
       tableData: [
         {
-          order: "订单号", // 订单号
-          orderName: "订单名称", // 订单名称
-          recipients: "收件人", // 收件人
-          site: "地址", // 收件地址
-          contactWay: "联系方式", // 联系方式
-          entryClerk: "录入人" // 联系方式
+          order: '订单号', // 订单号
+          orderName: '订单名称', // 订单名称
+          recipients: '收件人', // 收件人
+          site: '地址', // 收件地址
+          contactWay: '联系方式', // 联系方式
+          entryClerk: '录入人' // 联系方式
         }
       ],
       multipleSelection: []
-    };
+    }
   },
   methods: {
-    toggleSelection(rows) {
+    toggleSelection (rows) {
       if (rows) {
         rows.forEach(row => {
-          this.$refs.multipleTable.toggleRowSelection(row);
-        });
+          this.$refs.multipleTable.toggleRowSelection(row)
+        })
       } else {
-        this.$refs.multipleTable.clearSelection();
+        this.$refs.multipleTable.clearSelection()
       }
     },
-    handleSelectionChange(val) {
-      this.multipleSelection = val;
+    handleSelectionChange (val) {
+      this.multipleSelection = val
     },
     /**
      * @description: 设置表头样式
      * @param {type}
      * @return:
      */
-    getRowClass({ rowIndex }) {
+    getRowClass ({ rowIndex }) {
       if (rowIndex == 0) {
         return {
-          background: "#3cd7ff",
-          padding: "0px 0",
-          height: "30px",
-          lineHeight: "1.875rem",
-          fontWeight: "900",
-          fontSize: "1rem",
-          color: "#fff",
-          textAlign: "center"
-        };
+          background: '#3cd7ff',
+          padding: '0px 0',
+          height: '30px',
+          lineHeight: '1.875rem',
+          fontWeight: '900',
+          fontSize: '1rem',
+          color: '#fff',
+          textAlign: 'center'
+        }
       } else {
-        return "";
+        return ''
       }
     },
-    open() {
+    open () {
       /*  删除确认 */ this.$confirm(
-        "此操作将永久删除该文件, 是否继续?",
-        "提示",
-        { confirmButtonText: "确定", cancelButtonText: "取消", type: "warning" }
+        '此操作将永久删除该文件, 是否继续?',
+        '提示',
+        { confirmButtonText: '确定', cancelButtonText: '取消', type: 'warning' }
       )
         .then(() => {
-          this.clearProject();
-          this.$message({ type: "success", message: "删除成功!" });
+          this.clearProject()
+          this.$message({ type: 'success', message: '删除成功!' })
         })
         .catch(() => {
-          this.$message({ type: "info", message: "已取消删除" });
-        });
+          this.$message({ type: 'info', message: '已取消删除' })
+        })
     },
-    changProject() {
-      console.log(": ", "修改");
+    changProject () {
+      console.log(': ', '修改')
     }
   },
   computed: {}
-};
+}
 </script>
 <style scoped lang='less'>
 .scan-transport-out-index {

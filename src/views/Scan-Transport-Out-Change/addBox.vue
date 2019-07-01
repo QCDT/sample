@@ -149,35 +149,35 @@
   </div>
 </template>
 <script>
-import matrixTable from "@/components/tmp/zhanglan/matrixTable";
+import matrixTable from '@/components/tmp/zhanglan/matrixTable'
 export default {
   props: {},
   components: { matrixTable },
-  data() {
+  data () {
     return {
       forTheSampleData: [
-        { text: "选择冰箱", key: "", val: "" },
-        { text: "选择层", key: "", val: "" },
-        { text: "选择抽屉", key: "", val: "" },
-        { text: "选择样本盒", key: "", val: "" }
+        { text: '选择冰箱', key: '', val: '' },
+        { text: '选择层', key: '', val: '' },
+        { text: '选择抽屉', key: '', val: '' },
+        { text: '选择样本盒', key: '', val: '' }
       ],
       options: [
         {
-          value: "冰柜",
-          label: "冰柜"
+          value: '冰柜',
+          label: '冰柜'
         }
       ],
-      value: "",
-      mark:"",
-    };
+      value: '',
+      mark: ''
+    }
   },
   methods: {
-    goBack() {
-      this.$emit("goBack");
+    goBack () {
+      this.$emit('goBack')
     }
   },
   computed: {}
-};
+}
 </script>
 <style scoped lang='less'>
 .add-box {
@@ -352,7 +352,7 @@ export default {
   }
 }
 .matrixTable-box {
-   
+
   display: flex;
   justify-content: center;
 }

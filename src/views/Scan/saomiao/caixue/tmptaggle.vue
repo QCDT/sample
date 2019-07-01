@@ -4,12 +4,12 @@
       <img :src="mainPic" alt>
     </div>
     <div class="l-small small" v-show="showL">
-      <router-link to="/">
+      <router-link :to="link_1">
         <slot name="pic1"></slot>
       </router-link>
     </div>
     <div class="r-small small" v-show="showL">
-      <router-link to="/">
+      <router-link :to="link_2">
         <slot name="pic2"></slot>
       </router-link>
     </div>

@@ -1,6 +1,6 @@
 <template>
   <div class="div">
-    <Search></Search>
+    <Search @startSearch="startSearch"></Search>
     <!-- 表单 ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓ -->
     <div class="bot-form">
       <div class="table-box">
@@ -24,12 +24,17 @@
           <el-table-column prop="color" label="管帽颜色" show-overflow-tooltip></el-table-column>
 
           <!--  -->
-          <el-table-column label="样本信息"  width="200">
+          <el-table-column label="样本信息" width="200">
             <template slot-scope="scope">
               <el-button @click="handleClick(scope.row,scope.$index)" type="text" size="small">
                 <router-link :to="{name:'sample'}" style="color:blue;padding:3px">
-                  <el-tooltip class="item" effect="dark" :content="tableData[scope.$index].sample" placement="top-start" >
-                    <el-button style="border:0;padding:0">  {{tableData[scope.$index].sample}}</el-button>
+                  <el-tooltip
+                    class="item"
+                    effect="dark"
+                    :content="tableData[scope.$index].sampleInfo"
+                    placement="top-start"
+                  >
+                    <el-button style="border:0;padding:0">{{tableData[scope.$index].sampleInfo}}</el-button>
                   </el-tooltip>
                 </router-link>
               </el-button>
@@ -71,19 +76,19 @@ export default {
       // ↓   表单
       tableData: [
         {
-          coding: '123', // 序号编码
-          color: 'Mark', // 管帽颜色
-          sample: '海尔冰箱3-1-101海尔冰箱', // 样本信息
-          enterName: '录入人', // 录入人
-          enterTime: '录入日期', // 录入日期
-          sampl: '采样信息', // 采样信息
+          coding: '1', // 序号编码
+          color: '管帽颜色', // 管帽颜色
+          sampleInfo: '样本信息', // 样本信息
+          enterClork: '录入人', // 录入人
+          enterData: '录入日期', // 录入日期
+          samplingDate: '采样日期', // 采样日期
           source: '样本来源', // 样本来源
-          pastTime: '过期日期', // 过期日期
+          pastDate: '过期日期', // 过期日期
           location: '位置信息', // 位置信息
           status: '状态', // 状态
-          classify: '类别', // 类别
-          loanPerson: '借出人', // 借出人
-          loanTime: '2019' // 借出日期
+          sampleClass: '类别', // 类别
+          lender: '借出人', // 借出人
+          outDate: '2019' // 借出日期
         }
       ],
       multipleSelection: []
@@ -106,24 +111,18 @@ export default {
     },
     //  表头样式
     getRowClass ({ rowIndex }) {
-      if (rowIndex == 0) {
-        return {
-          background: '#3cd7ff',
-          padding: '0px 0px',
-          height: '30px',
-
-          fontWeight: '600',
-
-          color: '#fff',
-          textAlign: 'center'
-        }
-      }
+      return rowIndex == 0 ? this.$store.getters.formTheme : 0
     },
     // 表格里的事件 ↓ row:行数据 index:索引
     handleClick (row, index) {
       console.log(row, index)
+    },
+    // ↑
+
+    startSearch (payload) {
+      /* 搜索{} */
+      console.log('payload: ', payload)
     }
-    //  ↑
   },
   computed: {}
 }

@@ -10,17 +10,17 @@
 <script>
 export default {
   props: {
-    borderColor: { type: String, default: "#555" },
-    bgc: { type: String, default: "#fff" },
-    title: { type: String, default: "未传值" }
+    borderColor: { type: String, default: '#555' },
+    bgc: { type: String, default: '#fff' },
+    title: { type: String, default: '未传值' }
   },
   components: {},
-  data() {
-    return {};
+  data () {
+    return {}
   },
   methods: {},
   computed: {}
-};
+}
 </script>
 <style scoped lang='less'>
 .color-chunk-box {

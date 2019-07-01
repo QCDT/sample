@@ -107,65 +107,65 @@
   </div>
 </template>
 <script>
-import matrixTable from "@/components/tmp/zhanglan/matrixTable";
-import tmpButton from "@/components/tmp/zhanglan/tmpButton";
+import matrixTable from '@/components/tmp/zhanglan/matrixTable'
+import tmpButton from '@/components/tmp/zhanglan/tmpButton'
 export default {
   props: {},
   components: { matrixTable, tmpButton },
-  data() {
+  data () {
     return {
       options: [
         {
-          value: "橘子",
-          label: "橘子"
+          value: '橘子',
+          label: '橘子'
         }
       ],
-      value: "",
+      value: '',
       tableData: [
         {
-          coding: "123", // 序号编码
-          color: "Mark", // 管帽颜色
-          sample: "海尔冰箱3-1-101海尔冰箱", // 样本信息
-          enterName: "录入人", // 录入人
-          enterTime: "录入日期", // 录入日期
-          sampl: "采样信息", // 采样信息
-          source: "样本来源", // 样本来源
-          pastTime: "过期日期", // 过期日期
-          location: "位置信息", // 位置信息
-          status: "状态", // 状态
-          classify: "类别", // 类别
-          loanPerson: "借出人", // 借出人
-          loanTime: "2019" // 借出日期
+          coding: '123', // 序号编码
+          color: 'Mark', // 管帽颜色
+          sample: '海尔冰箱3-1-101海尔冰箱', // 样本信息
+          enterName: '录入人', // 录入人
+          enterTime: '录入日期', // 录入日期
+          sampl: '采样信息', // 采样信息
+          source: '样本来源', // 样本来源
+          pastTime: '过期日期', // 过期日期
+          location: '位置信息', // 位置信息
+          status: '状态', // 状态
+          classify: '类别', // 类别
+          loanPerson: '借出人', // 借出人
+          loanTime: '2019' // 借出日期
         }
       ],
       multipleSelection: []
       //   ↑ 表单
-    };
+    }
   },
   methods: {
-    getRowClass({ rowIndex }) {
+    getRowClass ({ rowIndex }) {
       if (rowIndex == 0) {
         return {
-          background: "#3cd7ff",
-          padding: "0px 0px",
-          height: "30px",
+          background: '#3cd7ff',
+          padding: '0px 0px',
+          height: '30px',
 
-          fontWeight: "600",
+          fontWeight: '600',
 
-          color: "#fff",
-          textAlign: "center"
-        };
+          color: '#fff',
+          textAlign: 'center'
+        }
       }
     },
-    handleClick(row, index) {
-      console.log(row, index);
+    handleClick (row, index) {
+      console.log(row, index)
     },
-    handleSelectionChange(val) {
-      this.multipleSelection = val;
+    handleSelectionChange (val) {
+      this.multipleSelection = val
     }
   },
   computed: {}
-};
+}
 </script>
 <style scoped lang='less'>
 .eidt-box {
@@ -174,7 +174,7 @@ export default {
     display: flex;
     .matrix {
       padding: 10px 50px;
-     
+
       width: 38%;
       margin: 0 auto;
     }

@@ -34,8 +34,8 @@
   </div>
 </template>
 <script>
-import fromItem from "./tmp-fromItem";
-import tmpButton from "@/components/tmp/zhanglan/tmpButton";
+import fromItem from './tmp-fromItem'
+import tmpButton from '@/components/tmp/zhanglan/tmpButton'
 export default {
   props: {
     title: String
@@ -44,14 +44,14 @@ export default {
     fromItem,
     tmpButton
   },
-  data() {
+  data () {
     return {
-      mark: ""
-    };
+      mark: ''
+    }
   },
   methods: {},
   computed: {}
-};
+}
 </script>
 <style scoped lang='less'>
 .transfer-order-box {
@@ -83,6 +83,6 @@ td {
   padding: 10px 0;
   justify-content: center;
   align-items: center;
- 
+
 }
 </style>

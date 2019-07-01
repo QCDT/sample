@@ -330,7 +330,7 @@ h3 {
 }
 
 .logout {
-  z-index: 99; 
+  z-index: 99;
 
   transform: translateX(5px);
 }

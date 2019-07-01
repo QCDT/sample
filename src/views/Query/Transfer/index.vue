@@ -2,6 +2,7 @@
   <!-- 转移 -->
   <div class="transfer-wrap">
     <!-- 左边 -->
+
     <div class="left-box">
       <div class="table-box">
         <!-- <formTopContent :count="tableData.length" :switchSaoMiao="switchSaoMiao">
@@ -75,7 +76,7 @@
       </div>
 
       <div class="row">
-        <htTbody></htTbody>
+        <matrix9x9></matrix9x9>
       </div>
     </div>
 
@@ -85,9 +86,10 @@
 <script>
 import goBack from '@/components/tmp/zhanglan/go-1'
 import htTbody from './tbody'
+import matrix9x9 from '@/components/tmp/zhanglan/matrix-9x9'
 export default {
   props: {},
-  components: { goBack, htTbody },
+  components: { goBack, htTbody, matrix9x9 },
   data () {
     return {
       tableData: [
@@ -112,20 +114,7 @@ export default {
   },
   methods: {
     getRowClass ({ rowIndex }) {
-      if (rowIndex == 0) {
-        return {
-          background: '#3cd7ff',
-          padding: '0px 0',
-          height: '30px',
-          lineHeight: '1.875rem',
-          fontWeight: '900',
-          fontSize: '1rem',
-          color: '#fff',
-          textAlign: 'center'
-        }
-      } else {
-        return ''
-      }
+      return rowIndex == 0 ? this.$store.getters.formTheme : ''
     },
     handleSelectionChange (val) {
       this.multipleSelection = val

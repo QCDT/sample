@@ -8,12 +8,12 @@
 export default {
   props: {},
   components: {},
-  data() {
-    return {};
+  data () {
+    return {}
   },
   methods: {},
   computed: {}
-};
+}
 </script>
 <style scoped lang='less'>
 .tmp-fromItem-box {
@@ -23,7 +23,7 @@ export default {
 span {
   width: 6rem;
   text-align-last: justify;
-   
+
 }
 input {
   outline: none;
