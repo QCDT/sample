@@ -29,13 +29,13 @@
       <tr></tr>
     </table>
     <div class="ack-btn">
-      <tmpButton style="margin 0 auto">确认</tmpButton>
+      <tmpButton style="margin 0 auto" @click="$emit('confirm')">确认</tmpButton>
     </div>
   </div>
 </template>
 <script>
-import fromItem from './tmp-fromItem'
-import tmpButton from '@/components/tmp/zhanglan/tmpButton'
+import fromItem from "./tmp-fromItem";
+import tmpButton from "@/components/tmp/zhanglan/tmpButton";
 export default {
   props: {
     title: String
@@ -44,14 +44,14 @@ export default {
     fromItem,
     tmpButton
   },
-  data () {
+  data() {
     return {
-      mark: ''
-    }
+      mark: ""
+    };
   },
   methods: {},
   computed: {}
-}
+};
 </script>
 <style scoped lang='less'>
 .transfer-order-box {
@@ -83,6 +83,5 @@ td {
   padding: 10px 0;
   justify-content: center;
   align-items: center;
-
 }
 </style>

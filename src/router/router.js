@@ -6,9 +6,9 @@ import Header from '@/components/header.vue'
 import DataSetting from '@/views/set/DataSetting'
 import ProjectSetting from '@/views/set/ProjectSetting/index.vue'
 import UserConfiguration from '@/views/set/UserConfiguration.vue'
-// import cardReader from '@/views/set/cardReader'
+import cardReader from '@/views/set/cardReader'
 import Printer from '@/views/set/Printer.vue'
-// import Centrifuge from '@/views/set/Centrifuge'
+import Centrifuge from '@/views/set/Centrifuge'
 import refrigerator from '@/views/set/refrigerator'
 // import choicelaboratory from '@/views/set/refrigerator/choicelaboratory'
 // import equipmentInfo from '@/views/set/refrigerator/equipmentInfo'
@@ -54,13 +54,13 @@ export default new Router({
       }
     },
     // 读卡器设置
-    // {
-    //   path: '/set/cardReader',
-    //   components: {
-    //     default: cardReader,
-    //     navbar: Header
-    //   }
-    // },
+    {
+      path: '/set/cardReader',
+      components: {
+        default: cardReader,
+        navbar: Header
+      }
+    },
     // 检测计划
     {
       path: '/scan/detection',
@@ -76,13 +76,13 @@ export default new Router({
       }
     },
     // 离心机设置
-    // {
-    //   path: '/set/Centrifuge',
-    //   components: {
-    //     default: Centrifuge,
-    //     navbar: Header
-    //   }
-    // },
+    {
+      path: '/set/Centrifuge',
+      components: {
+        default: Centrifuge,
+        navbar: Header
+      }
+    },
     // 冰箱设置
     {
       path: '/set/refrigerator',
