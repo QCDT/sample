@@ -8,7 +8,7 @@
       </h1>
       <div class="body">
         <div class="pic">
-          <img src="@/assets/img/public_saomiao.gif" alt>
+          <img src="@/assets/img/saomiao.gif" alt>
         </div>
         <button @click="$emit('close')">返回</button>
       </div>
@@ -36,7 +36,7 @@ export default {
 .content {
   width: 65%;
   margin: 0 auto;
-background-color: #fff;
+  background-color: #fff;
   .title {
     display: flex;
     justify-content: center;

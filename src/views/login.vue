@@ -77,28 +77,33 @@ export default {
   },
   mounted() {
     // element banner 高度自适应
+     this.imgLoad();
+		 window.addEventListener('resize', () => {
+				this.bannerHeight = this.$refs.image[0].height;
+				console.log(this.bannerHeight)
+		  })
     // this.imgLoad();
-    this.$nextTick(function() {
-      this.bannerHeight = this.$refs.image[0].height;
-      console.log(this.$refs.image[0].height);
-    });
-    window.addEventListener("resize", () => {
-      this.$nextTick(function() {
-        this.bannerHeight = this.$refs.image[0].height;
-        console.log(this.$refs.image[0].height);
-      });
-    });
+    // // this.$nextTick(function() {
+    // //   this.bannerHeight = this.$refs.image[0].height;
+    // //   console.log(this.$refs.image[0].height);
+    // // });
+    // window.addEventListener("resize", () => {
+    //   this.$nextTick(function() {
+    //     this.bannerHeight = this.$refs.image[0].height;
+    //     console.log(this.$refs.image[0].height);
+    //   });
+    // });
   },
   methods: {
     loginTab() {
       this.LoginTab = !this.LoginTab;
     },
-    // imgLoad () {
-    //   this.$nextTick(function () {
-    //     this.bannerHeight = this.$refs.image.height
-    //     console.log(this.$refs.image[0].height)
-    //   })
-    // },
+    imgLoad () {
+      this.$nextTick(function () {
+        this.bannerHeight = this.$refs.image[0].height
+        // console.log(this.$refs.image[0].height)
+      })
+    },
     loginIng () {
       this.$router.push('/Home')
       this.$axios({
@@ -110,17 +115,17 @@ export default {
           password: this.userPassword
         })
       })
-        .then(({ data }) => {
-          console.log(data);
-          if (data.code == 400) {
-            alert("用户名或密码错误");
-          } else {
-            this.$router.push("/Home");
-          }
-        })
-        .catch(error => {
-          console.log(error);
-        });
+      .then(({ data }) => {
+        console.log(data);
+        if (data.code == 400) {
+          alert("用户名或密码错误");
+        } else {
+          this.$router.push("/Home");
+        }
+      })
+      .catch(error => {
+        console.log(error);
+      });
     }
   }
 };

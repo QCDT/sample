@@ -43,12 +43,13 @@ export default {
       L_Chang: 96,
       L_FangXiang: false,
       L_Pic: [
-        //   转运 分组合演 患者采血 自动录入 离心机
+        //   转运 分组核验 患者采血 自动录入 离心机 样本接收
         { pic: require('@/assets/img/zhuangyun1.png'), linkName: 'zhuanyun' },
-        { pic: require('@/assets/img/fenzuheyan1.png'), linkName: 'fenzu' },
         { pic: require('@/assets/img/huanzhecaixue.png'), linkName: 'caixue' },
+        { pic: require('@/assets/img/revise-icon.png'), linkName: 'receive' },
+        { pic: require('@/assets/img/fenzuheyan1.png'), linkName: 'fenzu' },
+        { pic: require('@/assets/img/lixinji1.png'), linkName: 'lixin' },
         { pic: require('@/assets/img/zidongluru.png'), linkName: 'zidong' },
-        { pic: require('@/assets/img/lixinji1.png'), linkName: 'lixin' }
       ],
       //   右边
       R_Chang: 96,

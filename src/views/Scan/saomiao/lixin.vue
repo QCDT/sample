@@ -28,11 +28,19 @@
           </div>
       </div>
       <div class="centrifugeOperation">
-        <img src="@/assets/img/centrifugalSet.png" @click="centrifugalSet">
-        <img src="@/assets/img/centrifugalAdd.png" @click="addSample">
-        <img src="@/assets/img/centrifugalStart1.png" class="mainBtn">
-        <img src="@/assets/img/orders.png" @click="exportOrders">
-        <img src="@/assets/img/record.png" @click="Ordersdetail">
+            <el-tooltip class="item" effect="dark" content="离心机设置" placement="top-end">
+                <img src="@/assets/img/centrifugalSet.png" @click="centrifugalSet">
+            </el-tooltip>
+            <el-tooltip class="item" effect="dark" content="添加离心样本" placement="top-end">
+                <img src="@/assets/img/centrifugalAdd.png" @click="addSample">
+            </el-tooltip>
+            <img src="@/assets/img/centrifugalStart1.png" class="mainBtn">
+            <el-tooltip class="item" effect="dark" content="导出离心订单" placement="top-end">
+                <img src="@/assets/img/orders.png" @click="exportOrders">
+            </el-tooltip>
+            <el-tooltip class="item" effect="dark" content="离心订单详情" placement="top-end">
+                <img src="@/assets/img/record.png" @click="Ordersdetail">
+            </el-tooltip>       
       </div>          
     </div>
     <el-dialog

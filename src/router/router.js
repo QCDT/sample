@@ -6,15 +6,16 @@ import Header from '@/components/header.vue'
 import DataSetting from '@/views/set/DataSetting'
 import ProjectSetting from '@/views/set/ProjectSetting/index.vue'
 import UserConfiguration from '@/views/set/UserConfiguration.vue'
-// import cardReader from '@/views/set/cardReader'
+import cardReader from '@/views/set/cardReader'
 import Printer from '@/views/set/Printer.vue'
-// import Centrifuge from '@/views/set/Centrifuge'
+import Centrifuge from '@/views/set/Centrifuge'
 import refrigerator from '@/views/set/refrigerator'
-// import choicelaboratory from '@/views/set/refrigerator/choicelaboratory'
-// import equipmentInfo from '@/views/set/refrigerator/equipmentInfo'
-// import equipmentConstruction from '@/views/set/refrigerator/equipmentConstruction'
+import choicelaboratory from '@/views/set/refrigerator/choicelaboratory'
+import equipmentInfo from '@/views/set/refrigerator/equipmentInfo'
+import equipmentConstruction from '@/views/set/refrigerator/equipmentConstruction'
+import receive from '@/views/Scan/saomiao/receive'
 // import singleVerification from '@/views/Scan/saomiao/caixue/singleVerification'
-// import sampleBox from '@/views/set/sampleBox'
+import sampleBox from '@/views/set/sampleBox'
 import { zlRouter } from './zl'
 Vue.use(Router)
 
@@ -54,20 +55,13 @@ export default new Router({
       }
     },
     // 读卡器设置
-    // {
-    //   path: '/set/cardReader',
-    //   components: {
-    //     default: cardReader,
-    //     navbar: Header
-    //   }
-    // },
-    // 检测计划
     {
-      path: '/scan/detection',
-      name: 'detection',
-      component: () => import('@/views/Scan/saomiao/Detection/index.vue')
+      path: '/set/cardReader',
+      components: {
+        default: cardReader,
+        navbar: Header
+      }
     },
-
     {
       path: '/set/Printer',
       components: {
@@ -76,13 +70,13 @@ export default new Router({
       }
     },
     // 离心机设置
-    // {
-    //   path: '/set/Centrifuge',
-    //   components: {
-    //     default: Centrifuge,
-    //     navbar: Header
-    //   }
-    // },
+    {
+      path: '/set/Centrifuge',
+      components: {
+        default: Centrifuge,
+        navbar: Header
+      }
+    },
     // 冰箱设置
     {
       path: '/set/refrigerator',
@@ -90,6 +84,41 @@ export default new Router({
         default: refrigerator,
         navbar: Header
       }
+    },
+    // 样本盒设置
+    {
+      path: '/set/sampleBox',
+      components: {
+        default: sampleBox,
+        navbar: Header
+      }
+    },
+    {
+      path: '/set/refrigerator/choicelaboratory',
+      components: {
+        default: choicelaboratory,
+        navbar: Header
+      }
+    },
+    {
+      path: '/set/refrigerator/equipmentInfo',
+      components: {
+        default: equipmentInfo,
+        navbar: Header
+      }
+    },
+    {
+      path: '/set/refrigerator/equipmentConstruction',
+      components: {
+        default: equipmentConstruction,
+        navbar: Header
+      }
+    },
+    // 检测计划
+    {
+      path: '/scan/detection',
+      name: 'detection',
+      component: () => import('@/views/Scan/saomiao/Detection/index.vue')
     },
     /* 患者采血 */
     {
@@ -245,6 +274,14 @@ export default new Router({
       name: 'fenzu',
       components: {
         default: () => import(/* webpackChunkName: "scan" */ '@/views/Scan-FenZuHeYan'),
+        navbar: Header
+      }
+    },
+    {
+      path: '/scan/receive',
+      name: 'receive',
+      components: {
+        default: receive,
         navbar: Header
       }
     },

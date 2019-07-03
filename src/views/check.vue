@@ -178,10 +178,10 @@
           </el-table>
       </div>
       <span slot="footer" class="dialog-footer">
-      <el-button @click="DialogVisible = false" size="mini">取 消</el-button>
-      <el-button type="primary" @click="DialogVisible = false" size="mini">确 定</el-button>
-    </span>
-</el-dialog>
+        <el-button @click="DialogVisible = false" size="mini">取 消</el-button>
+        <el-button type="primary" @click="DialogVisible = false" size="mini">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 <script>

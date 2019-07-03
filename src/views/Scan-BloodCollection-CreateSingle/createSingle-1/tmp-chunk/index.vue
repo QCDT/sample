@@ -43,7 +43,7 @@ export default {
     overflow: hidden;
 
     width: 450px;
-    height: 380px;
+    // height: 390px;
 
     border-radius: 10px;
 }
