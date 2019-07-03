@@ -1,9 +1,9 @@
 import Header from '@/components/header.vue'
 export const zlRouter = [
   {
-    path: '/test',
+    path: '/test123',
     components: {
-      default: () => import('@/views/Scan/saomiao/Detection/index.vue'),
+      default: () => import('@/views/Scan/index.vue'),
       navbar: Header
     }
   }

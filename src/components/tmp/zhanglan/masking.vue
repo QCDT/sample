@@ -1,20 +1,21 @@
 <template>
-  <div class="masking-wrap">
+  <div class="masking-wrap" :style="{backgroundColor:`rgba(0, 0, 0, ${rgba})`}">
     <slot></slot>
   </div>
 </template>
 <script>
 export default {
   props: {
-    bgc: String// .in 背景色
+    rgba: { type: Number, default: 0.3 },
+    bgc: String // .in 背景色
   },
   components: {},
-  data () {
-    return {}
+  data() {
+    return {};
   },
   methods: {},
   computed: {}
-}
+};
 </script>
 <style scoped lang='less'>
 .masking-wrap {

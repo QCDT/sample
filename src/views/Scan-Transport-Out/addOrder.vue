@@ -1,27 +1,38 @@
 <template>
+  <!-- 添加订单的表单页面 -->
   <div class="add-order-tmp">
-    <!-- 添加订单的表单页面 -->
-    添加订单的表单页面
-    <test title="添加转出订单"></test>
+    <div class="in">
+      <addOrder style="background:#fff" title="添加转出订单" @confirm="confirm"></addOrder>
+  <sampleBox></sampleBox>
+    </div>
   </div>
 </template>
 <script>
-import transferOrder from '../Scan-Transport-Out-Change/transferOrder'
-import test from '../Scan-Transport-Out-Change/transferOrder'
-
+import addOrder from "../Scan-Transport-Out-Change/transferOrder";
+import  sampleBox from './sampleBox'
 export default {
   props: {},
-  components: { transferOrder, test },
-  data () {
-    return {}
+  components: { addOrder,sampleBox },
+  data() {
+    return {};
   },
-  methods: {},
+  methods: {
+    confirm() {
+      console.log("11: ", "确认");
+    }
+  },
   computed: {}
-}
+};
 </script>
 <style scoped lang='less'>
 .add-order-tmp {
-  background-color: #fff;
+  width: 100%;
+
+  background-color: #eee;
   margin-top: 87px;
+  height: calc(100% - 87px);
+}
+.in {
+  padding: 20px 20px 0;
 }
 </style>

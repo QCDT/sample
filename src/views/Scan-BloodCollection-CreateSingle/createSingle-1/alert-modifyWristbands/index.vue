@@ -37,15 +37,16 @@ export default {
   // height: 200px;
   // background: red;
   .patientInfo{
-    // text-align: center;
+    text-align: center;
     // line-height: 45px;
+    width: 100%;
     margin-top: 15px;
     >span{
       width: 30%;
       display: inline-block;
     }
     &/deep/.el-input{
-      width: 70%;
+      width: 50%;
     }
     img{
       width:30px;

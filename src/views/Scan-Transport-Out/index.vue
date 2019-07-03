@@ -48,7 +48,6 @@
               <router-link :to="{name:'outchange'}" style="color:#333">
                 <i class="icon icon-edit"></i>
               </router-link>
-
               <el-button type="text" @click="open(scope.row,scope.$index)">
                 <i class="icon icon-shanchu"></i>
               </el-button>

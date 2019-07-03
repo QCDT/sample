@@ -80,7 +80,6 @@ export default {
      this.imgLoad();
 		 window.addEventListener('resize', () => {
 				this.bannerHeight = this.$refs.image[0].height;
-				console.log(this.bannerHeight)
 		  })
     // this.imgLoad();
     // // this.$nextTick(function() {
