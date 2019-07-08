@@ -11,7 +11,7 @@
                 <el-input v-model="roleName" size="mini"></el-input>
             </div>
             <div class="userType">
-                <el-button type="primary" size="mini">搜索</el-button>
+                <el-button type="primary" size="mini" @click="searchUser">搜索</el-button>
                 <el-button type="primary" size="mini" @click="AddType">{{userType?"添加用户": '添加角色'}}</el-button>
                 <el-tooltip class="item" effect="dark" content="用户设置" placement="bottom">
                     <img src="@/assets/img/ren2.png" v-show ="userType" @click="TabUser" />
@@ -27,6 +27,7 @@
                 :data="tableData"
                 style="width: 100%"
                 size = 'mini'
+                max-height="380"
                 :row-style="{textAlign: 'center',padding:'0px',}"
                 :cell-style="{textAlign: 'center'}"
                 :header-cell-style ="{textAlign:'center', background:'#00c9ff',color:'white'}"
@@ -139,18 +140,18 @@ export default {
       userType: true, // 切换用户设置和角色设置
       addUserType: true, // 添加和修改弹窗的切换
       tableData: [ // 搜索后数据
-        {
-          username: 'admin',
-          rolename: '管理员'
-        },
-        {
-          username: 'admin',
-          rolename: '管理员'
-        },
-        {
-          username: 'admin',
-          rolename: '管理员'
-        }
+        // {
+        //   username: 'admin',
+        //   rolename: '管理员'
+        // },
+        // {
+        //   username: 'admin',
+        //   rolename: '管理员'
+        // },
+        // {
+        //   username: 'admin',
+        //   rolename: '管理员'
+        // }
       ],
       authority: [ // 角色权限设置数据
         {
@@ -196,9 +197,54 @@ export default {
       ]
     }
   },
+  created(){
+      this.$axios({
+        method:'get',
+        url:'sampleGuide/userInfo/findAllUser'
+      })
+      .then(({data})=>{
+         console.log(data)
+         data.data.forEach((item)=>{
+          this.tableData.push({
+            username: item.username,
+            rolename: item.name
+          })
+        })
+      })
+  },
   methods: {
     TabUser () { // 用户切换和角色切换的方法
       this.userType = !this.userType
+    },
+    searchUser () {
+      this.tableData = []
+      console.log(this.roleName)
+      this.$axios({
+        method:'post',
+        url:'sampleGuide/userInfo/findUserByNameAndRole',
+        headers: {
+                'Content-Type': 'application/json;charset=UTF-8'
+            },
+        data:({
+          username: this.userName,
+          rolePermId: this.roleName
+        })
+      })
+      .then(({ data }) => {
+        console.log(data);
+        if(data.data.length == 0){
+          return;
+        }
+        data.data.forEach((item)=>{
+          this.tableData.push({
+            username: item.username,
+            rolename: item.name
+          })
+        })
+      })
+      .catch(error => {
+        console.log(error);
+      });
     },
     handleEdit (index, row) {
       console.log(index, row)
