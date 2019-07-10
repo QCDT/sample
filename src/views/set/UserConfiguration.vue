@@ -4,11 +4,26 @@
         <div class="userTitle">
             <div class="userType">
                 <i>{{userType?"用户名": '角色名'}}</i>
-                <el-input v-model="userName" size="mini"></el-input>
+                <el-input v-model="searchUserName" size="mini"></el-input>
             </div>
             <div class="userType">
                 <i>{{userType?"角色名": '权限'}}</i>
-                <el-input v-model="roleName" size="mini"></el-input>
+                <el-select v-model="roleValue" placeholder="请选择" size="mini" v-show="userType">
+                  <el-option
+                    v-for="item in roleOptions"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value">
+                  </el-option>
+                </el-select>
+                <el-select v-model="jurisdictionValue" placeholder="请选择" size="mini" v-show="!userType">
+                  <el-option
+                    v-for="item in authority"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value">
+                  </el-option>
+                </el-select>
             </div>
             <div class="userType">
                 <el-button type="primary" size="mini" @click="searchUser">搜索</el-button>
@@ -24,7 +39,7 @@
         <div class="userList">
             <el-table
                 ref="multipleTable"
-                :data="tableData"
+                :data="UsertableData"
                 style="width: 100%"
                 size = 'mini'
                 max-height="380"
@@ -32,6 +47,7 @@
                 :cell-style="{textAlign: 'center'}"
                 :header-cell-style ="{textAlign:'center', background:'#00c9ff',color:'white'}"
                 border
+                v-show="userType"
                 >
                 <el-table-column
                 type="index"
@@ -40,21 +56,62 @@
                 >
                 </el-table-column>
                 <el-table-column
-                prop="username"
+                prop="userName"
                 label="用户名"
                 >
                 </el-table-column>
                 <el-table-column
-                prop="rolename"
+                prop="roleName"
                 label="角色名"
+                >
+                </el-table-column>
+                <el-table-column
+                prop="createTime"
+                label="创建时间"
                 >
                 </el-table-column>
                 <el-table-column label="操作">
                     <template slot-scope="scope">
-                        <img src="@/assets/img/xiugaiyonghu.png" class="edit" @click="handleEdit(scope.$index, scope.row)" v-show="userType"/>
-                        <img src="@/assets/img/shanchuyonghu.png" @click="handleDelete(scope.$index, scope.row)" v-show="userType"/>
-                        <img src="@/assets/img/xiugai02.png"  @click="handleEdit(scope.$index, scope.row)" v-show="!userType"/>
-                        <img src="@/assets/img/shanchu02.png" @click="handleDelete(scope.$index, scope.row)" v-show="!userType"/>
+                        <img src="@/assets/img/xiugaiyonghu.png" class="edit" @click="handleEdit(scope.$index, scope.row)"/>
+                        <img src="@/assets/img/shanchuyonghu.png" @click="handleDelete(scope.$index, scope.row)"/>
+                    </template>
+                </el-table-column>
+            </el-table>
+            <el-table
+                ref="multipleTable"
+                :data="RoletableData"
+                style="width: 100%"
+                size = 'mini'
+                max-height="380"
+                :row-style="{textAlign: 'center',padding:'0px',}"
+                :cell-style="{textAlign: 'center'}"
+                :header-cell-style ="{textAlign:'center', background:'#00c9ff',color:'white'}"
+                border
+                v-show="!userType"
+                >
+                <el-table-column
+                type="index"
+                width="100"
+                label="序号"
+                >
+                </el-table-column>
+                <el-table-column
+                prop="roleName"
+                label="角色名"
+                width="150"
+                >
+                </el-table-column>
+                <el-table-column
+                prop="jurisdiction"
+                label="权限"
+                width="450"
+                show-overflow-tooltip
+                >
+                </el-table-column>
+                <el-table-column label="操作">
+                    <template slot-scope="scope">
+                        <img src="@/assets/img/xiugai02.png"  @click="handleEdit(scope.$index, scope.row)"/>
+                        <img src="@/assets/img/shanchu02.png" @click="handleDelete(scope.$index, scope.row)"/>
                     </template>
                 </el-table-column>
             </el-table>
@@ -67,59 +124,80 @@
             <div>
                 <div class="roleDialogVisible">
                     <span>角色名</span>
-                    <i><el-input  placeholder="请输入内容" size="mini" class="addInput" clearable></el-input></i>
+                    <i><el-input v-model="newRoleName"  placeholder="请输入内容" size="mini" class="addInput" clearable></el-input></i>
                 </div>
                 <div>
                     <div class="jurisdiction">
                         <span>权限操作</span>
                     </div>
                     <div>
-                        <el-checkbox v-model="item.checked" v-for="(item,index) in authority"  :key="index" class="jurisdictionType">{{item.title}}</el-checkbox>
+                        <el-checkbox v-model="item.checked" v-for="(item,index) in authority"  :key="index" class="jurisdictionType">{{item.label}}</el-checkbox>
                     </div>
                 </div>
             </div>
             <span slot="footer" class="dialog-footer">
-                <el-button @click="RoleDialogVisible = false">保存</el-button>
-                <el-button type="primary" @click="RoleDialogVisible = false">返回</el-button>
+                <el-button @click="roleOperation"  size="mini">保存</el-button>
+                <el-button type="primary" @click="RoleDialogVisible = false" size="mini">返回</el-button>
             </span>
         </el-dialog>
         <el-dialog
             :title="addUserType? '添加用户': '修改用户'"
             :visible.sync="UserDialogVisible"
-            width="35%"
+            width="40%"
             center>
             <div class="dialogContentWrap">
                 <div class="dialogContent">
                     <span>用户名</span>
-                    <i><el-input v-model="userName" placeholder="请输入内容" size="mini" class="addInput" clearable></el-input></i>
+                    <i><el-input v-model= userName  placeholder="请输入内容" size="mini" class="addInput" clearable  prop="name" @blur="rulesUserName" maxlength = 15></el-input></i>
+                    <span class="verifyMsg">{{userNamemsg}}</span>
                 </div>
                 <div class="dialogContent">
                     <span>密码</span>
-                    <i><el-input v-model="userPassword" placeholder="请输入密码" size="mini" class="addInput" clearable  show-password></el-input></i>
+                    <i><el-input v-model= userPassword placeholder="请输入密码" size="mini" class="addInput" clearable  show-password  maxlength = 15></el-input></i>
+                    <span class="verifyMsg">{{passwordMsg}}</span>
                 </div>
                 <div class="dialogContent">
                     <span>确认密码</span>
                     <i><el-input v-model="repeatPassword" placeholder="请输入密码" size="mini" class="addInput" clearable  show-password></el-input></i>
+                    <span class="verifyMsg">{{passwordMsg}}</span>
+                </div>
+                <div class="dialogContent">
+                    <span>绑定IC卡</span>
+                    <i><el-input placeholder="请输入内容" size="mini" class="addInput" clearable></el-input></i>
+                    <img src="@/assets/img/saomiao.gif">
                 </div>
                 <div class="dialogContent">
                     <span>角色</span>
-                    <i><el-input v-model="userName" placeholder="请输入内容" size="mini" class="addInput" clearable></el-input></i>
+                    <i><el-input v-model= roleName placeholder="请输入内容" size="mini" class="addInput" clearable></el-input></i>
+                </div>
+                <div class="dialogContent">
+                    <span>姓名</span>
+                    <i><el-input v-model= compellation placeholder="请输入内容" size="mini" class="addInput" clearable></el-input></i>
                 </div>
                 <div class="dialogContent">
                     <span>实验室</span>
                     <i>
-                        <el-checkbox v-model="firstLevel">一期临床实验室</el-checkbox>
-                        <el-checkbox v-model="secondLevel">二期临床实验室</el-checkbox>
+                        <el-radio v-model="radio" label="1">Ⅰ期临床实验室</el-radio>
+                        <el-radio v-model="radio" label="2">II期临床实验室</el-radio>
                     </i>
                 </div>
                 <div class="dialogContent">
                     <span>谁可以看</span>
-                    <i><el-input  placeholder="请输入内容" size="mini" class="addInput" clearable  show-password></el-input></i>
+                    <i>
+                        <el-select v-model="selectValue" placeholder="请选择" size="mini">
+                          <el-option
+                            v-for="item in options"
+                            :key="item.value"
+                            :label="item.label"
+                            :value="item.value">
+                          </el-option>
+                        </el-select>
+                    </i>
                 </div>
             </div>
             <span slot="footer" class="dialog-footer">
-                <el-button @click="UserDialogVisible = false">保存</el-button>
-                <el-button type="primary" @click="UserDialogVisible = false">返回</el-button>
+                <el-button @click="userOperation" :disabled="Userdisabled" size="mini">保存</el-button>
+                <el-button type="primary" @click="UserDialogVisible = false" size="mini">返回</el-button>
             </span>
         </el-dialog>
      </div>
@@ -129,21 +207,53 @@
 export default {
   data () {
     return {
+      searchUserName: '', //用户名，角色搜索框
+      userNamemsg: '',
+      compellation: '', //姓名值
+      Userdisabled: false, //添加保存按钮禁用
+      roleValue: '', // 角色下拉框的value
+      userId: '', //用户ID
+      roleId: '', // 角色ID
       userName: '', // 用户名
       roleName: '', // 角色名
+      addUserName: '',
       userPassword: '', // 密码
       repeatPassword: '', // 二次密码
-      firstLevel: false, //
-      secondLevel: false,
+      radio: '1',
+      newRoleName: '',
       RoleDialogVisible: false, // 角色设置的弹窗
       UserDialogVisible: false, // 用户设置的弹窗
       userType: true, // 切换用户设置和角色设置
-      addUserType: true, // 添加和修改弹窗的切换
-      tableData: [ // 搜索后数据
+      addUserType: true, // 切换添加和修改弹窗
+      selectValue: '', //谁可以看下拉框
+      jurisdictionValue: '', // 权限的id
+      list: [], // 选择
+      roleOptions:[
         // {
-        //   username: 'admin',
-        //   rolename: '管理员'
-        // },
+        //   value: '',
+        //   label: '',
+        // }
+      ],
+      options:[
+        {
+          value: '0',
+          label: '公开',
+        },
+        {
+          value: '1',
+          label: '保密',
+        },
+        {
+          value: '2',
+          label: '部分人可见'
+        }
+      ],
+      UsertableData: [ // 用户数据
+        // {
+        //   id: '',
+        //   userName: 'admin',
+        //   roleName: '管理员'
+        // }
         // {
         //   username: 'admin',
         //   rolename: '管理员'
@@ -153,116 +263,390 @@ export default {
         //   rolename: '管理员'
         // }
       ],
+      RoletableData: [ // 角色数据
+        // {
+        //   id: '',
+        //   roleName: '管理员'
+        //   jurisdiction : ''
+        // }
+      ],
       authority: [ // 角色权限设置数据
         {
-          title: '新建，修改样本',
+          value: 1,
+          label: '新建，修改样本',
           checked: false
         },
         {
-          title: '样本的借出和归还',
+          value: 2,
+          label: '样本的借出和归还',
           checked: false
         },
         {
-          title: '销毁样本和样本盒',
+          value: 3,
+          label: '销毁样本和样本盒',
           checked: false
         },
         {
-          title: '导出Excel',
+          value: 4,
+          label: '导出Excel',
           checked: false
         },
         {
-          title: '转移样本和样本盒',
+          value: 5,
+          label: '转移样本和样本盒',
           checked: false
         },
         {
-          title: '查看日志信息',
+          value:6,
+          label: '查看日志信息',
           checked: false
         },
         {
-          title: '读卡器参数设置',
+          value: 7,
+          label: '读卡器参数设置',
           checked: false
         },
         {
-          title: '冰箱设置',
+          value: 8,
+          label: '冰箱设置',
           checked: false
         },
         {
-          title: '管理用户',
+          value: 9,
+          label: '管理用户',
           checked: false
         },
         {
-          title: '转运',
+          value:10,
+          label: '转运',
           checked: false
         }
       ]
     }
   },
-  created(){
-      this.$axios({
+  created () {
+      this.$axios({ //.............获取所有用户和角色的请求
         method:'get',
         url:'sampleGuide/userInfo/findAllUser'
       })
       .then(({data})=>{
-         console.log(data)
+        //  console.log(data)
+        //  console.log(data.data.create_date)
          data.data.forEach((item)=>{
-          this.tableData.push({
-            username: item.username,
-            rolename: item.name
+          this.UsertableData.push({
+            id: item.id,
+            userName: item.username,
+            roleName: item.name,
+            createTime: item.create_date
           })
         })
       })
+      this.$axios({ // ...................获取所有角色和权限请求
+        method: 'get',
+        url: 'sampleGuide/rolePerm/findAllRole'
+      })
+      .then(({data})=>{
+        // console.log(data.data.rolePermList)
+        data.data.rolePermList.forEach((item)=>{
+            console.log(item.name)
+            this.RoletableData.push({ //.............角色表格数据
+               id: item.id,
+               roleName: item.name,
+              //  jurisdiction: 
+            })
+            this.roleOptions.push({ //..............角色下拉框
+              value: item.id,
+              label: item.name
+            })
+        })
+      })
+  },
+  computed:{
+    jurisdictionList(){
+      this.authority.forEach((item)=>{
+        if(item.checked){
+           this.list.push(item.value)
+          // this.jurisdictionList.push(item.value)
+        }
+      })
+      return this.list
+      // console.log(this.list)
+    }
   },
   methods: {
     TabUser () { // 用户切换和角色切换的方法
       this.userType = !this.userType
+      this.searchUserName = ''
+      this.roleValue = ''
+      this.jurisdictionValue = ''
     },
-    searchUser () {
-      this.tableData = []
-      console.log(this.roleName)
-      this.$axios({
-        method:'post',
-        url:'sampleGuide/userInfo/findUserByNameAndRole',
-        headers: {
-                'Content-Type': 'application/json;charset=UTF-8'
-            },
-        data:({
-          username: this.userName,
-          rolePermId: this.roleName
-        })
-      })
-      .then(({ data }) => {
-        console.log(data);
-        if(data.data.length == 0){
-          return;
+    rulesUserName () {
+        if(this.userName == ''){
+          this.userNamemsg = "用户名不能为空"
+          this.Userdisabled = true
+        }else{
+          this.Userdisabled = false
+          this.userNamemsg = ''
         }
-        data.data.forEach((item)=>{
-          this.tableData.push({
-            username: item.username,
-            rolename: item.name
+        this.$axios({
+           method: 'post',
+           url: 'sampleGuide/userInfo/findResetUserName',
+           headers: {
+              'Content-Type': 'application/json; charset=UTF-8'
+           },
+           data:({
+              username: this.userName
+           })
+        })
+        .then(({data})=>{
+            if(data.data == 1){
+              this.userNamemsg = "该用户名已存在"
+              this.Userdisabled = true
+            }else{
+              this.Userdisabled = false
+               this.userNamemsg = ''
+            }
+        })  
+    },
+    roleOperation () {
+        if(this.addUserType){ //...........新增角色
+          this.$axios({ 
+            method: 'post',
+            url: 'sampleGuide/rolePerm/insertRole',
+            headers: {
+              'Content-Type': 'application/json;charset=UTF-8'
+            },
+            data: ({
+                name: this.newRoleName,
+                integerList: this.jurisdictionList
+            })
+          })
+          .then(({data})=>{
+               console.log(data)
+            })
+        }else{ // ...............修改角色
+          console.log(this.jurisdictionList)
+          this.$axios({ 
+            method: 'post',
+            url: 'sampleGuide/rolePerm/updateRole',
+            headers: {
+              'Content-Type': 'application/json;charset=UTF-8'
+            },
+            data: ({
+                id: this.roleId,
+                name: this.newRoleName,
+                integerList: this.jurisdictionList
+            })
+            .then(({data})=>{
+               console.log(data)
+            })
+          })
+        }
+    },
+    userOperation () {//..........弹窗保存操作
+        if(this.addUserType){ //........新增用户
+          console.log(this.roleName)
+          this.$axios({
+            method: 'post',
+            url: 'sampleGuide/userOther/insertUser',
+            headers: {
+              'Content-Type': 'application/json; charset=UTF-8'
+            },
+            data: ({
+                username: this.userName,
+                password: this.repeatPassword,
+                visible_strategy: this.selectValue,
+                // visible_data_user_id: '1,2,',
+                visible_data_laboratory_id: this.radio,
+                addUserRoleId: this.roleName,
+                chinesename:this.compellation
+            })
+          })
+          .then(({data})=>{
+              console.log(data)
+          })
+        }else{
+          // console.log(this.userId);
+          this.$axios({ //............修改用户
+            method: 'post',
+            url: 'sampleGuide/userOther/updateUserById',
+            headers: {
+              'Content-Type': 'application/json;charset=UTF-8'
+            },
+            data: ({
+                id: this.userId,
+                username: this.userName,
+                password: this.repeatPassword,
+                userRoleIdUpdate: this.roleName
+            })
+          })
+          .then(({data})=>{
+              if(data.code == 200){
+                  this.$message({
+                    message: '修改成功！',
+                    type: 'success'
+                  });
+                  this.UserDialogVisible = false
+              }else{
+                this.UserDialogVisible = true
+              }
+          })
+        }
+    },
+    searchUser () { // ..............搜索按钮点击事件
+      if(this.userType){
+        this.UsertableData = [] //..........用户 角色搜索
+        this.$axios({
+          method:'post',
+          url:'sampleGuide/userInfo/findUserByNameAndRole',
+          headers: {
+                  'Content-Type': 'application/json;charset=UTF-8'
+              },
+          data:({
+            username: this.searchUserName,
+            rolePermId: this.roleValue,
           })
         })
-      })
-      .catch(error => {
-        console.log(error);
-      });
+        .then(({ data }) => {
+          // console.log(data);
+          if(data.data.length == 0){
+            return;
+          }
+          data.data.forEach((item)=>{
+            this.UsertableData.push({
+              id: item.id,
+              userName: item.username,
+              roleName: item.name,
+              createTime: item.create_date
+            })
+          })
+        })
+        .catch(error => {
+          console.log(error);
+        });
+      }else{ // ............................ 角色，权限搜索
+        this.RoletableData = []
+        console.log(this.jurisdictionValue)
+        this.$axios({
+          method:'post',
+          url:'sampleGuide/rolePerm/findRoleByNameAndPermission',
+          headers: {
+            'Content-Type': 'application/json;charset=UTF-8'
+          },
+          data:({
+            name: this.searchUserName,
+            permissionPermId: this.jurisdictionValue
+          })
+        })
+        .then(({data})=>{
+          console.log(data)
+          if(data.data.length == 0){
+            return;
+          }
+          data.data.forEach((item)=>{
+            this.RoletableData.push({
+              id: item.id,
+              roleName: item.name,
+              //  jurisdiction: 
+            })
+          })
+        })
+      }
     },
     handleEdit (index, row) {
       console.log(index, row)
-      if (this.userType) {
+      if (this.userType) { // ...........修改用户时获取该用户的用户名和密码
         this.UserDialogVisible = true
+          this.$axios({
+            method:'post',
+            url:'sampleGuide/userInfo/findByUsername',
+            data: this.qs.stringify({
+              username: row.userName,
+            })
+          })
+          .then(({data})=>{
+             console.log(data)
+             this.userName = data.data.username
+             this.roleName = data.data.name
+             this.userPassword = data.data.password
+             this.userId = this.UsertableData[index].id
+          })
       } else {
         this.RoleDialogVisible = true
+        this.newRoleName = row.roleName //.....修改的角色名的获取
+        this.roleId = row.id
+        this.list = [],
+        this.authority.forEach((item)=>{
+          item.checked = false
+        })
       }
       this.addUserType = false
     },
     handleDelete (index, row) {
-      console, log(index, row)
+      if(this.userType){
+        this.userId = this.UsertableData[index].id
+        this.$axios({
+          method:'post',
+          url:'sampleGuide/userOther/deleteUserById',
+          headers: {
+          'Content-Type': 'application/json;charset=UTF-8'
+          },
+          data:({
+            id: this.userId
+          })
+        })
+        .then(({data})=>{
+            if(data.code == 200){
+              this.$message({
+                    message: '删除成功！',
+                    type: 'success'
+                });
+            }else{
+              this.$message({
+                  message: '删除失败，请重试',
+                  type: 'warning'
+              })
+            }
+        })
+      }else{
+        this.roleId = this.RoletableData[index].id
+        this.$axios({
+          method:'post',
+          url:'sampleGuide/rolePerm/deleteRoleById',
+          headers: {
+          'Content-Type': 'application/json;charset=UTF-8'
+          },
+          data:({
+            id: this.roleId
+          })
+        })
+        .then(({data})=>{
+            if(data.code == 200){
+              this.$message({
+                    message: '删除成功！',
+                    type: 'success'
+                });
+            }else{
+              this.$message({
+                  message: '删除失败，请重试',
+                  type: 'warning'
+              })
+            }
+        })
+      }
     },
     AddType () { // 添加方法
       if (this.userType) {
         this.UserDialogVisible = true
+        this.userName = ''
+        this.roleName = ''
+        this.userPassword = ''
       } else {
         this.RoleDialogVisible = true
+        this.list = []
+        this.authority.forEach((item)=>{
+            item.checked = false
+        })
       }
       this.addUserType = true
     }
