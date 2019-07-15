@@ -65,7 +65,11 @@ export default new Router({
     {
       path: '/scan/detection',
       name: 'detection',
-      component: () => import('@/views/Scan/saomiao/Detection/index.vue')
+      components: {
+        default: () => import('@/views/Scan-Detection/index.vue'),
+        navbar: Header
+      }
+
     },
 
     {

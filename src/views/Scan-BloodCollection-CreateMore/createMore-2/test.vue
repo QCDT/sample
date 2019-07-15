@@ -137,54 +137,54 @@
   </div>
 </template>
 <script>
-import tmpButton from "@/components/tmp/zhanglan/tmpButton";
+import tmpButton from '@/components/tmp/zhanglan/tmpButton'
 
-import blueSearch from "@/components/tmp/zhanglan/blueSearch";
+import blueSearch from '@/components/tmp/zhanglan/blueSearch'
 export default {
   props: {},
   components: { blueSearch, tmpButton },
-  data() {
+  data () {
     return {
       // value1: [new Date(2000, 10, 10, 10, 10), new Date(2000, 10, 11, 10, 10)],
-      value1: "",
+      value1: '',
       options: [
         {
-          value: "速度",
-          label: "速度"
+          value: '速度',
+          label: '速度'
         }
       ],
-      value: "",
+      value: '',
       tableData: [
         {
           coding: 1, // 序号
-          name: "血样", // 样本名称
-          enterName: "录入人", // 录入人
-          enterTime: "2018.09.09", // 录入日期
-          sampl: "2018.09.09", // 采样信息
-          source: "人", // 样本来源
-          classes: "B类" // 样本类别
+          name: '血样', // 样本名称
+          enterName: '录入人', // 录入人
+          enterTime: '2018.09.09', // 录入日期
+          sampl: '2018.09.09', // 采样信息
+          source: '人', // 样本来源
+          classes: 'B类' // 样本类别
         }
       ],
       multipleSelection: []
-    };
+    }
   },
   methods: {
-    search() {
-      this.$message("查询");
+    search () {
+      this.$message('查询')
     },
-    getRowClass({ rowIndex }) {
-      return rowIndex == 0 ? this.$store.getters.formTheme : 0;
+    getRowClass ({ rowIndex }) {
+      return rowIndex == 0 ? this.$store.getters.formTheme : 0
     },
-    handleSelectionChange(val) {
-      this.multipleSelection = val;
+    handleSelectionChange (val) {
+      this.multipleSelection = val
     },
-    confirmAdd() {
+    confirmAdd () {
       /* 确认添加 */
-      this.$emit("confirmAdd", 123);
+      this.$emit('confirmAdd', 123)
     }
   },
   computed: {}
-};
+}
 </script>
 <style scoped lang='less'>
 .select-sample {
@@ -240,13 +240,13 @@ export default {
 
   margin: 10px 20px;
   padding-top: 15px;
- 
+
   border: 1px solid #e2e2e2;
 }
 
 .form-input {
   width:100%;
- 
+
 }
 
 .form-table-box {

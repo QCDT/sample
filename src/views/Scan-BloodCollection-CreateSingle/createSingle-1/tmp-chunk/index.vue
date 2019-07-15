@@ -15,19 +15,19 @@
   </div>
 </template>
 <script>
-import tmpButton from "@/components/tmp/zhanglan/tmpButton";
+import tmpButton from '@/components/tmp/zhanglan/tmpButton'
 export default {
   props: {},
   components: { tmpButton },
-  data() {
+  data () {
     return {
-      input: "",
+      input: '',
       showPrint: false
-    };
+    }
   },
   methods: {},
   computed: {}
-};
+}
 </script>
 <style scoped lang='less'>
 .add-patient-info-box {
@@ -36,7 +36,7 @@ export default {
     align-items: center;
     justify-content: center;
     height: 87vh;
- 
+
 }
 
 .in-chunk {

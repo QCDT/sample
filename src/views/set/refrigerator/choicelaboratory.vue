@@ -11,7 +11,7 @@
                 <div @dblclick="editLabName(index)" class="labName">
                     <span v-show="!item.editing">{{item.laboratoryName}}</span>
                     <el-input v-show="item.editing" v-model="laboratoryName" placeholder="请输入内容" size="mini"></el-input>
-                </div>             
+                </div>
             </li>
         </ul>
         <div class="labBtn">
@@ -23,44 +23,43 @@
 </template>
 <script>
 export default {
-    data () {
-        return {
-            laboratoryName:'',
-            activeClass: -1,
-            list:[
-                {
-                    id:Date.now(),
-                    laboratoryName:'实验室',
-                    editing: false
-                },
-                {
-                    id:Date.now(),
-                    laboratoryName:'实验室',
-                    editing: false
-                }
-            ]
-        }
-    },
-    mounted () {
-        // document.onclick = function(){
-        //     this.list.map((item)=>{
-        //        return  item.editing = false;
-        //     })
-        // }
-    },
-    methods: {
-        chooselab (index) {
-            console.log(index)
-            this.activeClass = index;
-            // this.active = true
+  data () {
+    return {
+      laboratoryName: '',
+      activeClass: -1,
+      list: [
+        {
+          id: Date.now(),
+          laboratoryName: '实验室',
+          editing: false
         },
-        editLabName (index) {
-            this.list[index].editing = true;
-        },
-        equipmentInfo () {
-            this.$router.push('/set/refrigerator/equipmentInfo')
+        {
+          id: Date.now(),
+          laboratoryName: '实验室',
+          editing: false
         }
+      ]
     }
+  },
+  mounted () {
+    // document.onclick = function(){
+    //     this.list.map((item)=>{
+    //        return  item.editing = false;
+    //     })
+    // }
+  },
+  methods: {
+    chooselab (index) {
+      console.log(index)
+      this.activeClass = index
+      // this.active = true
+    },
+    editLabName (index) {
+      this.list[index].editing = true
+    },
+    equipmentInfo () {
+      this.$router.push('/set/refrigerator/equipmentInfo')
+    }
+  }
 }
 </script>
-

@@ -83,48 +83,48 @@
   </div>
 </template>
 <script>
-import maskTran from "@/components/tmp/zhanglan/masking";
-import tmpButton from "@/components/tmp/zhanglan/tmpButton";
-import selectSample from "@/views/Scan-FenZuHeYan/alert-createCheck/alert-selectSample";
+import maskTran from '@/components/tmp/zhanglan/masking'
+import tmpButton from '@/components/tmp/zhanglan/tmpButton'
+import selectSample from '@/views/Scan-FenZuHeYan/alert-createCheck/alert-selectSample'
 export default {
   props: {},
   components: { tmpButton, selectSample, maskTran },
-  data() {
+  data () {
     return {
       alertSelectSample: false, // 选择样本
       value2: new Date(),
       tableData: [
         {
-          id: "1",
-          orderName: "采血管", // 采血管
-          setTime: "2018.01.01", // 设置时间
-          mark: "备注" // 备注
+          id: '1',
+          orderName: '采血管', // 采血管
+          setTime: '2018.01.01', // 设置时间
+          mark: '备注' // 备注
         }
       ],
       multipleSelection: []
-    };
+    }
   },
   methods: {
-    getRowClass({ rowIndex }) {
-      return rowIndex == 0 ? this.$store.getters.formTheme : "";
+    getRowClass ({ rowIndex }) {
+      return rowIndex == 0 ? this.$store.getters.formTheme : ''
     },
-    changProject(rowData, index) {},
-    confirmAdd(v) {
-      this.alertSelectSample = false;
-      this.$message("确认添加");
-      console.log("确认添加: ", v);
+    changProject (rowData, index) {},
+    confirmAdd (v) {
+      this.alertSelectSample = false
+      this.$message('确认添加')
+      console.log('确认添加: ', v)
     },
-    selectSample() {
+    selectSample () {
       /* 选择样本 */
-      this.$message("选择样本");
-      this.alertSelectSample = true;
+      this.$message('选择样本')
+      this.alertSelectSample = true
     }
   },
   computed: {},
-  created() {
-    this.$emit("getMessage", 2);
+  created () {
+    this.$emit('getMessage', 2)
   }
-};
+}
 </script>
 <style scoped lang='less'>
 .row {

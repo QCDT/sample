@@ -10,20 +10,20 @@
   </div>
 </template>
 <script>
-import tmpButton from "@/components/tmp/zhanglan/tmpButton";
-import chunk from "@/views/Scan-BloodCollection-CreateSingle/createSingle-1/tmp-chunk";
+import tmpButton from '@/components/tmp/zhanglan/tmpButton'
+import chunk from '@/views/Scan-BloodCollection-CreateSingle/createSingle-1/tmp-chunk'
 export default {
   props: {},
   components: { tmpButton, chunk },
-  data() {
+  data () {
     return {
-      input: "",
+      input: '',
       showPrint: false
-    };
+    }
   },
   methods: {},
   computed: {}
-};
+}
 </script>
 <style scoped lang='less'>
 </style>

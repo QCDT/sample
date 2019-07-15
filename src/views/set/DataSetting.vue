@@ -129,3 +129,39 @@ export default {
   }
 }
 </script>
+<style lang="less" scoped>
+.SettingWrap{
+    width: 100%;
+    margin-top: 20px;
+    font-size: 16px;
+    .SettingContent{
+        margin: 0 auto;
+        width: 95%;
+        .SettingTitle{
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            .DataInfo{
+                border-left: 2px solid #00c9ff;
+                padding-left: 5px;
+                font-size: 16px;
+                line-height: 28px;
+            }
+        }
+        .addBox{
+            .addContent{
+                margin-top: 10px;
+                span{
+                    margin-right: 10px;
+                    display: inline-block;
+                    width: 80px;
+                    text-align: right;
+                }
+                .addInput{
+                    width: 15vw;
+                }
+            }
+        }
+    }
+}
+</style>

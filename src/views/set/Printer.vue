@@ -97,3 +97,49 @@ export default {
   }
 }
 </script>
+<style lang="less" scoped>
+.printerWrap{
+  width: 100%;
+//   text-align: center;
+}
+.printerTitle{
+    font-size: 18px;
+    margin:20px 0;
+    text-align: center;
+}
+.printerContent{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    .printerLeft{
+        // float: left;
+        margin-top: 60px;
+        margin-right:20px;
+        text-align: center;
+        p{
+            margin-top:10px;
+            text-align: left;
+            .printContent{
+                width:130px;
+            }
+        }
+        .btn{
+            margin-top:20px;
+        }
+        .choiceType{
+            font-size: 14PX;
+            margin-right: 15px;
+        }
+        .selectBox{
+            width:170px;
+        }
+    }
+    .printerRight{
+        img{
+            width: 300px;
+            height: 350px;
+        }
+    }
+}
+</style>
+

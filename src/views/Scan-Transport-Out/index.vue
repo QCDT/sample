@@ -2,7 +2,7 @@
   <!-- 转出主页 -->
   <div class="scan-transport-out-index">
     <fromName>转出订单查询</fromName>
-    <addAndSearch type='out'></addAndSearch>
+    <addAndSearch type="out"></addAndSearch>
     <div class="count">
       <span>共有:</span>
       <span>2</span>
@@ -22,7 +22,12 @@
         @selection-change="handleSelectionChange"
       >
         <el-table-column type="index" label="序号" width="70"></el-table-column>
-        <el-table-column prop="orderName" label="订单名称" width="120"></el-table-column>
+        <el-table-column prop="orderName" label="订单号" width="120"></el-table-column>
+        <el-table-column prop="orderName" label="订单名称" width="120">
+          <template>
+            <button @click="orderDetails">订单详情</button>
+          </template>
+        </el-table-column>
         <el-table-column prop="recipients" label="收件人" show-overflow-tooltip></el-table-column>
         <el-table-column prop="site" label="收件地址"></el-table-column>
         <el-table-column prop="contactWay" label="联系方式" show-overflow-tooltip></el-table-column>
@@ -56,16 +61,23 @@
         </el-table-column>
       </el-table>
     </div>
+    <!-- 订单详情页 -->
+    <maskTran :rgba="0" bgc="#eee" v-if="ifOrderDetails">
+      <orderDetails @close="ifOrderDetails=false"></orderDetails>
+    </maskTran>
   </div>
 </template>
 <script>
 import addAndSearch from './addAndSearch'
 import fromName from '@/components/tmp/zhanglan/fromName'
+import maskTran from '@/components/tmp/zhanglan/maskTran'
+import orderDetails from '@/views/Scan-Transport-Out/alert-orderDetails'
 export default {
   props: {},
-  components: { fromName, addAndSearch },
+  components: { fromName, addAndSearch, maskTran, orderDetails },
   data () {
     return {
+      ifOrderDetails: false,
       tableData: [
         {
           order: '订单号', // 订单号
@@ -80,6 +92,10 @@ export default {
     }
   },
   methods: {
+    orderDetails () {
+      this.ifOrderDetails = true
+      this.$message('订单详情orderDetails')
+    },
     toggleSelection (rows) {
       if (rows) {
         rows.forEach(row => {

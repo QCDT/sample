@@ -2,7 +2,7 @@
   <div class="SettingWrap">
       <div class="SettingContent">
         <div class="SettingTitle"> <!-- 冰箱设置的header -->
-            <span class="DataInfo">冰箱概况</span>
+            <!-- <span class="DataInfo">冰箱概况</span> -->
             <div>
                 <el-button type="primary" size="mini" @click="addrefrigerator">添加</el-button>
             </div>

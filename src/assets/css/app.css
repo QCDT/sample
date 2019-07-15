@@ -1,14 +1,14 @@
-@import './header.css';
-@import './login.css';
-@import './Home.css';
-@import './set.css';
-@import './cardReader.css';
-@import './header.css';
-@import './printer.css';
-@import './dataSetting.css';
-@import './userConfiguration.css';
-@import './Centrifuge.css';
-@import './refrigerator.css';
-@import './check.css';
-@import './choicelaboratory.css';
+
+ body {
+  margin: 0;
+  background: url("~@/assets/img/background.jpg") no-repeat;
+  background-size: cover;
+  font-family: "苹方", "微软雅黑", "Arial";
+}
+
+/* @import './cardReader.css'; */
+/* @import './Centrifuge.css'; */
+/* @import './refrigerator.css'; */
+/* @import './choicelaboratory.css'; */
+
 @import './reset.css';

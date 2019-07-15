@@ -11,7 +11,6 @@
       </h1>
       <h2>2/2</h2>
     </div>
-
     <div class="bar">
       <el-progress text-inside :stroke-width="12" :percentage="percentage" :color="customColor"></el-progress>
     </div>
@@ -21,32 +20,32 @@
 export default {
   props: {},
   components: {},
-  data() {
+  data () {
     return {
-      dian: "...",
+      dian: '...',
       timerDian: null,
       showPilot: false,
       percentage: 20,
-      customColor: "#90bf46"
-    };
+      customColor: '#90bf46'
+    }
   },
   filters: {
-    dian() {
-      return 11;
+    dian () {
+      return 11
     }
   },
   methods: {
-    runDian() {
+    runDian () {
       this.timerDian = setInterval(() => {
-        this.dian == "..." ? (this.dian = "") : (this.dian += ".");
-      }, 300);
+        this.dian == '...' ? (this.dian = '') : (this.dian += '.')
+      }, 300)
     }
   },
   computed: {},
-  created() {
-    this.showPilot ? null : this.runDian();
+  created () {
+    this.showPilot ? null : this.runDian()
   }
-};
+}
 </script>
 <style scoped lang='less'>
 .check-progress-box {

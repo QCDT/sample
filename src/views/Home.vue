@@ -1,41 +1,21 @@
 <template>
-    <div>
-        <div class="homeWrap">
-        
-        </div>
-    </div>
+  <div>
+      <div class="test">
+          123
+      </div>
+  </div>
 </template>
 <script>
-import fromName from '@/components/tmp/zhanglan/fromName'
 export default {
-  components: { fromName },
-  data () {
-    return {
-      active: 0,
-      homeLink: [
-        { link: 'home', text: '首页' },
-        { link: 'home', text: '扫描' },
-        { link: 'home', text: '查询' },
-        { link: 'home', text: '盘点' },
-        { link: 'home', text: '设置' },
-        { link: 'home', text: '数据分析' }
-      ]
-    }
+  props: {},
+  components: {},
+  data() {
+    return {};
   },
-
-  methods: {
-    test () {
-      // console.log("1: ", 1);
-    },
-    testclick () {
-      // console.log("111: ", 111);
-    }
-  }
-}
+  methods: {},
+  computed: {}
+};
 </script>
-<style lang="less" scoped>
-.icon{
-    font-size: 130px;
-}
-</style>
+<style scoped lang='less'>
 
+</style>

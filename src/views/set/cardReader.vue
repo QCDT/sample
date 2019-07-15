@@ -256,3 +256,68 @@ export default {
   }
 }
 </script>
+<style lang="less" scoped>
+.cardWrap {
+    width: 100%;
+
+    .btns {
+        width: 100%;
+        text-align: center;
+        margin-top: 25px;
+
+        .btn {
+            width: 120px;
+            // background-color: #00c9ff;
+        }
+    }
+
+    .parameterWrap {
+        width: 950px;
+        height: 80px;
+        border: 1px solid rgba(153, 153, 153, 1);
+        position: relative;
+        margin: 0 auto;
+        margin-top: 35px;
+        display: flex;
+        justify-content: space-around;
+
+        .parameter {
+            font-size: 14px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+
+            .parameterItem {
+                display: flex;
+                justify-content: space-around;
+                align-items: center;
+            }
+
+            .type {
+                font-size: 14px;
+                width: 70px;
+                margin-left: 15px;
+            }
+
+            .btn {
+                margin-left: 15px;
+                // background-color: #00c9ff
+            }
+        }
+
+        strong {
+            position: absolute;
+            font-size: 16px;
+            top: -15px;
+            left: 42%;
+            background: white;
+            display: inline-block;
+            line-height: 20px;
+            padding: 0px 10px;
+            width: 100px;
+            margin: 0 auto;
+            text-align: center;
+        }
+    }
+}
+</style>

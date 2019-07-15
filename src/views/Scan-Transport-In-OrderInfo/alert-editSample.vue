@@ -14,10 +14,10 @@
         <div class="item">
           <span>样本来源:</span>
           <el-input size="mini" style="width:160px"></el-input>
-      
+
         </div>
         <div class="item flex-end">
-   
+
           <el-input size="mini" style="width:160px"></el-input>
           <i class="el-icon-plus"></i>
         </div>
@@ -27,7 +27,7 @@
           <i class="">*</i>
         </div>
         <div class="item  flex-end">
-     
+
           <el-input size="mini" style="width:160px"></el-input>
           <i class="el-icon-plus"></i>
         </div>
@@ -42,16 +42,16 @@
 export default {
   props: {},
   components: {},
-  data() {
-    return {};
+  data () {
+    return {}
   },
   methods: {
-      save(){
-          this.$emit('save')
-      }
+    save () {
+      this.$emit('save')
+    }
   },
   computed: {}
-};
+}
 </script>
 <style scoped lang='less'>
 .edit-sample-box {
@@ -109,7 +109,7 @@ export default {
 }
 
 .item {
-   
+
     display: flex;
     align-items: center;
 

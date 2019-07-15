@@ -191,7 +191,7 @@
 export default {
   props: {},
   components: {},
-  data() {
+  data () {
     return {
       carouselIndex: 0 /* 轮播图的索引 */,
       autoplay: false,
@@ -199,34 +199,34 @@ export default {
       dialogSample: false,
       dialogExport: false,
       dialogOrder: false,
-      exportName: "",
+      exportName: '',
       sampleNum: 0,
-      value1: "",
-      value2: "",
-      setName: "",
-      findValue: "",
-      value: "",
-      bannerHeight: "",
+      value1: '',
+      value2: '',
+      setName: '',
+      findValue: '',
+      value: '',
+      bannerHeight: '',
       centrifugeList: [
         {
-          centrifugeName: "",
-          centrifugeTime: "",
-          centrifugeSpeed: "",
-          centrifugeTemperature: "",
+          centrifugeName: '',
+          centrifugeTime: '',
+          centrifugeSpeed: '',
+          centrifugeTemperature: '',
           activeCentrifugal: true
         },
         {
-          centrifugeName: "",
-          centrifugeTime: "",
-          centrifugeSpeed: "",
-          centrifugeTemperature: "",
+          centrifugeName: '',
+          centrifugeTime: '',
+          centrifugeSpeed: '',
+          centrifugeTemperature: '',
           activeCentrifugal: true
         },
         {
-          centrifugeName: "",
-          centrifugeTime: "",
-          centrifugeSpeed: "",
-          centrifugeTemperature: "",
+          centrifugeName: '',
+          centrifugeTime: '',
+          centrifugeSpeed: '',
+          centrifugeTemperature: '',
           activeCentrifugal: true
         }
       ],
@@ -266,9 +266,9 @@ export default {
         //   remarks:''
         // }
       ]
-    };
+    }
   },
-  mounted() {
+  mounted () {
     // element banner 高度自适应
     // this.imgLoad();
     // this.$nextTick(function() {
@@ -283,25 +283,25 @@ export default {
     // });
   },
   methods: {
-    change(v) {
-      console.log("v: ", v);
-      this.carouselIndex = v /* 轮播图的索引 */;
+    change (v) {
+      console.log('v: ', v)
+      this.carouselIndex = v /* 轮播图的索引 */
     },
-    centrifugalSet() {
-      this.dialogSet = true;
+    centrifugalSet () {
+      this.dialogSet = true
     },
-    addSample() {
-      this.dialogSample = true;
+    addSample () {
+      this.dialogSample = true
     },
-    exportOrders() {
-      this.dialogExport = true;
+    exportOrders () {
+      this.dialogExport = true
     },
-    Ordersdetail() {
-      this.dialogOrder = true;
+    Ordersdetail () {
+      this.dialogOrder = true
     }
   },
   computed: {}
-};
+}
 </script>
 <style  lang='less'>
 .centrifugeImg {
@@ -433,7 +433,7 @@ export default {
   }
 }
 .test {
- 
+
   opacity: 0.5;
 }
 .test-hover {

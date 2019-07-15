@@ -8,7 +8,7 @@
       </h1>
       <div class="body">
         <div class="pic">
-          <img src="@/assets/img/public_saomiao.gif" alt>
+          <img src="@/assets/img/saomiao.gif" alt>
         </div>
         <button @click="$emit('close')">返回</button>
       </div>
@@ -19,12 +19,12 @@
 export default {
   props: {},
   components: {},
-  data() {
-    return {};
+  data () {
+    return {}
   },
   methods: {},
   computed: {}
-};
+}
 </script>
 <style scoped lang='less'>
 .add-box {
@@ -72,7 +72,7 @@ background-color: #fff;
           margin-bottom: 50px;
           cursor: pointer;
       }
-      
+
   }
 }
 </style>

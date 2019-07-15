@@ -129,91 +129,91 @@
   </div>
 </template>
 <script>
-import colorChunk from "./colorChunk";
-import { setTimeout, setInterval } from "timers";
-import  formTopMenu from './formTopMenu'
+import colorChunk from './colorChunk'
+import { setTimeout, setInterval } from 'timers'
+import formTopMenu from './formTopMenu'
 export default {
   props: {},
-  components: { colorChunk,formTopMenu },
-  data() {
+  components: { colorChunk, formTopMenu },
+  data () {
     return {
-      mark: "",
+      mark: '',
       percentage: 60,
-      customColor: "#90bf46",
+      customColor: '#90bf46',
       second: 45,
       test: {
         hour12: false,
-        year: "2-digit",
-        month: "2-digit",
-        day: "2-digit",
-        hour: "2-digit",
-        minute: "2-digit",
-        second: "2-digit"
+        year: '2-digit',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit'
       },
-      day: ["天", "一", "二", "三", "四", "五", "六"],
+      day: ['天', '一', '二', '三', '四', '五', '六'],
       timer: null,
-      newDate: "",
-      time: "",
-      resTime: "",
+      newDate: '',
+      time: '',
+      resTime: '',
 
       tableData: [
         {
-          id: "1",
-          name: "CSPCHA115-25mg-Sub102-D1-0h", // 采血管
-          fangan: "2018.11.23.10.10.10", // 计划采血时间
-          shenban: "2018.11.23.10.10.10", // 核验时间
-          shenban: "2018.11.23.10.10.10" // 实际采血时间
+          id: '1',
+          name: 'CSPCHA115-25mg-Sub102-D1-0h', // 采血管
+          fangan: '2018.11.23.10.10.10', // 计划采血时间
+          shenban: '2018.11.23.10.10.10', // 核验时间
+          shenban: '2018.11.23.10.10.10' // 实际采血时间
         }
       ],
       multipleSelection: []
-    };
+    }
   },
   methods: {
-    getRowClass({ rowIndex }) {
-      return rowIndex == 0 ? this.$store.getters.formTheme : "";
+    getRowClass ({ rowIndex }) {
+      return rowIndex == 0 ? this.$store.getters.formTheme : ''
     },
-    changProject(rowData, index) {},
-    setsecond() {
+    changProject (rowData, index) {},
+    setsecond () {
       /* 设置倒计时 */
 
-      this.second - 1 < 0 ? (this.second = 12) : --this.second;
+      this.second - 1 < 0 ? (this.second = 12) : --this.second
     },
-    setDate() {
-      /* 拿到时间 */ this.newDate = new Date();
-      this.time = this.newDate.getTime();
+    setDate () {
+      /* 拿到时间 */ this.newDate = new Date()
+      this.time = this.newDate.getTime()
     },
-    format() {
-      /* 格式化时间 */ this.newDate.setTime((this.time += 1000));
-      let t = this.newDate.toLocaleString("chinese", this.test);
-      let d = `星期${this.day[this.newDate.getUTCDay()]}`;
-      this.resTime = `20${t + d}`.replace("/", "年").replace("/", "月");
+    format () {
+      /* 格式化时间 */ this.newDate.setTime((this.time += 1000))
+      let t = this.newDate.toLocaleString('chinese', this.test)
+      let d = `星期${this.day[this.newDate.getUTCDay()]}`
+      this.resTime = `20${t + d}`.replace('/', '年').replace('/', '月')
     },
 
-    runing() {
-      /* 格式化时间 -> 定时器*/ this.format();
+    runing () {
+      /* 格式化时间 -> 定时器 */ this.format()
       this.timer = setInterval(_ => {
-        this.format();
-        this.setsecond();
-      }, 1000);
+        this.format()
+        this.setsecond()
+      }, 1000)
     },
-    clearTimer() {
-      clearInterval(this.timer);
+    clearTimer () {
+      clearInterval(this.timer)
     },
-    run() {
-      this.setDate();
-      this.format();
-      this.runing();
+    run () {
+      this.setDate()
+      this.format()
+      this.runing()
     }
   },
   computed: {},
-  created() {
-    this.$emit("getMessage", 2);
-    this.run();
+  created () {
+    this.$emit('getMessage', 2)
+    this.run()
   },
-  beforeDestroy() {
-    this.clearTimer();
+  beforeDestroy () {
+    this.clearTimer()
   }
-};
+}
 </script>
 <style scoped lang='less'>
 .color-chunk {

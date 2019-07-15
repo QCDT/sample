@@ -1,8 +1,20 @@
 <template>
   <div id="app">
-    <router-view name="navbar"/>
-    <router-view/>
+    <router-view name="navbar" />
+    <router-view />
   </div>
 </template>
-<style lang="less">
+<script>
+import Header from '@/components/header.vue'
+export default {
+    components:{Header}
+}
+</script>
+
+<style>
+#app {
+  width: 100%;
+  height: 100%;
+}
+
 </style>

@@ -41,16 +41,16 @@
 </template>
 <script>
 export default {
-    data () {
-        return{
-            equipmentName: ''
-        }
-    },
-    methods:{
-        prevEquipment () {
-            this.$router.push('/set/refrigerator/equipmentInfo')
-        }
+  data () {
+    return {
+      equipmentName: ''
     }
+  },
+  methods: {
+    prevEquipment () {
+      this.$router.push('/set/refrigerator/equipmentInfo')
+    }
+  }
 }
 </script>
 <style lang="less" scoped>

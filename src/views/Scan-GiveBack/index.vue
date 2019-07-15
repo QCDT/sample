@@ -31,32 +31,32 @@
   </div>
 </template>
 <script>
-import tmpButton from "@/components/tmp/zhanglan/tmpButton";
-import  masking from '@/components/tmp/zhanglan/maskTran'
-import  record from '@/views/Scan-GiveBack/alert-record'
+import tmpButton from '@/components/tmp/zhanglan/tmpButton'
+import masking from '@/components/tmp/zhanglan/maskTran'
+import record from '@/views/Scan-GiveBack/alert-record'
 export default {
   props: {},
-  components: { tmpButton,masking,record },
-  data() {
+  components: { tmpButton, masking, record },
+  data () {
     return {
-      ghName: "",
-      textarea: ""
-    };
+      ghName: '',
+      textarea: ''
+    }
   },
   methods: {
-    eGuiHuan() {
-      console.log("111: ", 111);
+    eGuiHuan () {
+      console.log('111: ', 111)
       this.$notify.info({
-        title: "消息",
+        title: '消息',
         message: {
-          "归还人:": this.ghName,
-          "备注:": this.textarea
+          '归还人:': this.ghName,
+          '备注:': this.textarea
         }
-      });
+      })
     }
   },
   computed: {}
-};
+}
 </script>
 <style scoped lang='less'>
 .guihuan-wrap {

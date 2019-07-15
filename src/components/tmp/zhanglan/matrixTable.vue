@@ -65,15 +65,4 @@ td {
   font-size: 11px;
 }
 
-// .tbody-wrap {
-//   display: flex;
-
-//   padding: 20px 20px 0;
-
-//   background-color: #fff;
-
-//   .table {
-//     margin-right: 20px;
-//   }
-// }
 </style>

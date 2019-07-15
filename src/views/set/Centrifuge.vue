@@ -4,7 +4,6 @@
     <masking v-if="showMaskF">
       <div class="test">
         <!-- 表单内容 -->
-
         <form @submit.prevent="maskProject()">
           <div class="form-in">
             <div class="title">{{MASK_name}}</div>
@@ -165,10 +164,7 @@
           </template>
         </el-table-column>
       </el-table>
-      <div style="margin-top: 20px">
-        <!-- <el-button @click="toggleSelection([tableData[1], tableData[2]])">切换第二、第三行的选中状态</el-button> -->
-        <!-- <el-button @click="toggleSelection()">取消选择</el-button> -->
-      </div>
+
     </div>
     <div class="bot">
       <goBack></goBack>
@@ -478,11 +474,11 @@ export default {
 }
 
 .test {
-  display: flex;
+//   display: flex;
 
-  width: 1150px;
-  margin: 0 auto;
-  padding-top: 68px;
+//   width: 1150px;
+//   margin: 0 auto;
+  margin: 68px;
 
   form {
     width: 100%;
