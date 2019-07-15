@@ -83,19 +83,26 @@
         height: 32px;
     }
 }
-.fromContent{
-    display: flex;
-    justify-content: space-between;
+.formContent{
+    height: 200px;
 }
-.fromNum{
-    width: 50%;
+.formNum{
+    width: 100%;
     display: flex;
     justify-content: space-between;
+    align-items: center;
     margin-top: 20px;
     margin-left: 10px;
+    margin-bottom: 7px;
+    span{
+        margin-right: 7px;
+    }
     img{
-        width: 32px;
-        height: 32px;
+        width: 24px;
+        height: 24px;
+        margin-right: 10px;
+        vertical-align: middle;
+        cursor: pointer
     }
 }
 .recordTitle{
@@ -106,6 +113,9 @@
         display: flex;
         align-items: center;
         width: 45%;
+        button{
+            margin-left: 10px;
+        }
         .recordType{
             width: 40%;
             margin-left: 10px;

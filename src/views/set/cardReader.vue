@@ -13,7 +13,7 @@
         <div class="parameter">
           <div class="parameterItem">
             <span class="type">设备类型:</span>
-            <el-select v-model="devicetypeValue" filterable @change="changeCutDown">
+            <el-select v-model="devicetypeValue" filterable>
                 <el-option
                 v-for="item in devicetype"
                 :key="item.value"
@@ -24,7 +24,7 @@
           </div>
           <div class='parameterItem'>
             <span class='type'>端口类型:</span>
-            <el-select v-model="OpentypeValue" filterable>
+            <el-select v-model="OpentypeValue" filterable @change="changeOpentype">
                 <el-option
                 v-for="item in Opentype"
                 :key="item.value"
@@ -106,7 +106,7 @@ export default {
       netIpAddress: '192.168.1.22',
       netPort: '9099',
       comdisabled: false,
-      netdisabled: false,
+      netdisabled: true,
       comPort: [
         {
           value: 'COM1',
@@ -248,10 +248,17 @@ export default {
     })
   },
   methods: {
-    changeCutDown () {
-      // if(this.devicetypeValue == '大读卡器'){
-      //   this.OpentypeValue = ''
-      // }
+    changeOpentype () {
+      if(this.OpentypeValue == 'COM'){
+        this.comdisabled = false
+        this.netdisabled = true
+      }else if(this.OpentypeValue == 'NET'){
+        this.comdisabled = true
+        this.netdisabled = false
+      }else{
+        this.comdisabled = true
+        this.netdisabled = true
+      }
     }
   }
 }

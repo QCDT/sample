@@ -153,13 +153,13 @@
                 </div>
                 <div class="dialogContent">
                     <span>密码</span>
-                    <i><el-input v-model= userPassword placeholder="请输入密码" size="mini" class="addInput" clearable  show-password  maxlength = 15></el-input></i>
+                    <i><el-input v-model= userPassword placeholder="请输入密码" size="mini" class="addInput" clearable  show-password  maxlength = 15  @blur="verifyPassword"></el-input></i>
                     <span class="verifyMsg">{{passwordMsg}}</span>
                 </div>
                 <div class="dialogContent">
                     <span>确认密码</span>
-                    <i><el-input v-model="repeatPassword" placeholder="请输入密码" size="mini" class="addInput" clearable  show-password></el-input></i>
-                    <span class="verifyMsg">{{passwordMsg}}</span>
+                    <i><el-input v-model="repeatPassword" placeholder="请输入密码" size="mini" class="addInput" clearable  show-password  maxlength= 15 @blur="verifyPasswordA"></el-input></i>
+                    <span class="verifyMsg">{{repeatPasswordMsg}}</span>
                 </div>
                 <div class="dialogContent">
                     <span>绑定IC卡</span>
@@ -168,11 +168,21 @@
                 </div>
                 <div class="dialogContent">
                     <span>角色</span>
-                    <i><el-input v-model= roleName placeholder="请输入内容" size="mini" class="addInput" clearable></el-input></i>
+                    <i>
+                        <el-select v-model="roleOptionValue" placeholder="请选择" size="mini">
+                          <el-option
+                            v-for="item in roleOptions"
+                            :key="item.value"
+                            :label="item.label"
+                            :value="item.value">
+                          </el-option>
+                        </el-select>
+                    </i>
                 </div>
                 <div class="dialogContent">
                     <span>姓名</span>
-                    <i><el-input v-model= compellation placeholder="请输入内容" size="mini" class="addInput" clearable></el-input></i>
+                    <i><el-input v-model= compellation placeholder="请输入内容" size="mini" class="addInput" clearable @blur="verifyCompellation"></el-input></i>
+                    <span class="verifyMsg">{{compellationMsg}}</span>
                 </div>
                 <div class="dialogContent">
                     <span>实验室</span>
@@ -208,10 +218,14 @@ export default {
   data () {
     return {
       searchUserName: '', //用户名，角色搜索框
-      userNamemsg: '',
+      userNamemsg: '',// 用户名的校验提示信息
+      passwordMsg: '', // 密码的校验提示信息
+      repeatPasswordMsg: '', // 二次密码验证
+      compellationMsg:'',// 姓名验证提示信息
       compellation: '', //姓名值
-      Userdisabled: false, //添加保存按钮禁用
+      Userdisabled: true, //添加保存按钮禁用
       roleValue: '', // 角色下拉框的value
+      roleOptionValue: '', // 添加和修改中角色下拉框的value
       userId: '', //用户ID
       roleId: '', // 角色ID
       userName: '', // 用户名
@@ -219,8 +233,8 @@ export default {
       addUserName: '',
       userPassword: '', // 密码
       repeatPassword: '', // 二次密码
-      radio: '1',
-      newRoleName: '',
+      radio: '1', // 实验室选择按钮
+      newRoleName: '', // 添加角色
       RoleDialogVisible: false, // 角色设置的弹窗
       UserDialogVisible: false, // 用户设置的弹窗
       userType: true, // 切换用户设置和角色设置
@@ -325,34 +339,31 @@ export default {
     }
   },
   created () {
-      this.$axios({ //.............获取所有用户和角色的请求
+      this.$axios({ //.............获取所有用户的请求
         method:'get',
         url:'sampleGuide/userInfo/findAllUser'
       })
       .then(({data})=>{
-        //  console.log(data)
-        //  console.log(data.data.create_date)
          data.data.forEach((item)=>{
           this.UsertableData.push({
-            id: item.id,
-            userName: item.username,
-            roleName: item.name,
-            createTime: item.create_date
+            id: item.id,   //...............用户Id
+            userName: item.username,  //...........用户名
+            roleName: item.name,  //........角色名
+            createTime: item.create_date // ......创建时间
           })
         })
       })
-      this.$axios({ // ...................获取所有角色和权限请求
+      this.$axios({ // ...................获取所有角色请求
         method: 'get',
         url: 'sampleGuide/rolePerm/findAllRole'
       })
       .then(({data})=>{
-        // console.log(data.data.rolePermList)
-        data.data.rolePermList.forEach((item)=>{
-            console.log(item.name)
+        console.log(data)
+        data.data.forEach((item)=>{
             this.RoletableData.push({ //.............角色表格数据
-               id: item.id,
-               roleName: item.name,
-              //  jurisdiction: 
+               id: item.id,  // ........... 角色Id
+               roleName: item.name, // ...........角色名
+               jurisdiction: item.pname.join(",")// ..........权限
             })
             this.roleOptions.push({ //..............角色下拉框
               value: item.id,
@@ -362,16 +373,15 @@ export default {
       })
   },
   computed:{
-    jurisdictionList(){
+    jurisdictionList(){ 
       this.authority.forEach((item)=>{
         if(item.checked){
            this.list.push(item.value)
-          // this.jurisdictionList.push(item.value)
         }
       })
+      console.log(this.list)
       return this.list
-      // console.log(this.list)
-    }
+    },
   },
   methods: {
     TabUser () { // 用户切换和角色切换的方法
@@ -380,14 +390,41 @@ export default {
       this.roleValue = ''
       this.jurisdictionValue = ''
     },
-    rulesUserName () {
+    verifyCompellation (){ //............姓名验证
+      if(this.compellation == ''){
+        this.compellationMsg = '姓名不能为空'
+      }else{
+        let reg = /^[\u4e00-\u9fa5]{2,6}$/
+        if(!reg.test(this.compellation)){
+           this.compellationMsg = '请输入真实姓名'
+        }else{
+          this.compellationMsg = ''
+        }
+      }
+    },
+    verifyPassword () { // .........密码验证
+       if(this.userPassword == ''){
+         this.passwordMsg = '密码不能为空'
+       }else{
+         this.passwordMsg = ''
+         this.Userdisabled = false
+       }
+    },
+    verifyPasswordA () { // ..........二次密码验证
+       if(this.repeatPassword == ''){
+         this.repeatPasswordMsg = '密码不能为空'
+       }else if(this.repeatPassword != this.userPassword ){
+          this.repeatPasswordMsg = '两次密码不一致'
+          // this.Userdisabled = true
+       }else{
+         this.Userdisabled = false
+       }
+    },
+    rulesUserName () { //...........用户名验证
         if(this.userName == ''){
           this.userNamemsg = "用户名不能为空"
-          this.Userdisabled = true
+          // this.Userdisabled = true
         }else{
-          this.Userdisabled = false
-          this.userNamemsg = ''
-        }
         this.$axios({
            method: 'post',
            url: 'sampleGuide/userInfo/findResetUserName',
@@ -401,14 +438,16 @@ export default {
         .then(({data})=>{
             if(data.data == 1){
               this.userNamemsg = "该用户名已存在"
-              this.Userdisabled = true
+              // this.Userdisabled = true
             }else{
               this.Userdisabled = false
                this.userNamemsg = ''
             }
         })  
+        }
     },
     roleOperation () {
+      console.log(this.jurisdictionList)
         if(this.addUserType){ //...........新增角色
           this.$axios({ 
             method: 'post',
@@ -423,6 +462,8 @@ export default {
           })
           .then(({data})=>{
                console.log(data)
+               this.RoleDialogVisible = false
+               this.searchUser()
             })
         }else{ // ...............修改角色
           console.log(this.jurisdictionList)
@@ -439,11 +480,13 @@ export default {
             })
             .then(({data})=>{
                console.log(data)
+               this.RoleDialogVisible = false
+               this.searchUser()
             })
           })
         }
     },
-    userOperation () {//..........弹窗保存操作
+    userOperation () {
         if(this.addUserType){ //........新增用户
           console.log(this.roleName)
           this.$axios({
@@ -456,14 +499,16 @@ export default {
                 username: this.userName,
                 password: this.repeatPassword,
                 visible_strategy: this.selectValue,
+                // rfid_sample_box_hint：''
                 // visible_data_user_id: '1,2,',
                 visible_data_laboratory_id: this.radio,
-                addUserRoleId: this.roleName,
+                addUserRoleId: this.roleOptionValue,
                 chinesename:this.compellation
             })
           })
           .then(({data})=>{
               console.log(data)
+              location.reload()
           })
         }else{
           // console.log(this.userId);
@@ -477,7 +522,12 @@ export default {
                 id: this.userId,
                 username: this.userName,
                 password: this.repeatPassword,
-                userRoleIdUpdate: this.roleName
+                userRoleIdUpdate: this.roleOptionValue,
+                visible_data_laboratory_id: this.radio,
+                chinesename: this.compellation
+                // rfidCode: ''
+                //visible_strategy: '0'
+                //visible_data_user_id: ''字符串
             })
           })
           .then(({data})=>{
@@ -487,6 +537,7 @@ export default {
                     type: 'success'
                   });
                   this.UserDialogVisible = false
+                  location.reload()
               }else{
                 this.UserDialogVisible = true
               }
@@ -547,7 +598,7 @@ export default {
             this.RoletableData.push({
               id: item.id,
               roleName: item.name,
-              //  jurisdiction: 
+              jurisdiction: item.pname.join(",")
             })
           })
         })
@@ -567,8 +618,9 @@ export default {
           .then(({data})=>{
              console.log(data)
              this.userName = data.data.username
-             this.roleName = data.data.name
+             this.roleOptionValue = data.data.rid
              this.userPassword = data.data.password
+             this.repeatPassword = data.data.password
              this.userId = this.UsertableData[index].id
           })
       } else {
@@ -584,66 +636,114 @@ export default {
     },
     handleDelete (index, row) {
       if(this.userType){
-        this.userId = this.UsertableData[index].id
-        this.$axios({
-          method:'post',
-          url:'sampleGuide/userOther/deleteUserById',
-          headers: {
-          'Content-Type': 'application/json;charset=UTF-8'
-          },
-          data:({
-            id: this.userId
+         this.$confirm('确认删除该用户吗?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.userId = this.UsertableData[index].id
+          this.$axios({
+            method:'post',
+            url:'sampleGuide/userOther/deleteUserById',
+            headers: {
+            'Content-Type': 'application/json;charset=UTF-8'
+            },
+            data:({
+              id: this.userId
+            })
           })
-        })
-        .then(({data})=>{
-            if(data.code == 200){
-              this.$message({
-                    message: '删除成功！',
-                    type: 'success'
-                });
-            }else{
-              this.$message({
-                  message: '删除失败，请重试',
-                  type: 'warning'
-              })
-            }
-        })
+          .then(({data})=>{
+              if(data.code == 200){
+                this.$message({
+                      message: '删除成功！',
+                      type: 'success'
+                  });
+                  this.searchUser()
+              }else{
+                this.$message({
+                    message: '删除失败，请重试',
+                    type: 'warning'
+                })
+              }
+          })
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          });          
+        });
       }else{
-        this.roleId = this.RoletableData[index].id
-        this.$axios({
-          method:'post',
-          url:'sampleGuide/rolePerm/deleteRoleById',
-          headers: {
-          'Content-Type': 'application/json;charset=UTF-8'
-          },
-          data:({
-            id: this.roleId
+        this.$confirm('确认删除该角色吗?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.roleId = this.RoletableData[index].id
+          this.$axios({
+            method: 'post',
+            url: 'sampleGuide/rolePerm/findNumByRole',
+            headers: {
+              'Content-Type': 'application/json;charest=UTF-8'
+            },
+            data:({
+              id: this.roleId
+            })
           })
-        })
-        .then(({data})=>{
-            if(data.code == 200){
-              this.$message({
-                    message: '删除成功！',
-                    type: 'success'
-                });
-            }else{
-              this.$message({
-                  message: '删除失败，请重试',
-                  type: 'warning'
-              })
-            }
-        })
+          .then(({data})=>{
+                console.log(data)
+                if(data.data == 0){
+                  this.$axios({
+                    method:'post',
+                    url:'sampleGuide/rolePerm/deleteRoleById',
+                    headers: {
+                    'Content-Type': 'application/json;charset=UTF-8'
+                    },
+                    data:({
+                      id: this.roleId
+                    })
+                  })
+                  .then(({data})=>{
+                      if(data.code == 200){
+                        this.$message({
+                              message: '删除成功！',
+                              type: 'success'
+                          });
+                          this.searchUser()
+                      }else{
+                        this.$message({
+                            message: '删除失败，请重试',
+                            type: 'warning'
+                        })
+                      }
+                  })
+                }else{
+                  this.$alert('该角色下存在用户，不可删除！', '提示', {
+                      confirmButtonText: '确定',
+                      type: 'error'
+                  });
+                }
+          })
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          });          
+        });
+     
       }
     },
     AddType () { // 添加方法
       if (this.userType) {
         this.UserDialogVisible = true
         this.userName = ''
-        this.roleName = ''
+        this.roleOptionValue = ''
         this.userPassword = ''
+        this.repeatPassword = ''       
+        this.compellation = ''
       } else {
         this.RoleDialogVisible = true
         this.list = []
+        this.newRoleName = ''
         this.authority.forEach((item)=>{
             item.checked = false
         })

@@ -84,19 +84,19 @@
           <el-button type="primary"  size="mini">搜索</el-button>
         </div>
       </div>
-      <div class="fromNum">
-        <div><span>表单数量:</span></div>
+      <div class="formNum">
+        <div><span>表单数量:</span><span></span></div>
         <div>
           <img src="@/assets/img/receive-excel.png">
           <img src="@/assets/img/receive-pdf.png">
         </div>
       </div>
-      <div class="fromContent">
+      <div class="formContent">
           <el-table
                 ref="multipleTable"
                 :data="tableData"
                 tooltip-effect="dark"
-                style="width: 55%"
+                style="width: 50% ; float:left"
                 :row-style="{height:'32px',textAlign: 'center',padding:'0px',}"
                 :cell-style="{padding:'0px',textAlign: 'center'}"
                 :header-cell-style ="{height:'30px',textAlign:'center',padding:'0px', background:'#00c9ff',color:'white'}"
@@ -137,15 +137,14 @@
                 ref="multipleTable"
                 :data="tableData"
                 tooltip-effect="dark"
-                style="width: 40%"
+                style="width: 50%; float:right"
                 :row-style="{height:'32px',textAlign: 'center',padding:'0px',}"
                 :cell-style="{padding:'0px',textAlign: 'center'}"
                 :header-cell-style ="{height:'30px',textAlign:'center',padding:'0px', background:'#00c9ff',color:'white'}"
                 border
                 >
                 <el-table-column
-                type="index"
-                
+                type="index"               
                 label="序号"
                 class="DataTable"
                 >
