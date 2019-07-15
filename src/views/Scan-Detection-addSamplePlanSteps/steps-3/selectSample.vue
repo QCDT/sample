@@ -286,7 +286,7 @@ export default {
 .info {
   display: flex;
   white-space: nowrap;
-  justify-content: start;
+  justify-content: flex-start;
   margin-bottom: 10px;
   .items {
     display: flex;
