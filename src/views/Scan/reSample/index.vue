@@ -4,145 +4,134 @@
     <h1 class="top-title" v-if="title">{{title}}</h1>
     <div class="sample-box">
       <div class="left">
-        <h1 class="sample-old">
-          <tmpButton style="padding:5px 10px;">当前信息</tmpButton>
-        </h1>
-        <ul class="sample-old">
-          <li class="item" v-for="(item,index) in sample" :key="index">
-            <span>{{item.key}}:</span>
-            <i>{{item.value}}</i>
-          </li>
-        </ul>
-        <div class="bot">
-          <div class="matrix">
-            <matrix9x9 tdWidth="10px" tdHeight="10px"></matrix9x9>
+          <h1 class="sample-old">
+            <tmpButton>当前信息</tmpButton>
+          </h1>
+          <ul>
+            <li v-for="(item, index) in sample" :key="index" class="item">
+              <span>{{item.key}}:</span>
+              <i>{{item.value}}</i>
+            </li>
+          </ul>
+          <div class="bot">
+            <div class="matrix">
+                <matrix9x9 tdWidth="10px" tdHeight="10px"></matrix9x9>
+            </div>
+            <div class="mark">
+              <h1>备注</h1>
+              <el-input
+                type="textarea"
+                :rows="5"
+                placeholder="请输入内容"
+                v-model="textarea"
+              ></el-input>
+            </div>
           </div>
-          <div class="mark">
-            <h1>备注</h1>
-            <el-input
-              type="textarea"
-              :rows="5"
-              style="width:280px"
-              placeholder="请输入内容"
-              v-model="textarea"
-            ></el-input>
-          </div>
-        </div>
       </div>
       <div class="right">
-        <h1 class="sample-old">
-          <tmpButton style="padding:5px 10px;">修改信息</tmpButton>
-        </h1>
-        <ul class="sample-old">
-          <li class="item">
-            <span>RFID编号:</span>
-            <el-input v-model="input" size="small" style="width:150px"></el-input>
-            <i class="icon icon-kaiguan" style="fontSize:18px"></i>
-          </li>
-          <li class="item">
-            <span>样本名称:</span>
-            <el-input v-model="input" size="small" style="width:150px"></el-input>
-          </li>
-          <li class="item">
-            <span>样本来源:</span>
-
-            <el-select size="small" style="width:100px" v-model="value" placeholder="请选择">
-              <el-option
-                v-for="item in options"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              ></el-option>
-            </el-select>
-            <el-input v-model="input" size="small" style="width:150px"></el-input>
-
-            <i class="icon icon-tianjia"></i>
-          </li>
-          <li class="item">
-            <span>样本类别:</span>
-
-            <el-select size="small" style="width:100px" v-model="value" placeholder="请选择">
-              <el-option
-                v-for="item in options"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              ></el-option>
-            </el-select>
-            <el-input v-model="input" size="small" style="width:150px"></el-input>
-
-            <i class="icon icon-tianjia"></i>
-          </li>
-
-          <li class="item">
-            <span>采样日期:</span>
-            <el-input v-model="input" size="small" style="width:150px"></el-input>
-            <i class="icon icon-shanchu" style="fontSize:20px"></i>
-          </li>
-          <li class="item">
-            <span>有效日期:</span>
-            <el-input v-model="input" size="small" style="width:150px"></el-input>
-            <i class="icon icon-shanchu" style="fontSize:20px"></i>
-          </li>
-          <li class="item">
-            <span>提前报警天数:</span>
-            <el-input v-model="input" size="small" style="width:150px"></el-input>天
-          </li>
-          <h1>位置信息</h1>
-          <li class="item location-info-change">
-            <i>冰箱:</i>
-            <el-select size="small" style="width:100px" v-model="value" placeholder="请选择">
-              <el-option
-                v-for="item in options"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              ></el-option>
-            </el-select>
-            <i>层数:</i>
-            <el-select size="small" style="width:100px" v-model="value" placeholder="请选择">
-              <el-option
-                v-for="item in options"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              ></el-option>
-            </el-select>
-            <i>抽屉:</i>
-            <el-select size="small" style="width:100px" v-model="value" placeholder="请选择">
-              <el-option
-                v-for="item in options"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              ></el-option>
-            </el-select>
-            <i>样本盒:</i>
-            <el-select size="small" style="width:100px" v-model="value" placeholder="请选择">
-              <el-option
-                v-for="item in options"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              ></el-option>
-            </el-select>
-          </li>
-        </ul>
-        <div class="bot">
-          <div class="matrix">
-            <matrix9x9 tdWidth="10px" tdHeight="10px"></matrix9x9>
+          <h1 class="sample-old">
+            <tmpButton>修改信息</tmpButton>
+          </h1>
+          <ul>
+            <li class="item">
+              <span>RFID编号:</span>
+              <el-input v-model="input" size="small" class="newSample"></el-input>
+              <i class="icon icon-kaiguan"></i>
+            </li>
+            <li class="item">
+              <span>样本名称:</span>
+              <el-input v-model="input" size="small" class="newSample"></el-input>
+            </li>
+            <li class="item">
+              <span>样本来源:</span>
+              <el-select size="small" v-model="value" placeholder="请选择" class="newSample">
+                <el-option
+                  v-for="item in options"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                ></el-option>
+              </el-select>
+            </li>
+            <li class="item">
+               <span>样本类别:</span>
+               <el-select size="small" v-model="value" placeholder="请选择" class="newSample">
+                  <el-option
+                    v-for="item in options"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                  ></el-option>
+                </el-select>
+            </li>
+            <li class="item">
+              <span>采样日期:</span>
+              <el-input v-model="input" size="small" class="newSample"></el-input>
+            </li>
+            <li class="item">
+              <span>有效日期:</span>
+              <el-input v-model="input" size="small" class="newSample"></el-input>
+            </li>
+            <li class="item">
+              <span>提前报警天数:</span>
+              <el-input v-model="input" size="small" class="newSample"></el-input>天
+            </li>
+            <li>
+              <span>位置信息:</span>
+            </li>
+            <li class="item location-info-change">
+              <i>冰箱:</i>
+              <el-select size="small" v-model="value" placeholder="请选择">
+                <el-option
+                  v-for="item in options"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                ></el-option>
+              </el-select>
+              <i>层数:</i>
+              <el-select size="small" v-model="value" placeholder="请选择">
+                <el-option
+                  v-for="item in options"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                ></el-option>
+              </el-select>
+              <i>抽屉:</i>
+              <el-select size="small" v-model="value" placeholder="请选择">
+                <el-option
+                  v-for="item in options"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                ></el-option>
+              </el-select>
+              <i>样本盒:</i>
+              <el-select size="small" v-model="value" placeholder="请选择">
+                <el-option
+                  v-for="item in options"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                ></el-option>
+              </el-select>
+            </li>
+          </ul>
+          <div class="bot">
+            <div class="matrix">
+                <matrix9x9 tdWidth="10px" tdHeight="10px"></matrix9x9>
+            </div>
+            <div class="mark">
+              <h1>备注</h1>
+              <el-input
+                type="textarea"
+                :rows="5"
+                placeholder="请输入内容"
+                v-model="textarea"
+              ></el-input>
+            </div>
           </div>
-          <div class="mark">
-            <h1>备注</h1>
-            <el-input
-              type="textarea"
-              :rows="5"
-              style="width:280px"
-              placeholder="请输入内容"
-              v-model="textarea"
-            ></el-input>
-          </div>
-        </div>
       </div>
     </div>
     <div class="bot-btn">
@@ -211,41 +200,44 @@ export default {
   }
 }
 .sample-box {
+  width:100%;
   display: flex;
+  justify-content: center;
 }
 .left {
-  flex: 1;
-
   border-right: 1px solid #999;
-  .item {
-    margin-bottom: 10px;
-
-    font-size: 17px;
-    span {
-      display: inline-block;
-
-      margin-bottom: 10.8px;
-      width: 7.5rem;
-    }
-  }
-}
-.right {
-  flex: 1;
-}
-.sample-old {
-  padding: 10px 50px;
+  padding-right: 20px;
+  margin-left: 50px;
   .item {
     margin-bottom: 10px;
     font-size: 15px;
     span {
       display: inline-block;
-      width: 7.5rem;
+      width: 120px;
     }
   }
 }
+.right {
+  margin-left: 20px;
+  .item {
+    margin-bottom: 10px;
+    font-size: 15px;
+    >span {
+      display: inline-block;
+      width: 120px;
+    }
+    .newSample{
+      width: 50%;
+    }
+  }
+}
+.sample-old {
+  margin-bottom: 10px;
+}
 .bot {
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
+  width: 500px;
 }
 .mark {
   padding-top: 20px;

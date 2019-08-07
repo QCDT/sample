@@ -1,7 +1,7 @@
 <template>
  <div>
-     <div class="userWrap">
-        <div class="userTitle">
+     <div class="userWrap">  
+        <div class="userTitle">  <!-- 搜索用户和角色部分  -->
             <div class="userType">
                 <i>{{userType?"用户名": '角色名'}}</i>
                 <el-input v-model="searchUserName" size="mini"></el-input>
@@ -36,7 +36,8 @@
                 </el-tooltip>
             </div>
         </div>
-        <div class="userList">
+        <div class="userList"> 
+          <!-- 用户列表展示 -->
             <el-table
                 ref="multipleTable"
                 :data="UsertableData"
@@ -77,6 +78,7 @@
                     </template>
                 </el-table-column>
             </el-table>
+          <!-- 角色列表展示 -->
             <el-table
                 ref="multipleTable"
                 :data="RoletableData"
@@ -116,23 +118,24 @@
                 </el-table-column>
             </el-table>
         </div>
+        <!-- 角色添加和修改的页面-->
         <el-dialog
             :title='addUserType? "添加角色": "修改角色"'
             :visible.sync="RoleDialogVisible"
             width="40%"
             center>
-            <div>
+            <div class="dialogContentWrap">
                 <div class="roleDialogVisible">
                     <span>角色名</span>
                     <i><el-input v-model="newRoleName"  placeholder="请输入内容" size="mini" class="addInput" clearable></el-input></i>
                 </div>
                 <div>
-                    <div class="jurisdiction">
-                        <span>权限操作</span>
-                    </div>
-                    <div>
-                        <el-checkbox v-model="item.checked" v-for="(item,index) in authority"  :key="index" class="jurisdictionType">{{item.label}}</el-checkbox>
-                    </div>
+                  <div class="jurisdiction">
+                      <span>权限操作</span>
+                  </div>
+                  <div>
+                      <el-checkbox v-model="item.checked" v-for="(item,index) in authority"  :key="index" class="jurisdictionType">{{item.label}}</el-checkbox>
+                  </div>
                 </div>
             </div>
             <span slot="footer" class="dialog-footer">
@@ -140,6 +143,7 @@
                 <el-button type="primary" @click="RoleDialogVisible = false" size="mini">返回</el-button>
             </span>
         </el-dialog>
+        <!-- 用户添加和修改的页面-->
         <el-dialog
             :title="addUserType? '添加用户': '修改用户'"
             :visible.sync="UserDialogVisible"
@@ -154,7 +158,10 @@
                 <div class="dialogContent">
                     <span>密码</span>
                     <i><el-input v-model= userPassword placeholder="请输入密码" size="mini" class="addInput" clearable  show-password  maxlength = 15  @blur="verifyPassword"></el-input></i>
-                    <span class="verifyMsg">{{passwordMsg}}</span>
+                    <span class="verifyMsg">
+                      <i class="el-icon-circle-close" v-show="msgerror"></i>
+                      {{passwordMsg}}
+                    </span>
                 </div>
                 <div class="dialogContent">
                     <span>确认密码</span>
@@ -181,7 +188,7 @@
                 </div>
                 <div class="dialogContent">
                     <span>姓名</span>
-                    <i><el-input v-model= compellation placeholder="请输入内容" size="mini" class="addInput" clearable @blur="verifyCompellation"></el-input></i>
+                    <i><el-input v-model= compellation placeholder="请输入内容" size="mini" class="addInput" clearable @blur="verifyCompellation" maxlength= 15></el-input></i>
                     <span class="verifyMsg">{{compellationMsg}}</span>
                 </div>
                 <div class="dialogContent">
@@ -379,7 +386,6 @@ export default {
            this.list.push(item.value)
         }
       })
-      console.log(this.list)
       return this.list
     },
   },
@@ -399,6 +405,7 @@ export default {
            this.compellationMsg = '请输入真实姓名'
         }else{
           this.compellationMsg = ''
+         this.Userdisabled = false
         }
       }
     },
@@ -407,7 +414,6 @@ export default {
          this.passwordMsg = '密码不能为空'
        }else{
          this.passwordMsg = ''
-         this.Userdisabled = false
        }
     },
     verifyPasswordA () { // ..........二次密码验证
@@ -415,15 +421,13 @@ export default {
          this.repeatPasswordMsg = '密码不能为空'
        }else if(this.repeatPassword != this.userPassword ){
           this.repeatPasswordMsg = '两次密码不一致'
-          // this.Userdisabled = true
        }else{
-         this.Userdisabled = false
+         this.repeatPasswordMsg = ''
        }
     },
     rulesUserName () { //...........用户名验证
         if(this.userName == ''){
           this.userNamemsg = "用户名不能为空"
-          // this.Userdisabled = true
         }else{
         this.$axios({
            method: 'post',
@@ -462,9 +466,16 @@ export default {
           })
           .then(({data})=>{
                console.log(data)
+               this.$message({
+                  message: '新增角色成功！',
+                  type: 'success'
+               });
                this.RoleDialogVisible = false
                this.searchUser()
             })
+          .catch(error=>{
+            this.$message.error('新增角色失败，请重试');
+          })
         }else{ // ...............修改角色
           console.log(this.jurisdictionList)
           this.$axios({ 
@@ -479,9 +490,16 @@ export default {
                 integerList: this.jurisdictionList
             })
             .then(({data})=>{
-               console.log(data)
-               this.RoleDialogVisible = false
-               this.searchUser()
+              console.log(data)
+              this.$message({
+                message: '修改角色成功！',
+                type: 'success'
+              });
+              this.RoleDialogVisible = false
+              this.searchUser()
+            })
+            .catch(error=>{
+                this.$message.error('修改角色失败，请重试');
             })
           })
         }
@@ -489,12 +507,13 @@ export default {
     userOperation () {
         if(this.addUserType){ //........新增用户
           console.log(this.roleName)
+          
           this.$axios({
             method: 'post',
             url: 'sampleGuide/userOther/insertUser',
-            headers: {
-              'Content-Type': 'application/json; charset=UTF-8'
-            },
+            // headers: {
+            //   'Content-Type': 'application/json; charset=UTF-8'
+            // },
             data: ({
                 username: this.userName,
                 password: this.repeatPassword,
@@ -508,16 +527,23 @@ export default {
           })
           .then(({data})=>{
               console.log(data)
-              location.reload()
+              this.$message({
+                message: '新增用户成功！',
+                type: 'success'
+              });
+              this.searchUser()
+          })
+          .catch((error)=>{
+             this.$message.error('新增用户失败，请重试');
           })
         }else{
           // console.log(this.userId);
           this.$axios({ //............修改用户
             method: 'post',
             url: 'sampleGuide/userOther/updateUserById',
-            headers: {
-              'Content-Type': 'application/json;charset=UTF-8'
-            },
+            // headers: {
+            //   'Content-Type': 'application/json;charset=UTF-8'
+            // },
             data: ({
                 id: this.userId,
                 username: this.userName,
@@ -531,16 +557,15 @@ export default {
             })
           })
           .then(({data})=>{
-              if(data.code == 200){
-                  this.$message({
-                    message: '修改成功！',
-                    type: 'success'
-                  });
-                  this.UserDialogVisible = false
-                  location.reload()
-              }else{
-                this.UserDialogVisible = true
-              }
+                this.$message({
+                  message: '修改用户成功！',
+                  type: 'success'
+                });
+                this.UserDialogVisible = false
+                this.searchUser()
+          })
+          .catch(error=>{
+            this.$message.error('修改用户失败，请重试');
           })
         }
     },
@@ -550,9 +575,9 @@ export default {
         this.$axios({
           method:'post',
           url:'sampleGuide/userInfo/findUserByNameAndRole',
-          headers: {
-                  'Content-Type': 'application/json;charset=UTF-8'
-              },
+          // headers: {
+          //         'Content-Type': 'application/json;charset=UTF-8'
+          //     },
           data:({
             username: this.searchUserName,
             rolePermId: this.roleValue,
@@ -573,7 +598,7 @@ export default {
           })
         })
         .catch(error => {
-          console.log(error);
+          this.$message.error('搜索用户失败，请重试');
         });
       }else{ // ............................ 角色，权限搜索
         this.RoletableData = []
@@ -602,6 +627,9 @@ export default {
             })
           })
         })
+        .catch(error=>{
+          this.$message.error('搜索角色失败，请重试');
+        })
       }
     },
     handleEdit (index, row) {
@@ -622,6 +650,9 @@ export default {
              this.userPassword = data.data.password
              this.repeatPassword = data.data.password
              this.userId = this.UsertableData[index].id
+          })
+          .catch(error=>{
+            this.$message.error('获取信息失败，请重试');
           })
       } else {
         this.RoleDialogVisible = true
@@ -653,18 +684,17 @@ export default {
             })
           })
           .then(({data})=>{
-              if(data.code == 200){
-                this.$message({
-                      message: '删除成功！',
-                      type: 'success'
-                  });
-                  this.searchUser()
-              }else{
-                this.$message({
-                    message: '删除失败，请重试',
-                    type: 'warning'
-                })
-              }
+              this.$message({
+                    message: '删除成功！',
+                    type: 'success'
+              });
+              this.searchUser()
+          })
+          .catch(error=>{
+              this.$message({
+                  message: '删除失败，请重试',
+                  type: 'warning'
+              })
           })
         }).catch(() => {
           this.$message({
@@ -703,25 +733,24 @@ export default {
                     })
                   })
                   .then(({data})=>{
-                      if(data.code == 200){
-                        this.$message({
-                              message: '删除成功！',
-                              type: 'success'
-                          });
-                          this.searchUser()
-                      }else{
-                        this.$message({
-                            message: '删除失败，请重试',
-                            type: 'warning'
-                        })
-                      }
+                      this.$message({
+                            message: '删除成功！',
+                            type: 'success'
+                        });
+                      this.searchUser()
                   })
+                .catch(error=>{
+                  this.$message.error('删除失败，请重试');
+                })
                 }else{
                   this.$alert('该角色下存在用户，不可删除！', '提示', {
                       confirmButtonText: '确定',
                       type: 'error'
                   });
                 }
+          })
+          .catch(error=>{
+            this.$message.error('获取信息失败，请重试');
           })
         }).catch(() => {
           this.$message({
@@ -753,3 +782,90 @@ export default {
   }
 }
 </script>
+<style lang="less" scoped>
+.userWrap{
+    width: 90%;
+    margin: 0 auto;
+    margin-top: 30px;
+    .userTitle{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 60%;
+        margin: 0 auto;
+        margin-bottom: 20px;
+        img{
+            width: 32px;
+            height: 32px;
+            margin-left: 10px;
+            vertical-align: middle;
+            cursor: pointer;
+        }
+        .userType{
+            display: flex;
+            justify-content: space-between;
+            margin-right: 10px;
+            i{
+                width: 30%;
+                line-height: 28px;
+            }
+        }
+    }
+    .userList{
+        img{
+            width: 32px;
+            height: 32px;
+            vertical-align: top;
+            margin-right: 5px;
+            cursor:pointer;
+        }
+        .edit{
+            margin-top: 3px;
+        }
+    }
+    .dialogContent{
+        display: flex;
+        // justify-content: space-around;
+        align-items: center;
+        margin-top: 15px;
+        img{
+            width: 24px;
+            height: 24px;
+            margin-left: 5px;
+        }
+        .verifyMsg{
+            font-size: 12px;
+            width:8vw;
+            color: red;
+            margin-left: 3px
+        }
+        // font-size: 12PX;
+        > span{
+            width:6vw;
+            display: inline-block;
+        }
+        .el-radio{
+            margin-right: 15px;
+        }
+    }
+    .jurisdiction{
+        margin-bottom: 10px;
+    }
+    .jurisdictionType{
+        width: 38%;
+    }
+    .roleDialogVisible{
+        margin-bottom: 10px;
+        .addInput{
+            width: 40%;
+            margin-left: 20px;
+        }
+    }
+  .dialogContentWrap{
+    width: 80%;
+    margin: 0 auto;
+    text-align: left;
+  }
+}
+
+</style>

@@ -5,41 +5,43 @@
             <span class="DataInfo">备份表单信息</span>
             <div>
                 <el-button type="primary" size="mini" @click="addbackups">添加</el-button>
-                <el-button type="danger" size="mini">删除</el-button>
+                <el-button type="danger" size="mini" @click="delbackups">删除</el-button>
             </div> <!-- 添加的弹窗 -->
             <el-dialog
                 title="添加表单信息"
                 :visible.sync="centerDialogVisible"
-                width="30%"
-                class="addBox"
+                width="35%"
+                class="addBoxWrap"
                 >
-                <div class="addContent">
-                    <span>路径:</span>
-                    <el-input  placeholder="请输入内容" size="mini" class="addInput"></el-input>
-                </div>
-                <div class="addContent">
-                    <span>用户名:</span>
-                    <el-input placeholder="请输入内容" size="mini" class="addInput"></el-input>
-                </div>
-                <div class="addContent">
-                    <span>密码:</span>
-                    <el-input  placeholder="请输入内容" size="mini" class="addInput"></el-input>
-                </div>
-                <div class="addContent">
-                    <span>端口号:</span>
-                    <el-input  placeholder="请输入内容" size="mini" class="addInput"></el-input>
-                </div>
-                <div class="addContent">
-                    <span>数据库名称:</span>
-                    <el-input  placeholder="请输入内容" size="mini" class="addInput"></el-input>
-                </div>
-                <div class="addContent">
-                    <span>IP:</span>
-                    <el-input  placeholder="请输入内容" size="mini" class="addInput"></el-input>
+                <div class="addBox">
+                  <div class="addContent">
+                      <span>路径:</span>
+                      <el-input  v-model="addpath" placeholder="请输入内容" size="mini" class="addInput" disabled></el-input>
+                  </div>
+                  <div class="addContent">
+                      <span>用户名:</span>
+                      <el-input v-model="username" placeholder="请输入内容" size="mini" class="addInput" disabled></el-input>
+                  </div>
+                  <div class="addContent">
+                      <span>密码:</span>
+                      <el-input v-model="password"  placeholder="请输入内容" size="mini" class="addInput" disabled show-password></el-input>
+                  </div>
+                  <div class="addContent">
+                      <span>端口号:</span>
+                      <el-input v-model="port" placeholder="请输入内容" size="mini" class="addInput" disabled></el-input>
+                  </div>
+                  <div class="addContent">
+                      <span>数据库名称:</span>
+                      <el-input v-model="name"  placeholder="请输入内容" size="mini" class="addInput" disabled></el-input>
+                  </div>
+                  <div class="addContent">
+                      <span>IP:</span>
+                      <el-input  v-model="ip" placeholder="请输入内容" size="mini" class="addInput" disabled></el-input>
+                  </div>
                 </div>
                 <span slot="footer" class="dialog-footer">
-                    <el-button @click="centerDialogVisible = false">取 消</el-button>
-                    <el-button type="primary" @click="centerDialogVisible = false">确 定</el-button>
+                    <el-button @click="centerDialogVisible = false" size="mini">取 消</el-button>
+                    <el-button type="primary" @click="addbackupsContent" size="mini">确 定</el-button>
                 </span>
             </el-dialog>
         </div>
@@ -52,6 +54,7 @@
                 :row-style="{height:'32px',textAlign: 'center',padding:'0px',}"
                 :cell-style="{padding:'0px',textAlign: 'center'}"
                 :header-cell-style ="{height:'30px',textAlign:'center',padding:'0px', background:'#00c9ff',color:'white'}"
+                @selection-change = "handleSelectionChange"
                 border
                 >
                 <el-table-column
@@ -99,33 +102,172 @@
 export default {
   data () {
     return {
+      username: '',
+      password:'',
+      addpath:'D:\\backUpDB',
+      name: '',
+      ip: '',
+      port:'',
       centerDialogVisible: false, // 添加按钮的弹窗显示与隐藏
+      delbackupsList: [], // 删除项的集合
       tableData: [ // 备份信息数据
-        {
-          date: '2019-03-08 15:04:53',
-          username: 'admin',
-          filename: 'sample',
-          address: 'D:/backUpDB/20190308150447_sample.sql'
-        },
-        {
-          date: '2019-03-08 15:04:53',
-          username: 'admin',
-          filename: 'sample',
-          address: 'D:/backUpDB/20190308150447_sample.sql'
-        },
-        {
-          date: '2019-03-08 15:04:53',
-          username: 'admin',
-          filename: 'sample',
-          address: 'D:/backUpDB/20190308150447_sample.sql'
-        }
+        // {
+        //   date: '2019-03-08 15:04:53',
+        //   username: 'admin',
+        //   filename: 'sample',
+        //   address: 'D:/backUpDB/20190308150447_sample.sql'
+        // },
+        // {
+        //   date: '2019-03-08 15:04:53',
+        //   username: 'admin',
+        //   filename: 'sample',
+        //   address: 'D:/backUpDB/20190308150447_sample.sql'
+        // },
+        // {
+        //   date: '2019-03-08 15:04:53',
+        //   username: 'admin',
+        //   filename: 'sample',
+        //   address: 'D:/backUpDB/20190308150447_sample.sql'
+        // }
       ]
     }
+  },
+  created(){
+    this.$axios({
+      method: 'get',
+      url: 'sampleGuide/backupDatabase/selectAllBackupOrder'
+    })
+    .then(({data})=>{
+      console.log(data)
+      data.data.forEach((item)=>{
+        this.tableData.push({
+          id: item.id,
+          data: item.backupTime,
+          username:item.backupUser.username,
+          filename:item.dbName,
+          address: item.backupPath,
+        })
+      })
+    }),
+    this.$axios({
+      method: 'get',
+      url: 'sampleGuide/backupDatabase/findDatabaseInfo'
+    })
+    .then(({data})=>{
+      console.log(data)
+      data.data.forEach((item)=>{
+        this.username = item.dbUsername
+        this.password = item.dbPassword
+        this.ip = item.ip
+        this.port = item.portNumber
+        this.name = item.dbName
+      })
+    })
   },
   methods: {
     addbackups () {
       this.centerDialogVisible = true
+    },
+    addbackupsContent(){
+      this.$axios({
+        method: 'post',
+        url: 'sampleGuide/backupDatabase/addBackupOrder',
+        data:({
+          ip: this.ip,
+          portNumber: this.port,
+          dbUsername: this.username,
+          dbPassword: this.password,
+          dbname: this.name,
+          backupPath: this.addpath
+        })
+      })
+      .then((data)=>{
+          console.log(data);
+      })
+    },
+    handleSelectionChange(selection){
+      // console.log(selection)
+      this.delbackupsList = []
+      selection.forEach((item)=>{
+          this.delbackupsList.push(item.id)
+      })
+      // console.log(this.delbackupsList)
+    },
+    delbackups() {
+      console.log(this.delbackupsList)
+      if(this.delbackupsList.length == 0){
+        this.$message({
+          message: '请先选择需要删除的信息！',
+          type: 'warning'
+        });
+      }else{
+        this.$confirm(`当前已选中${this.delbackupsList.length}条信息，确定删除吗？`, '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$axios({
+            method: 'post',
+            url: 'sampleGuide/backupDatabase/batchUpdateBackupOrderStatus',
+            headers: {
+              'Content-Type': 'application/json; charset=UTF-8'
+            },
+            data:({
+              backupOrderList: this.delbackupsList
+              // id: 1
+            })
+          })
+          .then((data)=>{
+            console.log(data)
+            this.$message({
+              type: 'success',
+              message: '删除成功!'
+            });
+          })
+        }).catch(() => {        
+        });
+      }
     }
   }
 }
 </script>
+<style lang="less" scoped>
+.SettingWrap{
+    width: 100%;
+    margin-top: 20px;
+    font-size: 16px;
+    .SettingContent{
+        margin: 0 auto;
+        width: 95%;
+        .SettingTitle{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            .DataInfo{
+                border-left: 2px solid #00c9ff;
+                padding-left: 5px;
+                font-size: 16px;
+            }
+        }
+        .addBox{
+            width: 80%;
+            margin: 0 auto;
+            .addContent{
+                margin-top: 10px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                span{
+                    display: inline-block;
+                    width: 25%;
+                    font-size: 16px;
+                }
+                .addInput{
+                    width: 50%;
+                }
+            }
+        }
+    }
+}
+</style>

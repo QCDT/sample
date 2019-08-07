@@ -1,5 +1,5 @@
 <template>
-  <div class="zl-item-sum">
+  <div class="item-sum">
     <!-- 表格头部的字: 项目总数: xx -->
     <span>{{name}}</span>
     <span>{{number}}</span>
@@ -21,7 +21,7 @@ export default {
 </script>
 <style scoped lang='less'>
 span {
-  font-size: 16px;
+  font-size: 14px;
 }
 
 span:nth-child(2) {

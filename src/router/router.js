@@ -118,7 +118,7 @@ export default new Router({
     {
       path: '/scan/detection',
       name: 'detection',
-      component: () => import('@/views/Scan/saomiao/Detection/index.vue')
+      component: () => import('@/views/Scan-Detection/index.vue')
     },
     /* 患者采血 */
     {

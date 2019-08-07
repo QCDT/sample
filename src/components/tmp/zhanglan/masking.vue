@@ -10,12 +10,12 @@ export default {
     bgc: String // .in 背景色
   },
   components: {},
-  data() {
-    return {};
+  data () {
+    return {}
   },
   methods: {},
   computed: {}
-};
+}
 </script>
 <style scoped lang='less'>
 .masking-wrap {

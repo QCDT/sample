@@ -44,39 +44,39 @@
   </div>
 </template>
 <script>
-import formTopMenu from "../../Scan-BloodCollection-CheckSingle/patientsCheck/formTopMenu";
-import checkProgress from "@/components/tmp/zhanglan/checkProgress";
+import formTopMenu from '../../Scan-BloodCollection-CheckSingle/patientsCheck/formTopMenu'
+import checkProgress from '@/components/tmp/zhanglan/checkProgress'
 export default {
   props: {},
   components: { formTopMenu, checkProgress },
-  data() {
+  data () {
     return {
-      input: "",
+      input: '',
       tableData: [
         {
-          id: "1",
-          name: "患者编号", // 患者编号
-          fangan: "患者姓名", // 患者姓名
-          shenban: "采血管", // 采血管
-          persorn: "预计时间", // 预计时间
-          persorn: "核验时间", // 核验时间
-          persorn: "实际采血实际" // 实际采血实际
+          id: '1',
+          name: '患者编号', // 患者编号
+          fangan: '患者姓名', // 患者姓名
+          shenban: '采血管', // 采血管
+          persorn: '预计时间', // 预计时间
+          persorn: '核验时间', // 核验时间
+          persorn: '实际采血实际' // 实际采血实际
         }
       ],
       multipleSelection: []
-    };
+    }
   },
   methods: {
-    getRowClass({ rowIndex }) {
-      return rowIndex == 0 ? this.$store.getters.formTheme : "";
+    getRowClass ({ rowIndex }) {
+      return rowIndex == 0 ? this.$store.getters.formTheme : ''
     },
-    changProject(rowData, index) {}
+    changProject (rowData, index) {}
   },
   computed: {},
-  created() {
-    this.$emit("getMessage", 1);
+  created () {
+    this.$emit('getMessage', 1)
   }
-};
+}
 </script>
 <style scoped lang='less'>
 .scan-box {

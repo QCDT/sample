@@ -1,8 +1,6 @@
 <template>
   <div class="div">
-    <div class="group left" :style="{ transform:  `translateX(-${L_Chang>96?96:L_Chang}%)` ,
-
-        }">
+    <div class="group left" :style="{ transform:  `translateX(-${L_Chang>96?96:L_Chang}%)` ,}">
       <ul>
         <li v-for="(item,index) in L_Pic" :key="index">
           <router-link :to="{name:item.linkName}">
@@ -99,7 +97,7 @@ export default {
   position: absolute;
   top: 35px;
   right: 0px;
-    z-index: 100;
+  z-index: 100;
   background-color: #fff;
   .btn {
     border-radius: 0.625rem 0 0 0.625rem;
@@ -109,11 +107,8 @@ export default {
 .group {
   display: flex;
   overflow: hidden;
-
   transition:transform  0.9s ease-in-out;
-
   border-radius: 0 0.625rem 0.625rem 0;
-
   ul {
     display: flex;
 

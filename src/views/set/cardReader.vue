@@ -24,7 +24,7 @@
           </div>
           <div class='parameterItem'>
             <span class='type'>端口类型:</span>
-            <el-select v-model="OpentypeValue" filterable @change="changeOpentype">
+            <el-select v-model="OpentypeValue" filterable>
                 <el-option
                 v-for="item in Opentype"
                 :key="item.value"
@@ -33,7 +33,7 @@
                 </el-option>
             </el-select>
           </div>
-          <div class='parameterItem'> <el-button type="primary" class="btn">测试</el-button> </div>
+          <div class='parameterItem'> <el-button type="primary" class="btn" @click="cardReaderTest">测试</el-button> </div>
         </div>
       </div>
       <div class="parameterWrap">
@@ -88,8 +88,8 @@
         </div>
       </div>
       <div class="btns">
-        <el-button type="primary" class="btn">保存</el-button>
-        <el-button type="primary" class="btn" >返回</el-button>
+        <el-button type="primary" class="btn" @click="saveCardReader">保存</el-button>
+        <el-button type="primary" class="btn" @click="$router.go(-1)">返回</el-button>
       </div>
     </div>
   </div>
@@ -98,7 +98,7 @@
 export default {
   data () {
     return ({
-      devicetypeValue: '大读卡器',
+      devicetypeValue: 'M201',
       OpentypeValue: 'COM',
       comBaudRateValue: '38400',
       comFrameStructureValue: '8E1',
@@ -219,15 +219,15 @@ export default {
       ],
       devicetype: [
         {
-          value: '大读卡器',
+          value: 'M201',
           label: '大读卡器'
         },
         {
-          value: '小读卡器',
+          value: 'RL8000',
           label: '小读卡器'
         },
         {
-          value: '3D读卡器',
+          value: 'RD242',
           label: '3D读卡器'
         }
       ],
@@ -247,8 +247,17 @@ export default {
       ]
     })
   },
-  methods: {
-    changeOpentype () {
+  watch:{
+    devicetypeValue(){
+      if(this.devicetypeValue == 'M201'){
+        this.OpentypeValue = 'COM'
+      }else if(this.devicetypeValue == 'RL8000'){
+        this.OpentypeValue = 'USB'
+      }else{
+        this.OpentypeValue = 'COM'
+      }
+    },
+    OpentypeValue(){
       if(this.OpentypeValue == 'COM'){
         this.comdisabled = false
         this.netdisabled = true
@@ -260,6 +269,129 @@ export default {
         this.netdisabled = true
       }
     }
+  },
+  methods: {
+    cardReaderTest(){
+      console.log(this.$cookies.keys())
+      // MyActiveX1.RDR_Close();
+      // let n = this.$store.state.OnOpen(this.devicetypeValue,this.OpentypeValue,this.comBaudRateValue,this.comFrameStructureValue,this.comPortValue,this.netIpAddress,this.netPort)
+      // if (n!=0) {
+      //   this.$alert('设备未识别到，请检查设备连接或设备类型', '', {
+      //     confirmButtonText: '确定',
+      //     type: 'error'
+      //   });
+		  //   return false;
+      // }else{
+      //   this.$alert( '连接成功！请点击保存', '提示', {
+      //     confirmButtonText: '确定',
+      //     type:'success'
+      //   });
+      // }
+      // let nret=0;
+		  // //盘点标签时，使能15693协议。返回，成功：0 ；失败：非0 （查看错误代码表）。
+      // nret = MyActiveX1.RDR_Enable15693(0,0x00,0);
+      // nret = MyActiveX1.RDR_Enable14443A();
+      // if(nret!=0){
+      //   this.$alert('连接读卡器失败', '提示', {
+      //     confirmButtonText: '确定',
+      //     type: 'error'
+      //   });
+      //   //结束标签盘点操作，释放内存空间。
+      //   MyActiveX1.RDR_FinishInventory();
+      //   return;
+      // }
+    },
+    saveCardReader(){
+      // this.$cookies.set('readerType', this.devicetypeValue) 
+      this.$axios({
+          method: 'post',
+          url: 'sampleGuide/cardReader/saveCardReaderCookies',
+          headers: {
+            'Content-Type': 'application/json; charset=UTF-8'
+          },
+          credentials:"include",
+          data:({
+             readerType: this.devicetypeValue,
+             portType: this.OpentypeValue,
+             comPortNo: this.comPortValue,
+             comBaudRate: this.comBaudRateValue,
+             comFrameStructure: this.comFrameStructureValue,
+             netIpAddress: this.netIpAddress,
+             netPortNo: this.netPort
+          })
+      })
+      .then((data)=>{
+         console.log(data)
+      })
+      .catch(error=>{
+        console.log(error)
+      })
+    }
   }
 }
 </script>
+<style lang="less" scoped>
+.cardWrap {
+    width: 100%;
+
+    .btns {
+        width: 100%;
+        text-align: center;
+        margin-top: 25px;
+
+        .btn {
+            width: 120px;
+            // background-color: #00c9ff;
+        }
+    }
+
+    .parameterWrap {
+        width: 950px;
+        height: 80px;
+        border: 1px solid rgba(153, 153, 153, 1);
+        position: relative;
+        margin: 0 auto;
+        margin-top: 35px;
+        display: flex;
+        justify-content: space-around;
+
+        .parameter {
+            font-size: 14px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+
+            .parameterItem {
+                display: flex;
+                justify-content: space-around;
+                align-items: center;
+            }
+
+            .type {
+                font-size: 14px;
+                width: 70px;
+                margin-left: 15px;
+            }
+
+            .btn {
+                margin-left: 15px;
+                // background-color: #00c9ff
+            }
+        }
+
+        strong {
+            position: absolute;
+            font-size: 16px;
+            top: -15px;
+            left: 42%;
+            background: white;
+            display: inline-block;
+            line-height: 20px;
+            padding: 0px 10px;
+            width: 100px;
+            margin: 0 auto;
+            text-align: center;
+        }
+    }
+}
+</style>

@@ -99,29 +99,29 @@
 export default {
   props: {},
   components: {},
-  data() {
+  data () {
     return {
-      value1: "",
+      value1: '',
       tableData: [
         {
           // 序号[非ID] 订单名称 创建事件 创建用户名 取出人 预计归还事件 备注 订单状态 操作
-          id: "1",
-          orderName: "表单名称", // 表单名称
+          id: '1',
+          orderName: '表单名称', // 表单名称
           newTime: 20180102, // 归还人
-          newUserName: "创建用户名" // 归还日期
+          newUserName: '创建用户名' // 归还日期
         }
       ],
       multipleSelection: []
-    };
+    }
   },
   methods: {
-    getRowClass({ rowIndex }) {
+    getRowClass ({ rowIndex }) {
       /* 表头样式 */
-      return rowIndex == 0 ? this.$store.getters.formTheme : "";
+      return rowIndex == 0 ? this.$store.getters.formTheme : ''
     }
   },
   computed: {}
-};
+}
 </script>
 <style scoped lang='less'>
 .record-box {

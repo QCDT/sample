@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="saomiao-box">
-      <img src="@/assets/img/public_saomiao.gif" alt width="100px">
+      <img src="@/assets/img/saomiao.gif" alt width="100px">
       <div class="search-input">
         <searchInput @click="search"></searchInput>
       </div>

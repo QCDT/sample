@@ -34,7 +34,7 @@ export default {
 
   justify-content: center;
   align-items: center;
-  background-color: rgba(0, 0, 0, 0.1);
+  // background-color: rgba(0, 0, 0, 0.1);
 }
 .title {
   height: 87px;
@@ -43,10 +43,8 @@ export default {
   background-color: transparent;
 }
 .in {
-  width: calc(100% - 40px);
-
-  padding: 0 20px;
-  height: calc(100% - 87px);
+  width:100%;
+  height:100%;
   cursor: default;
 }
 </style>

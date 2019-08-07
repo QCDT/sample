@@ -88,7 +88,7 @@
         <div><span>表单数量:</span><span></span></div>
         <div>
           <img src="@/assets/img/receive-excel.png">
-          <img src="@/assets/img/receive-pdf.png">
+          <img src="@/assets/img/receivePDF.png">
         </div>
       </div>
       <div class="formContent">

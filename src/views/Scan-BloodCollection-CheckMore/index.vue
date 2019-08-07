@@ -38,7 +38,7 @@ export default {
 <style scoped lang='less'>
 .check-single-index {
   padding: 20px;
- 
+
 }
 
 .steps-box {

@@ -19,7 +19,7 @@ button {
   outline: none;
   border: 0;
   min-width: 100px;
-//   line-height: 25px;
+  line-height: 25px;
   text-align: center;
   background-color: #3cd7ff;
   white-space: nowrap;

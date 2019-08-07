@@ -27,18 +27,18 @@
 export default {
   props: {},
   components: {},
-  data() {
+  data () {
     return {
-      input: ""
-    };
+      input: ''
+    }
   },
   methods: {
-    save() {
-      this.$emit("save");
+    save () {
+      this.$emit('save')
     }
   },
   computed: {}
-};
+}
 </script>
 <style scoped lang='less'>
 .form-top-menu-box {

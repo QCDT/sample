@@ -64,11 +64,11 @@
   </div>
 </template>
 <script>
-import tmpButton from "@/components/tmp/zhanglan/tmpButton";
-import alertAddPatientInformation from "@/views/Scan-BloodCollection-CreateSingle/createSingle-1/alert-addPatientInformation";
-import alertModifyPatientInformation from "@/views/Scan-BloodCollection-CreateSingle/createSingle-1/alert-modifyPatientInformation";
-import alertModifyWristbands from "@/views/Scan-BloodCollection-CreateSingle/createSingle-1/alert-modifyWristbands";
-import maskTran from "@/components/tmp/zhanglan/masking";
+import tmpButton from '@/components/tmp/zhanglan/tmpButton'
+import alertAddPatientInformation from '@/views/Scan-BloodCollection-CreateSingle/createSingle-1/alert-addPatientInformation'
+import alertModifyPatientInformation from '@/views/Scan-BloodCollection-CreateSingle/createSingle-1/alert-modifyPatientInformation'
+import alertModifyWristbands from '@/views/Scan-BloodCollection-CreateSingle/createSingle-1/alert-modifyWristbands'
+import maskTran from '@/components/tmp/zhanglan/masking'
 export default {
   props: {},
   components: {
@@ -78,49 +78,49 @@ export default {
     alertModifyPatientInformation,
     alertModifyWristbands
   },
-  data() {
+  data () {
     return {
       toggleAddPatientInfo: false /* 添加患者信息 */,
       toggleModifyPatientInformation: false /* 修改患者信息 */,
       toggleModifyWristbands: false /* 修改腕带信息 */,
       tableData: [
         {
-          id: "1",
-          name: "订单名称", // 订单名称
-          fangan: "2018.01.01", // 创建日期
-          shenban: "张三", // 创建人员
-          persorn: "XXX状态" // 状态
+          id: '1',
+          name: '订单名称', // 订单名称
+          fangan: '2018.01.01', // 创建日期
+          shenban: '张三', // 创建人员
+          persorn: 'XXX状态' // 状态
         }
       ],
       multipleSelection: []
-    };
+    }
   },
   methods: {
-    getRowClass({ rowIndex }) {
-      return rowIndex == 0 ? this.$store.getters.formTheme : "";
+    getRowClass ({ rowIndex }) {
+      return rowIndex == 0 ? this.$store.getters.formTheme : ''
     },
-    changProject(rowData, index) {},
-    addPatientInformation() {
+    changProject (rowData, index) {},
+    addPatientInformation () {
       /* 添加患者信息 */
-      this.toggleAddPatientInfo = true;
-      this.$message("添加患者信息");
+      this.toggleAddPatientInfo = true
+      this.$message('添加患者信息')
     },
-    modifyPatientInformation() {
+    modifyPatientInformation () {
       /* 修改患者信息 */
-      this.toggleModifyPatientInformation = true;
-      this.$message("修改患者信息");
+      this.toggleModifyPatientInformation = true
+      this.$message('修改患者信息')
     },
-    modifyWristbands() {
+    modifyWristbands () {
       /* 修改腕带信息 */
-      this.toggleModifyWristbands = true;
-      this.$message("修改腕带信息");
-    },
+      this.toggleModifyWristbands = true
+      this.$message('修改腕带信息')
+    }
   },
   computed: {},
-  created() {
-    this.$emit("getMessage", 0);
+  created () {
+    this.$emit('getMessage', 0)
   }
-};
+}
 </script>
 <style scoped lang='less'>
 .table-name {

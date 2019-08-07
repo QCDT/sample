@@ -51,35 +51,35 @@
   </div>
 </template>
 <script>
-import tmpButton from "@/components/tmp/zhanglan/tmpButton";
+import tmpButton from '@/components/tmp/zhanglan/tmpButton'
 export default {
   props: {},
   components: { tmpButton },
-  data() {
+  data () {
     return {
       tableData: [
         {
-          id: "1",
-          name: "编号", // 项目名称
-          fangan: "性别", // 方案号
-          shenban: "身份证", // 申办方
-          persorn: "病房" // 负责人
+          id: '1',
+          name: '编号', // 项目名称
+          fangan: '性别', // 方案号
+          shenban: '身份证', // 申办方
+          persorn: '病房' // 负责人
         }
       ],
       multipleSelection: []
-    };
+    }
   },
   methods: {
-    getRowClass({ rowIndex }) {
-      return rowIndex == 0 ? this.$store.getters.formTheme : "";
+    getRowClass ({ rowIndex }) {
+      return rowIndex == 0 ? this.$store.getters.formTheme : ''
     },
-    changProject(rowData, index) {}
+    changProject (rowData, index) {}
   },
   computed: {},
-  created() {
-    this.$emit("getMessage", 0);
+  created () {
+    this.$emit('getMessage', 0)
   }
-};
+}
 </script>
 <style scoped lang='less'>
 .form-cerate-order {

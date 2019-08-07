@@ -34,28 +34,28 @@
   </div>
 </template>
 <script>
-import masking from "@/components/tmp/zhanglan/masking";
-import editSample from "@/views/Scan-Transport-In-OrderInfo/alert-editSample";
+import masking from '@/components/tmp/zhanglan/masking'
+import editSample from '@/views/Scan-Transport-In-OrderInfo/alert-editSample'
 export default {
   props: {},
   components: { masking, editSample },
-  data() {
+  data () {
     return {
       ifEdit: false
-    };
+    }
   },
   methods: {
-    edit() {
-      this.ifEdit = true;
-      this.$message("修改转入样本");
+    edit () {
+      this.ifEdit = true
+      this.$message('修改转入样本')
     },
-    save(v) {
-      this.ifEdit = false;
-      this.$message("保存");
+    save (v) {
+      this.ifEdit = false
+      this.$message('保存')
     }
   },
   computed: {}
-};
+}
 </script>
 <style scoped lang='less'>
 table {

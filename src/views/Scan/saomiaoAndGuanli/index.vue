@@ -36,8 +36,8 @@ export default {
   // justify-content:center;
   align-items: center;
   flex-direction: column;
-
-  width: 1366px;
+  margin-top: 3%;
+  width: 100%;
 
   color: #00c9ff;
   .pic {

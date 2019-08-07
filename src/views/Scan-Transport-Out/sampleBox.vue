@@ -39,40 +39,51 @@
         </el-table>
       </div>
     </div>
+    <transition name="el-fade-in-linear">
+      <masking :rgba="0" v-if="ifAddSampleBox">
+        <addSampleBox @close="ifAddSampleBox=false" @save='save'></addSampleBox>
+      </masking>
+    </transition>
   </div>
 </template>
 <script>
+import masking from '@/components/tmp/zhanglan/maskTran'
+import addSampleBox from './addSampleBox/index'
 export default {
   props: {},
-  components: {},
-  data() {
+  components: { masking, addSampleBox },
+  data () {
     return {
       ifAddSampleBox: false,
       tableData: [
         {
-          id: "1",
-          name: "替格瑞洛", // 项目名称
-          fangan: "SN-YQ-2018005/V 1.0", // 方案号
-          shenban: "石药集团中奇制药技术", // 申办方
-          persorn: "李四", // 负责人
-          yaowu: "CSPCHA115胶囊" // 药物名称
+          id: '1',
+          name: '替格瑞洛', // 项目名称
+          fangan: 'SN-YQ-2018005/V 1.0', // 方案号
+          shenban: '石药集团中奇制药技术', // 申办方
+          persorn: '李四', // 负责人
+          yaowu: 'CSPCHA115胶囊' // 药物名称
         }
       ],
       multipleSelection: []
-    };
+    }
   },
   methods: {
-    getRowClass({ rowIndex }) {
-      /*  设置表头样式 */
-      return rowIndex == 0 ? this.$store.getters.formTheme : "";
+    save () {
+      this.ifAddSampleBox = false
+      this.$message('save')
     },
-    addSampleBox() {
-      this.$message("添加样本盒");
-      this.ifAddSampleBox = true;
+    getRowClass ({ rowIndex }) {
+      /*  设置表头样式 */
+      return rowIndex == 0 ? this.$store.getters.formTheme : ''
+    },
+    addSampleBox () {
+      this.$message('添加样本盒')
+      this.ifAddSampleBox = true
     }
   },
   computed: {}
-};
+}
 </script>
 <style scoped lang='less'>
 .title {

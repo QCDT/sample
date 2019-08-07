@@ -58,42 +58,42 @@
   </div>
 </template>
 <script>
-import masking from "@/components/tmp/zhanglan/masking";
-import test from "@/views/Scan-BloodCollection-CreateMore/createMore-2/test";
+import masking from '@/components/tmp/zhanglan/masking'
+import test from '@/views/Scan-BloodCollection-CreateMore/createMore-2/test'
 export default {
   props: {},
   components: { masking, test },
-  data() {
+  data () {
     return {
       ifSelectPatients: false,
       value1: new Date(),
-      input: "",
+      input: '',
       tableData: [
         {
-          id: "1",
-          name: "编号", // 项目名称
-          fangan: "性别", // 方案号
-          shenban: "身份证", // 申办方
-          persorn: "病房" // 负责人
+          id: '1',
+          name: '编号', // 项目名称
+          fangan: '性别', // 方案号
+          shenban: '身份证', // 申办方
+          persorn: '病房' // 负责人
         }
       ],
       multipleSelection: []
-    };
+    }
   },
   methods: {
-    toggleSelectPatients() {
-      this.ifSelectPatients = true;
+    toggleSelectPatients () {
+      this.ifSelectPatients = true
     },
-    getRowClass({ rowIndex }) {
-      return rowIndex == 0 ? this.$store.getters.formTheme : "";
+    getRowClass ({ rowIndex }) {
+      return rowIndex == 0 ? this.$store.getters.formTheme : ''
     },
-    changProject(rowData, index) {}
+    changProject (rowData, index) {}
   },
   computed: {},
-  created() {
-    this.$emit("getMessage", 1);
+  created () {
+    this.$emit('getMessage', 1)
   }
-};
+}
 </script>
 <style scoped lang='less'>
 .time-interval {

@@ -1,12 +1,5 @@
-/*
- * @Description: 这是一个初始化标签样式的文件...例如:h1-h6 d的样式都是  font-size: 14px;
- * @Author: 张澜
- * @Date: 2019-06-11 16:34:27
- * @LastEditTime: 2019-06-19 12:47:58
- * @LastEditors: Please set LastEditors
- */
-
-/* html {
+/* 
+ html {
   line-height: 1.15;
   -webkit-text-size-adjust: 100%;
 }
@@ -151,7 +144,7 @@ template {
 }
 [hidden] {
   display: none;
-} */
+}  */
 html,
 body,
 div,
@@ -176,7 +169,6 @@ table,
 th,
 td {
   border: 0;
-  /* font-family: "微软雅黑", "黑体", "宋体"; */
   font-size: 14px;
   margin: 0;
   padding: 0;
@@ -186,6 +178,7 @@ body {
   height: 100%;
   width: 100%;
 }
+
 address,
 caption,
 cite,
@@ -200,7 +193,6 @@ var {
   font-weight: normal;
 }
 a {
- 
   text-decoration: none;
 }
 a:link {
@@ -244,6 +236,7 @@ button[disabled],
 input[disabled] {
   cursor: default;
 }
+
 img {
   border: 0;
 }
@@ -252,5 +245,20 @@ ol,
 li {
   list-style-type: none;
 }
-
- 
+.el-table th {
+  /* 表格样式 */
+  background: #3cd7ff !important;
+  padding: 0px 0 !important;
+  height: 30px !important;
+  line-height: 1.875rem !important;
+  font-weight: 900 !important;
+  font-size: 1rem !important;
+  color: #fff !important;
+  text-align: center !important;
+}
+.el-icon-close {
+  transition: all 0.2s;
+}
+.el-icon-close:hover {
+  color: #f42;
+}

@@ -12,7 +12,6 @@
     <!-- 表格名称 -->
     <div class="top">
       <fromName>项目列表</fromName>
-      <h1>项目列表</h1>
     </div>
     <div class="cent">
       <item-sum name="项目总数:" :number="tableData.length"></item-sum>
@@ -20,53 +19,88 @@
     </div>
 
     <div class="form center">
-      <el-table :row-style="{height:'32px',textAlign: 'center',padding:'0px',}" :cell-style="{padding:'0px',textAlign: 'center'}" border stripe ref="multipleTable" :data="tableData" tooltip-effect="dark" :style="{width: '1296px',margin:'0 auto',}" :header-cell-style="getRowClass" @selection-change="handleSelectionChange" >
-        <el-table-column type="index" label="序号" width="70"></el-table-column>
-        <el-table-column prop="name" label="项目名称" width="120"></el-table-column>
-        <el-table-column prop="fangan" label="方案号" show-overflow-tooltip></el-table-column>
-        <el-table-column prop="shenban" label="申办方"></el-table-column>
-        <el-table-column prop="persorn" label="负责人" show-overflow-tooltip></el-table-column>
-        <el-table-column prop="yaowu" label="药物名称" show-overflow-tooltip></el-table-column>
-        <el-table-column fixed="right" label="操作" width="100">
-          <template slot-scope="scope">
-            <div class="flex">
-              <el-button @click="changProject(scope.row,scope.$index)" type="text" size="small">修改</el-button>
-              <el-button type="text" @click="open">删除</el-button>
-            </div>
-          </template>
+      <el-table
+        :row-style="{height:'32px',textAlign: 'center',padding:'0px',}"
+        :cell-style="{padding:'0px',textAlign: 'center'}"
+        border
+        ref="multipleTable"
+        :data="tableData"
+        tooltip-effect="dark"
+        :style="{width: '1296px',margin:'0 auto'}"
+        :header-cell-style="getRowClass"
+      >
+        <el-table-column
+            type="selection"
+            width="55">
+        </el-table-column>
+        <el-table-column
+          prop="name"
+          label="项目名称"
+        >
+        </el-table-column>
+        <el-table-column
+          prop="fangan"
+          label="方案号"
+        >
+        </el-table-column>
+        <el-table-column
+          prop="shenban"
+          label="申办方"
+        >
+        </el-table-column>
+        <el-table-column
+          prop="persorn"
+          label="负责人"
+          width="100">
+        </el-table-column>
+        <el-table-column
+          prop="yaowu"
+          label="负责人"
+        >
+        </el-table-column>
+        <el-table-column label="操作">
+            <template slot-scope="scope">
+               <el-tooltip effect="dark" content="修改" placement="bottom-start">
+                  <i class="el-icon-edit btn" @click="changeProject(scope.$index, scope.row)"></i>
+               </el-tooltip>
+               <el-tooltip effect="dark" content="删除" placement="bottom-start">
+                  <i class="el-icon-delete btn" @click="delProject(scope.$index, scope.row)"></i>
+               </el-tooltip>
+            </template>
         </el-table-column>
       </el-table>
     </div>
     <div class="bot">
-      <goBack></goBack>
+      <el-button type="primary" size="mini" @click="$router.go(-1)">返回</el-button>
     </div>
   </div>
 </template>
 <script>
 import itemSum from '@/components/tmp/zhanglan/item-sum'
 import goBack from '@/components/tmp/zhanglan/go-1'
-import masking from '@/views/set/ProjectSetting/masking'
 import fromName from '@/components/tmp/zhanglan/fromName'
 import newProject from './newProject/index'
 export default {
-  components: { itemSum, goBack, masking, fromName, newProject },
+  inject:['reload'],
+  components: { itemSum, goBack, fromName, newProject },
   data () {
     return {
       // 新建项目
-      MASK_items: [
-        { text: '项目名称', name: '项目名称', key: 'name', value: '1' },
-        { text: '方案号', fangan: '方案号', key: 'fangan', value: '2' },
-        { text: '申办方', shenban: '申办方', key: 'shenban', value: '3' },
-        { text: '负责人', persorn: '负责人', key: 'persorn', value: '4' },
-        { text: '药物名称', yaowu: '药物', key: 'yaowu', value: '5' }
-      ],
+      MASK_items: {
+          'id': '',
+          'name':'',
+          'fangan':'',
+          'shenban':'',
+          'persorn':'',
+          'yaowu':''
+      },
       // 返回按钮
       dialogVisible: false,
       // 删除按钮 确认框
       MASK_name: '新建项目',
       MASK_btn: '创建',
       MASK_event: true, // true创建项目 false 为修改项目
-      MASK_cha_index: -1, // 修改的哪一行
+      // MASK_cha_index: -1, // 修改的哪一行
       //   MASK_del_index: -1, //删除的哪一行
 
       tableData: [
@@ -82,40 +116,59 @@ export default {
       multipleSelection: []
     }
   },
-
+  created(){
+    this.$axios.get("/sampleGuide/guest/selectProjectAll")
+    .then(({data})=>{
+      console.log(data)
+       data.forEach((item)=>{
+          this.tableData.push({
+              id:item.id,
+              name: item.name,
+              fangan:item.protocol_number,
+              shenban:item.sponsor,
+              persorn: item.responsible_person,
+              yanwu: item.drug_name
+          })
+       })
+    })
+    .catch((error)=>{
+      console.log(error)
+    })
+  },
   methods: {
-    // El UI ...
-    toggleSelection (rows) {
-      if (rows) {
-        rows.forEach(row => {
-          this.$refs.multipleTable.toggleRowSelection(row)
-        })
-      } else {
-        this.$refs.multipleTable.clearSelection()
-      }
-    },
-    handleSelectionChange (val) {
-      this.multipleSelection = val
-    },
     /* 设置表头样式 */
     getRowClass ({ rowIndex }) {
-      return rowIndex == 0 ? this.$store.getters.formTheme : ''
+      return rowIndex == 0 ? this.$store.state.formTheme : ''
     },
-    // EL UI操作事件
-    changProject (row, index) {
+    // 修改项目
+    changeProject (index,row) {
       // row 当前行的数据,index 当前行的索引
       this.MASK_name = '修改项目'
       this.MASK_btn = '修 改'
       this.MASK_event = false // true 为创建 false 为修改
-      this.MASK_cha_index = index // 修改的哪一行
-      console.log('修改蒙版数据: ', '修改项目')
-
-      this.MASK_value = this.tableData[index]
+      // this.MASK_cha_index = index // 修改的哪一行
+      console.log(row)
+      this.MASK_items = { 
+          'id': row.id,
+          'name': row.name,
+          'fangan': row.fangan,
+          'shenban': row.shenban,
+          'persorn': row.persorn,
+          'yaowu': row.yaowu
+        }
       this.dialogVisible = true
     },
 
     // 显示蒙版-->新建项目的点击按钮
     openProject () {
+      this.MASK_items = {
+          'id': '',
+          'name':'',
+          'fangan':'',
+          'shenban':'',
+          'persorn':'',
+          'yaowu':''
+      }
       this.MASK_name = '新建项目'
       this.MASK_btn = '创 建'
       this.MASK_event = true // true 为创建 false 为修改
@@ -127,29 +180,73 @@ export default {
         ? this.addProject(val)
         : this.putProject(val)
     },
-    addProject (val) {
-      /*  创建 */ this.tableData.push(val)
-      this.$message({ message: '添加成功', type: 'success' })
+    addProject (val) { // 创建
+      console.log(val)
+      this.$axios({
+        method: 'post',
+        url: '/sampleGuide/guest/insertProject',
+        data:({
+          name: val[name],
+          protocol_number: val[fangan],
+          sponsor: val[shenban],
+          responsible_person: val[persorn],
+          drug_name: val[yanwu]
+        })
+      })
+      .then(({data})=>{
+        console.log(data)
+        this.$message({ message: '添加成功', type: 'success' })
+        this.reload()
+      })
+      .catch(({error})=>{
+        console.log(error)
+      })
       this.closeProject()
     },
-    putProject (val) {
-      /*  修改 */
-      console.log('998: ', 998)
-      this.tableData[this.MASK_cha_index] = val
+    putProject (val) {  /*  修改 */    
+      this.$axios({
+        method: 'post',
+        url: '/sampleGuide/guest/updateProject',
+        data:({
+          id: val[id],
+          name: val[name],
+          protocol_number: val[fangan],
+          sponsor: val[shenban],
+          responsible_person: val[persorn],
+          drug_name: val[yanwu]
+        })
+      })
+      .then(({data})=>{
+        console.log(data)
+        this.$message({ message: '修改成功', type: 'success' })
+        this.reload();
+      })
+      .catch(({error})=>{
+        console.log(error)
+      })
       this.closeProject()
     },
-    clearProject (row, index) {
-      /*  删除数据 */ this.tableData.splice(index, 1)
+    clearProject (row, index) { // 删除 
+      this.$axios({
+        method: 'post',
+        url:'/sampleGuide/guest/deleteProject',
+        data:({
+            id: row.id
+        })
+      })
+      .then((data)=>{
+          console.log(data)
+          this.$message({ type: 'success', message: '删除成功!' })
+      })
     },
-    open () {
-      /*  删除确认 */ this.$confirm(
+    delProject () { /*  删除确认 */
+      this.$confirm(
         '此操作将永久删除该文件, 是否继续?',
         '提示',
         { confirmButtonText: '确定', cancelButtonText: '取消', type: 'warning' }
       )
         .then(() => {
           this.clearProject()
-          this.$message({ type: 'success', message: '删除成功!' })
         })
         .catch(() => {
           this.$message({ type: 'info', message: '已取消删除' })
@@ -162,10 +259,6 @@ export default {
 }
 </script>
 <style scoped lang='less'>
-.bot {
-  background-color: #fff;
-}
-
 .cent {
   button {
     cursor: pointer;
@@ -195,7 +288,6 @@ export default {
   .cent {
     display: flex;
     justify-content: space-between;
-
     width: 1226px;
     // padding: 0 35px;
     margin: 0 auto;
@@ -204,18 +296,20 @@ export default {
 
   .center {
     background-color: #fff;
+    .btn{
+      font-size: 18px;
+      margin-right: 10px;
+      cursor: pointer;
+      outline: none;
+    }
   }
 
   .bot {
-    position: fixed;
-    bottom: 0;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
+    background-color: #fff;
     width: 100%;
     height: 150px;
+    text-align: center;
+    line-height: 150px;
   }
 }
 

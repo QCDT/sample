@@ -1,9 +1,9 @@
 <template>
   <div class="verificationWrap">
     <div class="verificationContent" v-for="(item,index) in verificationList" :key="index">
-      <router-link 
-        :to="item.singleLink" 
-        v-show="item.activeVerification" 
+      <router-link
+        :to="item.singleLink"
+        v-show="item.activeVerification"
         @mouseover.native="singleEnter(index)"
         @mouseout.native="singleOut(index)"
         >
@@ -15,8 +15,8 @@
         <img :src='item.mainContentB' v-show="item.activeVerification">
         <span>{{item.title}}</span>
       </div>
-      <router-link 
-        :to='item.multiplayerLink' 
+      <router-link
+        :to='item.multiplayerLink'
         v-show="item.activeVerification"
         @mouseover.native="multiplayerEnter(index)"
         @mouseout.native="multiplayerOut(index)"
@@ -36,32 +36,32 @@ export default {
   components: { tmptaggle, goBack },
   data () {
     return {
-      verificationList:[
+      verificationList: [
         {
-          singleA: require("@/assets/img/caixue_onepeople.png"),
-          singleB: require("@/assets/img/caixue_onepeople1.png"),
+          singleA: require('@/assets/img/caixue_onepeople.png'),
+          singleB: require('@/assets/img/caixue_onepeople1.png'),
           singleLink: '/scan/caixue/singleVerification',
-          mainContentA: require("@/assets/img/caixue_huanzhe1.png"),
-          mainContentB: require("@/assets/img/caixue_huanzhe1.jpg"),
-          hoverSingle:false,
+          mainContentA: require('@/assets/img/caixue_huanzhe1.png'),
+          mainContentB: require('@/assets/img/caixue_huanzhe1.jpg'),
+          hoverSingle: false,
           hoverMultiplayer: false,
           activeVerification: false,
-          multiplayerA: require("@/assets/img/caixue_morepeople.png"),
-          multiplayerB: require("@/assets/img/caixue_morepeople1.png"),
+          multiplayerA: require('@/assets/img/caixue_morepeople.png'),
+          multiplayerB: require('@/assets/img/caixue_morepeople1.png'),
           multiplayerLink: '/',
           title: '开始核验'
         },
         {
-          singleA: require("@/assets/img/caixue_addonepatient.png"),
-          singleB: require("@/assets/img/caixue_addonepatient1.png"),
+          singleA: require('@/assets/img/caixue_addonepatient.png'),
+          singleB: require('@/assets/img/caixue_addonepatient1.png'),
           singleLink: '/',
-          mainContentA: require("@/assets/img/caixue_addPatient.png"),
-          mainContentB: require("@/assets/img/caixue_addPatient.jpg"),
-          hoverSingle:false,
+          mainContentA: require('@/assets/img/caixue_addPatient.png'),
+          mainContentB: require('@/assets/img/caixue_addPatient.jpg'),
+          hoverSingle: false,
           hoverMultiplayer: false,
           activeVerification: false,
-          multiplayerA: require("@/assets/img/caixue_addmorepatient.png"),
-          multiplayerB: require("@/assets/img/caixue_addmorepatient1.png"),
+          multiplayerA: require('@/assets/img/caixue_addmorepatient.png'),
+          multiplayerB: require('@/assets/img/caixue_addmorepatient1.png'),
           multiplayerLink: '/',
           title: '创建核验表单'
         }
@@ -76,13 +76,13 @@ export default {
       this.verificationList[index].hoverSingle = true
     },
     singleOut (index) {
-      this.verificationList[index].hoverSingle= false
+      this.verificationList[index].hoverSingle = false
     },
     multiplayerEnter (index) {
-       this.verificationList[index].hoverMultiplayer = true
+      this.verificationList[index].hoverMultiplayer = true
     },
     multiplayerOut (index) {
-       this.verificationList[index].hoverMultiplayer = false
+      this.verificationList[index].hoverMultiplayer = false
     }
   },
   computed: {}

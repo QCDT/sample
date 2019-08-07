@@ -8,21 +8,21 @@
   </div>
 </template>
 <script>
-import addOrder from "../Scan-Transport-Out-Change/transferOrder";
-import  sampleBox from './sampleBox'
+import addOrder from '../Scan-Transport-Out-Change/transferOrder'
+import sampleBox from './sampleBox'
 export default {
   props: {},
-  components: { addOrder,sampleBox },
-  data() {
-    return {};
+  components: { addOrder, sampleBox },
+  data () {
+    return {}
   },
   methods: {
-    confirm() {
-      console.log("11: ", "确认");
+    confirm () {
+      console.log('11: ', '确认')
     }
   },
   computed: {}
-};
+}
 </script>
 <style scoped lang='less'>
 .add-order-tmp {

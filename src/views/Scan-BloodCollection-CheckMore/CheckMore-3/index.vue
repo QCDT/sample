@@ -5,15 +5,15 @@
 export default {
   props: {},
   components: {},
-  data() {
-    return {};
+  data () {
+    return {}
   },
   methods: {},
   computed: {},
-  created() {
-    this.$emit("getMessage", 2);
+  created () {
+    this.$emit('getMessage', 2)
   }
-};
+}
 </script>
 <style scoped lang='less'>
 </style>

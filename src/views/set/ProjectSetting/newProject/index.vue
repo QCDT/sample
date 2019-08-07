@@ -6,9 +6,9 @@
           <div class="form-in">
             <div class="title">{{MASK_name}}</div>
             <div class="content">
-              <p v-for="(item,index) in MASK_items" :key="index">
+              <p v-for="(item,index) in MASK_text" :key="index">
                 <span>{{item.text}}:</span>
-                <input type="text" v-model="MASK_value[item.key]">
+                <input type="text" v-model="MASK_items[item.value]" maxlength="20">
               </p>
             </div>
             <div class="bot-btn">
@@ -24,30 +24,52 @@
   </div>
 </template>
 <script>
-import masking from '@/views/set/ProjectSetting/masking'
 export default {
   props: {
     MASK_btn: String,
     dialogVisible: Boolean,
     MASK_name: String,
-    MASK_items: { type: Array, default: () => [] }
+    MASK_items: { type: Object, default: () => {} }
   },
-  components: { masking },
   data () {
     return {
-      MASK_value: {
-        name: '替格瑞洛', // 项目名称
-        fangan: 'SN-YQ-2018005/V 1.0', // 方案号
-        shenban: '石药集团中奇制药技术', // 申办方
-        persorn: '李四', // 负责人
-        yaowu: 'CSPCHA115胶囊' // 药物名称
-      }
+      MASK_text: [
+        {
+          text: '项目名称',
+          value: 'name'
+        },
+        {
+          text: '方案号',
+          value: 'fangan'
+        },
+        {
+          text: '申办方',
+          value: 'shenban'
+        },
+        {
+          text: '负责人',
+          value: 'persorn'
+        },
+        {
+          text: '药物名称',
+          value:'yaowu'
+        }
+      ]
     }
   },
+  // watch:{
+  //   MASK_items:{
+  //     deep: true,
+  //     handler: function (newVal, oldVal){
+  //       if(newVal.name == ''){
+  //         this.msg = '项目名称不能为空'
+  //         // this.$message({ message: '项目名称不能为空', type: 'error' })
+  //       }
+  //       console.log(newVal, oldVal)
+  //     }
+  //   }
+  // },
   methods: {
-    clearFromBack () {
-      console.log(': ', '返回事件')
-    },
     handleClose (done) {
       this.$confirm('确认关闭？')
         .then(_ => {
@@ -58,10 +80,21 @@ export default {
     },
     // 项目:创建,修改
     maskProject () {
-      this.$emit('maskProject', JSON.parse(JSON.stringify(this.MASK_value)))
-      //   this.$emit("maskProject", this.MASK_value);
-      this.MASK_value = {}
-      console.log('111111111111111111111: ', 111111111111111111111)
+      // if(this.MASK_items.name === ''){
+      //   this.$message({ message: '项目名称不能为空', type: 'error' })
+      // }else if(this.MASK_items.fangan === ''){
+      //   this.$message({ message: '方案号不能为空', type: 'error' })
+      // }else if(this.MASK_items.shenban === ''){
+      //   this.$message({ message: '申办方不能为空', type: 'error' })
+      // }else if(this.MASK_items.persorn === ''){
+      //    this.$message({ message: '负责人不能为空', type: 'error' })
+      // }else if(this.MASK_items.yaowu === ''){
+      //   this.$message({ message: '药物名称不能为空', type: 'error' })
+      // }else{
+        this.$emit("maskProject", this.MASK_items);
+      // }
+      // this.$emit('maskProject', JSON.parse(JSON.stringify(this.MASK_value)))
+      // this.MASK_value = {}
     }
   },
   computed: {}

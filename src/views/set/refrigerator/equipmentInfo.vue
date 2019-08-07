@@ -35,19 +35,19 @@
 </template>
 <script>
 export default {
-    data () {
-        return {
-            equipmentName:''
-        }
-    },
-    methods:{
-        prevEquipment () {
-            this.$router.push('/set/refrigerator/choicelaboratory')
-        },
-        nextEquipment () {
-            this.$router.push('/set/refrigerator/equipmentConstruction')
-        }
+  data () {
+    return {
+      equipmentName: ''
     }
+  },
+  methods: {
+    prevEquipment () {
+      this.$router.push('/set/refrigerator/choicelaboratory')
+    },
+    nextEquipment () {
+      this.$router.push('/set/refrigerator/equipmentConstruction')
+    }
+  }
 }
 </script>
 <style lang="less">

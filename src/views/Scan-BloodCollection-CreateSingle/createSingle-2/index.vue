@@ -50,40 +50,40 @@
   </div>
 </template>
 <script>
-import tmpButton from "@/components/tmp/zhanglan/tmpButton";
+import tmpButton from '@/components/tmp/zhanglan/tmpButton'
 export default {
   props: {},
   components: { tmpButton },
-  data() {
+  data () {
     return {
       tableData: [
         {
-          id: "1",
-          name: "订单名称", // 订单名称
-          fangan: "2018.01.01", // 创建日期
-          shenban: "张三", // 创建人员
-          persorn: "XXX状态" // 状态
+          id: '1',
+          name: '订单名称', // 订单名称
+          fangan: '2018.01.01', // 创建日期
+          shenban: '张三', // 创建人员
+          persorn: 'XXX状态' // 状态
         }
       ],
       multipleSelection: []
-    };
+    }
   },
   methods: {
-    getRowClass({ rowIndex }) {
-      return rowIndex == 0 ? this.$store.getters.formTheme : "";
+    getRowClass ({ rowIndex }) {
+      return rowIndex == 0 ? this.$store.getters.formTheme : ''
     },
-    changProject(rowData, index) {}
+    changProject (rowData, index) {}
   },
   computed: {},
-  created() {
-    this.$emit("getMessage", 1);
+  created () {
+    this.$emit('getMessage', 1)
   }
-};
+}
 </script>
 <style scoped lang='less'>
 .top-input {
   display: flex;
- 
+
   margin-bottom: 5px;
 }
 .item {

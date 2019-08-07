@@ -1,14 +1,13 @@
-@import './header.css';
-@import './login.css';
-@import './Home.css';
-@import './set.css';
-@import './cardReader.css';
-@import './header.css';
-@import './printer.css';
-@import './dataSetting.css';
-@import './userConfiguration.css';
-@import './Centrifuge.css';
-@import './refrigerator.css';
-@import './check.css';
-@import './choicelaboratory.css';
+
+ body {
+  margin: 0;
+  font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
+}
+
+/* @import './cardReader.css'; */
+/* @import './Centrifuge.css'; */
+/* @import './refrigerator.css'; */
+/* @import './choicelaboratory.css'; */
+
 @import './reset.css';
+@import './check.css';

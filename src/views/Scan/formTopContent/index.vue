@@ -9,7 +9,7 @@
         <span>开始扫描样本盒:</span>
         <slot name="saomiao"></slot>
       </div>
-      <div class="item" :class="{hidden:switchSaoMiao}">
+      <div class="item" :class="{'hidden':switchSaoMiao}">
         <span>批量管理模式:</span>
         <slot name="guanli"></slot>
       </div>

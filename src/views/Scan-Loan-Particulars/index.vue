@@ -79,93 +79,93 @@
   </div>
 </template>
 <script>
-import fromName from "@/components/tmp/zhanglan/fromName";
-import maskTran from "@/components/tmp/zhanglan/masking";
-import add from "@/views/Scan-Loan-Particulars/add";
+import fromName from '@/components/tmp/zhanglan/fromName'
+import maskTran from '@/components/tmp/zhanglan/masking'
+import add from '@/views/Scan-Loan-Particulars/add'
 export default {
   props: {},
   components: { fromName, maskTran, add },
-  data() {
+  data () {
     return {
       ifAddBox: false,
       ifSearchAddBox: false,
       tableData: [
         {
           // 序号[非ID] 订单名称 创建事件 创建用户名 取出人 预计归还事件 备注 订单状态 操作
-          id: "1",
-          orderName: "表单名称", // 表单名称
+          id: '1',
+          orderName: '表单名称', // 表单名称
           newTime: 20180102, // 创建时间
-          newUserName: "创建用户名", // 创建用户名
-          takeOutName: "meu", // 取走人
+          newUserName: '创建用户名', // 创建用户名
+          takeOutName: 'meu', // 取走人
           returnTiem: 123123, // 预计归还时间
-          mark: "无备注", // 备注
-          status: "已核验" // 表单状态
+          mark: '无备注', // 备注
+          status: '已核验' // 表单状态
         }
       ],
       multipleSelection: []
-    };
+    }
   },
   methods: {
-    add() {
-      this.$message("扫描样本盒添加");
-      this.ifAddBox = true;
+    add () {
+      this.$message('扫描样本盒添加')
+      this.ifAddBox = true
     },
-    searchAdd() {
-      this.$message("查询样本添加");
+    searchAdd () {
+      this.$message('查询样本添加')
       setTimeout(() => {
-           this.$message("和查询页面类似"); 
-      }, 0);
-    
-      this.ifSearchAddBox = true;
+        this.$message('和查询页面类似')
+      }, 0)
+
+      this.ifSearchAddBox = true
     },
-    toggleSelection(rows) {
+    toggleSelection (rows) {
       if (rows) {
         rows.forEach(row => {
-          this.$refs.multipleTable.toggleRowSelection(row);
-        });
+          this.$refs.multipleTable.toggleRowSelection(row)
+        })
       } else {
-        this.$refs.multipleTable.clearSelection();
+        this.$refs.multipleTable.clearSelection()
       }
     },
-    handleSelectionChange(val) {
-      this.multipleSelection = val;
+    handleSelectionChange (val) {
+      this.multipleSelection = val
     },
 
-    getRowClass({ rowIndex }) {
+    getRowClass ({ rowIndex }) {
       /* 表头样式 */
-      return rowIndex == 0 ? this.$store.getters.formTheme : "";
+      return rowIndex == 0 ? this.$store.getters.formTheme : ''
     },
     // 删除订单
-    delDingdan(row, index) {
-      this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
+    delDingdan (row, index) {
+      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
       })
         .then(() => {
-          this.tableData.splice(index, 1);
-          this.$message({ type: "success", message: "删除成功!" });
+          this.tableData.splice(index, 1)
+          this.$message({ type: 'success', message: '删除成功!' })
         })
         .catch(() => {
-          this.$message({ type: "info", message: "已取消删除" });
-        });
+          this.$message({ type: 'info', message: '已取消删除' })
+        })
     },
 
     // ↓    添加订单
-    showAdd() {
-      /* 显示 */ this.showDingdan = true;
+    showAdd () {
+      /* 显示 */ this.showDingdan = true
     },
-    clearAdd() {
-      /* 隐藏 */ this.showDingdan = false;
+    clearAdd () {
+      /* 隐藏 */ this.showDingdan = false
     },
-    submitForm(v) {
-      /* 添加订单 */ this.tableData.push(v);
-      this.clearAdd();
+    submitForm (v) {
+      /* 添加订单 */ this.tableData.push(v)
+      this.clearAdd()
     }
     // ↑
   },
   computed: {}
-};
+}
 </script>
 <style scoped lang='less'>
 .loadn-particulars-index {

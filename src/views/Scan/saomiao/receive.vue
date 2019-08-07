@@ -165,7 +165,7 @@
                 <div><span>表单数量:</span><span>{{formNum}}</span></div>
                 <div>
                 <img src="@/assets/img/receive-excel.png" @click="exportSampleFormExcel">
-                <img src="@/assets/img/receive-pdf.png" @click="exportSampleFormPDF">
+                <img src="@/assets/img/receivePDF.png" @click="exportSampleFormPDF">
                 </div>
             </div>
             <div class="formContent">

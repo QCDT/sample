@@ -111,11 +111,13 @@
   margin-left: 10px;
 }
 .recordTitle > div .recordType {
-  width: 40%;
-  margin-left: 10px;
+  width: 50%;
 }
 .recordTitle > div .recordTime {
   width: 20%;
+}
+.recordTitle > div /deep/ .el-input {
+  margin-right: 10px;
 }
 .notice {
   color: #fa3849;

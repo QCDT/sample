@@ -29,24 +29,24 @@
         <small class="versions">Sampleguide 3.0</small>
         <div class="icon-wrap">
           <div class="item" @mouseenter="showIndex=1" @mouseleave="showIndex=-1">
-            <img src="@/assets/img/header_user1.png" alt>
+            <img src="@/assets/img/header_user1.png">
             <p :class="{show:showIndex===1}">
               <span>用户名: admin</span>
               <span>角色名: 超级管理员</span>
             </p>
           </div>
           <div class="item" @mouseenter="showIndex=2" @mouseleave="showIndex=-1">
-            <img src="@/assets/img/header_tell1.png" alt>
+            <img src="@/assets/img/header_tell1.png">
             <p class="tel" :class="{show:showIndex===2}">
               <span>联系电话: 010-68683182</span>
               <span>E-mail：service@huitonghealthcare.com</span>
             </p>
           </div>
           <div class="item">
-            <img src="@/assets/img/header_help1.png" alt>
+            <img src="@/assets/img/header_help1.png">
           </div>
           <div class="item logout-wrap" @mouseenter="showIndex=4" @mouseleave="showIndex=-1">
-            <img src="@/assets/img/header_home1.png" alt>
+            <img src="@/assets/img/header_home1.png">
             <p class="logout" :class="{show:showIndex===4}">
               <span>切换用户</span>
               <span>退出</span>
@@ -95,12 +95,19 @@ export default {
 }
 </script>
 <style scoped lang='less'>
+.headWrap{
+  height: 80px;
+}
 .center {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 87px;
-  padding: 0 20px;
+  height: 80px;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  z-index: 2;
+  background: white;
 }
 .logo {
   cursor: pointer;
@@ -120,7 +127,7 @@ export default {
   display: flex;
   align-items: center;
 
-  height: 28px;
+  height: 35px;
   margin-bottom: 5px;
 
   cursor: default;
@@ -140,7 +147,7 @@ export default {
     display: flex;
     align-items: flex-start;
     // background-color: #333;
-
+    justify-content: center;
     white-space: nowrap;
 
     font-weight: 500;

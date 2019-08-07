@@ -4,8 +4,9 @@
       <tr class="row" v-for="(row,index) in tableData||matrixData" :key="index">
         <td
           :style="{backgroundColor:item.bgc,
-        width:tdWidth,
-        height:tdHeight,borderColor:borderColor
+          width:tdWidth,
+          height:tdHeight,
+          borderColor:borderColor
         }"
           v-for="(item,ind) in row"
           :key="ind"

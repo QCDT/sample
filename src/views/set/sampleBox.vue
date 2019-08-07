@@ -63,15 +63,15 @@
 </template>
 <script>
 export default {
-    data () {
-        return {
-            tableData:[
-                {
-                    
-                }
-            ]
+  data () {
+    return {
+      tableData: [
+        {
+
         }
+      ]
     }
+  }
 }
 </script>
 <style lang="less" scoped>
@@ -96,7 +96,7 @@ export default {
     p{
       .sampleNum{
           margin-left: 10px;
-      }  
+      }
     }
     .sampleBoxTable{
         text-align: center;
@@ -110,4 +110,3 @@ export default {
     }
 }
 </style>
-
