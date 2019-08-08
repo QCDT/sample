@@ -16,7 +16,7 @@ export default {}
 .tmp-row-empty {
   display: flex;
   align-items: center;
-  font-size: 16px;
+  font-size: 14px;
   margin-right: 20px;
 }
 .tmp-row-empty-title {
@@ -25,5 +25,6 @@ export default {}
 }
 .tmp-row-empty-input {
   font-style: normal;
+  font-size: 14px;
 }
 </style>

@@ -1,6 +1,6 @@
 <template>
   <div class="query-wrap">
-    {{sampleSearch}}
+    <!-- {{sampleSearch}} -->
     <div class="top">
       <div class="data">
         <div class="row row-spall">
@@ -8,30 +8,27 @@
             样式名称
             <el-input
               slot="elUI"
+              size="small"
               v-model="sampleSearch.name"
               clearable
-              size="small"
-              style="width:100%"
             ></el-input>
           </tmpinput>
           <tmpinput>
             借出人
             <el-input
               slot="elUI"
+              size="small"
               v-model="sampleSearch.lender"
               clearable
-              size="small"
-              style="width:100%"
             ></el-input>
           </tmpinput>
           <tmpinput>
-            &nbsp;&nbsp;&nbsp;&nbsp;录入人
+            录入人
             <el-input
               slot="elUI"
+              size="small"
               v-model="sampleSearch.enterClerk"
               clearable
-              size="small"
-              style="width:100%"
             ></el-input>
           </tmpinput>
           <tmpinput>
@@ -42,7 +39,6 @@
               clearable
               v-model="sampleSearch.testTubeCategory"
               placeholder="请选择"
-              style="width:100%"
             >
               <el-option
                 v-for="item in testTubeCategory"
@@ -62,7 +58,6 @@
               clearable
               v-model="sampleSearch.source"
               placeholder="请选择"
-              style="width:100%"
             >
               <el-option
                 v-for="item in source"
@@ -73,14 +68,13 @@
             </el-select>
           </tmpinput>
           <tmpinput>
-            &nbsp;&nbsp;状&nbsp;&nbsp;态
+           状态
             <el-select
               slot="elUI"
               size="small"
               clearable
               v-model="sampleSearch.status"
               placeholder="请选择"
-              style="width:100%"
             >
               <el-option
                 v-for="item in status"
@@ -98,7 +92,6 @@
               clearable
               v-model="sampleSearch.sampleClass"
               placeholder="请选择"
-              style="width:100%"
             >
               <el-option
                 v-for="item in sampleClass"
@@ -116,7 +109,6 @@
               clearable
               v-model="sampleSearch.itemClass"
               placeholder="请选择"
-              style="width:100%"
             >
               <el-option
                 v-for="item in itemClass"
@@ -139,8 +131,8 @@
             借出日期
             <el-date-picker
               slot="elUI"
-              size="small"
               clearable
+              size="small"
               v-model="sampleSearch.outDate"
               type="daterange"
               range-separator="至"
@@ -190,7 +182,7 @@
             ></el-date-picker>
           </tmpinput>
         </div>
-        <div class="row" style="width:58%">
+        <div class="row">
           <h2 style="white-space: nowrap;margin-right:22px">位置信息:</h2>
           <tmpinput>
             冰箱
@@ -214,8 +206,8 @@
             层数
             <el-select
               slot="elUI"
-              size="small"
               clearable
+              size="small"
               v-model="sampleSearch.layer"
               placeholder="请选择"
               style="width:100%"
@@ -356,7 +348,7 @@ export default {
         this.showAdvancedSearch = false
       } else {
         this.showAdvancedSearch = true
-        this.asHeight = '160px'
+        this.asHeight = '170px'
       }
     },
     startSearch () {
@@ -369,9 +361,6 @@ export default {
 <style scoped lang='less'>
 .query-wrap {
   position: relative;
-
-  width: 1270px;
-  margin: 0 auto;
   margin-top: 0.875rem;
   padding: 50px 30px 0;
 
@@ -404,7 +393,7 @@ export default {
   align-items: center;
   justify-content: center;
 
-  width: 1270px;
+  width: 93%;
   margin-top: 10px;
   padding-bottom: 10px;
 
@@ -427,7 +416,7 @@ export default {
     i {
       padding: 0 0.8em 0 0;
 
-      font-weight: 800;
+      // font-weight: 800;
     }
   }
 
@@ -435,14 +424,12 @@ export default {
     color: #333;
 
     font-size: 16px;
-    font-weight: 500;
+    // font-weight: 500;
   }
 }
 
 /* 高级搜索 */
 .advanced-search {
-  overflow: hidden;
-
   width: 100%;
   height: 0;
 

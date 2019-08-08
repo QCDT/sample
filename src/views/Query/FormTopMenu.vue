@@ -12,7 +12,7 @@
           打印样式设置
           <el-select
             slot="elUI"
-            size="mini"
+            size="small"
             clearable
             v-model="value"
             filterable
@@ -54,22 +54,13 @@
           <small>修改</small>
         </div>
       </router-link>
-      <div class="item">
+       <div class="item">
         <i class="icon icon-pdf" style="color:#A33639"></i>
         <small>导出PDF</small>
       </div>
       <div class="item">
-        <download-excel
-          class="export-excel-wrapper"
-          :data="multipleSelection"
-          :fields="json_fields"
-          name="Excle名称.xls"
-        >
-          <div @click="isEmpty" class="item">
-            <i class="icon icon-excel" style="color:#217346"></i>
-            <small>导出Excel</small>
-          </div>
-        </download-excel>
+          <i class="icon icon-excel" style="color:#217346"></i>
+          <small>导出Excel</small>
       </div>
     </div>
   </div>
@@ -89,26 +80,26 @@ export default {
        * json_fields: key:表头 val:行数据[值];[常规字段 | 支持嵌套(obj) | 支持回调 ]
        * json_data:将要导出的表格数据
        */
-      json_fields: {
-        序号: 'coding',
-        管帽颜色: 'color',
-        样本信息: 'sample',
-        录入人: 'enterName',
-        录入日期: 'enterTime',
-        采样信息: 'sampl',
-        样本来源: 'source',
-        过期日期: 'pastTime',
-        位置信息: 'location',
-        状态: 'status',
-        类别: 'classify',
-        借出人: 'loanPerson',
-        借出日期: 'loanTime'
-      },
-      json_data: [
-        { name: '张三', sex: '男', phone: { mobile: '13333333333' } },
-        { name: '张四', sex: '男', phone: { mobile: '15555555555' } }
-      ],
-      json_meta: [[{ ' key ': ' charset ', ' value ': ' utf- 8 ' }]],
+      // json_fields: {
+      //   '序号': 'coding',
+      //   '管帽颜色': 'color',
+      //   '样本信息': 'sample',
+      //   '录入人': 'enterName',
+      //   '录入日期': 'enterTime',
+      //   '采样信息': 'sampl',
+      //   '样本来源': 'source',
+      //   '过期日期': 'pastTime',
+      //   '位置信息': 'location',
+      //   '状态': 'status',
+      //   '类别': 'classify',
+      //   '借出人': 'loanPerson',
+      //   '借出日期': 'loanTime'
+      // },
+      // json_data: [
+      //   { name: '张三', sex: '男', phone: { mobile: '13333333333' } },
+      //   { name: '张四', sex: '男', phone: { mobile: '15555555555' } }
+      // ],
+      // json_meta: [[{ ' key ': ' charset ', ' value ': ' utf- 8 ' }]],
       //   ↑  导出
       //  ↓   打印样式设置
       options: [
@@ -126,12 +117,12 @@ export default {
     }
   },
   methods: {
-    isEmpty () {
-      console.log('999123: ')
-      this.multipleSelection.length == 0
-        ? this.$message('请选择要导出的数据')
-        : 0
-    }
+    // isEmpty () {
+    //   console.log('999123: ')
+    //   this.multipleSelection.length == 0
+    //     ? this.$message('请选择要导出的数据')
+    //     : 0
+    // }
   },
   computed: {}
 }

@@ -26,7 +26,7 @@
         ref="multipleTable"
         :data="tableData"
         tooltip-effect="dark"
-        :style="{width: '1296px',margin:'0 auto'}"
+        :style="{width: '100%',margin:'0 auto'}"
         :header-cell-style="getRowClass"
       >
         <el-table-column
@@ -71,13 +71,14 @@
       </el-table>
     </div>
     <div class="bot">
-      <el-button type="primary" size="mini" @click="$router.go(-1)">返回</el-button>
+      <goBack @click="$router.go(-1)">返回</goBack>
+      <!-- <el-button type="primary" size="mini" @click="$router.go(-1)">返回</el-button> -->
     </div>
   </div>
 </template>
 <script>
 import itemSum from '@/components/tmp/zhanglan/item-sum'
-import goBack from '@/components/tmp/zhanglan/go-1'
+import goBack from '@/components/tmp/zhanglan/tmpButton'
 import fromName from '@/components/tmp/zhanglan/fromName'
 import newProject from './newProject/index'
 export default {

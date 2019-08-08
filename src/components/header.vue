@@ -213,7 +213,7 @@ export default {
 
 h1 {
   display: flex;
-  align-items: top;
+  align-items: center;
 
   box-sizing: border-box;
   height: 100%;

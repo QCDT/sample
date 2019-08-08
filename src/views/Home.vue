@@ -29,6 +29,7 @@
         </div>
       </div>
     </div>
+    <!-- <div></div> -->
       <!-- 冰箱详情动画展示 -->
     <div class="refInfo" v-show="refrigeratorInfo">
         <img src="@/assets/img/ice_open.png">
@@ -82,7 +83,7 @@
         </div>
     </div>
     <!-- 相关事件报警 -->
-    <div class="sampleWarning"  :style="{ transform:  `translateX(${sampleWarningShow? '0' : '365px'})`}">
+    <div class="sampleWarning"  :style="{ transform:  `translateX(${sampleWarningShow? '0' : '85%'})`}">
       <div class="sampleWarningL" @click="warningShow">
         <el-badge :value="12">
           <span>相关事件报警</span>
@@ -215,7 +216,7 @@ export default {
 }
 .refWrap{
   .labList{
-      width: 840PX;
+      width: 900PX;
       margin: 0 auto;
       margin-top: 10%;
       position: relative;
@@ -239,10 +240,11 @@ export default {
         }
         li{
           float: left;
-          width: 280PX;
+          width: 300PX;
+          text-align: center;
         }
         .labImg{
-          width: 200PX;
+          width: 200px;
           // height: 200PX;
           margin-bottom: 15px;
           cursor: pointer;
@@ -250,7 +252,7 @@ export default {
       }
   }
   .refrigeratorList{
-    width: 840PX;
+    width: 900PX;
     margin: 0 auto;
     border: 1px solid rgb(204, 204, 204);
     margin: 0 auto;
@@ -276,7 +278,7 @@ export default {
       }
       li{
         float: left;
-        width: 280PX;
+        width: 300PX;
       }
       .refImg{
         width: 81PX;
@@ -290,6 +292,7 @@ export default {
   .labList-2{
     border: 1px solid rgb(204, 204, 204);
     margin: 0 auto;
+    margin-top: 4%;
     border-radius: 5px;
     padding: 5px;
     margin-bottom: 15px;
@@ -300,7 +303,8 @@ export default {
   .labList-3{
     // border: 1px solid rgb(204, 204, 204);
     margin: 0;
-    width:560PX;
+    margin-top: 10%;
+    width:600PX;
     margin-bottom: 15px;
     // border-radius: 5px;
     // padding: 5px;
@@ -313,7 +317,7 @@ export default {
     // }
   }
   .refrigeratorList-2{
-    width: 560PX;
+    width: 600PX;
     margin: 0;
   }
 }
@@ -429,10 +433,10 @@ export default {
   opacity: 0;
 }
 .arrowL{
-  left: 0;
+  left: -6%;
 };
 .arrowR{
-  right: 0;
+  right: -6%;
 }
 .sampleWarning{
   width:450px;

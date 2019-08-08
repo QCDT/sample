@@ -806,7 +806,7 @@ export default {
             justify-content: space-between;
             margin-right: 10px;
             i{
-                width: 30%;
+                width: 35%;
                 line-height: 28px;
             }
         }

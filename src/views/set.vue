@@ -138,7 +138,7 @@ export default {
   display: flex;
   justify-content: space-around;
   align-items: center;
-  height: 358px;
+  height: 380px;
 }
 .setList li {
   padding: 50px;
