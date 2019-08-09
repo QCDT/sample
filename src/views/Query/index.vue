@@ -1,3 +1,10 @@
+<!--
+ * @Description: In User Settings Edit
+ * @Author: 刘一帆
+ * @Date: 2019-07-15 16:37:07
+ * @LastEditTime: 2019-08-08 19:54:25
+ * @LastEditors: Please set LastEditors
+ -->
 <template>
   <div class="searchWrap">
     <Search @startSearch="startSearch"></Search>
@@ -7,37 +14,28 @@
         <FormTopMenu :count="Number(tableData.length)" :multipleSelection="multipleSelection"></FormTopMenu>
         <el-table
           :row-style="{height:'32px',textAlign: 'center',padding:'0px',}"
-          :cell-style="{padding:'0px',textAlign: 'center'}"
+          :cell-style="{padding:0 , textAlign: 'center',}"
           border
-          stripe
           ref="multipleTable"
           :data="tableData"
           tooltip-effect="dark"
-          :style="{width: '100%'}"
-          :header-cell-style="getRowClass"
+          style="width:100%"
           @selection-change="handleSelectionChange"
         >
           <el-table-column type="selection" show-overflow-tooltip></el-table-column>
-          <el-table-column label="序号" width="60" type="index">
+          <el-table-column label="序号" type="index" width="70">
           </el-table-column>
           <el-table-column prop="color" label="管帽颜色" show-overflow-tooltip></el-table-column>
 
           <!--  -->
-          <el-table-column label="样本信息" prop="sampleInfo">
-            <!-- <template slot-scope="scope">
-              <el-button @click="handleClick(scope.row,scope.$index)" type="text" size="small">
-                <router-link :to="{name:'sample'}" style="color:blue;padding:3px">
-                  <el-tooltip
-                    class="item"
-                    effect="dark"
-                    :content="tableData[scope.$index].sampleInfo"
-                    placement="top-start"
-                  >
-                    <el-button style="border:0;padding:0">{{tableData[scope.$index].sampleInfo}}</el-button>
-                  </el-tooltip>
-                </router-link>
-              </el-button>
-            </template> -->
+          <el-table-column label="样本信息" show-overflow-tooltip>
+            <template slot-scope="scope"> 
+                <!--           -->
+                  <span class="cellStyle" @click="sampleInfoClick">
+                      {{tableData[scope.$index].sampleInfo}}
+                  </span>
+                <!-- </router-link> -->
+            </template>
           </el-table-column>
           <!--  -->
           <el-table-column prop="enterName" label="录入人" show-overflow-tooltip></el-table-column>
@@ -48,15 +46,13 @@
           <el-table-column prop="location" label="位置信息" show-overflow-tooltip></el-table-column>
           <el-table-column prop="status" label="状态" show-overflow-tooltip></el-table-column>
           <el-table-column prop="classify" label="类别" show-overflow-tooltip></el-table-column>
-          <el-table-column prop="loanPerson"  label="借出人" show-overflow-tooltip></el-table-column>
+          <el-table-column prop="loanPerson" label="借出人" show-overflow-tooltip></el-table-column>
           <el-table-column prop="loanTime" label="借出日期" show-overflow-tooltip></el-table-column>
 
-          <el-table-column fixed="right" label="日志信息" show-overflow-tooltip width="100">
-            <template slot-scope="scope">
-              <!-- <el-button @click="handleClick(scope.row,scope.$index)" type="text" size="small"> -->
-                <span>查看</span>
-              <!-- </el-button> -->
-            </template>
+          <el-table-column label="日志信息"  fixed="right">
+            <template>
+                <span class="cellStyle" @click="sampleLog">查看</span>
+            </template> 
           </el-table-column>
         </el-table>
       </div>
@@ -75,6 +71,7 @@ export default {
       // ↓   表单
       tableData: [
         {
+          coding: '1', // 序号编码
           color: '管帽颜色', // 管帽颜色
           sampleInfo: '样本信息', // 样本信息
           enterClork: '录入人', // 录入人
@@ -95,19 +92,18 @@ export default {
   },
   methods: {
     handleSelectionChange (val) {
-      console.log(val)
       this.multipleSelection = val
-    },
-    //  表头样式
-    getRowClass ({ rowIndex }) {
-      return rowIndex == 0 ? this.$store.state.formTheme : 0
     },
     // 表格里的事件 ↓ row:行数据 index:索引
     handleClick (row, index) {
       console.log(row, index)
     },
-    // ↑
-
+    sampleInfoClick(){
+      this.$router.push({name: 'sample'})
+    },
+    sampleLog(){
+      this.$router.push({name:'log'})
+    },
     startSearch (payload) {
       /* 搜索{} */
       console.log('payload: ', payload)
@@ -120,6 +116,9 @@ export default {
 // 表单
 .searchWrap{
   padding:0 20px;
+}
+.cellStyle{
+  cursor: pointer
 }
 .table-box {
   width: 100%;

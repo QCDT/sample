@@ -29,7 +29,6 @@
         </div>
       </div>
     </div>
-    <!-- <div></div> -->
       <!-- 冰箱详情动画展示 -->
     <div class="refInfo" v-show="refrigeratorInfo">
         <img src="@/assets/img/ice_open.png">

@@ -44,8 +44,9 @@ export default {
     margin-bottom: 12px;
 
     > img {
-      width: 105px;
-      height: 105px;
+      width: 90px;
+      cursor:pointer;
+      // height: 70px;
     }
   }
 

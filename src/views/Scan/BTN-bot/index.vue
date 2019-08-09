@@ -166,10 +166,10 @@ export default {
 
   width: 100%;
 
-  //position: fixed;
-  height: 120px;
+  // position: absolute;
+  height: 100px;
 
-  // bottom: 0;
+  // bottom: 20px;
 
   display: flex;
   align-items: flex-end;

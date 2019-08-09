@@ -17,7 +17,8 @@
                     :to="item.link"
                     @click.native="active=index"
                     :class="{active:index===active}"
-                  >{{item.text}}</router-link>
+                  >{{item.text}}
+                  </router-link>
                 </span>
               </li>
             </ul>
@@ -32,7 +33,7 @@
             <img src="@/assets/img/header_user1.png">
             <p :class="{show:showIndex===1}">
               <span>用户名: admin</span>
-              <span>角色名: 超级管理员</span>
+              <span>角色名: 管理员</span>
             </p>
           </div>
           <div class="item" @mouseenter="showIndex=2" @mouseleave="showIndex=-1">
@@ -96,13 +97,13 @@ export default {
 </script>
 <style scoped lang='less'>
 .headWrap{
-  height: 80px;
+  height: 70px;
 }
 .center {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 80px;
+  height: 70px;
   width: 100%;
   position: fixed;
   top: 0;
@@ -113,7 +114,7 @@ export default {
   cursor: pointer;
   width: 190px;
   height: 71px;
-  transform: scale(0.8, 0.8);
+  transform: scale(0.7, 0.7);
 }
 .left-box {
   display: flex;
@@ -127,7 +128,7 @@ export default {
   display: flex;
   align-items: center;
 
-  height: 35px;
+  // height: 35px;
   margin-bottom: 5px;
 
   cursor: default;
@@ -189,7 +190,7 @@ export default {
       a {
         display: flex;
 
-        padding: 5px 30px 2px;
+        padding: 0px 20px 2px;
 
         border-top-left-radius: 8px;
         border-top-right-radius: 8px;
@@ -337,7 +338,7 @@ h3 {
 }
 
 .logout {
-  z-index: 99;
+  z-index: 2;
 
   transform: translateX(5px);
 }

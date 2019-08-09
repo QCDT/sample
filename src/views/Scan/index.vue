@@ -1,6 +1,6 @@
 <template>
   <div class="scan-wrap">
-    <div v-show="!newBoxMaskTran && !reBoxMaskTran && !newMaskTran && !reMaskTran">
+    <div v-show="!newBoxMaskTran && !newMaskTran && !reMaskTran && !togegleZhuanYun">
       <!-- 拉条:侧边导航栏:转运 分组合演 患者采血 自动录入 离心机 -->
       <BTNTopPosa></BTNTopPosa>
       <!-- 扫描动态图    -->
@@ -12,27 +12,26 @@
           <el-switch v-model="switchGuanLi" slot="guanli"></el-switch>
         </formTopContent>
           <!-- 扫描样本 -->
-            <div class="scanSample"  v-show="!switchSaoMiao" >
+            <div  v-show="!switchSaoMiao" >
               <el-table
-                :row-style="{height:'32px',textAlign: 'center',padding:'0px'}"
-                :cell-style="{textAlign: 'center',padding: '0px'}"
+                :row-style="{height:'32px',textAlign: 'center'}"
+                :cell-style="{textAlign: 'center', padding: '0'}"
                 border
-                stripe
-                max-height= '200'
+                max-height= '190'
                 :data="tableData"
                 tooltip-effect="dark"
-                :style="{width: '100%',margin:'0 auto',}"
+                style='width:100%'
                 @select="selects"
                 @select-all="selects"
               >
-                <el-table-column type="selection" width="55" ></el-table-column>
-                <el-table-column type="index" width="60" label="序号" ></el-table-column>
+                <el-table-column type="selection" width="55"></el-table-column>
+                <el-table-column type="index"  label="序号" width="70"></el-table-column>
                 <el-table-column label="RFID编码" prop="coding" show-overflow-tooltip></el-table-column>
                 <el-table-column prop="name" label="样本名称" show-overflow-tooltip></el-table-column>
                 <el-table-column prop="address" label="位置信息" show-overflow-tooltip></el-table-column>
-                <el-table-column prop="status" width="80" label="状态" show-overflow-tooltip ></el-table-column>
-                <el-table-column prop="info" label="详细信息" show-overflow-tooltip></el-table-column>
-                <el-table-column label="操作" width="80">
+                <el-table-column prop="status" label="状态" width="120" show-overflow-tooltip ></el-table-column>
+                <el-table-column prop="info" label="详细信息" width="120" show-overflow-tooltip></el-table-column>
+                <el-table-column label="操作" fixed="right" width="120">
                   <template slot-scope="scope">
                     <el-tooltip class="item" effect="dark" content="新建" placement="bottom-start" >
                       <img 
@@ -55,29 +54,28 @@
               </el-table>
             </div>
           <!-- 扫描样本盒 -->
-            <div class="scanSampleBox" v-show="switchSaoMiao">
+            <div v-show="switchSaoMiao">
               <el-table
                 :row-style="{height:'32px',textAlign: 'center',padding:'0px'}"
                 :cell-style="{textAlign: 'center',padding: '0px'}"
                 border
                 stripe
                 :data="boxData"
-                max-height = '200'
+                max-height= '190'
                 tooltip-effect="dark"
-                :style="{width: '100%',margin:'0 auto'}"
-                @select="selects"
-                @select-all="selects"
+                :style="{width: '100%'}"
+                @selection-change="selects"
               >
                 <el-table-column type="selection" width="55" ></el-table-column>
-                <el-table-column type="index" width="60" label="序号" ></el-table-column>
+                <el-table-column type="index" width="70" label="序号" ></el-table-column>
                 <el-table-column label="RFID编码" >
                   <template slot-scope="scope">{{ scope.row.coding }}</template>
                 </el-table-column>
                 <el-table-column prop="name" label="样本盒名称" show-overflow-tooltip></el-table-column>
                 <el-table-column prop="address" label="位置信息" show-overflow-tooltip></el-table-column>
-                <el-table-column prop="status" width="80" label="状态" show-overflow-tooltip ></el-table-column>
+                <el-table-column prop="status" label="状态" show-overflow-tooltip ></el-table-column>
                 <el-table-column prop="info" label="详细信息" show-overflow-tooltip></el-table-column>
-                <el-table-column label="操作" width="80">
+                <el-table-column label="操作">
                   <template slot-scope="scope">
                     <el-tooltip class="item" effect="dark" content="新建" placement="bottom-start" >
                       <img 
@@ -98,16 +96,12 @@
     </div> 
       <!-- 新建样本 -->
       <transition name="el-fade-in-linear">
-        <!-- <maskTran v-if="newMaskTran" :rgba="0"> -->
           <newSample  v-if="newMaskTran" title="新建样本" :RFID="RFID" @goBack="newMaskTran=false" @save="save"></newSample>
-        <!-- </maskTran> -->
       </transition>
       <!-- 修改样本 -->
       <transition name="el-fade-in-linear">
-        <!-- <maskTran v-if="reMaskTran" :rgba="0"> -->
           <!-- rgba:透明度 -->
           <reSample v-if="reMaskTran" title="修改样本" @changeSave="changeSave" @goBack="reMaskTran=false"></reSample>
-        <!-- </maskTran> -->
       </transition>
       <!-- 新建样本盒 -->
       <transition name="el-fade-in-linear">
@@ -117,10 +111,10 @@
       </transition>
       <!-- 转运 -->
       <transition name="el-fade-in-linear">
-        <maskTran v-if="togegleZhuanYun" :rgba="0">
+        <!-- <maskTran :rgba="0"> -->
           <!-- rgba:透明度 -->
-          <alertZhuanYun @save="saveZhuanYun" @goBack="togegleZhuanYun=false"></alertZhuanYun>
-        </maskTran>
+          <alertZhuanYun v-if="togegleZhuanYun" @save="saveZhuanYun" @goBack="togegleZhuanYun=false"></alertZhuanYun>
+        <!-- </maskTran> -->
       </transition>
   </div>
 </template>
@@ -316,11 +310,13 @@ export default {
   position: relative;
   // padding: 35px 20px 0;
   padding:  0 20px;
+  // height: 100%;
   overflow: hidden;
 }
 // 表单
 .table-box {
   padding-top: 20px;
+  height:16vw;
   .tb-img {
     width: 25px;
     vertical-align: middle;

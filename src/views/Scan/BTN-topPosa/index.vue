@@ -1,6 +1,7 @@
+
 <template>
   <div class="div">
-    <div class="group left" :style="{ transform:  `translateX(-${L_Chang>96?96:L_Chang}%)` ,}">
+    <div class="group left" :style="{ transform:  `translateX(${L_FangXiang? '0' : '-96%'})` ,}">
       <ul>
         <li v-for="(item,index) in L_Pic" :key="index">
           <router-link :to="{name:item.linkName}">
@@ -14,22 +15,17 @@
       </div>
     </div>
     <!-- right -->
-    <div
-      class="group right"
-      :style="{ transform:  `translateX(${R_Chang>83?82.8:R_Chang}%)`,
-         transition:'transform 0.3s ease-in-out'
-         }"
-    >
-      <div class="btn" @click="R_toggle" style="width:20%">
-        <i class="icon" :class="[R_FangXiang? 'icon-icon-left':'icon-icon-right']"></i>
-      </div>
-      <ul>
-        <li v-for="(item,index) in R_Pic" :key="index">
-          <router-link :to="{name:item.linkName}">
-            <img :src="item.pic" alt>
-          </router-link>
-        </li>
-      </ul>
+    <div class="group right" :style="{transform: `translateX(${R_FangXiang? '0': '80%'})`}">
+        <div class="btn" @click="R_toggle">
+          <i class="icon" :class="[R_FangXiang? 'icon-icon-right':'icon-icon-left']"></i>
+        </div>
+        <ul>
+          <li v-for="(item, index) in R_Pic" :key="index">
+            <router-link :to="{name:item.linkName}">
+              <img :src="item.pic">
+            </router-link>
+          </li>
+        </ul>
     </div>
   </div>
 </template>
@@ -38,7 +34,6 @@ export default {
   data () {
     return {
       //  左边导航: 长度 方向 图片
-      L_Chang: 96,
       L_FangXiang: false,
       L_Pic: [
         //   转运 分组核验 患者采血 自动录入 离心机 样本接收
@@ -50,8 +45,7 @@ export default {
         { pic: require('@/assets/img/zidongluru.png'), linkName: 'zidong' },
       ],
       //   右边
-      R_Chang: 96,
-      R_FangXiang: true,
+      R_FangXiang:false,
       R_Pic: [
         //   转运 分组合演 患者采血 自动录入 离心机
         { pic: require('@/assets/img/yangpinjiance.png'), linkName: 'detection' }
@@ -61,22 +55,10 @@ export default {
   methods: {
     //   左边导航栏
     L_toggle () {
-      if (this.L_FangXiang) {
-        this.L_Chang = 100
-        this.L_FangXiang = false
-      } else {
-        this.L_Chang = 0
-        this.L_FangXiang = true
-      }
+      this.L_FangXiang = !this.L_FangXiang
     },
     R_toggle () {
-      if (this.R_FangXiang) {
-        this.R_Chang = 0
-        this.R_FangXiang = false
-      } else {
-        this.R_Chang = 100
-        this.R_FangXiang = true
-      }
+      this.R_FangXiang = !this.R_FangXiang
     }
   }
 }
@@ -87,7 +69,7 @@ export default {
   position: absolute;
   top: 35px;
   left: 0;
-  z-index: 100;
+  z-index: 2;
   background-color: #fff;
   .btn {
     border-radius: 0 0.625rem 0.625rem 0;
@@ -97,7 +79,7 @@ export default {
   position: absolute;
   top: 35px;
   right: 0px;
-  z-index: 100;
+  z-index: 2;
   background-color: #fff;
   .btn {
     border-radius: 0.625rem 0 0 0.625rem;
@@ -106,16 +88,15 @@ export default {
 //  左边导航栏
 .group {
   display: flex;
-  overflow: hidden;
-  transition:transform  0.9s ease-in-out;
+  // overflow: hidden;
+  transition: 0.9s ease-in-out;
   border-radius: 0 0.625rem 0.625rem 0;
   ul {
     display: flex;
-
     border: 1px solid #eee;
 
     li {
-      margin: 10px 5px;
+      // margin: 10px 5px;
       padding: 5px 5px; // 修改大小记得修改 data里的数据
 
       cursor: pointer;
@@ -130,11 +111,7 @@ export default {
     display: flex;
     align-items: center;
     justify-content: center;
-
-    width: 5%;
-
     cursor: pointer;
-
     border: 1px solid #eee;
     border-color: #0ddfff;
     border-left: none;

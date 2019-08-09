@@ -1,3 +1,10 @@
+<!--
+ * @Description: In User Settings Edit
+ * @Author: 刘一帆
+ * @Date: 2019-07-15 16:37:07
+ * @LastEditTime: 2019-08-08 19:52:34
+ * @LastEditors: Please set LastEditors
+ -->
 <template>
   <!-- 共有多少条数据...销毁..打印标签..转移..导出... -->
   <div class="selection-box">
@@ -30,35 +37,35 @@
       </div>
     </div>
     <div class="right">
-      <div class="item">
+      <div class="item" @click="delSample">
         <i class="icon icon-shanchu"></i>
         <small>销毁</small>
       </div>
-      <div class="item">
+      <div class="item" @click="printTag">
         <i class="icon icon-print"></i>
         <small>打印标签</small>
       </div>
-      <router-link :to="{name:'transfer'}" style="color:#000">
-        <div class="item">
+      <!-- <router-link :to="{name:'transfer'}" style="color:#000"> -->
+        <div class="item" @click="transfer">
           <i class="icon icon-zhuanyi"></i>
           <small>转移</small>
         </div>
-      </router-link>
-      <div class="item">
+      <!-- </router-link> -->
+      <div class="item" @click="printLocation">
         <i class="icon icon-weizhi"></i>
         <small>打印位置信息</small>
       </div>
-      <router-link :to="{name:'changsample'}" style="color:#000">
-        <div class="item">
+      <!-- <router-link :to="{name:'changsample'}" style="color:#000"> -->
+        <div class="item" @click="amendSample">
           <i class="icon icon-yemianxiugai"></i>
-          <small>修改</small>
+          <small>批量修改</small>
         </div>
-      </router-link>
-       <div class="item">
+      <!-- </router-link> -->
+       <div class="item" @click="exportExcel">
         <i class="icon icon-pdf" style="color:#A33639"></i>
         <small>导出PDF</small>
       </div>
-      <div class="item">
+      <div class="item" @click="exportPdf">
           <i class="icon icon-excel" style="color:#217346"></i>
           <small>导出Excel</small>
       </div>
@@ -75,33 +82,6 @@ export default {
   components: { tmpinput },
   data () {
     return {
-      //   ↓  导出
-      /**
-       * json_fields: key:表头 val:行数据[值];[常规字段 | 支持嵌套(obj) | 支持回调 ]
-       * json_data:将要导出的表格数据
-       */
-      // json_fields: {
-      //   '序号': 'coding',
-      //   '管帽颜色': 'color',
-      //   '样本信息': 'sample',
-      //   '录入人': 'enterName',
-      //   '录入日期': 'enterTime',
-      //   '采样信息': 'sampl',
-      //   '样本来源': 'source',
-      //   '过期日期': 'pastTime',
-      //   '位置信息': 'location',
-      //   '状态': 'status',
-      //   '类别': 'classify',
-      //   '借出人': 'loanPerson',
-      //   '借出日期': 'loanTime'
-      // },
-      // json_data: [
-      //   { name: '张三', sex: '男', phone: { mobile: '13333333333' } },
-      //   { name: '张四', sex: '男', phone: { mobile: '15555555555' } }
-      // ],
-      // json_meta: [[{ ' key ': ' charset ', ' value ': ' utf- 8 ' }]],
-      //   ↑  导出
-      //  ↓   打印样式设置
       options: [
         {
           value: '选项1',
@@ -117,12 +97,80 @@ export default {
     }
   },
   methods: {
-    // isEmpty () {
-    //   console.log('999123: ')
-    //   this.multipleSelection.length == 0
-    //     ? this.$message('请选择要导出的数据')
-    //     : 0
-    // }
+    // 销毁样本
+    delSample(){
+       if(this.multipleSelection.length == 0){
+          this.$message({
+            message: '请选择需要销毁的样本',
+            type: 'warning'
+          });
+       }else{
+          console.log(this.multipleSelection)
+       }
+    },
+    // 打印标签
+    printTag(){
+      if(this.multipleSelection.length == 0){
+        this.$message({
+          message: '请选择需要打印标签的样本',
+          type: 'warning'
+        });
+      }else{
+        console.log(this.multipleSelection)
+      }
+    },
+    // 转移样本
+    transfer(){
+      if(this.multipleSelection.length == 0){
+        this.$message({
+          message: '请选择需要转移的样本',
+          type: 'warning'
+        });
+      }else{
+         this.$router.push({name:'transfer'})
+      }
+    },
+    //打印位置信息
+    printLocation(){
+      if(this.multipleSelection.length == 0){
+        this.$message({
+          message: '请选择需要打印位置信息的样本',
+          type: 'warning'
+        });
+      }else{
+         console.log(this.multipleSelection)
+      }
+    },
+    amendSample(){
+      if(this.multipleSelection.length == 0){
+        this.$message({
+          message: '请选择需要修改的样本',
+          type: 'warning'
+        });
+      }else{
+         this.$router.push({name: 'changsample'})
+      }
+    },
+    exportExcel(){
+      if(this.multipleSelection.length == 0){
+        this.$message({
+          message: '请选择需要导出的样本',
+          type: 'warning'
+        });
+      }else{
+         console.log(this.multipleSelection)
+      }
+    },
+    exportPdf(){
+      if(this.multipleSelection.length == 0){
+        this.$message({
+          message: '请选择需要导出的样本',
+          type: 'warning'
+        });
+      }else{
+        console.log(this.multipleSelection)
+      }
+    }
   },
   computed: {}
 }

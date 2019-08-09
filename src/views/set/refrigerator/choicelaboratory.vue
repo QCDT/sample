@@ -4,8 +4,8 @@
       <span>选择实验室</span>
     </div>
     <div class="operationlab">
-      <el-button type="primary" @click="addEl()">添加实验室</el-button>
-      <el-button type="primary" @click="delEl()">删除实验室</el-button>
+      <el-button type="primary" @click="addEl()" size="small">添加实验室</el-button>
+      <el-button type="primary" @click="delEl()" size="small">删除实验室</el-button>
     </div>
     <div class="labListWrap">
       <ul class="labList">
@@ -19,7 +19,7 @@
           <div @dblclick="editLabName(index)" class="labName">
             <span v-show="!item.editing">{{item.laboratoryName}}</span>
             <el-input
-              :id="`focus${index}`"
+              size="small"
               v-show="item.editing"
               v-model="item.laboratoryName"
               placeholder="请输入内容"
@@ -32,8 +32,8 @@
       <img src="@/assets/img/arrowRight.png" class="arrowR arrow">
     </div>
     <div class="labBtn">
-      <el-button type="primary">保存</el-button>
-      <el-button type="primary" @click="returnup()">返回</el-button>
+      <el-button type="primary" size="small">保存</el-button>
+      <el-button type="primary" @click="returnup()" size="small">返回</el-button>
 
     </div>
     <el-button type="primary" size="small" class="labNext" @click="equipmentInfo">下一步</el-button>

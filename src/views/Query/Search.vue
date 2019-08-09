@@ -362,8 +362,7 @@ export default {
 .query-wrap {
   position: relative;
   margin-top: 0.875rem;
-  padding: 50px 30px 0;
-
+  padding: 30px 30px 0;
   background-color: #fdfdfd;
   box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.4);
 }
