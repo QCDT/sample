@@ -1,33 +1,162 @@
 <template>
   <!-- 归还 -->
   <div class="guihuan-wrap">
-    <div class="in">
-      <div class="row">
-        <span>归还人:</span>
-        <i>
-          <el-input v-model="ghName" placeholder="请输入内容" size="small"></el-input>
-        </i>
-      </div>
-      <h1>备注:</h1>
-      <el-input
-        type="textarea"
-        placeholder="请输入内容"
-        v-model="textarea"
-        maxlength="1000"
-        show-word-limit
-      ></el-input>
-      <div class="row botBtn">
-        <tmpButton @click="eGuiHuan" style="margin:0 10px">归还</tmpButton>
-        <tmpButton @click="$router.go(-1)">返回</tmpButton>
-      </div>
-      <i class="icon icon-edit record" title="归还记录">
-        <small>查看归还记录</small>
-      </i>
+    <el-form ref="ruleForm" :model="ruleForm"  status-icon label-width="120px" label-position="left"  :rules="rules">
+      <el-form-item label="归还表单名称" prop="formName" required>
+        <el-input v-model="ruleForm.formName"></el-input>
+      </el-form-item>
+        <el-form-item label="归还人" prop="name" required>
+        <el-input v-model="ruleForm.name"></el-input>
+      </el-form-item>
+      <el-form-item label="备注">
+        <el-input  
+            type="textarea"
+            v-model="ruleForm.desc"
+            maxlength="1000"
+            show-word-limit
+            placeholder="请输入内容"
+            :rows="4">
+        </el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" @click="submitForm('ruleForm')">归还</el-button>
+        <el-button @click="$router.go(-1)">返回</el-button>
+      </el-form-item>
+    </el-form>
+    <div class="GiveBackRecord" @click="showRecord">
+      <p><img src="@/assets/img/sample-receive.png"></p>
+      <p><span>归还记录</span></p>
     </div>
-    <!-- 归还记录 -->
-<masking :rgba=0>
-    <record></record>
-</masking>
+    <!--归还记录-->
+    <el-dialog
+        title="历史接收记录"
+        :visible.sync="dialogRecords"
+        width="80%"
+        center>
+        <div class="recordTitle">
+            <div>
+            <span class="recordType">表单名称:</span>
+            <el-input v-model="recordsformName" placeholder="请输入内容" size="mini"></el-input>
+            <span class="recordType">样本名称:</span>
+            <el-input v-model="recordsSampleName" placeholder="请输入内容" size="mini"></el-input>
+            </div>
+            <div>
+            <span class="recordTime">归还时间</span>
+            <el-date-picker
+                v-model="choiceTime"
+                value-format="yyyy-MM-dd HH:mm:ss"
+                type="datetimerange"
+                size="mini"
+                range-separator="至"
+                start-placeholder="开始日期"
+                end-placeholder="结束日期">
+            </el-date-picker>
+            <el-button type="primary"  size="mini" @click="searchReception">搜索</el-button>
+            </div>
+        </div>
+        <div class="formNum">
+            <div><span>表单数量:</span><span>{{formNum}}</span></div>
+            <div>
+            <img src="@/assets/img/receive-excel.png" @click="exportSampleFormExcel">
+            <img src="@/assets/img/receivePDF.png" @click="exportSampleFormPDF">
+            </div>
+        </div>
+        <div class="formContent">
+            <el-table
+                    ref="multipleTable"
+                    :data="sampleDataForm"
+                    tooltip-effect="dark"
+                    @select-change='selectExportFrom'
+                    @row-click="showSampleItem"
+                    style="width: 60%; float:left"
+                    height="220"
+                    :row-style="{height:'32px',textAlign: 'center',padding:'0px',cursor:'pointer'}"
+                    :cell-style="{padding:'0px',textAlign: 'center'}"
+                    :header-cell-style ="{height:'30px',textAlign:'center',padding:'0px', background:'#00c9ff',color:'white'}"
+                    border
+                    >
+                    <el-table-column
+                        type="selection"
+                        width="55"
+                    > 
+                    </el-table-column>
+                    <el-table-column
+                    type="index"                       
+                    label="序号"
+                    >
+                    </el-table-column>
+                    <el-table-column
+                    prop="formName"
+                    label="表单名称"
+                    show-overflow-tooltip
+                    >
+                    </el-table-column>
+                    <el-table-column
+                    prop="recipients"
+                    label="归还人"
+                    width="80"
+                    >
+                    </el-table-column>
+                    <el-table-column
+                    prop="enteringData"
+                    label="归还日期"
+                    width="180"
+                    show-overflow-tooltip
+                    >
+                    </el-table-column>
+            </el-table>
+            <el-table
+                    ref="multipleTable"
+                    :data="sampleDataItem"
+                    tooltip-effect="dark"
+                    style="width: 40%; float:right"
+                    height="220"
+                    :row-style="{height:'32px',textAlign: 'center',padding:'0px',}"
+                    :cell-style="{padding:'0px',textAlign: 'center'}"
+                    :header-cell-style ="{height:'30px',textAlign:'center',padding:'0px', background:'#00c9ff',color:'white'}"
+                    border
+                    >
+                    <el-table-column
+                    type="index"                       
+                    label="序号"
+                    class="DataTable"
+                    >
+                    </el-table-column>
+                    <el-table-column
+                    prop="sampleName"
+                    label="样本名称"
+                    class="DataTable"
+                    show-overflow-tooltip
+                    >
+                    </el-table-column>
+                    <el-table-column
+                    prop="sampleType"
+                    label="样本类别"
+                    class="DataTable"
+                    width="80"
+                    show-overflow-tooltip
+                    >
+                    </el-table-column>
+                    <el-table-column
+                    prop="patientNub"
+                    label="受试者编号"
+                    class="DataTable"
+                    show-overflow-tooltip
+                    >
+                    </el-table-column>
+                    <el-table-column
+                    prop="standingTime"
+                    label="静置时间"
+                    class="DataTable"
+                    show-overflow-tooltip
+                    >
+                    </el-table-column>
+            </el-table>
+        </div>
+        <span slot="footer" class="dialog-footer">
+            <el-button type="primary" @click="dialogRecords = false" size="mini">返回</el-button>
+        </span>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -38,21 +167,66 @@ export default {
   props: {},
   components: { tmpButton, masking, record },
   data () {
+    let verificationName = (rule, value,callback)=>{
+      if(value === ''){
+        callback(new Error("请输入归还人姓名"))
+      }else{
+        let reg = /^[\u4e00-\u9fa5]{2,4}$/
+        if(!reg.test(value)){
+           callback(new Error('姓名格式不正确'))
+        }
+        callback();
+      }
+    }
     return {
-      ghName: '',
-      textarea: ''
+      dialogRecords: false,
+      formName: '',
+      recordsformName: '',// 表单名称
+      recordsSampleName: '',// 样本名称
+      choiceTime: '',// 盘点时间
+      formNum: 0,
+      sampleDataForm:[
+
+      ],
+      ruleForm:{
+        formName: '',
+        desc: '',
+        name:''
+      },
+      rules:{
+        name:[
+          {validator:verificationName,trigger:'blur'}
+        ],
+        formName:[
+          { required: true, message: '请输入表单名称', trigger: 'blur' }
+        ]
+      }
     }
   },
   methods: {
-    eGuiHuan () {
-      console.log('111: ', 111)
-      this.$notify.info({
-        title: '消息',
-        message: {
-          '归还人:': this.ghName,
-          '备注:': this.textarea
-        }
-      })
+    submitForm(ruleForm){
+       this.$refs[ruleForm].validate((valid) => {
+          if (valid) {
+
+            // alert('submit!');
+          } else {
+            console.log('error submit!!');
+            return false;
+          }
+        });
+    },
+    showRecord(){
+      this.dialogRecords = true
+    },
+    searchReception(){
+
+    },
+    showSampleItem(){
+       
+    },
+    exportSampleFormExcel(){
+    },
+    exportSampleFormPDF(){
     }
   },
   computed: {}
@@ -60,77 +234,23 @@ export default {
 </script>
 <style scoped lang='less'>
 .guihuan-wrap {
-    position: fixed;
-    z-index: 90;
-    top: 87px;
-    right: 0;
-    bottom: 0;
-    left: 0;
-
-    background-color: #eee;
-
-    .in {
-        position: relative;
-
-        width: 1000px;
-        margin: 50px auto 0;
-        padding: 0 100px;
-        // border: 1px solid #aaa;
-    }
-}
-
-.row {
-    display: flex;
-    align-items: flex-end;
-
-    margin-bottom: 10px;
-
-    white-space: nowrap;
-
-    span {
-        margin-right: 1em;
-
-        font-size: 17px;
-    }
-}
-
-h1 {
-    margin-right: 1em;
-    margin-bottom: 7px;
-
-    font-size: 17px;
-    font-weight: 500;
-}
-
-.botBtn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    padding-top: 50px;
-}
-
-.record {
-    display: flex;
-    align-items: flex-end;
-
-    cursor: pointer;
-    cursor: pointer;
-    transition: color .1s;
-
-    color: #000;
-
-    font-size: 35px;
-
-    small {
-        color: #000;
-
-        font-size: 17px;
-    }
-
-    &:hover {
-        color: #3cd7ff;
-    }
+   width: 50%;
+   margin: 0 auto;
+   margin-top: 20px;
+   background: #edf0f0;
+   padding: 7% 25% ;
+   position: relative;
+   .GiveBackRecord{
+     position: absolute;
+     right: 13%;
+     top: 20%;
+     text-align: center;
+     cursor: pointer;
+     img{
+       width: 32px;
+       height: 32px;
+     }
+   }
 }
 
 </style>

@@ -11,8 +11,7 @@
         ref="multipleTable"
         :data="tableData"
         tooltip-effect="dark"
-        :style="{width: '100%',margin:'0 auto',}"
-        :header-cell-style="getRowClass"
+        :style="{width: '100%'}"
         @selection-change="handleSelectionChange"
       >
         <el-table-column prop="newTime" label="表单名称" show-overflow-tooltip></el-table-column>
@@ -31,8 +30,10 @@
 
       <div class="fotm-table-box">
         <div class="form-two-menu">
-          <i @click="add" class="icon icon-tianjia" title="扫描样本盒添加"></i>
-          <i @click="searchAdd" title="查询样本添加" class="icon el-icon-zoom-in" ></i>
+          <img src="@/assets/img/yangbenhe.png" @click="add">
+          <!-- <i @click="add" class="icon icon-tianjia" title="扫描样本盒添加"></i> -->
+          <!-- <i @click="searchAdd" title="查询样本添加" class="icon el-icon-zoom-in" ></i> -->
+          <img src="@/assets/img/yangben.png" @click="searchAdd">
         </div>
         <el-table
           :row-style="{height:'32px',textAlign: 'center',padding:'0px',}"
@@ -52,19 +53,21 @@
           <el-table-column prop="returnTiem" label="位置信息" show-overflow-tooltip></el-table-column>
           <el-table-column fixed="right" label="操作" width="100">
             <template slot-scope="scope">
-              <el-button @click="delDingdan(scope.row,scope.$index)" type="text" size="small">
-                <i class="el-icon-delete"></i>
-              </el-button>
+              <!-- <el-button @click="delDingdan(scope.row,scope.$index)" type="text" size="small"> -->
+                <i class="el-icon-delete del" @click="delDingdan(scope.row,scope.$index)" ></i>
+              <!-- </el-button> -->
             </template>
           </el-table-column>
         </el-table>
         <h1>详细异常描述</h1>
-        <table>
-          <tr>
-            <td width="50%">异常详情</td>
-            <td width="50%">样本名称异常详情</td>
-          </tr>
-        </table>
+        <div class="checkDetailsContent">
+          <div class="checkLeft">
+            <p><span>异常详情</span></p>
+          </div>
+          <div>
+            <p><span>样本名称(位置信息)</span></p>
+          </div>
+        </div>
       </div>
 
       <el-button round class="center enter-btn" style="  background-color: rgb(13, 207, 255);">确认核验</el-button>
@@ -131,10 +134,10 @@ export default {
       this.multipleSelection = val
     },
 
-    getRowClass ({ rowIndex }) {
-      /* 表头样式 */
-      return rowIndex == 0 ? this.$store.getters.formTheme : ''
-    },
+    // getRowClass ({ rowIndex }) {
+    //   /* 表头样式 */
+    //   return rowIndex == 0 ? this.$store.getters.formTheme : ''
+    // },
     // 删除订单
     delDingdan (row, index) {
       this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
@@ -181,11 +184,6 @@ table {
   border-collapse: collapse;
   margin-bottom: 10px;
 }
-table,
-th,
-td {
-  border: 1px solid #333;
-}
 .fotm-table-one {
   margin: 10px 20px 50px;
 }
@@ -204,6 +202,15 @@ td {
 .form-two-menu {
   display: flex;
   justify-content: flex-end;
+  margin-bottom: 10px;
+  img{
+    height: 30px;
+    margin-right: 10px;
+    cursor: pointer;
+  }
+}
+.del{
+  font-size: 18px;
 }
 h1 {
   display: flex;
@@ -220,5 +227,21 @@ h1 {
 .el-icon-zoom-in{
     font-size: 17px;
     margin: 0 20px 5px;
+}
+.checkDetailsContent{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
+  p{
+    border: 1px solid #ccc;
+    width: 45vw;
+    text-align: center;
+  }
+  .checkLeft{
+    p{
+      border-right: none;
+    }
+  }
 }
 </style>

@@ -3,7 +3,6 @@
     <table class="table" :style="{borderColor:borderColor,borderWidth:borderWidth}">
       <tr class="row" v-for="(row,index) in matrixData" :key="index">
         <td
-
           v-for="(item,ind) in row"
           :key="ind"
           :style="{backgroundColor:item.bgc,borderColor:borderColor}"

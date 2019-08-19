@@ -5,39 +5,55 @@
     <div class="bot-group" v-show="!switchSaoMiao&&!switchGuanLi">
       <div class="item">
         <router-link :to="{name:botGroupPic[0].link}">
-          <img :src="botGroupPic[0].pic" title="借出">
+          <el-tooltip class="item" effect="dark" content="借出" >
+            <img :src="botGroupPic[0].pic">
+          </el-tooltip>
         </router-link>
       </div>
       <div class="item">
         <router-link :to="{name:botGroupPic[1].link}">
-          <img :src="botGroupPic[1].pic" title="归还">
+          <el-tooltip class="item" effect="dark" content="归还">
+            <img :src="botGroupPic[1].pic">
+          </el-tooltip>
         </router-link>
       </div>
       <div class="item">
-        <img :src="botGroupPic[2].pic" title="销毁"  @click="delitem">
+        <el-tooltip class="item" effect="dark" content="销毁">
+          <img :src="botGroupPic[2].pic"   @click="delitem">
+        </el-tooltip>
       </div>
       <div class="item">
-        <img :src="botGroupPic[3].pic" title="标签"  @click="printitem">
+        <el-tooltip class="item" effect="dark" content="标签">
+          <img :src="botGroupPic[3].pic"   @click="printitem">
+        </el-tooltip>
       </div>
       <div class="item">
-        <img :src="botGroupPic[4].pic" title="转运"  @click="zhuanyunClick">
+        <el-tooltip class="item" effect="dark" content="转运">
+          <img :src="botGroupPic[4].pic"   @click="zhuanyunClick">
+        </el-tooltip>
       </div>
     </div>
     <!-- 底部的按钮(二) -->
     <div class="bot-group" v-show="switchSaoMiao">
       <div class="item">
         <!-- <router-link :to="{name:botGroupPic[3].link}"> -->
-          <img :src="botGroupPic[3].pic" alt title="标签" @click="printitem">
+          <el-tooltip class="item" effect="dark" content="标签" >
+            <img :src="botGroupPic[3].pic" alt  @click="printitem">
+          </el-tooltip>
         <!-- </router-link> -->
       </div>
       <div class="item">
         <!-- <router-link :to="{name:botGroupPic[4].link}"> -->
-          <img :src="botGroupPic[4].pic" alt title="转运"  @click="zhuanyunClick">
+          <el-tooltip class="item" effect="dark" content="转运">
+            <img :src="botGroupPic[4].pic"   @click="zhuanyunClick">
+          </el-tooltip>
         <!-- </router-link> -->
       </div>
       <div class="item">
         <!-- <router-link :to="{name:botGroupPic[2].link}"> -->
-          <img :src="botGroupPic[2].pic" alt title="销毁" @click="delitem">
+          <el-tooltip class="item" effect="dark" content="销毁">
+            <img :src="botGroupPic[2].pic"  @click="delitem">
+          </el-tooltip>
         <!-- </router-link> -->
       </div>
     </div>

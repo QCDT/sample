@@ -390,24 +390,6 @@ export default new Router({
         navbar: Header
       }
     },
-    // 垃圾
-    {
-      path: '/scan/laji',
-      name: 'laji',
-      components: {
-        default: () => import(/* webpackChunkName: "scan" */ '@/views/Scan/botGropLink/laji.vue'),
-        navbar: Header
-      }
-    },
-    // 标签
-    {
-      path: '/scan/biaoqian',
-      name: 'biaoqian',
-      components: {
-        default: () => import(/* webpackChunkName: "scan" */ '@/views/Scan/botGropLink/biaoqian.vue'),
-        navbar: Header
-      }
-    },
     // 查询->批量录入
     {
       path: '/scan/batchEntry',

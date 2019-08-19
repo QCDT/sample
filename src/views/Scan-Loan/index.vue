@@ -5,7 +5,7 @@
     </transition>
     <div class="top">
       <fromName>借出订单列表</fromName>
-      <tmpButton @click="showAdd" style="height:28px">添加订单</tmpButton>
+      <tmpButton @click="showAdd" style="height:26px">添加订单</tmpButton>
     </div>
 
     <el-table
@@ -23,9 +23,7 @@
       <el-table-column type="index" label="序号" width="70"></el-table-column>
       <el-table-column label="订单名称" width="100">
         <template slot-scope="scope">
-          <router-link :to="{name:'particulars'}">
-            <button>{{tableData[scope.$index].orderName}}</button>
-          </router-link>
+            <span class="orderName" @click="showOrder">{{tableData[scope.$index].orderName}}</span>
         </template>
       </el-table-column>
       <el-table-column prop="newTime" label="创建时间" show-overflow-tooltip></el-table-column>
@@ -36,7 +34,7 @@
       <el-table-column prop="status" label="订单状态" show-overflow-tooltip></el-table-column>
       <el-table-column fixed="right" label="操作" width="100">
         <template slot-scope="scope">
-          <el-button @click="delDingdan(scope.row,scope.$index)" type="text" size="small">删除</el-button>
+          <i class="el-icon-delete del" @click="delDingdan(scope.row,scope.$index)"></i>
         </template>
       </el-table-column>
     </el-table>
@@ -100,14 +98,15 @@ export default {
         type: 'warning'
       })
         .then(() => {
-          this.tableData.splice(index, 1)
           this.$message({ type: 'success', message: '删除成功!' })
         })
         .catch(() => {
           this.$message({ type: 'info', message: '已取消删除' })
         })
     },
-
+    showOrder(){
+      this.$router.push({name:'particulars'})
+    },
     // ↓    添加订单
     showAdd () {
       /* 显示 */ this.showDingdan = true
@@ -128,7 +127,13 @@ export default {
 .loan-wrap {
   padding: 20px 20px 0;
 }
-
+.orderName{
+  cursor: pointer;
+}
+.del{
+  font-size: 20px;
+  cursor: pointer;
+}
 .top {
   display: flex;
   justify-content: space-between;

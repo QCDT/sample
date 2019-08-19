@@ -8,30 +8,26 @@
         :model="ruleForm"
         :rules="rules"
         ref="ruleForm"
+        status-icon
         label-width="110px"
         label-position="left"
         class="demo-ruleForm"
       >
-        <el-form-item label="订单名称" prop="name">
-          <el-input v-model="ruleForm.name"></el-input>
+        <el-form-item label="订单名称" prop="name" required>
+          <el-input v-model="ruleForm.name" ></el-input>
+        </el-form-item>
+        <el-form-item label="取走人" prop="takes" required>
+          <el-input v-model="ruleForm.takes"></el-input>
         </el-form-item>
         <el-form-item label="预计归还时间" required>
           <el-col :span="7">
-            <el-form-item prop="date1">
+            <el-form-item prop="date">
               <el-date-picker
                 type="date"
                 placeholder="选择日期"
                 :picker-options="pickerOptions"
-                v-model="ruleForm.date1"
-                style="width: 100%;"
+                v-model="ruleForm.date"
               ></el-date-picker>
-            </el-form-item>
-          </el-col>
-
-          <el-col class="line" :span="1" style="width: 2%;margin-left:1%">-</el-col>
-          <el-col :span="7">
-            <el-form-item prop="date2">
-              <el-time-picker placeholder="选择时间" v-model="ruleForm.date2" style="width: 100%;"></el-time-picker>
             </el-form-item>
           </el-col>
         </el-form-item>
@@ -43,13 +39,12 @@
             maxlength="1000"
             show-word-limit
             placeholder="请输入内容"
-            :rows="7"
+            :rows="4"
           ></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="submitForm('ruleForm')">立即创建</el-button>
           <el-button @click="clearAdd('ruleForm')">返回</el-button>
-          <!-- <el-button @click="resetForm('ruleForm')">返回</el-button> -->
         </el-form-item>
       </el-form>
     </div>
@@ -60,12 +55,34 @@ export default {
   props: { showDingdan: Boolean },
   components: {},
   data () {
+    let orderName = (rule, value, callback) => {
+        if (value === '') {
+          callback(new Error('请输入订单名称'));
+        } else {
+          if( value.length > 50){
+            callback(new Error('名称长度为1-50个字符'));
+          }else{
+
+          }
+          callback();
+        }
+      };
+    let  verificationTakes = (rule, value, callback) =>{
+      if(value === ''){
+        callback(new Error('请输入取走人姓名'))
+      }else{
+        let reg = /^[\u4e00-\u9fa5]{2,4}$/
+        if(!reg.test(value)){
+           callback(new Error('姓名格式不正确'))
+        }
+        callback();
+      }
+    }
     return {
       ruleForm: {
         name: '',
-        region: '',
-        date1: '',
-        date2: '',
+        takes:'',
+        date: '',
         delivery: false,
         type: [],
         resource: '',
@@ -80,40 +97,19 @@ export default {
       //
       rules: {
         name: [
-          { required: true, message: '请输入订单名称', trigger: 'blur' },
-          { min: 1, max: 50, message: '长度在 1 到 50 个字符', trigger: 'blur' }
+          { validator: orderName, trigger: 'blur' }
         ],
-        region: [
-          { required: true, message: '请选择活动区域', trigger: 'change' }
+        takes:[
+          { validator: verificationTakes, trigger: 'blur' }
         ],
-        date1: [
+        date: [
           {
             type: 'date',
             required: true,
             message: '请选择日期',
             trigger: 'change'
           }
-        ],
-        date2: [
-          {
-            type: 'date',
-            required: true,
-            message: '请选择时间',
-            trigger: 'change'
-          }
-        ],
-        type: [
-          {
-            type: 'array',
-            required: true,
-            message: '请至少选择一个活动性质',
-            trigger: 'change'
-          }
-        ],
-        resource: [
-          { required: true, message: '请选择活动资源', trigger: 'change' }
-        ],
-        desc: [{ required: true, message: '请填写活动形式', trigger: 'blur' }]
+        ]
       }
     }
   },
@@ -124,7 +120,7 @@ export default {
     submitForm (formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          this.$emit('submitForm', JSON.parse(JSON.stringify(this.ruleForm)))
+          // this.$emit('submitForm', JSON.parse(JSON.stringify(this.ruleForm)))
         } else {
           console.log('error submit!!')
           return false
@@ -139,19 +135,18 @@ export default {
 // form 表单
 .form {
   position: fixed;
-  z-index: 90;
-  top: 87px;
+  z-index: 20;
+  top: 80px;
   right: 0;
   bottom: 0;
   left: 0;
 
   background-color: #eee;
   .in {
-    width: 1000px;
-    padding: 0 100px;
-
+    width: 60%;
+    padding: 0 50px;
     background-color: #fff;
-    margin: 50px auto 0;
+    margin: 30px auto 0;
     border: 1px solid #aaa;
 
     h1 {

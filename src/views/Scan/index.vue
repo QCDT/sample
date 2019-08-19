@@ -129,7 +129,6 @@ import tmpButton from "@/components/tmp/zhanglan/tmpButton";
 import newSample from "./newSample";
 import reSample from "./reSample";
 import newSampleBox from "./newSampleBox";
-import reSampleBox from "./reSampleBox";
 import alertZhuanYun from "./alert-ZhuanYun";
 export default {
   components: {
@@ -141,7 +140,6 @@ export default {
     newSample,
     reSample,
     newSampleBox,
-    reSampleBox,
     BTNbot,
     alertZhuanYun
   },

@@ -81,7 +81,6 @@
             @selection-change="handleSelectionChange"
           >
             <el-table-column type="index" label="序号" width="70"></el-table-column>
-
             <el-table-column prop="takeOutName" label="样本名称"></el-table-column>
             <el-table-column prop="takeOutName" label="样本类别"></el-table-column>
             <el-table-column prop="returnTiem" label="受试者编号" show-overflow-tooltip></el-table-column>

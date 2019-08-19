@@ -173,8 +173,7 @@
                         ref="multipleTable"
                         :data="sampleDataForm"
                         tooltip-effect="dark"
-                        @select='selectExportFrom'
-                        @select-all='selectExportAllFrom'
+                        @selection-change="selectExportFrom"
                         @row-click="showSampleItem"
                         style="width: 60%; float:left"
                         height="220"
@@ -555,14 +554,9 @@ export default {
                })
            })
         },
-        selectExportFrom(selection, row){
-            console.log(selection, row)
-            selection.forEach((item)=>{
-                this.exportList.push(item.id)
-            })
-        },
-        selectExportAllFrom(selection){
-            console.log(selection)
+
+        selectExportFrom(selection){
+            this.exportList = []
             selection.forEach((item)=>{
                 this.exportList.push(item.id)
             })
