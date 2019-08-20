@@ -236,7 +236,6 @@ button[disabled],
 input[disabled] {
   cursor: default;
 }
-
 img {
   border: 0;
 }

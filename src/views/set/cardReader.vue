@@ -272,21 +272,20 @@ export default {
   },
   methods: {
     cardReaderTest(){
-      console.log(this.$cookies.keys())
-      // MyActiveX1.RDR_Close();
-      // let n = this.$store.state.OnOpen(this.devicetypeValue,this.OpentypeValue,this.comBaudRateValue,this.comFrameStructureValue,this.comPortValue,this.netIpAddress,this.netPort)
-      // if (n!=0) {
-      //   this.$alert('设备未识别到，请检查设备连接或设备类型', '', {
-      //     confirmButtonText: '确定',
-      //     type: 'error'
-      //   });
-		  //   return false;
-      // }else{
-      //   this.$alert( '连接成功！请点击保存', '提示', {
-      //     confirmButtonText: '确定',
-      //     type:'success'
-      //   });
-      // }
+      MyActiveX1.RDR_Close();
+      let n = this.$store.state.OnOpen(this.devicetypeValue,this.OpentypeValue,this.comBaudRateValue,this.comFrameStructureValue,this.comPortValue,this.netIpAddress,this.netPort)
+      if (n!=0) {
+        this.$alert('设备未识别到，请检查设备连接或设备类型', '提示', {
+          confirmButtonText: '确定',
+          type: 'error'
+        });
+		    return false;
+      }else{
+        this.$alert( '连接成功！请点击保存', '提示', {
+          confirmButtonText: '确定',
+          type:'success'
+        });
+      }
       // let nret=0;
 		  // //盘点标签时，使能15693协议。返回，成功：0 ；失败：非0 （查看错误代码表）。
       // nret = MyActiveX1.RDR_Enable15693(0,0x00,0);
@@ -302,30 +301,40 @@ export default {
       // }
     },
     saveCardReader(){
-      // this.$cookies.set('readerType', this.devicetypeValue) 
-      this.$axios({
-          method: 'post',
-          url: 'sampleGuide/cardReader/saveCardReaderCookies',
-          headers: {
-            'Content-Type': 'application/json; charset=UTF-8'
-          },
-          credentials:"include",
-          data:({
-             readerType: this.devicetypeValue,
-             portType: this.OpentypeValue,
-             comPortNo: this.comPortValue,
-             comBaudRate: this.comBaudRateValue,
-             comFrameStructure: this.comFrameStructureValue,
-             netIpAddress: this.netIpAddress,
-             netPortNo: this.netPort
-          })
-      })
-      .then((data)=>{
-         console.log(data)
-      })
-      .catch(error=>{
-        console.log(error)
-      })
+      this.$cookies.set('readerType', this.devicetypeValue, '1y')
+      this.$cookies.set('portType', this.OpentypeValue, '1y') 
+      this.$cookies.set('comPortNo',this.comPortValue, '1y')
+      this.$cookies.set('comBaudRate',this.comBaudRateValue, '1y')
+      this.$cookies.set('comFrameStructure', this.comFrameStructureValue, '1y')
+      this.$cookies.set('netIpAddress', this.netIpAddress, '1y')
+      this.$cookies.set('netPortNo', this.netPort, '1y')
+      this.$alert( '保存成功!', '提示', {
+          confirmButtonText: '确定',
+          type:'success'
+      });
+      // this.$axios({
+      //     method: 'post',
+      //     url: 'sampleGuide/cardReader/saveCardReaderCookies',
+      //     headers: {
+      //       'Content-Type': 'application/json; charset=UTF-8'
+      //     },
+      //     credentials:"include",
+      //     data:({
+      //        readerType: this.devicetypeValue,
+      //        portType: this.OpentypeValue,
+      //        comPortNo: this.comPortValue,
+      //        comBaudRate: this.comBaudRateValue,
+      //        comFrameStructure: this.comFrameStructureValue,
+      //        netIpAddress: this.netIpAddress,
+      //        netPortNo: this.netPort
+      //     })
+      // })
+      // .then((data)=>{
+      //    console.log(data)
+      // })
+      // .catch(error=>{
+      //   console.log(error)
+      // })
     }
   }
 }

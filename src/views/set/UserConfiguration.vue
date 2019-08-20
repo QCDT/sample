@@ -1,5 +1,12 @@
 <template>
  <div>
+      <object id="MyActiveX1" width=0 height=0
+        classid="clsid:38BEF3F4-E284-4548-8E7B-FE20AE443AD8">
+        <param name="_Version" value="65536"/>
+        <param name="_ExtentX" value="2646"/>
+        <param name="_ExtentY" value="1323"/>
+        <param name="_StockProps" value="0"/>
+      </object>
      <div class="userWrap">  
         <div class="userTitle">  <!-- 搜索用户和角色部分  -->
             <div class="userType">
@@ -147,7 +154,7 @@
         <el-dialog
             :title="addUserType? '添加用户': '修改用户'"
             :visible.sync="UserDialogVisible"
-            width="40%"
+            width="60%"
             center>
             <div class="dialogContentWrap">
                 <div class="dialogContent">
@@ -159,7 +166,6 @@
                     <span>密码</span>
                     <i><el-input v-model= userPassword placeholder="请输入密码" size="mini" class="addInput" clearable  show-password  maxlength = 15  @blur="verifyPassword"></el-input></i>
                     <span class="verifyMsg">
-                      <i class="el-icon-circle-close" v-show="msgerror"></i>
                       {{passwordMsg}}
                     </span>
                 </div>
@@ -171,7 +177,7 @@
                 <div class="dialogContent">
                     <span>绑定IC卡</span>
                     <i><el-input placeholder="请输入内容" size="mini" class="addInput" clearable></el-input></i>
-                    <img src="@/assets/img/saomiao.gif">
+                    <img src="@/assets/img/saomiao.gif" @click="bindingCard">
                 </div>
                 <div class="dialogContent">
                     <span>角色</span>
@@ -199,7 +205,7 @@
                     </i>
                 </div>
                 <div class="dialogContent">
-                    <span>谁可以看</span>
+                    <span>谁可以看(样本信息)</span>
                     <i>
                         <el-select v-model="selectValue" placeholder="请选择" size="mini">
                           <el-option
@@ -351,6 +357,7 @@ export default {
         url:'sampleGuide/userInfo/findAllUser'
       })
       .then(({data})=>{
+        console.log(data);
          data.data.forEach((item)=>{
           this.UsertableData.push({
             id: item.id,   //...............用户Id
@@ -450,6 +457,73 @@ export default {
         })  
         }
     },
+    bindingCard(){
+      let devicetypeValue = this.$cookies.get('readerType')
+      let OpentypeValue = this.$cookies.get('portType')
+      let comPortValue = this.$cookies.get('comPortNo')
+      let comBaudRateValue = this.$cookies.get('comBaudRate')
+      let comFrameStructureValue = this.$cookies.get('comFrameStructure')
+      let netIpAddress = this.$cookies.get('netIpAddress')
+      let netPort = this.$cookies.get('netPortNo')
+      console.log(devicetypeValue,OpentypeValue,comPortValue,comBaudRateValue,comFrameStructureValue,netIpAddress,netPort)
+      MyActiveX1.RDR_Close();
+      // let n = this.$store.state.OnOpen(devicetypeValue,OpentypeValue,comBaudRateValue,comFrameStructureValue,comPortValue,netIpAddress,netPort)
+      // if (n!=0) {
+		  //   return false;
+      // }
+      let nret=0;
+      this.OnOpen(devicetypeValue,OpentypeValue,comPortValue,comBaudRateValue,comFrameStructureValue,netIpAddress,netPort)
+		//盘点标签初始化,申请盘点标签所需要的内存空间。返回，成功：0 ；失败：非0 （查看错误代码表）。
+	  nret = MyActiveX1.RDR_InitInventory();
+		if(nret!=0)
+		{
+			alert("盘点标签初始化失败！");
+			return;
+		}
+		//盘点标签时，使能15693协议。返回，成功：0 ；失败：非0 （查看错误代码表）。
+		nret = MyActiveX1.RDR_Enable15693(0,0x00,0);
+		nret = MyActiveX1.RDR_Enable14443A();
+		if (nret!=0) {
+			//结束标签盘点操作，释放内存空间。
+		    MyActiveX1.RDR_FinishInventory();
+			return;
+    }
+    this.readRfid()
+      // this.$store.state.readRfid()
+    },
+    OnOpen (devicetypeValue, OpentypeValue, comBaudRateValue, comFrameStructureValue, comPortValue, netIpAddress, netPort) {
+    let nret = -1
+    if (OpentypeValue === 'COM') {
+      nret = MyActiveX1.RDR_OpenPort(devicetypeValue, comPortValue, comBaudRateValue, comFrameStructureValue)
+    } else if (OpentypeValue === 'USB') {
+      nret = MyActiveX1.RDR_OpenUSB(devicetypeValue, 0, '')
+    } else {
+      nret = MyActiveX1.RDR_OpenNet(devicetypeValue, netIpAddress, netPort)
+    }
+    if(nret!=0)
+    {
+      // alert("打开设备失败!");
+        return ;
+    }
+  },
+    readRfid(){
+      let nret = 0
+      let recordCnt = ''
+      let arrRfidCode = []
+      nret = MyActiveX1.RDR_Inventory(0, '')
+      if (nret !== 0) {
+        this.$alert('读取标签失败，请检查设备连接以及参数设置！', '提示', {
+          confirmButtonText: '确定',
+          type: 'error'
+        })
+        MyActiveX1.RDR_FinishInventory()
+        return
+      }
+      recordCnt = MyActiveX1.RDR_GetRecordCnt()
+      console.log(recordCnt)
+      // recordCnt.forEach((item, index) => {
+      // })
+    },
     roleOperation () {
       console.log(this.jurisdictionList)
         if(this.addUserType){ //...........新增角色
@@ -489,6 +563,7 @@ export default {
                 name: this.newRoleName,
                 integerList: this.jurisdictionList
             })
+          })
             .then(({data})=>{
               console.log(data)
               this.$message({
@@ -501,19 +576,14 @@ export default {
             .catch(error=>{
                 this.$message.error('修改角色失败，请重试');
             })
-          })
         }
     },
     userOperation () {
         if(this.addUserType){ //........新增用户
-          console.log(this.roleName)
-          
+          console.log(this.roleName)         
           this.$axios({
             method: 'post',
             url: 'sampleGuide/userOther/insertUser',
-            // headers: {
-            //   'Content-Type': 'application/json; charset=UTF-8'
-            // },
             data: ({
                 username: this.userName,
                 password: this.repeatPassword,
@@ -532,6 +602,7 @@ export default {
                 type: 'success'
               });
               this.searchUser()
+              this.UserDialogVisible = false
           })
           .catch((error)=>{
              this.$message.error('新增用户失败，请重试');
@@ -639,6 +710,9 @@ export default {
           this.$axios({
             method:'post',
             url:'sampleGuide/userInfo/findByUsername',
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded'
+            },
             data: this.qs.stringify({
               username: row.userName,
             })
@@ -676,9 +750,6 @@ export default {
           this.$axios({
             method:'post',
             url:'sampleGuide/userOther/deleteUserById',
-            headers: {
-            'Content-Type': 'application/json;charset=UTF-8'
-            },
             data:({
               id: this.userId
             })
@@ -832,21 +903,22 @@ export default {
             width: 24px;
             height: 24px;
             margin-left: 5px;
+            cursor: pointer;
         }
         .verifyMsg{
             font-size: 12px;
-            width:8vw;
+            width:6vw;
             color: red;
             margin-left: 3px
         }
         // font-size: 12PX;
         > span{
-            width:6vw;
+            width:10vw;
             display: inline-block;
         }
-        .el-radio{
-            margin-right: 15px;
-        }
+        // .el-radio{
+        //     margin-right: 15px;
+        // }
     }
     .jurisdiction{
         margin-bottom: 10px;
@@ -862,7 +934,7 @@ export default {
         }
     }
   .dialogContentWrap{
-    width: 80%;
+    width: 60%;
     margin: 0 auto;
     text-align: left;
   }

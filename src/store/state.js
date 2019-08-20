@@ -10,4 +10,22 @@ module.exports.state = {
     }
     return nret
   }
+  // readRfid () {
+  //   let nret = 0
+  //   let recordCnt = ''
+  //   let arrRfidCode = []
+  //   nret = MyActiveX1.RDR_Inventory(0, '')
+  //   if (nret !== 0) {
+  //     this.$alert('读取标签失败，请检查设备连接以及参数设置！', '提示', {
+  //       confirmButtonText: '确定',
+  //       type: 'error'
+  //     })
+  //     MyActiveX1.RDR_FinishInventory()
+  //     return
+  //   }
+  //   recordCnt = MyActiveX1.RDR_GetRecordCnt()
+  //   console.log(recordCnt)
+  //   // recordCnt.forEach((item, index) => {
+  //   // })
+  // }
 }
