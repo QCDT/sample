@@ -8,11 +8,9 @@ import 'element-ui/lib/theme-chalk/index.css'
 import qs from 'qs'
 import axios from 'axios'
 import VueCookies from 'vue-cookies'
-import JsonExcel from 'vue-json-excel'
 axios.defaults.baseURL = 'http://192.168.1.75:8071'
 axios.defaults.headers['Content-Type'] = 'application/json;charset=UTF-8'
 Vue.config.productionTip = false
-Vue.component('downloadExcel', JsonExcel)
 Vue.use(ElementUI)
 Vue.use(VueCookies)
 Vue.prototype.qs = qs

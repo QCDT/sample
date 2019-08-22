@@ -1,12 +1,6 @@
 <template>
  <div>
-      <object id="MyActiveX1" width=0 height=0
-        classid="clsid:38BEF3F4-E284-4548-8E7B-FE20AE443AD8">
-        <param name="_Version" value="65536"/>
-        <param name="_ExtentX" value="2646"/>
-        <param name="_ExtentY" value="1323"/>
-        <param name="_StockProps" value="0"/>
-      </object>
+     <cardfile></cardfile>
      <div class="userWrap">  
         <div class="userTitle">  <!-- 搜索用户和角色部分  -->
             <div class="userType">
@@ -35,13 +29,15 @@
             <div class="userType">
                 <el-button type="primary" size="mini" @click="searchUser">搜索</el-button>
                 <el-button type="primary" size="mini" @click="AddType">{{userType?"添加用户": '添加角色'}}</el-button>
-                <el-tooltip class="item" effect="dark" content="用户设置" placement="bottom">
-                    <img src="@/assets/img/ren2.png" v-show ="userType" @click="TabUser" />
-                </el-tooltip>
-                <el-tooltip class="item" effect="dark" content="角色设置" placement="bottom">
-                    <img src="@/assets/img/ren.png" v-show ="!userType" @click="TabUser"/>
-                </el-tooltip>
             </div>
+        </div>
+        <div class="userIcon">
+          <el-tooltip class="item" effect="dark" content="用户设置" placement="bottom">
+              <img src="@/assets/img/ren2.png" v-show ="userType" @click="TabUser" />
+          </el-tooltip>
+          <el-tooltip class="item" effect="dark" content="角色设置" placement="bottom">
+              <img src="@/assets/img/ren.png" v-show ="!userType" @click="TabUser"/>
+          </el-tooltip>
         </div>
         <div class="userList"> 
           <!-- 用户列表展示 -->
@@ -134,7 +130,8 @@
             <div class="dialogContentWrap">
                 <div class="roleDialogVisible">
                     <span>角色名</span>
-                    <i><el-input v-model="newRoleName"  placeholder="请输入内容" size="mini" class="addInput" clearable></el-input></i>
+                    <i><el-input v-model="newRoleName"  placeholder="请输入内容" size="mini" class="addInput" @blur="verifyRole" clearable></el-input></i>
+                    <span class="verifyMsg">{{roleMsg}}</span>
                 </div>
                 <div>
                   <div class="jurisdiction">
@@ -176,7 +173,7 @@
                 </div>
                 <div class="dialogContent">
                     <span>绑定IC卡</span>
-                    <i><el-input placeholder="请输入内容" size="mini" class="addInput" clearable></el-input></i>
+                    <i><el-input placeholder="请输入内容" size="mini" v-model="cardNub" class="addInput" disabled></el-input></i>
                     <img src="@/assets/img/saomiao.gif" @click="bindingCard">
                 </div>
                 <div class="dialogContent">
@@ -200,8 +197,7 @@
                 <div class="dialogContent">
                     <span>实验室</span>
                     <i>
-                        <el-radio v-model="radio" label="1">Ⅰ期临床实验室</el-radio>
-                        <el-radio v-model="radio" label="2">II期临床实验室</el-radio>
+                      <el-checkbox v-for="item in labList"  :key="item.id" v-model="item.checked" @change="labChange">{{item.label}}</el-checkbox>
                     </i>
                 </div>
                 <div class="dialogContent">
@@ -217,6 +213,9 @@
                         </el-select>
                     </i>
                 </div>
+                <div v-show="selectValue === 2" class="showUser">
+                   <el-checkbox class="userItem" v-for="item in showUser"  :key="item.id" v-model="item.checked" @change="userChange">{{item.label}}</el-checkbox>
+                </div>
             </div>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="userOperation" :disabled="Userdisabled" size="mini">保存</el-button>
@@ -227,9 +226,18 @@
  </div>
 </template>
 <script>
+import cardfile from "@/components/cardfile";
 export default {
+  inject:['reload'],
+  components:{
+    cardfile
+  },
   data () {
     return {
+      labList:[],
+      labListid: [],
+      showUserList:[],
+      roleMsg:'',
       searchUserName: '', //用户名，角色搜索框
       userNamemsg: '',// 用户名的校验提示信息
       passwordMsg: '', // 密码的校验提示信息
@@ -239,6 +247,7 @@ export default {
       Userdisabled: true, //添加保存按钮禁用
       roleValue: '', // 角色下拉框的value
       roleOptionValue: '', // 添加和修改中角色下拉框的value
+      cardNub: '', // 绑定IC卡值
       userId: '', //用户ID
       roleId: '', // 角色ID
       userName: '', // 用户名
@@ -246,7 +255,6 @@ export default {
       addUserName: '',
       userPassword: '', // 密码
       repeatPassword: '', // 二次密码
-      radio: '1', // 实验室选择按钮
       newRoleName: '', // 添加角色
       RoleDialogVisible: false, // 角色设置的弹窗
       UserDialogVisible: false, // 用户设置的弹窗
@@ -254,7 +262,10 @@ export default {
       addUserType: true, // 切换添加和修改弹窗
       selectValue: '', //谁可以看下拉框
       jurisdictionValue: '', // 权限的id
-      list: [], // 选择
+      list: [
+
+      ], // 选择
+      showUser: [], // 部分人可见显示信息
       roleOptions:[
         // {
         //   value: '',
@@ -263,15 +274,15 @@ export default {
       ],
       options:[
         {
-          value: '0',
+          value: 0,
           label: '公开',
         },
         {
-          value: '1',
+          value: 1,
           label: '保密',
         },
         {
-          value: '2',
+          value: 2,
           label: '部分人可见'
         }
       ],
@@ -300,7 +311,7 @@ export default {
       authority: [ // 角色权限设置数据
         {
           value: 1,
-          label: '新建，修改样本',
+          label: '新建、修改样本',
           checked: false
         },
         {
@@ -310,7 +321,7 @@ export default {
         },
         {
           value: 3,
-          label: '销毁样本和样本盒',
+          label: '销毁样本及样本盒',
           checked: false
         },
         {
@@ -320,7 +331,7 @@ export default {
         },
         {
           value: 5,
-          label: '转移样本和样本盒',
+          label: '转移样本及样本盒',
           checked: false
         },
         {
@@ -354,17 +365,31 @@ export default {
   created () {
       this.$axios({ //.............获取所有用户的请求
         method:'get',
-        url:'sampleGuide/userInfo/findAllUser'
+        url:'sampleGuide/userInfo/initialUser'
       })
       .then(({data})=>{
-        console.log(data);
-         data.data.forEach((item)=>{
+        // console.log(data)
+        // console.log(data.data.userList)
+         data.data.userList.forEach((item)=>{
           this.UsertableData.push({
             id: item.id,   //...............用户Id
             userName: item.username,  //...........用户名
             roleName: item.name,  //........角色名
-            createTime: item.create_date // ......创建时间
+            createTime: item.create_date ,// ......创建时间
           })
+          this.showUser.push({
+            id: item.id,
+            label: item.username,
+            checked: false
+          })
+          // console.log(this.showUser)
+        })
+        data.data.laboratoryDictList.forEach((item)=>{
+            this.labList.push({
+              id: item.id,
+              label: item.name,
+              checked: false
+            })
         })
       })
       this.$axios({ // ...................获取所有角色请求
@@ -372,7 +397,7 @@ export default {
         url: 'sampleGuide/rolePerm/findAllRole'
       })
       .then(({data})=>{
-        console.log(data)
+        // console.log(data)
         data.data.forEach((item)=>{
             this.RoletableData.push({ //.............角色表格数据
                id: item.id,  // ........... 角色Id
@@ -432,32 +457,114 @@ export default {
          this.repeatPasswordMsg = ''
        }
     },
+    verifyRole(){ // ................角色验证
+      if(this.newRoleName==''){
+        this.roleMsg = '角色名称不能为空'
+      }
+      if(this.addUserType){
+         this.$axios({
+           method:'post',
+           url:'sampleGuide/rolePerm/findResetRoleName',
+           data:({
+              name: this.newRoleName
+           })
+         })
+         .then(({data})=>{
+           if(data.data === 1){
+            this.roleMsg = '角色名称已存在'
+           }else{
+             this.roleMsg = ''
+           }
+           console.log(data)
+         })
+         .catch((error)=>{
+            console.log(error)
+         })
+      }else{
+         this.$axios({
+           method:'post',
+           url:'sampleGuide/rolePerm/findResetRoleNameUpdate',
+           data:({
+              id: this.roleId,
+              name: this.newRoleName
+           })
+         })
+         .then(({data})=>{
+           if(data.data == 2){
+             this.roleMsg = '角色名称已存在'
+           }else{
+             this.roleMsg = ''
+           }
+           console.log(data)
+         })
+         .catch((error)=>{
+            console.log(error)
+         })
+      }
+    },
     rulesUserName () { //...........用户名验证
         if(this.userName == ''){
           this.userNamemsg = "用户名不能为空"
         }else{
-        this.$axios({
-           method: 'post',
-           url: 'sampleGuide/userInfo/findResetUserName',
-           headers: {
-              'Content-Type': 'application/json; charset=UTF-8'
-           },
-           data:({
-              username: this.userName
-           })
-        })
-        .then(({data})=>{
-            if(data.data == 1){
-              this.userNamemsg = "该用户名已存在"
-              // this.Userdisabled = true
-            }else{
-              this.Userdisabled = false
-               this.userNamemsg = ''
-            }
-        })  
+          if(this.addUserType){
+            this.$axios({
+              method: 'post',
+              url: 'sampleGuide/userInfo/findResetUserName',
+              data:({
+                  username: this.userName
+              })
+            })
+            .then(({data})=>{
+                if(data.data == 1){
+                  this.userNamemsg = "该用户名已存在"
+                  // this.Userdisabled = true
+                }else{
+                  this.Userdisabled = false
+                  this.userNamemsg = ''
+                }
+            })  
+          }else{
+            this.$axios({
+              method:'post',
+              url:'sampleGuide/userInfo/findUserByIdUpdate',
+              data:({
+                 username: this.userName,
+                 id:this.userId
+              })
+            })
+            .then(({data})=>{
+              if(data.data == 2){
+                 this.userNamemsg = "该用户名已存在"
+              }else{
+                this.userNamemsg = ''
+                this.Userdisabled = false
+              }
+            })
+          }
+
         }
     },
+    // 部分人可见---- 可见用户的id集合
+    userChange () {
+      let newshowUserList = []
+      this.showUserList = []
+      newshowUserList = this.showUser.filter((item)=>{ return item.checked})
+      newshowUserList.forEach((item)=>{
+          this.showUserList.push(item.id)
+      })
+      console.log(this.showUserList)
+    },
+    // 实验室集合
+    labChange () {
+      let newLabList = []
+      this.labListid = []
+      newLabList = this.labList.filter((item)=>{ return item.checked})
+      newLabList.forEach((item)=>{
+        this.labListid.push(item.id)
+      })
+    },
     bindingCard(){
+      MyActiveX1.RDR_Close();
       let devicetypeValue = this.$cookies.get('readerType')
       let OpentypeValue = this.$cookies.get('portType')
       let comPortValue = this.$cookies.get('comPortNo')
@@ -465,52 +572,34 @@ export default {
       let comFrameStructureValue = this.$cookies.get('comFrameStructure')
       let netIpAddress = this.$cookies.get('netIpAddress')
       let netPort = this.$cookies.get('netPortNo')
-      console.log(devicetypeValue,OpentypeValue,comPortValue,comBaudRateValue,comFrameStructureValue,netIpAddress,netPort)
-      MyActiveX1.RDR_Close();
-      // let n = this.$store.state.OnOpen(devicetypeValue,OpentypeValue,comBaudRateValue,comFrameStructureValue,comPortValue,netIpAddress,netPort)
-      // if (n!=0) {
-		  //   return false;
-      // }
+      let n = this.$store.state.OnOpen(devicetypeValue,OpentypeValue,comPortValue,comBaudRateValue,comFrameStructureValue,netIpAddress,netPort)
+      if (n!=0) {
+          return 
+      }
       let nret=0;
-      this.OnOpen(devicetypeValue,OpentypeValue,comPortValue,comBaudRateValue,comFrameStructureValue,netIpAddress,netPort)
-		//盘点标签初始化,申请盘点标签所需要的内存空间。返回，成功：0 ；失败：非0 （查看错误代码表）。
-	  nret = MyActiveX1.RDR_InitInventory();
-		if(nret!=0)
-		{
-			alert("盘点标签初始化失败！");
-			return;
-		}
-		//盘点标签时，使能15693协议。返回，成功：0 ；失败：非0 （查看错误代码表）。
-		nret = MyActiveX1.RDR_Enable15693(0,0x00,0);
-		nret = MyActiveX1.RDR_Enable14443A();
-		if (nret!=0) {
-			//结束标签盘点操作，释放内存空间。
-		    MyActiveX1.RDR_FinishInventory();
-			return;
-    }
+      //盘点标签初始化,申请盘点标签所需要的内存空间。返回，成功：0 ；失败：非0 （查看错误代码表）。
+	    nret = MyActiveX1.RDR_InitInventory();
+      if (nret!=0) {
+        alert("盘点标签初始化失败！")
+        return;
+      }
+      //盘点标签时，使能15693协议。返回，成功：0 ；失败：非0 （查看错误代码表）。
+      nret = MyActiveX1.RDR_Enable15693(0,0x00,0)
+      nret = MyActiveX1.RDR_Enable14443A()
+      if (nret!=0) {
+        //结束标签盘点操作，释放内存空间。
+          MyActiveX1.RDR_FinishInventory()
+        return;
+      }
     this.readRfid()
-      // this.$store.state.readRfid()
+    MyActiveX1.RDR_Close()
     },
-    OnOpen (devicetypeValue, OpentypeValue, comBaudRateValue, comFrameStructureValue, comPortValue, netIpAddress, netPort) {
-    let nret = -1
-    if (OpentypeValue === 'COM') {
-      nret = MyActiveX1.RDR_OpenPort(devicetypeValue, comPortValue, comBaudRateValue, comFrameStructureValue)
-    } else if (OpentypeValue === 'USB') {
-      nret = MyActiveX1.RDR_OpenUSB(devicetypeValue, 0, '')
-    } else {
-      nret = MyActiveX1.RDR_OpenNet(devicetypeValue, netIpAddress, netPort)
-    }
-    if(nret!=0)
-    {
-      // alert("打开设备失败!");
-        return ;
-    }
-  },
     readRfid(){
       let nret = 0
       let recordCnt = ''
-      let arrRfidCode = []
-      nret = MyActiveX1.RDR_Inventory(0, '')
+      let j =0
+      nret = MyActiveX1.RDR_Inventory(0,"")
+      // alert(nret)
       if (nret !== 0) {
         this.$alert('读取标签失败，请检查设备连接以及参数设置！', '提示', {
           confirmButtonText: '确定',
@@ -520,9 +609,18 @@ export default {
         return
       }
       recordCnt = MyActiveX1.RDR_GetRecordCnt()
-      console.log(recordCnt)
-      // recordCnt.forEach((item, index) => {
-      // })
+      // console.log(recordCnt)
+      let sTagInfo = MyActiveX1.GetRecord(j).split("-");
+      let sTagID = sTagInfo[sTagInfo.length-1];
+      alert(recordCnt)
+      if(recordCnt == 1){
+        this.cardNub = sTagID
+      }else{
+        this.$alert('IC卡只能绑定一个！', '提示', {
+          confirmButtonText: '确定',
+          type: 'error'
+        })
+      }
     },
     roleOperation () {
       console.log(this.jurisdictionList)
@@ -530,9 +628,6 @@ export default {
           this.$axios({ 
             method: 'post',
             url: 'sampleGuide/rolePerm/insertRole',
-            headers: {
-              'Content-Type': 'application/json;charset=UTF-8'
-            },
             data: ({
                 name: this.newRoleName,
                 integerList: this.jurisdictionList
@@ -545,7 +640,8 @@ export default {
                   type: 'success'
                });
                this.RoleDialogVisible = false
-               this.searchUser()
+               this.reload()
+               this.userType = true
             })
           .catch(error=>{
             this.$message.error('新增角色失败，请重试');
@@ -555,9 +651,6 @@ export default {
           this.$axios({ 
             method: 'post',
             url: 'sampleGuide/rolePerm/updateRole',
-            headers: {
-              'Content-Type': 'application/json;charset=UTF-8'
-            },
             data: ({
                 id: this.roleId,
                 name: this.newRoleName,
@@ -571,10 +664,10 @@ export default {
                 type: 'success'
               });
               this.RoleDialogVisible = false
-              this.searchUser()
+              this.reload()
             })
             .catch(error=>{
-                this.$message.error('修改角色失败，请重试');
+                this.$message.error('修改角色失败,请重试!');
             })
         }
     },
@@ -588,9 +681,9 @@ export default {
                 username: this.userName,
                 password: this.repeatPassword,
                 visible_strategy: this.selectValue,
-                // rfid_sample_box_hint：''
-                // visible_data_user_id: '1,2,',
-                visible_data_laboratory_id: this.radio,
+                rfid_code : this.cardNub,
+                visible_data_user_id: this.showUserList.join(','),
+                visible_data_laboratory_id: this.labListid.join(','),
                 addUserRoleId: this.roleOptionValue,
                 chinesename:this.compellation
             })
@@ -601,7 +694,7 @@ export default {
                 message: '新增用户成功！',
                 type: 'success'
               });
-              this.searchUser()
+              this.reload()
               this.UserDialogVisible = false
           })
           .catch((error)=>{
@@ -612,19 +705,16 @@ export default {
           this.$axios({ //............修改用户
             method: 'post',
             url: 'sampleGuide/userOther/updateUserById',
-            // headers: {
-            //   'Content-Type': 'application/json;charset=UTF-8'
-            // },
             data: ({
                 id: this.userId,
                 username: this.userName,
                 password: this.repeatPassword,
                 userRoleIdUpdate: this.roleOptionValue,
-                visible_data_laboratory_id: this.radio,
-                chinesename: this.compellation
-                // rfidCode: ''
-                //visible_strategy: '0'
-                //visible_data_user_id: ''字符串
+                visible_data_laboratory_id: this.labListid.join(','),
+                chinesename: this.compellation,
+                visible_data_user_id: this.showUserList.join(','),
+                visible_strategy: this.selectValue,
+                rfidCode: this.cardNub
             })
           })
           .then(({data})=>{
@@ -633,7 +723,7 @@ export default {
                   type: 'success'
                 });
                 this.UserDialogVisible = false
-                this.searchUser()
+                this.reload()
           })
           .catch(error=>{
             this.$message.error('修改用户失败，请重试');
@@ -704,9 +794,9 @@ export default {
       }
     },
     handleEdit (index, row) {
-      console.log(index, row)
       if (this.userType) { // ...........修改用户时获取该用户的用户名和密码
         this.UserDialogVisible = true
+        this.userNamemsg = ''
           this.$axios({
             method:'post',
             url:'sampleGuide/userInfo/findByUsername',
@@ -724,17 +814,51 @@ export default {
              this.userPassword = data.data.password
              this.repeatPassword = data.data.password
              this.userId = this.UsertableData[index].id
+             this.compellation = data.data.chinesename
+             this.cardNub = data.data.rfidCode  //visible_data_laboratory_id
+             this.selectValue = data.data.visible_strategy
+            this.showUser.forEach((item)=>{
+              item.checked = false
+              if(data.data.visible_data_user_id == ''){
+                return
+              }else{
+                data.data.visible_data_user_id.split(',').forEach((option)=>{
+                    if(item.id == option){
+                        console.log(item)
+                       item.checked = true
+                    }
+                })
+              }
+
+            })
+             console.log(data.data.visible_data_laboratory_id.split(','));
+             this.labList.forEach((item)=>{
+               item.checked = false
+                data.data.visible_data_laboratory_id.split(',').forEach((option)=>{
+                    if(item.id == option){
+                        console.log(item)
+                       item.checked = true
+                    }
+                })
+             })
           })
           .catch(error=>{
             this.$message.error('获取信息失败，请重试');
           })
       } else {
+        // console.log(row)
         this.RoleDialogVisible = true
+        this.roleMsg = ''
         this.newRoleName = row.roleName //.....修改的角色名的获取
         this.roleId = row.id
-        this.list = [],
+        this.list = []
         this.authority.forEach((item)=>{
-          item.checked = false
+             item.checked = false
+            row.jurisdiction.split(',').forEach((option)=>{
+              if(item.label == option){
+                item.checked = true
+              }
+            })
         })
       }
       this.addUserType = false
@@ -759,7 +883,7 @@ export default {
                     message: '删除成功！',
                     type: 'success'
               });
-              this.searchUser()
+              this.reload()
           })
           .catch(error=>{
               this.$message({
@@ -783,9 +907,6 @@ export default {
           this.$axios({
             method: 'post',
             url: 'sampleGuide/rolePerm/findNumByRole',
-            headers: {
-              'Content-Type': 'application/json;charest=UTF-8'
-            },
             data:({
               id: this.roleId
             })
@@ -808,7 +929,7 @@ export default {
                             message: '删除成功！',
                             type: 'success'
                         });
-                      this.searchUser()
+                      this.reload()
                   })
                 .catch(error=>{
                   this.$message.error('删除失败，请重试');
@@ -840,7 +961,14 @@ export default {
         this.userPassword = ''
         this.repeatPassword = ''       
         this.compellation = ''
+        this.userNamemsg = ''
+        this.selectValue = 0
+        this.cardNub =''
+        this.labList.forEach((item)=>{
+            item.checked = false
+        })
       } else {
+        this.roleMsg = ''
         this.RoleDialogVisible = true
         this.list = []
         this.newRoleName = ''
@@ -865,22 +993,36 @@ export default {
         width: 60%;
         margin: 0 auto;
         margin-bottom: 20px;
-        img{
-            width: 32px;
-            height: 32px;
-            margin-left: 10px;
-            vertical-align: middle;
-            cursor: pointer;
+        button{
+          background: #00c9ff;
+          border: 1px solid #00c9ff;
         }
         .userType{
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
+            align-items: center;
             margin-right: 10px;
             i{
-                width: 35%;
-                line-height: 28px;
+                width: 40%;
             }
         }
+    }
+    .userIcon{
+      text-align: right;
+      margin-bottom: 7px;
+      img{
+          width: 32px;
+          height: 32px;
+          margin-left: 10px;
+          vertical-align: middle;
+          cursor: pointer;
+      }
+    }
+    .showUser{
+      margin-top: 10px;
+      .userItem{
+        width: 17%
+      }
     }
     .userList{
         img{
@@ -905,12 +1047,6 @@ export default {
             margin-left: 5px;
             cursor: pointer;
         }
-        .verifyMsg{
-            font-size: 12px;
-            width:6vw;
-            color: red;
-            margin-left: 3px
-        }
         // font-size: 12PX;
         > span{
             width:10vw;
@@ -934,9 +1070,15 @@ export default {
         }
     }
   .dialogContentWrap{
-    width: 60%;
+    width: 70%;
     margin: 0 auto;
     text-align: left;
+  }
+  .verifyMsg{
+    font-size: 12px;
+    width:7vw;
+    color: red;
+    margin-left: 3px
   }
 }
 

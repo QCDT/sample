@@ -18,19 +18,19 @@
             </p>
             <div>
                 <p><span class="choiceType">选择打印内容</span></p>
-                <div  v-show="printValue == '样本'">
+                <div  v-show="printValue == 'sample'">
                    <el-checkbox-group 
                       v-model="printListA"
                       :max="3">
-                      <el-checkbox v-for="(item,index) in printContentA" :key='index' :label="item" class="choiceContent">{{item}}</el-checkbox>
+                      <el-checkbox v-for="(item,index) in printContentA" :key='index' :label="item.value" class="choiceContent">{{item.label}}</el-checkbox>
                    </el-checkbox-group>
                   <!-- <el-checkbox  v-model="item.checked" >{{item.title}}</el-checkbox> -->
                 </div>
-                <div v-show="printValue == '样本盒'">
+                <div v-show="printValue == 'sampleBox'">
                   <el-checkbox-group 
                       v-model="printListB"
                       :max="3">
-                      <el-checkbox v-for="(item,index) in printContentB" :key='index' :label="item" class="choiceContent">{{item}}</el-checkbox>
+                      <el-checkbox v-for="(item,index) in printContentB" :key='index' :label="item.value" class="choiceContent">{{item.label}}</el-checkbox>
                   </el-checkbox-group>
                 </div>
                 <div class="btns">
@@ -41,11 +41,11 @@
         </div>
         <div class="printerRight">
             <span><img src="@/assets/img/printer.jpg"/></span>
-            <div class="preview" v-show="printValue === '样本'">
-              <p v-for="item in printListA" :key="item"><span >{{item}}</span></p>
+            <div class="preview" v-show="printValue === 'sample'">
+              <p v-for="item in printA" :key="item.label"><span >{{item.label}}</span></p>
             </div>
-            <div class="preview" v-show="printValue === '样本盒'">
-              <p v-for="item in printListB" :key="item"><span>{{item}}</span></p>
+            <div class="preview" v-show="printValue === 'sampleBox'">
+              <p v-for="item in printB" :key="item.label"><span>{{item.label}}</span></p>
             </div>
         </div>
       </div>
@@ -55,31 +55,152 @@
 export default {
   data () {
     return {
+      setId: '',
       printListA:[],
       printListB: [],
-      printValue: '样本',
+      printA:[],
+      printB:[],
+      printValue: 'sample',// 选择打印样本盒或样本
       printType: [
         {
-          value: '样本',
+          value: 'sample',
           label: '样本'
         },
         {
-          value: '样本盒',
+          value: 'sampleBox',
           label: '样本盒'
         }
       ],
-      printContentA: [ 
-          '样本名称', '录入人名称', '冰箱名称','录入时间', '采样时间',
-          '过期时间', '样本来源', '样本类别', '样本位置'
-        ],
+      printContentA: [
+        {
+          label:'样本名称',
+          value: 'sample_name'
+        },
+        {
+          label:'录入人名称',
+          value: 'sample_userName'
+        },
+        {
+          label:'冰箱名称',
+          value: 'sample_refrigerator'
+        },
+        {
+          label:'录入时间',
+          value: 'sample_inputTime'
+        },
+        {
+          label:'采样时间',
+          value: 'sample_samplingTime'
+        },
+        {
+          label:'过期时间',
+          value: 'sample_expireTime'
+        },        
+        {
+          label:'样本来源',
+          value: 'sample_sampleSource'
+        },
+        {
+          label:'样本类别',
+          value: 'sample_sampleCategory'
+        },
+        {
+          label:'样本位置',
+          value: 'sample_location'
+        }
+      ],
       printContentB: [
-        '样本盒名称', '录入人名称','冰箱名称','录入时间','样本盒位置'
+        {
+          label:'样本盒名称',
+          value: 'sampleBox_name'
+        },
+        {
+          label:'录入人名称',
+          value: 'sampleBox_userName'
+        },
+        {
+          label:'冰箱名称',
+          value: 'sampleBox_refrigerator'
+        },
+        {
+          label:'录入时间',
+          value: 'sampleBox_inputTime'
+        },
+        {
+          label:'样本盒位置',
+          value: 'sampleBox_location'
+        }     
       ]
     }
   },
+  watch:{
+    printListA:function(val,oldval){
+      this.printA = []
+      this.printContentA.forEach((item)=>{
+        this.printListA.forEach((option)=>{
+          if(item.value == option){
+            this.printA.push(item)
+          }
+        })
+      })
+      // console.log(this.printA)
+    },
+    printListB:function(val,oldval){
+      this.printB = []
+      this.printContentB.forEach((item)=>{
+        this.printListB.forEach((option)=>{
+          if(item.value == option){
+            this.printB.push(item)
+          }
+        })
+      })
+      // console.log(this.printB)
+    },
+  },
+  created(){
+    this.$axios({
+      method: 'post',
+      url: 'sampleGuide/printerSetting/findPrinterSettingByUserId',
+      data:({
+        id: 1
+      })
+    })
+    .then(({data})=>{
+      console.log(data)
+      this.setId = item.id ? item.id : ''
+      this.printListA = [data.data[0].firstLine, data.data[0].secondLine, data.data[0].thirdLine]
+      this.printListB = [data.data[1].firstLine, data.data[1].secondLine, data.data[1].thirdLine]
+    })
+    .catch((error)=>{
+        console.log(error)
+    })
+  },
   methods:{
     savePrint(){
-      // console.log(111)
+        if(this.printListA.length === 0 && this.printListB.length === 0){
+          return
+        }
+        this.$axios({
+          method:'post',
+          url: 'sampleGuide/printerSetting/addOrUpdatePrinterSettingByUser',
+          data:({
+              id: this.setId,
+              category: this.printValue,
+              firstLine: this.printListA[0],
+              secondLine: this.printListA[1] ? this.printListA[1] : "",
+              thirdLine: this.printListA[2] ? this.printListA[2] : ""
+          })
+        })
+        .then(({data})=>{
+          this.$message({
+            message: '保存成功!',
+            type: 'success'
+          });
+            console.log(data)
+        })
+        .catch((error)=>{
+            console.log(error)
+        })
     }
   }
 }
@@ -102,8 +223,12 @@ export default {
     .btns{
       text-align: center;
       margin-top: 50px;
+    
       button{
         margin-right: 10px;
+        width: 100px;
+        background: #00c9ff;
+        border: 1px solid #00c9ff;
       }
     }
     .printerLeft{

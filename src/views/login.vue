@@ -77,7 +77,7 @@ export default {
   },
   mounted() {
     // element banner 高度自适应
-    // this.imgLoad();
+    this.imgLoad();
     this.$nextTick(function() {
       this.bannerHeight = this.$refs.image[0].height;
       console.log(this.$refs.image[0].height);
@@ -100,26 +100,29 @@ export default {
       })
     },
     loginIng() {
-      this.$router.push("/Home");
-      // this.$axios({
-      //   method: "post",
-      //   url: "sampleGuide/doLogin/selectByName",
-      //   data: this.qs.stringify({
-      //     username: this.userName,
-      //     password: this.userPassword
-      //   })
-      // })
-      //   .then(({ data }) => {
-      //     console.log(data);
-      //     if (data.code == 400) {
-      //       alert("用户名或密码错误");
-      //     } else {
-      //       this.$router.push("/Home");
-      //     }
-      //   })
-      //   .catch(error => {
-      //     console.log(error);
-      //   });
+      // this.$router.push("/Home");
+      this.$axios({
+        method: "post",
+        url: "sampleGuide/doLogin/selectByName",
+        headers: {
+              'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        data: this.qs.stringify({
+          username: this.userName,
+          password: this.userPassword
+        })
+      })
+        .then(({ data }) => {
+          console.log(data);
+          if (data.code == 400) {
+            alert("用户名或密码错误");
+          } else {
+            this.$router.push("/Home");
+          }
+        })
+        .catch(error => {
+          console.log(error);
+        });
     }
   }
 };

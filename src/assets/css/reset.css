@@ -251,6 +251,7 @@ li {
   height: 32px !important;
   color: #fff !important;
   text-align: center !important;
+  font-weight: 900;
 }
 .el-icon-close {
   transition: all 0.2s;

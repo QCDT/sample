@@ -4,24 +4,24 @@
     <masking v-if="showMaskF">
       <div class="test">
         <!-- 表单内容 -->
-        <form @submit.prevent="maskProject()">
+        <form >
           <div class="form-in">
             <div class="title">{{MASK_name}}</div>
             <div class="content">
               <h1 style="margin-bottom:10px">实验室</h1>
-              <tmpinput style="margin-bottom:10px">
+              <tmpinput style="margin-bottom:15px">
                 选择实验室
                 <el-select
                   slot="elUI"
                   size="mini"
                   clearable
-                  v-model="MASK_value.laboratory"
+                  v-model="labValue"
                   filterable
                   placeholder="请选择"
                   style="width:170px"
                 >
                   <el-option
-                    v-for="item in options"
+                    v-for="item in labOption"
                     :key="item.value"
                     :label="item.label"
                     :value="item.value"
@@ -29,98 +29,109 @@
                 </el-select>
               </tmpinput>
               <h1  style="margin-bottom:10px">离心机信息</h1>
-              <tmpinput style="margin-bottom:15px">
+              <tmpinput style="margin-bottom:20px">
                 设备编号
                 <el-input
                   slot="elUI"
-                  v-model="MASK_value.eqNumber"
+                  v-model="eqNumber"
                   clearable
                   size="mini"
                   style="width:170px"
                 ></el-input>
               </tmpinput>
-              <tmpinput style="margin-bottom:10px">
+              <tmpinput style="margin-bottom:15px">
                 设备名称
                 <el-input
                   slot="elUI"
-                  v-model="MASK_value.eqName"
+                  v-model="eqName"
                   clearable
                   size="mini"
-                  style="width:170px"
+                  style="width:170px" 
                 ></el-input>
               </tmpinput>
-              <tmpinput style="margin-bottom:10px">
+              <tmpinput style="margin-bottom:15px">
                 设备品牌
                 <el-select
                   slot="elUI"
                   size="mini"
                   clearable
-                  v-model="MASK_value.laboratory"
+                  v-model="brandValue"
                   filterable
                   placeholder="请选择"
                   style="width:170px"
+                  @change="changeType"
                 >
                   <el-option
-                    v-for="item in options"
+                    v-for="item in brandOption"
                     :key="item.value"
                     :label="item.label"
                     :value="item.value"
                   ></el-option>
                 </el-select>
               </tmpinput>
-              <tmpinput style="margin-bottom:10px">
+              <tmpinput style="margin-bottom:15px">
                 设备型号
                 <el-select
                   slot="elUI"
                   size="mini"
                   clearable
-                  v-model="MASK_value.laboratory"
+                  v-model="typeValue"
                   filterable
                   placeholder="请选择"
                   style="width:170px"
                 >
                   <el-option
-                    v-for="item in options"
+                    v-for="item in typeOption"
                     :key="item.value"
                     :label="item.label"
                     :value="item.value"
                   ></el-option>
                 </el-select>
               </tmpinput>
-              <tmpinput style="margin-bottom:10px">
+              <tmpinput style="margin-bottom:15px">               
                 离心时间
                 <el-input
                   slot="elUI"
-                  v-model="MASK_value.time"
+                  v-model="time"
                   clearable
                   size="mini"
                   style="width:170px"
                 ></el-input>
+                <span slot="unit">min</span>
               </tmpinput>
-              <tmpinput style="margin-bottom:10px">
+              <tmpinput style="margin-bottom:15px">
                 设备转速
                 <el-input
                   slot="elUI"
-                  v-model="MASK_value.revSpeed"
+                  v-model="revSpeed"
                   clearable
                   size="mini"
                   style="width:170px"
                 ></el-input>
+                <el-select  style="width: 90px; margin-left:10px" v-model="unitValue" clearable placeholder="请选择" size="mini" slot="unit">
+                    <el-option
+                      v-for="item in unitOption"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value">
+                    </el-option>
+                </el-select>
               </tmpinput>
-              <tmpinput style="margin-bottom:10px">
+              <tmpinput style="margin-bottom:20px">
                 设备温度
                 <el-input
                   slot="elUI"
-                  v-model="MASK_value.temp"
+                  v-model="temp"
                   clearable
                   size="mini"
                   style="width:170px"
                 ></el-input>
+                <span slot="unit">℃</span>
               </tmpinput>
             </div>
-            <div class="bot-btn">
-              <button type="button" @click="clearFromBack">返回</button>
-              <button type="submit">{{MASK_btn}}</button>
+            <div class="bot-btn">             
+              <button @click="maskProject()">{{MASK_btn}}</button>
+              <button  @click="showMaskF = false">返回</button>
             </div>
           </div>
         </form>
@@ -129,26 +140,23 @@
     </masking>
     <div class="cent">
       <fromName>离心机概况</fromName>
-      <!-- <item-sum name="项目总数:" :number="tableData.length"></item-sum> -->
       <button @click="newProject">添加离心机</button>
     </div>
     <div class="form center">
       <el-table
-        :row-style="{height:'32px',textAlign: 'center',padding:'0px',}"
+        :row-style="{height:'32px',textAlign: 'center',padding:'0px'}"
         :cell-style="{padding:'0px',textAlign: 'center'}"
         border
-        stripe
         ref="multipleTable"
         :data="tableData"
         tooltip-effect="dark"
-        :style="{width: '100%',margin:'0 auto',}"
-        :header-cell-style="getRowClass"
+        :style="{width: '100%'}"
         @selection-change="handleSelectionChange"
       >
         <el-table-column type="index" label="序号" width="70"></el-table-column>
-        <el-table-column prop="laboratory" label="实验室" width="220"></el-table-column>
-        <el-table-column prop="eqNumber" label="设备编号" width="120"></el-table-column>
-        <el-table-column prop="eqName" label="设备名称" width="120"></el-table-column>
+        <el-table-column prop="laboratory" label="实验室"></el-table-column>
+        <el-table-column prop="eqNumber" label="设备编号" ></el-table-column>
+        <el-table-column prop="eqName" label="设备名称"></el-table-column>
         <el-table-column prop="brand" label="品牌" show-overflow-tooltip></el-table-column>
         <el-table-column prop="type" label="型号"></el-table-column>
         <el-table-column prop="time" label="时间" show-overflow-tooltip></el-table-column>
@@ -156,11 +164,12 @@
         <el-table-column prop="temp" label="温度" show-overflow-tooltip></el-table-column>
         <el-table-column fixed="right" label="操作" width="100">
           <template slot-scope="scope">
-            <div class="flex">
-              <el-button @click="changProject(scope.row,scope.$index)" type="text" size="mini">修改</el-button>
-              <el-button type="text" @click="open">删除</el-button>
-            </div>
-            <!-- <el-button @click="clearProject(scope.row,scope.$index)" type="text" size="mini">删除</el-button> -->
+              <el-tooltip effect="dark" content="修改" placement="bottom-start">
+                  <i class="el-icon-edit btn" @click="changeCentrifuge(scope.$index, scope.row)"></i>
+              </el-tooltip>
+              <el-tooltip effect="dark" content="删除" placement="bottom-start">
+                  <i class="el-icon-delete btn" @click="delCentrifuge(scope.$index, scope.row)"></i>
+              </el-tooltip>
           </template>
         </el-table-column>
       </el-table>
@@ -179,184 +188,169 @@ import fromName from '@/components/tmp/zhanglan/fromName'
 import tmpinput from '@/components/tmp/zhanglan/tmp-empty-input'
 export default {
   components: { itemSum, goBack, masking, fromName, tmpinput },
+  inject:['reload'],
   data () {
     return {
-      //   试管类别
-      options: [
+      // 实验室集合
+      labOption:[
+
+      ],
+      // 设备品牌集合
+      brandOption:[
+
+      ],
+      typeOption:[
+
+      ],
+      // 设备转速单位集合
+      unitOption:[
         {
-          value: '苹果', // js拿到的数据
-          label: '苹果' // 下拉菜单里展示的字
+          value: 'g',
+          label: 'g'   
         },
         {
-          value: '香蕉',
-          label: '香蕉'
+          value: 'r/min',
+          label: 'r/min'
         }
       ],
-      value123: '',
+      unitValue: 'g',
+      labValue: '',
+      brandValue: '',
+      typeValue:'',
+      time: '', 
+      revSpeed: '',
+      temp:'',
+      eqNumber: '',
+      eqName:'',
+      centrifugeId: '',
       // 试管类别 ↑↑↑↑↑↑
       // 删除按钮 确认框
       dialogVisible: false,
-      test: '',
       // 蒙版的开关
       showMaskF: false,
       // 蒙版的表单数据
       MASK_name: '添加离心机',
       MASK_btn: '保存',
       MASK_event: true, // true创建项目 false 为修改项目
-      MASK_cha_index: -1, // 修改的哪一行
+     // MASK_cha_index: -1, // 修改的哪一行
       //   MASK_del_index: -1, //删除的哪一行
-      MASK_items: [
-        {
-          text: '选择实验室',
-          name: '实验室',
-          key: 'laboratory',
-          value: '1',
-          type: 'select'
-        },
-        {
-          text: '设备编号',
-          fangan: '设备编号',
-          key: 'eqNumber',
-          value: '2',
-          type: 'input'
-        },
-        {
-          text: '设备名称',
-          shenban: '设备名称',
-          key: 'eqName',
-          value: '3',
-          type: 'input'
-        },
-        {
-          text: '设备品牌',
-          persorn: '品牌',
-          key: 'brand',
-          value: '4',
-          type: 'select'
-        },
-        {
-          text: '设备型号',
-          persorn: '型号',
-          key: 'type',
-          value: '5',
-          type: 'input'
-        },
-        {
-          text: '离心时间',
-          persorn: '时间',
-          key: 'time',
-          value: '6',
-          type: 'input'
-        },
-        {
-          text: '设备转速',
-          persorn: '转速',
-          key: 'revSpeed',
-          value: '7',
-          type: 'input'
-        },
-        {
-          text: '设备温度',
-          persorn: '温度',
-          key: 'temp',
-          value: '8',
-          type: 'input'
-        }
-      ],
       MASK_value: {
-        laboratory: 'I期临床实验室', // 实验室
-        eqNumber: '001', // 设备编号
-        eqName: '设备名称', // 设备名称
-        brand: '品牌', // 品牌
-        type: '型号', // 型号
-        time: '时间', // 时间
-        revSpeed: '转速', // 转速
-        temp: '温度' // 温度
+        // laboratory: 'I期临床实验室', // 实验室
+        // eqNumber: '001', // 设备编号
+        // eqName: '设备名称', // 设备名称
+        // brand: '品牌', // 品牌
+        // type: '型号', // 型号
+        // time: '时间', // 时间
+        // revSpeed: '转速', // 转速
+        // temp: '温度' // 温度
       },
-      /**
-       * @description: groupChang:控制拉条的长度,它是一个
-       *               groupFangXiang: 箭头方向,这是一个布尔值[false:不显示]
-       * @param {type}
-       * @return:
-       */
-      groupChang: 96,
-      groupFangXiang: false,
       // El UI
       // 开关的值
-      value: false,
+      // value: false,
 
-      value1: false,
-      value2: false,
-      value3: '',
-      value4: '',
+      // value1: false,
+      // value2: false,
+      // value3: '',
+      // value4: '',
 
       tableData: [
-        {
-          id: '1', // ???
-          laboratory: 'I期临床实验室', // 实验室
-          eqNumber: '001', // 设备编号
-          eqName: '设备名称', // 设备名称
-          brand: '品牌', // 品牌
-          type: '型号', // 型号
-          time: '时间', // 时间
-          revSpeed: '转速', // 转速
-          temp: '温度' // 温度
-        }
+        // {
+        //   id: '1', // ???
+        //   laboratory: 'I期临床实验室', // 实验室
+        //   eqNumber: '001', // 设备编号
+        //   eqName: '设备名称', // 设备名称
+        //   brand: '品牌', // 品牌
+        //   type: '型号', // 型号
+        //   time: '时间', // 时间
+        //   revSpeed: '转速', // 转速
+        //   temp: '温度' // 温度
+        // }
       ],
       multipleSelection: []
     }
   },
-
+  created(){
+     this.$axios({
+          method: 'get',
+          url: 'sampleGuide/centrifuge/findAllCentrifuge',
+      })
+      .then(({data})=>{
+          console.log(data)
+          data.data.centrifugeList.forEach((item)=>{
+            this.tableData.push({
+              id: item.id,
+              laboratory: item.laboratoryDict.name,
+              laboratoryid: item.laboratoryDict.id,
+              eqNumber:item.centrifugeNumber,
+              eqName: item.name,
+              brand: item.brandModel.brand,
+              type: item.brandModel.modelNumber,
+              typeId:item.brandModel.id,
+              time: item.time,
+              revSpeed: item.rotationRate,
+              temp: item.temperate
+            })
+          })
+          data.data.laboratoryDicts.forEach((item)=>{
+            this.labOption.push({
+              value: item.id,
+              label: item.name
+            })
+          })
+          data.data.brandModelList.forEach((item)=>{
+              this.brandOption.push({
+                value: item,
+                label: item
+              })
+          })
+      })
+  },
   methods: {
     // El UI ...
-    toggleSelection (rows) {
-      if (rows) {
-        rows.forEach(row => {
-          this.$refs.multipleTable.toggleRowSelection(row)
-        })
-      } else {
-        this.$refs.multipleTable.clearSelection()
-      }
-    },
     handleSelectionChange (val) {
       this.multipleSelection = val
     },
-    /**
-     * @description: 设置表头样式
-     * @param {type}
-     * @return:
-     */
-    getRowClass ({ rowIndex }) {
-      if (rowIndex == 0) {
-        return {
-          background: '#3cd7ff',
-          padding: '0px 0',
-          height: '30px',
-          lineHeight: '1.875rem',
-          fontWeight: '900',
-          fontSize: '1rem',
-          color: '#fff',
-          textAlign: 'center'
-        }
-      } else {
-        return ''
-      }
-    },
     // EL UI操作事件
-    changProject (row, index) {
+    changeCentrifuge (index, row) {
+      console.log(row.type)
       // row 当前行的数据,index 当前行的索引
       this.MASK_name = '修改项目'
       this.MASK_btn = '修改'
       this.MASK_event = false // true 为创建 false 为修改
-      this.MASK_cha_index = index // 修改的哪一行
-      console.log('修改蒙版数据: ', '修改项目')
-
-      this.MASK_value = this.tableData[index]
+     // this.MASK_cha_index = index // 修改的哪一行
+      this.labValue = row.laboratoryid
+      this.brandValue= row.brand
+      // this.typeOption = [{value: row.typeId, label:row.type}]
+      // this.typeValue = row.typeId
+      this.time = parseFloat(row.time)
+      this.revSpeed = parseFloat(row.revSpeed)
+      this.temp = parseFloat(row.temp)
+      this.eqName = row.eqName
+      this.eqNumber = row.eqNumber
+      this.centrifugeId = row.id
+      this.$axios({
+        method: 'post',
+        url: 'sampleGuide/centrifuge/findModelNumberByBrand',
+        data:({
+          'brand': row.brand
+        })
+      })
+      .then(({data})=>{
+        console.log(data)
+        this.typeOption = []
+        // this.typeValue = ''
+        data.data.forEach((item)=>{
+          this.typeOption.push({
+            value: item.id,
+            label:item.modelNumber
+          })
+        })
+        this.typeValue = row.typeId
+      })
+      .catch(({error})=>{
+          console.log(error)
+      })
       this.showMaskF = true
-    },
-    clearProject (row, index) {
-      this.tableData.splice(index, 1)
-      this.dialogVisible = false
     },
     // 显示蒙版-->添加离心机的点击按钮
     newProject () {
@@ -370,39 +364,102 @@ export default {
       // 蒙版事件: 修改 OR 创建
       this.MASK_event ? this.addProject() : this.putProject()
     },
+    //  添加离心机
     addProject () {
-      console.log(': ', '创建项目')
-      console.log('this.MASK_items: ', this.MASK_value)
-      this.tableData.push(JSON.parse(JSON.stringify(this.MASK_value)))
-      alert('添加成功')
+      // this.tableData.push(JSON.parse(JSON.stringify(this.MASK_value)))
+      this.$axios({
+        method:'post',
+        url: 'sampleGuide/centrifuge/insertCentrifuge',
+        data:({
+          name: this.eqName, // 离心机名称
+          time: this.time+'min', // 离心时间
+          rotationRate: this.revSpeed + this.unitValue, //转速
+          temperate:this.temp+'℃',//温度
+          laboratoryDictId: this.labValue, // 实验室id
+          centrifugeNumber: this.eqNumber, //离心机编号
+          modelNumberId: this.typeValue   // 离心机型号id
+        })
+      })
+      .then(({data})=>{
+         this.$message({
+          message: '添加离心机成功!',
+          type: 'success'
+        });
+        this.reload()
+      })
+      .catch((error)=>{
+            this.$message.error('添加失败！请重试');
+      })
+      // alert('添加成功')
       this.MASK_value = {}
-      this.clearFromBack()
-    },
-    putProject () {
-      console.log('修改数据: ')
-      this.tableData[this.MASK_cha_index] = JSON.parse(
-        JSON.stringify(this.MASK_value)
-      )
-      alert('修改成功')
-      this.MASK_value = {}
-      this.clearFromBack()
-    },
-    clearFromBack () {
       this.showMaskF = false
-      console.log(': ', '返回事件')
+      // this.clearFromBack()
     },
-
-    open () {
-      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+    // 修改离心机信息
+    putProject () {
+      console.log(this.typeValue)
+      this.$axios({
+        method: 'post',
+        url:'sampleGuide/centrifuge/updateCentrifuge',
+        data:({
+          id: this.centrifugeId,
+          name: this.eqName, // 离心机名称
+          time: this.time+'min', // 离心时间
+          rotationRate:this.revSpeed + this.unitValue, //转速
+          temperate:this.temp+'℃',//温度
+          laboratoryDictId: this.labValue, // 实验室id
+          centrifugeNumber: this.MASK_value.eqNumber, //离心机编号
+          modelNumberId: this.typeValue  
+        })
+      })
+      .then(({data})=>{
+          this.$message({
+            message: '修改离心机成功!',
+            type: 'success'
+          });
+        this.labValue = ''
+        this.brandValue= ''
+        this.typeValue = ''
+        this.time = ''
+        this.revSpeed = ''
+        this.temp = ''
+        this.eqName = ''
+        this.eqNumber = ''
+        this.reload()
+      })
+      .catch((error)=>{
+        console.log(error)
+          this.$message.error('修改失败！请重试');
+      })
+      this.MASK_value = {}
+      this.showMaskF = false
+    },
+    // 删除离心机
+    delCentrifuge (index, row) {
+      this.$confirm('确认删除该离心机吗?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       })
         .then(() => {
-          this.clearProject() // 执行删除事件
-          this.$message({
-            type: 'success',
-            message: '删除成功!'
+          // this.clearProject() // 执行删除事件
+          this.$axios({
+            method: 'post',
+            url: 'sampleGuide/centrifuge/deleteCentrifugeById',
+            data:({
+               id: row.id
+            })
+          })
+          .then((data)=>{
+            console.log(data)
+            this.$message({
+              type: 'success',
+              message: '删除成功!'
+            })
+            this.reload();
+          })
+          .catch((error)=>{
+              console.log(error)
           })
         })
         .catch(() => {
@@ -411,6 +468,30 @@ export default {
             message: '已取消删除'
           })
         })
+    },
+    // 根据设备品牌查询设备型号
+    changeType(){
+      this.$axios({
+        method: 'post',
+        url: 'sampleGuide/centrifuge/findModelNumberByBrand',
+        data:({
+          'brand': this.brandValue
+        })
+      })
+      .then(({data})=>{
+        console.log(data)
+        this.typeOption = []
+        this.typeValue = ''
+        data.data.forEach((item)=>{
+          this.typeOption.push({
+            value: item.id,
+            label:item.modelNumber
+          })
+        })
+      })
+      .catch(({error})=>{
+          console.log(error)
+      })
     }
   }
 }
@@ -443,16 +524,13 @@ export default {
 .project-wrap {
   position: relative;
 
-  width: 1226px;
+  width: 95%;
   margin: 0 auto;
   padding-top: 10px;
   .cent {
     display: flex;
     justify-content: space-between;
-
-    width: 1226px;
-    // padding: 0 35px;
-    margin: 0 auto;
+    width: 100%;
     margin-bottom: 8px;
   }
 
@@ -472,21 +550,23 @@ export default {
     height: 150px;
   }
 }
-
+.btn{
+  font-size: 18px;
+  margin-right: 10px;
+  cursor: pointer;
+  outline: none;
+}
 .test {
-//   display: flex;
-
-//   width: 1150px;
-//   margin: 0 auto;
-  margin: 68px;
-
+  width: 100%;
+  height: 100%;
   form {
-    width: 100%;
-    height: 530px;
-    padding-top: 50px;
-
+    width: 80%;
+    // height: 450px;
+    padding:30px;
+    padding-top: 40px;
     background-color: #fff;
-
+    margin: 0 auto;
+    margin-top: 40px;
     .form-in {
       position: relative;
 
@@ -494,12 +574,7 @@ export default {
       align-items: center;
       flex-direction: column;
       justify-content: center;
-
-      //   width: 1000px;
-      width: 80%;
-      margin: 0 auto;
-      height: 80%;
-      padding-top: 40px;
+      padding-top: 30px;
 
       border: 1px solid #ccc;
 
@@ -520,11 +595,10 @@ export default {
 
       // 内容
       .content {
-        height: 300px;
         > div {
           display: flex;
 
-          align-items: flex-end;
+          align-items:center;
 
           height: 20px;
         //   span {
@@ -579,7 +653,7 @@ export default {
     }
   }
 }
-.flex {
-  display: flex;
-}
+// .flex {
+//   display: flex;
+// }
 </style>

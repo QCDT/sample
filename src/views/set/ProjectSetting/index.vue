@@ -27,7 +27,6 @@
         :data="tableData"
         tooltip-effect="dark"
         :style="{width: '100%',margin:'0 auto'}"
-        :header-cell-style="getRowClass"
       >
         <el-table-column
             type="selection"
@@ -49,13 +48,13 @@
         >
         </el-table-column>
         <el-table-column
-          prop="persorn"
+          prop="person"
           label="负责人"
           width="100">
         </el-table-column>
         <el-table-column
           prop="yaowu"
-          label="负责人"
+          label="药物"
         >
         </el-table-column>
         <el-table-column label="操作">
@@ -92,7 +91,7 @@ export default {
           'name':'',
           'fangan':'',
           'shenban':'',
-          'persorn':'',
+          'person':'',
           'yaowu':''
       },
       // 返回按钮
@@ -105,14 +104,14 @@ export default {
       //   MASK_del_index: -1, //删除的哪一行
 
       tableData: [
-        {
-          id: '1',
-          name: '替格瑞洛', // 项目名称
-          fangan: 'SN-YQ-2018005/V 1.0', // 方案号
-          shenban: '石药集团中奇制药技术', // 申办方
-          persorn: '李四', // 负责人
-          yaowu: 'CSPCHA115胶囊' // 药物名称
-        }
+        // {
+        //   id: '1',
+        //   name: '替格瑞洛', // 项目名称
+        //   fangan: 'SN-YQ-2018005/V 1.0', // 方案号
+        //   shenban: '石药集团中奇制药技术', // 申办方
+        //   person: '李四', // 负责人
+        //   yaowu: 'CSPCHA115胶囊' // 药物名称
+        // }
       ],
       multipleSelection: []
     }
@@ -121,14 +120,14 @@ export default {
     this.$axios.get("/sampleGuide/guest/selectProjectAll")
     .then(({data})=>{
       console.log(data)
-       data.forEach((item)=>{
+       data.data.forEach((item)=>{
           this.tableData.push({
               id:item.id,
               name: item.name,
-              fangan:item.protocol_number,
+              fangan:item.protocolNumber,
               shenban:item.sponsor,
-              persorn: item.responsible_person,
-              yanwu: item.drug_name
+              person: item.responsiblePerson,
+              yaowu: item.drugName
           })
        })
     })
@@ -137,10 +136,6 @@ export default {
     })
   },
   methods: {
-    /* 设置表头样式 */
-    getRowClass ({ rowIndex }) {
-      return rowIndex == 0 ? this.$store.state.formTheme : ''
-    },
     // 修改项目
     changeProject (index,row) {
       // row 当前行的数据,index 当前行的索引
@@ -154,7 +149,7 @@ export default {
           'name': row.name,
           'fangan': row.fangan,
           'shenban': row.shenban,
-          'persorn': row.persorn,
+          'person': row.person,
           'yaowu': row.yaowu
         }
       this.dialogVisible = true
@@ -167,7 +162,7 @@ export default {
           'name':'',
           'fangan':'',
           'shenban':'',
-          'persorn':'',
+          'person':'',
           'yaowu':''
       }
       this.MASK_name = '新建项目'
@@ -187,11 +182,11 @@ export default {
         method: 'post',
         url: '/sampleGuide/guest/insertProject',
         data:({
-          name: val[name],
-          protocol_number: val[fangan],
-          sponsor: val[shenban],
-          responsible_person: val[persorn],
-          drug_name: val[yanwu]
+          name: val.name,
+          protocolNumber: val.fangan,
+          sponsor: val.shenban,
+          responsiblePerson: val.person,
+          drugName: val.yaowu
         })
       })
       .then(({data})=>{
@@ -205,16 +200,17 @@ export default {
       this.closeProject()
     },
     putProject (val) {  /*  修改 */    
+      console.log(val)
       this.$axios({
         method: 'post',
         url: '/sampleGuide/guest/updateProject',
         data:({
-          id: val[id],
-          name: val[name],
-          protocol_number: val[fangan],
-          sponsor: val[shenban],
-          responsible_person: val[persorn],
-          drug_name: val[yanwu]
+          id: val.id,
+          name: val.name,
+          protocolNumber: val.fangan,
+          sponsor: val.shenban,
+          responsiblePerson: val.person,
+          drugName: val.yaowu
         })
       })
       .then(({data})=>{
@@ -227,30 +223,39 @@ export default {
       })
       this.closeProject()
     },
-    clearProject (row, index) { // 删除 
-      this.$axios({
-        method: 'post',
-        url:'/sampleGuide/guest/deleteProject',
-        data:({
-            id: row.id
-        })
-      })
-      .then((data)=>{
-          console.log(data)
-          this.$message({ type: 'success', message: '删除成功!' })
-      })
-    },
-    delProject () { /*  删除确认 */
-      this.$confirm(
-        '此操作将永久删除该文件, 是否继续?',
-        '提示',
-        { confirmButtonText: '确定', cancelButtonText: '取消', type: 'warning' }
-      )
-        .then(() => {
-          this.clearProject()
-        })
-        .catch(() => {
-          this.$message({ type: 'info', message: '已取消删除' })
+    delProject (index,row) { /*  删除确认 */
+       this.$confirm('确认删除该项目吗?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          // this.$axios()
+          this.$axios({
+           method: 'post',
+           url: '/sampleGuide/guest/deleteProject',
+           data:({
+              id: row.id
+           })
+          })
+          .then(({data})=>{
+              this.$message({
+                type: 'success',
+                message: '删除成功!'
+              });
+              this.reload()
+          })
+          .catch((error)=>{
+              this.$message({
+                type: 'error',
+                message: '删除失败!'
+              });
+          })
+
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          })          
         })
     },
     closeProject () {

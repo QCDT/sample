@@ -48,7 +48,7 @@ export default {
         },
         {
           text: '负责人',
-          value: 'persorn'
+          value: 'person'
         },
         {
           text: '药物名称',
@@ -57,18 +57,6 @@ export default {
       ]
     }
   },
-  // watch:{
-  //   MASK_items:{
-  //     deep: true,
-  //     handler: function (newVal, oldVal){
-  //       if(newVal.name == ''){
-  //         this.msg = '项目名称不能为空'
-  //         // this.$message({ message: '项目名称不能为空', type: 'error' })
-  //       }
-  //       console.log(newVal, oldVal)
-  //     }
-  //   }
-  // },
   methods: {
     handleClose (done) {
       this.$confirm('确认关闭？')
@@ -80,21 +68,7 @@ export default {
     },
     // 项目:创建,修改
     maskProject () {
-      // if(this.MASK_items.name === ''){
-      //   this.$message({ message: '项目名称不能为空', type: 'error' })
-      // }else if(this.MASK_items.fangan === ''){
-      //   this.$message({ message: '方案号不能为空', type: 'error' })
-      // }else if(this.MASK_items.shenban === ''){
-      //   this.$message({ message: '申办方不能为空', type: 'error' })
-      // }else if(this.MASK_items.persorn === ''){
-      //    this.$message({ message: '负责人不能为空', type: 'error' })
-      // }else if(this.MASK_items.yaowu === ''){
-      //   this.$message({ message: '药物名称不能为空', type: 'error' })
-      // }else{
         this.$emit("maskProject", this.MASK_items);
-      // }
-      // this.$emit('maskProject', JSON.parse(JSON.stringify(this.MASK_value)))
-      // this.MASK_value = {}
     }
   },
   computed: {}

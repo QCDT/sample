@@ -73,7 +73,7 @@
                 label="备份时间"
                 class="DataTable"
                 >
-                <template slot-scope="scope">{{ scope.row.date }}</template>
+                <template slot-scope="scope">{{ scope.row.data }}</template>
                 </el-table-column>
                 <el-table-column
                 prop="username"
@@ -100,6 +100,7 @@
 </template>
 <script>
 export default {
+  inject:['reload'],
   data () {
     return {
       username: '',
@@ -177,12 +178,17 @@ export default {
           portNumber: this.port,
           dbUsername: this.username,
           dbPassword: this.password,
-          dbname: this.name,
+          dbName: this.name,
           backupPath: this.addpath
         })
       })
       .then((data)=>{
           console.log(data);
+          this.$message({
+            message: '添加成功!',
+            type: 'success'
+          });
+          this.reload()
       })
     },
     handleSelectionChange(selection){
@@ -223,6 +229,7 @@ export default {
               type: 'success',
               message: '删除成功!'
             });
+            this.reload()
           })
         }).catch(() => {        
         });

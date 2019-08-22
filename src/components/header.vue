@@ -174,15 +174,15 @@ export default {
       background: #3cd7ff;
 
       &:first-child {
-        border-right: 1px solid #3cd7ff;
-        border-left: 1px solid #3cd7ff;
+        border-right: 1px solid #00c9ff;
+        border-left: 1px solid #00c9ff;
         border-top-left-radius: 5px;
         border-bottom-left-radius: 5px;
       }
 
       &:last-child {
-        border-right: 1px solid #3cd7ff;
-        border-left: 1px solid #3cd7ff;
+        border-right: 1px solid #00c9ff;
+        border-left: 1px solid #00c9ff;
         border-top-right-radius: 5px;
         border-bottom-right-radius: 5px;
       }
@@ -205,7 +205,7 @@ export default {
       }
 
       .active {
-        color: #3cd7ff;
+        color: #00c9ff;
         background: #fff;
       }
     }
@@ -220,7 +220,7 @@ h1 {
   height: 100%;
   padding: 2px 10px;
 
-  border-left: 2px solid rgb(60, 215, 255);
+  border-left: 2px solid #00c9ff;
 
   font-size: 16px;
   font-weight: 500;
@@ -234,7 +234,7 @@ h2 {
   height: 100%;
   padding: 0 10px;
 
-  border-left: 2px solid rgb(60, 215, 255);
+  border-left: 2px solid #00c9ff;
 
   span {
     color: rgb(135, 138, 149);
@@ -254,7 +254,7 @@ h3 {
   height: 100%;
   padding: 0 10px;
 
-  border-left: 2px solid rgb(60, 215, 255);
+  border-left: 2px solid #00c9ff;
 
   font-size: 16px;
   font-weight: 500;
@@ -309,7 +309,7 @@ h3 {
 
       color: #fff;
       border-radius: 5px;
-      background-color: #3cd7ff;
+      background-color: #00c9ff;
 
       font-size: 16px;
       font-weight: 100;

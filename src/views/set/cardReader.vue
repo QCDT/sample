@@ -1,12 +1,13 @@
 <template>
   <div>
-    <object id="MyActiveX1" width=0 height=0
+    <cardfile></cardfile>
+    <!-- <object id="MyActiveX1" width=0 height=0
         classid="clsid:38BEF3F4-E284-4548-8E7B-FE20AE443AD8">
         <param name="_Version" value="65536"/>
         <param name="_ExtentX" value="2646"/>
         <param name="_ExtentY" value="1323"/>
         <param name="_StockProps" value="0"/>
-    </object>
+    </object> -->
     <div class="cardWrap">
       <div class="parameterWrap">
         <strong>设备参数</strong>
@@ -33,7 +34,7 @@
                 </el-option>
             </el-select>
           </div>
-          <div class='parameterItem'> <el-button type="primary" class="btn" @click="cardReaderTest">测试</el-button> </div>
+          <div class='parameterItem'> <el-button size="small" type="primary" class="btn" @click="cardReaderTest">测试</el-button> </div>
         </div>
       </div>
       <div class="parameterWrap">
@@ -88,14 +89,18 @@
         </div>
       </div>
       <div class="btns">
-        <el-button type="primary" class="btn" @click="saveCardReader">保存</el-button>
-        <el-button type="primary" class="btn" @click="$router.go(-1)">返回</el-button>
+        <el-button type="primary" size="small" class="btn" @click="saveCardReader">保存</el-button>
+        <el-button type="primary" size="small" class="btn" @click="$router.go(-1)">返回</el-button>
       </div>
     </div>
   </div>
 </template>
 <script>
+import cardfile from '@/components/cardfile'
 export default {
+  components:{
+      cardfile
+  },
   data () {
     return ({
       devicetypeValue: 'M201',
@@ -107,6 +112,62 @@ export default {
       netPort: '9099',
       comdisabled: false,
       netdisabled: true,
+       devicetype: [
+        {
+          value: 'M201',
+          label: '大读卡器'
+        },
+        {
+          value: 'RL8000',
+          label: '小读卡器'
+        },
+        {
+          value: 'RD242',
+          label: '3D读卡器'
+        }
+      ],     
+       Opentype: [
+        {
+          value: 'COM',
+          label: 'COM'
+        },
+        {
+          value: 'USB',
+          label: 'USB'
+        },
+        {
+          value: 'NET',
+          label: 'NET'
+        }
+      ],
+      comBaudRate: [
+        {
+          value: '9600',
+          label: '9600'
+        },
+        {
+          value: '38400',
+          label: '38400'
+        },
+        {
+          value: '115200',
+          label: '115200'
+        }
+      ],
+      comFrameStructure: [
+        {
+          value: '8E1',
+          label: '8E1'
+        },
+        {
+          value: '8N1',
+          label: '8N1'
+        },
+        {
+          value: '8O1',
+          label: '8O1'
+        }
+      ],
       comPort: [
         {
           value: 'COM1',
@@ -188,63 +249,7 @@ export default {
           value: 'COM20',
           label: 'COM20'
         }
-      ],
-      comFrameStructure: [
-        {
-          value: '8E1',
-          label: '8E1'
-        },
-        {
-          value: '8N1',
-          label: '8N1'
-        },
-        {
-          value: '8O1',
-          label: '8O1'
-        }
-      ],
-      comBaudRate: [
-        {
-          value: '9600',
-          label: '9600'
-        },
-        {
-          value: '38400',
-          label: '38400'
-        },
-        {
-          value: '115200',
-          label: '115200'
-        }
-      ],
-      devicetype: [
-        {
-          value: 'M201',
-          label: '大读卡器'
-        },
-        {
-          value: 'RL8000',
-          label: '小读卡器'
-        },
-        {
-          value: 'RD242',
-          label: '3D读卡器'
-        }
-      ],
-      Opentype: [
-        {
-          value: 'COM',
-          label: 'COM'
-        },
-        {
-          value: 'USB',
-          label: 'USB'
-        },
-        {
-          value: 'NET',
-          label: 'NET'
-        }
-      ]
+      ] 
     })
   },
   watch:{
@@ -272,6 +277,7 @@ export default {
   },
   methods: {
     cardReaderTest(){
+      // alert(MyActiveX1.RDR_Close())
       MyActiveX1.RDR_Close();
       let n = this.$store.state.OnOpen(this.devicetypeValue,this.OpentypeValue,this.comBaudRateValue,this.comFrameStructureValue,this.comPortValue,this.netIpAddress,this.netPort)
       if (n!=0) {
@@ -286,21 +292,9 @@ export default {
           type:'success'
         });
       }
-      // let nret=0;
-		  // //盘点标签时，使能15693协议。返回，成功：0 ；失败：非0 （查看错误代码表）。
-      // nret = MyActiveX1.RDR_Enable15693(0,0x00,0);
-      // nret = MyActiveX1.RDR_Enable14443A();
-      // if(nret!=0){
-      //   this.$alert('连接读卡器失败', '提示', {
-      //     confirmButtonText: '确定',
-      //     type: 'error'
-      //   });
-      //   //结束标签盘点操作，释放内存空间。
-      //   MyActiveX1.RDR_FinishInventory();
-      //   return;
-      // }
     },
     saveCardReader(){
+      MyActiveX1.RDR_Close();
       this.$cookies.set('readerType', this.devicetypeValue, '1y')
       this.$cookies.set('portType', this.OpentypeValue, '1y') 
       this.$cookies.set('comPortNo',this.comPortValue, '1y')
@@ -312,29 +306,6 @@ export default {
           confirmButtonText: '确定',
           type:'success'
       });
-      // this.$axios({
-      //     method: 'post',
-      //     url: 'sampleGuide/cardReader/saveCardReaderCookies',
-      //     headers: {
-      //       'Content-Type': 'application/json; charset=UTF-8'
-      //     },
-      //     credentials:"include",
-      //     data:({
-      //        readerType: this.devicetypeValue,
-      //        portType: this.OpentypeValue,
-      //        comPortNo: this.comPortValue,
-      //        comBaudRate: this.comBaudRateValue,
-      //        comFrameStructure: this.comFrameStructureValue,
-      //        netIpAddress: this.netIpAddress,
-      //        netPortNo: this.netPort
-      //     })
-      // })
-      // .then((data)=>{
-      //    console.log(data)
-      // })
-      // .catch(error=>{
-      //   console.log(error)
-      // })
     }
   }
 }
@@ -350,6 +321,8 @@ export default {
 
         .btn {
             width: 120px;
+            background: #00c9ff;
+            border: 1px solid #00c9ff;
             // background-color: #00c9ff;
         }
     }
@@ -384,6 +357,8 @@ export default {
 
             .btn {
                 margin-left: 15px;
+                background: #00c9ff;
+                border: 1px solid #00c9ff;
                 // background-color: #00c9ff
             }
         }

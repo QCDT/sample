@@ -7,6 +7,7 @@
     <i class="tmp-row-empty-input">
       <slot name="elUI"></slot>
     </i>
+    <slot name="unit"></slot>
   </div>
 </template>
 <script>
