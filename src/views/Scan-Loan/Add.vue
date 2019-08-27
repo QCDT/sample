@@ -25,6 +25,7 @@
               <el-date-picker
                 type="date"
                 placeholder="选择日期"
+                value-format="yyyy-MM-dd"
                 :picker-options="pickerOptions"
                 v-model="ruleForm.date"
               ></el-date-picker>
@@ -53,6 +54,7 @@
 <script>
 export default {
   props: { showDingdan: Boolean },
+   inject:['reload'],
   components: {},
   data () {
     let orderName = (rule, value, callback) => {
@@ -61,8 +63,20 @@ export default {
         } else {
           if( value.length > 50){
             callback(new Error('名称长度为1-50个字符'));
-          }else{
-
+          }else {
+            this.$axios({
+              method:'post',
+              url:'sampleGuide/scan/existLoanOrderName',
+              data:({
+                name: value,// 当前订单ID
+              })
+            })
+            .then(({data})=>{
+              if({data}.code !== 200){
+                callback(new Error(data.data ));
+                // this.$message({ type: 'info', message:data.data })
+              }
+            })
           }
           callback();
         }
@@ -104,7 +118,6 @@ export default {
         ],
         date: [
           {
-            type: 'date',
             required: true,
             message: '请选择日期',
             trigger: 'change'
@@ -118,10 +131,34 @@ export default {
       this.$emit('clearAdd')
     },
     submitForm (formName) {
+      console.log(formName);
       this.$refs[formName].validate(valid => {
         if (valid) {
           // this.$emit('submitForm', JSON.parse(JSON.stringify(this.ruleForm)))
-        } else {
+          this.$axios({
+            method:'post',
+            url:'sampleGuide/scan/addLoanOrder',
+            data:({
+              /* id:,// 当前订单ID */
+              name:this.ruleForm.name,//借出订单名称
+              /* createTime:,//创建时间
+              createUserId:,//创建的用户的id
+              createUserName:,//创建的用户的姓名 */
+              takeleave:this.ruleForm.takes,//取走人
+              //expectedreturndate:this.ruleForm.date,//预计归还时间
+              loanremarks:this.ruleForm.desc,//备注
+              /* status:,//订单状态
+              deleteStatus:,//删除状态 */
+            })
+          }).then((data)=>{
+            console.log(data);
+            if(data.data.code==200){
+              this.$message({ type: 'success', message:'创建借出订单成功' })
+              this.reload();
+            }
+          })
+          console.log(this.ruleForm.name,this.ruleForm.takes,this.ruleForm.date,this.ruleForm.desc);
+          } else {
           console.log('error submit!!')
           return false
         }

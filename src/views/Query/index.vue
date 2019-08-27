@@ -57,8 +57,10 @@
         </el-table>
       </div>
     </div>
+    <center class='backBtn' @click="backLoanPage()">返回</center>
     <!-- 表单 ↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑ -->
   </div>
+  
 </template>
 <script>
 import Search from './Search'
@@ -107,6 +109,9 @@ export default {
     startSearch (payload) {
       /* 搜索{} */
       console.log('payload: ', payload)
+    },
+    backLoanPage(){
+      this.$router.push({name:'particulars'})
     }
   },
   computed: {}
@@ -131,4 +136,16 @@ export default {
   }
 }
 //  ↑
+
+//返回按钮
+.backBtn{
+  border:1px solid #31d4ff;
+  color:#31d4ff;
+  width:130px;
+  height:28px;
+  line-height:28px;
+  margin:15px auto;
+  border-radius:3px;
+  cursor:pointer;
+}
 </style>

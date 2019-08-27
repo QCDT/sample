@@ -14,8 +14,9 @@ import choicelaboratory from '@/views/set/refrigerator/choicelaboratory'
 import equipmentInfo from '@/views/set/refrigerator/equipmentInfo'
 import equipmentConstruction from '@/views/set/refrigerator/equipmentConstruction'
 import receive from '@/views/Scan/saomiao/receive'
-// import singleVerification from '@/views/Scan/saomiao/caixue/singleVerification'
 import sampleBox from '@/views/set/sampleBox'
+
+//import searchAdd from '@/views/Scan-Loan-Particulars/searchAdd'//借出查询
 import { zlRouter } from './zl'
 Vue.use(Router)
 

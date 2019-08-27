@@ -1,4 +1,5 @@
 module.exports.state = {
+  loanOrderId :'',//全局变量，获取选中借出表单ID
   OnOpen (devicetypeValue, OpentypeValue, comBaudRateValue, comFrameStructureValue, comPortValue, netIpAddress, netPort) {
     // alert(comFrameStructureValue)
     let nret = -1
