@@ -1,13 +1,6 @@
 <template>
   <div>
     <cardfile></cardfile>
-    <!-- <object id="MyActiveX1" width=0 height=0
-        classid="clsid:38BEF3F4-E284-4548-8E7B-FE20AE443AD8">
-        <param name="_Version" value="65536"/>
-        <param name="_ExtentX" value="2646"/>
-        <param name="_ExtentY" value="1323"/>
-        <param name="_StockProps" value="0"/>
-    </object> -->
     <div class="cardWrap">
       <div class="parameterWrap">
         <strong>设备参数</strong>
@@ -112,7 +105,7 @@ export default {
       netPort: '9099',
       comdisabled: false,
       netdisabled: true,
-       devicetype: [
+      devicetype: [
         {
           value: 'M201',
           label: '大读卡器'
@@ -278,8 +271,7 @@ export default {
   methods: {
     cardReaderTest(){
       // alert(MyActiveX1.RDR_Close())
-      MyActiveX1.RDR_Close();
-      let n = this.$store.state.OnOpen(this.devicetypeValue,this.OpentypeValue,this.comBaudRateValue,this.comFrameStructureValue,this.comPortValue,this.netIpAddress,this.netPort)
+      let n = this.$store.state.OnOpen(this.devicetypeValue,this.OpentypeValue,this.comPortValue,this.comBaudRateValue,this.comFrameStructureValue,this.netIpAddress,this.netPort)
       if (n!=0) {
         this.$alert('设备未识别到，请检查设备连接或设备类型', '提示', {
           confirmButtonText: '确定',
@@ -292,9 +284,10 @@ export default {
           type:'success'
         });
       }
+      MyActiveX1.RDR_Close();
     },
     saveCardReader(){
-      MyActiveX1.RDR_Close();
+      // MyActiveX1.RDR_Close();
       this.$cookies.set('readerType', this.devicetypeValue, '1y')
       this.$cookies.set('portType', this.OpentypeValue, '1y') 
       this.$cookies.set('comPortNo',this.comPortValue, '1y')

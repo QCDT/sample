@@ -187,6 +187,9 @@ export default {
       ]
     };
   },
+  created () {
+      
+  },
   methods: {
     refShow(index){
       this.labRefrigerator = true

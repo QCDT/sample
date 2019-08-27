@@ -38,21 +38,21 @@
       <div class="item">
         <!-- <router-link :to="{name:botGroupPic[3].link}"> -->
           <el-tooltip class="item" effect="dark" content="标签" >
-            <img :src="botGroupPic[3].pic" alt  @click="printitem">
+            <img :src="botGroupPic[3].pic" alt  @click="printitemBox">
           </el-tooltip>
         <!-- </router-link> -->
       </div>
       <div class="item">
         <!-- <router-link :to="{name:botGroupPic[4].link}"> -->
           <el-tooltip class="item" effect="dark" content="转运">
-            <img :src="botGroupPic[4].pic"   @click="zhuanyunClick">
+            <img :src="botGroupPic[4].pic"   @click="zhuanyunClickBox">
           </el-tooltip>
         <!-- </router-link> -->
       </div>
       <div class="item">
         <!-- <router-link :to="{name:botGroupPic[2].link}"> -->
           <el-tooltip class="item" effect="dark" content="销毁">
-            <img :src="botGroupPic[2].pic"  @click="delitem">
+            <img :src="botGroupPic[2].pic"  @click="delitemBox">
           </el-tooltip>
         <!-- </router-link> -->
       </div>
@@ -79,10 +79,12 @@
 </template>
 <script>
 export default {
+  inject:['reload'],
   props: { 
     switchSaoMiao: { type: Boolean, default: false }, 
     switchGuanLi: { type: Boolean, default: false },
-    checkedlist: { type: Array, default: [] }
+    checkedlist: { type: Array, default: [] },
+    checkedBoxlist:{type:Array,default:[]}
   },
   components: {},
   data () {
@@ -116,7 +118,12 @@ export default {
     zhuanyunClick () {
       if(this.checkedlist.length == 0){
          this.$message({
-          message: '请选择要转运的样本',
+          message: '请选择要转移的样本',
+          type: 'warning'
+        });
+      }else if(this.checkedlist.length > 1){
+        this.$message({
+          message: '样本只能单个转移哟',
           type: 'warning'
         });
       }else{
@@ -124,6 +131,32 @@ export default {
         this.$emit('zhuanyun')
       }
       
+    },
+    zhuanyunClickBox(){
+      if(this.checkedBoxlist.length == 0){
+         this.$message({
+          message: '请选择需要转移的样本盒',
+          type: 'warning'
+        });
+      }else if(this.checkedBoxlist.length > 1){
+        this.$message({
+          message: '只能对一个样本盒进行转移操作',
+          type: 'warning'
+        });
+      }else{
+        let boxInfo = this.checkedBoxlist.every((item)=>{
+            return item.address
+        })
+        if(boxInfo){
+          
+          this.$emit('zhuanyun')
+        }else{
+          this.$alert('存在空样本，请移除后重试', '提示', {
+            confirmButtonText: '确定',
+            type:'warning'
+          })
+        }
+      }
     },
     delitem(){
       if(this.checkedlist.length == 0){
@@ -149,6 +182,59 @@ export default {
         });
       }
     },
+    delitemBox(){
+      if(this.checkedBoxlist.length == 0){
+        this.$message({
+          message: '请先选择要销毁的样本盒',
+          type: 'warning'
+        });
+      }else{
+        let boxInfo = this.checkedBoxlist.every((item)=>{
+            return item.address
+        })
+        if(boxInfo){
+          this.$confirm('已选中'+this.checkedBoxlist.length+'条数据，确定销毁样本盒吗?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            this.$axios({
+              method:'post',
+              url:'/sampleGuide/set/destroySampleBox',
+              data:({
+                list: this.checkedBoxlist.map((item)=>{return item.id})
+              })
+            })
+            .then(({data})=>{
+              console.log(data)
+              if(data.data == 0){
+                this.$message({
+                  type: 'success',
+                  message: '删除成功!'
+                });
+                this.reload()
+              }else{
+                this.$message({
+                  type: 'warning',
+                  message: data.data
+                });
+              }
+
+            })
+          }).catch(() => {
+            this.$message({
+              type: 'info',
+              message: '已取消删除'
+            });          
+          });
+        }else{
+          this.$alert('存在空样本，请移除后重试', '提示', {
+            confirmButtonText: '确定',
+            type:'warning'
+          })
+        }
+      }
+    },
     printitem(){
       if(this.checkedlist.length == 0){
          this.$message({
@@ -163,14 +249,42 @@ export default {
         }).then(() => {
           this.$message({
             type: 'success',
-            message: '删除成功!'
+            message: '打印成功!'
           });
         }).catch(() => {
           this.$message({
             type: 'info',
-            message: '已取消删除'
+            message: '已取消打印'
           });          
         });
+      }
+    },
+    printitemBox(){
+      if(this.checkedBoxlist.length == 0){
+         this.$message({
+          message: '请先选择要打印的样本',
+          type: 'warning'
+        });
+      }else{
+        let boxInfo = this.checkedBoxlist.map((item)=>{
+            return item.address
+        })
+        alert(boxInfo)
+        // this.$confirm('已选中'+this.checkedBoxlist.length+'条数据，确定打印样本吗?', '提示', {
+        //   confirmButtonText: '确定',
+        //   cancelButtonText: '取消',
+        //   type: 'warning'
+        // }).then(() => {
+        //   this.$message({
+        //     type: 'success',
+        //     message: '打印成功!'
+        //   });
+        // }).catch(() => {
+        //   this.$message({
+        //     type: 'info',
+        //     message: '已取消打印'
+        //   });          
+        // });
       }
     }
   },

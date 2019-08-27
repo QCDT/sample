@@ -16,14 +16,12 @@
       ref="multipleTable"
       :data="tableData"
       tooltip-effect="dark"
-      :style="{width: '100%',margin:'0 auto',}"
-      :header-cell-style="getRowClass"
-      @selection-change="handleSelectionChange"
+      :style="{width: '100%'}"
     >
       <el-table-column type="index" label="序号" width="70"></el-table-column>
       <el-table-column label="订单名称" width="100">
         <template slot-scope="scope">
-            <span class="orderName" @click="showOrder">{{tableData[scope.$index].orderName}}</span>
+            <span class="orderName" @click="showOrder(scope.row,scope.$index)">{{tableData[scope.$index].orderName}}</span>
         </template>
       </el-table-column>
       <el-table-column prop="newTime" label="创建时间" show-overflow-tooltip></el-table-column>
@@ -54,7 +52,6 @@ export default {
     return {
       // 切换 添加借出订单选项
       showDingdan: false,
-
       tableData: [
         {
           // 序号[非ID] 订单名称 创建事件 创建用户名 取出人 预计归还事件 备注 订单状态 操作
@@ -71,40 +68,27 @@ export default {
       multipleSelection: []
     }
   },
+  created(){
+      console.log(111)
+  },
   methods: {
-    // El UI ...
-    toggleSelection (rows) {
-      if (rows) {
-        rows.forEach(row => {
-          this.$refs.multipleTable.toggleRowSelection(row)
-        })
-      } else {
-        this.$refs.multipleTable.clearSelection()
-      }
-    },
-    handleSelectionChange (val) {
-      this.multipleSelection = val
-    },
-
-    getRowClass ({ rowIndex }) {
-      /* 表头样式 */
-      return rowIndex == 0 ? this.$store.getters.formTheme : ''
-    },
     // 删除订单
     delDingdan (row, index) {
-      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+      console.log(row,index)
+      this.$confirm('确定要删除该订单吗?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       })
-        .then(() => {
-          this.$message({ type: 'success', message: '删除成功!' })
-        })
-        .catch(() => {
-          this.$message({ type: 'info', message: '已取消删除' })
-        })
+      .then(() => {
+        this.$message({ type: 'success', message: '删除成功!' })
+      })
+      .catch(() => {
+        this.$message({ type: 'info', message: '已取消删除' })
+      })
     },
-    showOrder(){
+    showOrder(index,row){
+      console.log(index.row)
       this.$router.push({name:'particulars'})
     },
     // ↓    添加订单

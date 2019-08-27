@@ -1,15 +1,16 @@
 <template>
   <div>
+    <cardfile></cardfile>
     <div class="sample-tmp" v-show="!switchSaoMiao">
       <div class="pic">
-        <img src="@/assets/img/sample.gif" alt>
+        <img src="@/assets/img/sample.gif" @click="scanSample">
       </div>
       <h1>扫描样本</h1>
       <span>请将样本放置在读写器上，然后点击上方按钮开始扫描</span>
     </div>
     <div class="sample-tmp"  v-show="switchSaoMiao">
       <div class="pic">
-        <img src="@/assets/img/saomiao_scanbox.gif" alt>
+        <img src="@/assets/img/saomiao_scanbox.gif" @click="scanSample">
       </div>
       <h1>扫描样本盒</h1>
       <span>请将样本盒放置在读写器上，然后点击上方按钮开始扫描</span>
@@ -17,15 +18,118 @@
   </div>
 </template>
 <script>
+import cardfile from "@/components/cardfile";
 export default {
   props: {
-    switchSaoMiao: Boolean
+    switchSaoMiao: Boolean,
   },
-  components: {},
+  components: {
+    cardfile
+  },
   data () {
-    return {}
+    return {
+      RfidArr: [],
+      tableData: [],
+      boxData: []
+    }
   },
-  methods: {},
+  methods: {
+    scanSample(){
+      this.boxData = []
+      this.RfidArr = []
+      MyActiveX1.RDR_Close()
+      let devicetypeValue = this.$cookies.get('readerType')
+      let OpentypeValue = this.$cookies.get('portType')
+      let comPortValue = this.$cookies.get('comPortNo')
+      let comBaudRateValue = this.$cookies.get('comBaudRate')
+      let comFrameStructureValue = this.$cookies.get('comFrameStructure')
+      let netIpAddress = this.$cookies.get('netIpAddress')
+      let netPort = this.$cookies.get('netPortNo')
+      let n = this.$store.state.OnOpen(devicetypeValue,OpentypeValue,comPortValue,comBaudRateValue,comFrameStructureValue,netIpAddress,netPort)
+      if (n!=0) {
+        return 
+      }
+      let nret=0;
+      //盘点标签初始化,申请盘点标签所需要的内存空间。返回，成功：0 ；失败：非0 （查看错误代码表）。
+	    nret = MyActiveX1.RDR_InitInventory();
+      if (nret!=0) {
+        alert("盘点标签初始化失败！")
+        return;
+      }
+      //盘点标签时，使能15693协议。返回，成功：0 ；失败：非0 （查看错误代码表）。
+      nret = MyActiveX1.RDR_Enable15693(0,0x00,0)
+      nret = MyActiveX1.RDR_Enable14443A()
+      if (nret!=0) {
+        //结束标签盘点操作，释放内存空间。
+          MyActiveX1.RDR_FinishInventory()
+        return;
+      }
+      this.readRfid()
+      MyActiveX1.RDR_Close()
+    },
+    readRfid(){
+      let nret = 0
+      let recordCnt = ''
+      nret = MyActiveX1.RDR_Inventory(0,"")
+      if (nret !== 0) {
+        this.$alert('读取标签失败，请检查设备连接以及参数设置！', '提示', {
+          confirmButtonText: '确定',
+          type: 'error'
+        })
+        MyActiveX1.RDR_FinishInventory()
+        return
+      }
+      recordCnt = MyActiveX1.RDR_GetRecordCnt()
+      alert(recordCnt)
+      for(let j=0;j<recordCnt;j++){
+          // RfidArr = []
+        	let sTagInfo = MyActiveX1.GetRecord(j).split("-")
+          let sTagID = sTagInfo[sTagInfo.length-1]
+          console.log(sTagID)
+            this.RfidArr[j] = sTagID
+      }
+      // if(this.RfidArr.length == 0){
+      //   return
+      // }
+      console.log(this.RfidArr)
+      if(this.switchSaoMiao){
+        this.$axios({
+          method:'post',
+          url: '/sampleGuide/set/isUseRfidCode',
+          data:({
+            batchRfidCode: this.RfidArr
+          })
+        })
+        .then(({data})=>{
+            data.data.rfidMap.newRfidCode.forEach((item)=>{
+              this.boxData.push({
+                id:'',
+                coding: item, // 序号编码
+                name: "", // 样本名称
+                address: "", // 位置信息
+                status: "", // 状态
+                info: "", // 详细信息
+              })
+            }),
+            data.data.sampleBoxMap.SampleBoxInfo.forEach((item)=>{             
+              this.boxData.push({
+                id:item.id,
+                coding: item.rfidCode, // 序号编码
+                name: item.name, // 样本名称
+                address: item.sampleBoxStru.detailLocation, // 位置信息
+                status: item.status ==1?'正常':'借出', // 状态
+                info: "详细信息", // 详细信息
+              })
+            }),
+            console.log(data)
+            this.$emit('changeBox',this.boxData)
+        })
+      }else{
+          alert(2)
+      }
+
+    },
+  },
   computed: {}
 }
 </script>

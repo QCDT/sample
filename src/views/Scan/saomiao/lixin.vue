@@ -1,10 +1,10 @@
 <template>
   <div>
+    <cardfile></cardfile>
     <div class="centrifugeImg">
       <el-carousel
         :initial-index="carouselIndex"
         @change="change"
-        type="card"
         :height="bannerHeight+'px'" 
         arrow="always"
         trigger="click"
@@ -19,19 +19,19 @@
       <div class="centrifugeInfo">
         <div>
           <span>离心机名称</span>
-          <span class="centrifugeItem">RL离心机</span>
+          <span class="centrifugeItem">{{centrifugeName}}</span>
         </div>
         <div>
           <span>时间</span>
-          <span class="centrifugeItem">00:00:00</span>
+          <span class="centrifugeItem">{{centrifugeTime}}</span>
         </div>
         <div>
           <span>转速</span>
-          <span class="centrifugeItem">3500r/min</span>
+          <span class="centrifugeItem">{{centrifugeSpeed}}</span>
         </div>
         <div>
           <span>温度</span>
-          <span class="centrifugeItem">3℃</span>
+          <span class="centrifugeItem">{{centrifugeTemperature}}</span>
         </div>
       </div>
       <div class="centrifugeOperation">
@@ -46,36 +46,38 @@
       <div class="dialogSet">
         <div class="setItem">
           <span>名称</span>
-          <el-input placeholder="请输入内容" v-model="setName" :disabled="true" size="mini"></el-input>
+          <el-input placeholder="请输入内容" v-model="centrifugeName" :disabled="true" size="mini"></el-input>
         </div>
         <div class="setItem">
           <span>品牌</span>
-          <el-input placeholder="请输入内容" v-model="setName" :disabled="true" size="mini"></el-input>
+          <el-input placeholder="请输入内容" v-model="setBrand" :disabled="true" size="mini"></el-input>
         </div>
         <div class="setItem">
           <span>型号</span>
-          <el-input placeholder="请输入内容" v-model="setName" :disabled="true" size="mini"></el-input>
+          <el-input placeholder="请输入内容" v-model="setType" :disabled="true" size="mini"></el-input>
         </div>
         <div class="setItem">
           <span>时间</span>
-          <el-input placeholder="请输入内容" v-model="setName" size="mini"></el-input>
+          <el-input placeholder="请输入内容" v-model="setTime" size="mini"></el-input>
+          <span>min</span>
         </div>
         <div class="setItem">
           <span>转速</span>
-          <el-input placeholder="请输入内容" v-model="setName" size="mini"></el-input>
-          <el-select v-model="value" placeholder="请选择" size="mini">
+          <el-input placeholder="请输入内容" v-model="setSpeed" size="mini"></el-input>
+          <el-select v-model="unitValue" placeholder="请选择" size="mini">
             <el-option value="g">g</el-option>
             <el-option value="r/min">r/min</el-option>
           </el-select>
         </div>
         <div class="setItem">
-          <span>转速</span>
-          <el-input placeholder="请输入内容" v-model="setName" size="mini"></el-input>
+          <span>温度</span>
+          <el-input placeholder="请输入内容" v-model="setTemperature" size="mini"></el-input>
           <span>℃</span>
         </div>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button size="mini" type="primary" @click="dialogSet = false">修改</el-button>
+        <el-button size="mini" type="primary" @click="updateSet">修改</el-button>
+        <el-button size="mini" type="primary" @click="dialogSet = false">返回</el-button>
       </span>
     </el-dialog>
     <el-dialog :visible.sync="dialogSample" width="60%">
@@ -186,9 +188,11 @@
   </div>
 </template>
 <script>
+import cardfile from '@/components/cardfile'
 export default {
   props: {},
-  components: {},
+  components: {cardfile},
+  inject:['reload'],
   data () {
     return {
       carouselIndex: 0 /* 轮播图的索引 */,
@@ -197,36 +201,43 @@ export default {
       dialogSample: false,// 离心机样本添加
       dialogExport: false,// 离心机样本导出
       dialogOrder: false,// 样本订单详情
+      centrifugeName: '', // 离心机名称
+      centrifugeTime: '', // 离心机时间
+      centrifugeSpeed:'',// 离心机转速
+      centrifugeTemperature: '',// 离心机温度
+      centrifugeId: '',//离心机id
+      unitValue:'',// 单位值
       exportName: '',
       sampleNum: 0,
       value1: '',
       value2: '',
-      setName: '',
+      setTime: '', // 修改页面离心机时间
+      setSpeed: '',// 修改页面离心机转速
+      setTemperature:'',//修改页面离心机温度
+      setBrand:'',//修改页面离心机转速
+      setType: '', //修改页面离心机型号
       findValue: '',
       value: '',
       bannerHeight: '',
       centrifugeList: [
-        {
-          centrifugeName: '',
-          centrifugeTime: '',
-          centrifugeSpeed: '',
-          centrifugeTemperature: '',
-          activeCentrifugal: true
-        },
-        {
-          centrifugeName: '',
-          centrifugeTime: '',
-          centrifugeSpeed: '',
-          centrifugeTemperature: '',
-          activeCentrifugal: true
-        },
-        {
-          centrifugeName: '',
-          centrifugeTime: '',
-          centrifugeSpeed: '',
-          centrifugeTemperature: '',
-          activeCentrifugal: true
-        }
+        // {
+        //   centrifugeName: '',
+        //   centrifugeTime: '',
+        //   centrifugeSpeed: '',
+        //   centrifugeTemperature: '',
+        // },
+        // {
+        //   centrifugeName: '',
+        //   centrifugeTime: '',
+        //   centrifugeSpeed: '',
+        //   centrifugeTemperature: '',
+        // },
+        // {
+        //   centrifugeName: '',
+        //   centrifugeTime: '',
+        //   centrifugeSpeed: '',
+        //   centrifugeTemperature: '',
+        // }
       ],
       dialogSampleData: [
         // 离心机添加样本数据
@@ -266,6 +277,30 @@ export default {
       ]
     }
   },
+  created () {
+    this.$axios({
+      method: 'get',
+      url: 'sampleGuide/centrifuge/findAllCentrifuge'
+    })
+    .then(({data})=>{
+      console.log(data)
+      data.data.centrifugeList.forEach((item)=>{
+        this.centrifugeList.push({
+          id: item.id,
+          centrifugeName: item.name,
+          centrifugeTime: item.time,
+          centrifugeSpeed: item.rotationRate,
+          centrifugeTemperature: item.temperate,
+          brand:item.brandModel.brand,
+          type: item.brandModel.modelNumber
+        })
+      })
+      this.centrifugeName = this.centrifugeList[0].centrifugeName
+      this.centrifugeTime = this.centrifugeList[0].centrifugeTime
+      this.centrifugeSpeed = this.centrifugeList[0].centrifugeSpeed
+      this.centrifugeTemperature = this.centrifugeList[0].centrifugeTemperature
+    })
+  },
   mounted () {
     // element banner 高度自适应
     this.imgLoad();
@@ -282,10 +317,18 @@ export default {
   },
   methods: {
     change (v) {
+      console.log(v)
+      this.centrifugeName = this.centrifugeList[v].centrifugeName
+      this.centrifugeTime = this.centrifugeList[v].centrifugeTime
+      this.centrifugeSpeed = this.centrifugeList[v].centrifugeSpeed
+      this.centrifugeTemperature = this.centrifugeList[v].centrifugeTemperature
+      this.setBrand = this.centrifugeList[v].brand
+      this.setType = this.centrifugeList[v].type
+      this.centrifugeId = this.centrifugeList[v].id
       this.carouselIndex = v /* 轮播图的索引 */
     },
     scanSample(){
-      console.log(this.$cookies.get('readerType'))
+      MyActiveX1.RDR_Close();
       let devicetypeValue = this.$cookies.get('readerType')
       let OpentypeValue = this.$cookies.get('portType')
       let comPortValue = this.$cookies.get('comPortNo')
@@ -293,16 +336,89 @@ export default {
       let comFrameStructureValue = this.$cookies.get('comFrameStructure')
       let netIpAddress = this.$cookies.get('netIpAddress')
       let netPort = this.$cookies.get('netPortNo')
-      MyActiveX1.RDR_Close();
-      let n = this.$store.state.OnOpen(devicetypeValue,OpentypeValue,comBaudRateValue,comFrameStructureValue,comPortValue,netIpAddress,netPort)
+      let n = this.$store.state.OnOpen(devicetypeValue,OpentypeValue,comPortValue,comBaudRateValue,comFrameStructureValue,netIpAddress,netPort)
       if (n!=0) {
-		    return false;
-      }else{
-         
+          return 
       }
+      let nret=0;
+      //盘点标签初始化,申请盘点标签所需要的内存空间。返回，成功：0 ；失败：非0 （查看错误代码表）。
+	    nret = MyActiveX1.RDR_InitInventory();
+      if (nret!=0) {
+        alert("盘点标签初始化失败！")
+        return;
+      }
+      //盘点标签时，使能15693协议。返回，成功：0 ；失败：非0 （查看错误代码表）。
+      nret = MyActiveX1.RDR_Enable15693(0,0x00,0)
+      nret = MyActiveX1.RDR_Enable14443A()
+      if (nret!=0) {
+        //结束标签盘点操作，释放内存空间。
+          MyActiveX1.RDR_FinishInventory()
+        return;
+      }
+    this.readRfid()
+    MyActiveX1.RDR_Close()
+    },
+    readRfid(){
+      let nret = 0
+      let recordCnt = ''
+      let j =0
+      nret = MyActiveX1.RDR_Inventory(0,"")
+      // alert(nret)
+      if (nret !== 0) {
+        this.$alert('读取标签失败，请检查设备连接以及参数设置！', '提示', {
+          confirmButtonText: '确定',
+          type: 'error'
+        })
+        MyActiveX1.RDR_FinishInventory()
+        return
+      }
+      recordCnt = MyActiveX1.RDR_GetRecordCnt()
+      // console.log(recordCnt)
+      let sTagInfo = MyActiveX1.GetRecord(j).split("-");
+      let sTagID = sTagInfo[sTagInfo.length-1];
+      alert(recordCnt)
+      // if(recordCnt == 1){
+      //   this.cardNub = sTagID
+      // }else{
+      //   this.$alert('IC卡只能绑定一个！', '提示', {
+      //     confirmButtonText: '确定',
+      //     type: 'error'
+      //   })
+      // }
     },
     centrifugalSet () {
       this.dialogSet = true
+      this.setTime = parseFloat(this.centrifugeTime)
+      this.setSpeed = parseFloat(this.centrifugeSpeed)
+      this.setTemperature = parseFloat(this.centrifugeTemperature)
+      this.unitValue = this.centrifugeSpeed.replace(/[^a-z]+/ig,"")
+    },
+    updateSet(){
+      this.$axios({
+        method:'post',
+        url: 'sampleGuide/centrifuge/updateCentrifuge',
+        data:({
+          id: this.centrifugeId,
+          time: this.setTime+'min',
+          rotationRate: this.setSpeed+this.unitValue,
+          temperate: this.setTemperature+'℃'
+        })
+      })
+      .then(({data})=>{
+        console.log(data)
+        this.$message({
+          message: '修改成功！',
+          type: 'success'
+        });
+        this.reload()
+      })
+      .catch(({data})=>{
+        this.$message({
+          message: '修改失败，请重试！',
+          type: 'error'
+        });
+      })
+      this.dialogSet = false
     },
     addSample () {
       this.dialogSample = true
@@ -325,7 +441,7 @@ export default {
 </script>
 <style  lang='less'>
 .centrifugeImg {
-  width: 60%;
+  width: 40%;
   height: 50%;
   // line-height: 50%;
   margin: 0 auto;
