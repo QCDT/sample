@@ -1,6 +1,6 @@
 <template>
   <div class="scan-wrap">
-    <div v-show="!newBoxMaskTran && !newMaskTran && !reMaskTran && !togegleZhuanYun">
+    <div v-show="!newBoxMaskTran && !newMaskTran && !reMaskTran && !togegleZhuanYun && !showSampleBoxInfo">
       <!-- 拉条:侧边导航栏:转运 分组合演 患者采血 自动录入 离心机 -->
       <BTNTopPosa></BTNTopPosa>
       <!-- 扫描动态图    -->
@@ -78,7 +78,7 @@
                 <el-table-column prop="status" label="状态" show-overflow-tooltip ></el-table-column>
                 <el-table-column label="详细信息" show-overflow-tooltip>
                     <template slot-scope="scope">
-                      <span class="infoStyle" @click="SampleBoxInfo(scope.row, scope.$index)">详细信息</span>
+                      <span class="infoStyle" v-show="scope.row.address ? true : false"  @click="sampleBoxInfo(scope.row, scope.$index)">详细信息</span>
                     </template>
                 </el-table-column>
                 <el-table-column label="操作">
@@ -119,7 +119,11 @@
       </transition>
       <!-- 新建样本盒/修改样本盒 -->
       <transition name="el-fade-in-linear">
-          <newSampleBox v-if="newBoxMaskTran" :sampleBoxId='sampleBoxId' :boxRfid='boxRfid'  :title="sampleBoxTitle" @goBack="newBoxMaskTran=false" @save="save"></newSampleBox>
+          <newSampleBox v-if="newBoxMaskTran" :sampleBoxId='sampleBoxId' :boxRfid='boxRfid'  :title="sampleBoxTitle" @changeBoxRfid="changeBoxRfid" @goBack="newBoxMaskTran=false" @save="save"></newSampleBox>
+      </transition>
+      <!-- 样本盒详情-->
+      <transition name="el-fade-in-linear">
+          <showInfo v-if="showSampleBoxInfo" :sampleBoxId='sampleBoxId' @goBack="showSampleBoxInfo=false"></showInfo>
       </transition>
       <!-- 转运 -->
       <transition name="el-fade-in-linear">
@@ -142,6 +146,7 @@ import newSample from "./newSample";
 import reSample from "./reSample";
 import newSampleBox from "./newSampleBox";
 import alertZhuanYun from "./alert-ZhuanYun";
+import showInfo from './newSampleBox/showInfo'
 export default {
   components: {
     BTNTopPosa,
@@ -153,7 +158,8 @@ export default {
     reSample,
     newSampleBox,
     BTNbot,
-    alertZhuanYun
+    alertZhuanYun,
+    showInfo
   },
   data() {
     return {
@@ -162,6 +168,7 @@ export default {
       reMaskTran: false, // 修改样本
       newMaskTran: false, // 新建样本
       newBoxMaskTran: false, // 新建样本盒
+      showSampleBoxInfo: false, //样本盒详细信息
       sampleBoxTitle: '',
       RFID: '',
       boxRfid: '',
@@ -230,7 +237,8 @@ export default {
       
     },
     sampleBoxInfo(row,index){
-
+      this.sampleBoxId = row.id
+      this.showSampleBoxInfo = true
     },
     newBoxMask(row){
       this.newBoxMaskTran=true
@@ -248,8 +256,6 @@ export default {
       console.log("index: ", index);
     },
     reBoxMask(row){
-    //   this.reBoxMaskTran = true
-
       this.$axios({
         method:'post',
         url:'/sampleGuide/set/isCanBeUpdateSampleBox',
@@ -271,6 +277,9 @@ export default {
             this.sampleBoxId = row.id
           }
       })
+    },
+    changeBoxRfid(rfid){
+      this.boxRfid = rfid
     },
     selectBox(selection) {
       this.checkedBoxlist = selection

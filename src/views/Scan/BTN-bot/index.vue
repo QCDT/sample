@@ -44,7 +44,7 @@
       </div>
       <div class="item">
         <!-- <router-link :to="{name:botGroupPic[4].link}"> -->
-          <el-tooltip class="item" effect="dark" content="转运">
+          <el-tooltip class="item" effect="dark" content="转移">
             <img :src="botGroupPic[4].pic"   @click="zhuanyunClickBox">
           </el-tooltip>
         <!-- </router-link> -->
@@ -148,8 +148,24 @@ export default {
             return item.address
         })
         if(boxInfo){
-          
-          this.$emit('zhuanyun')
+          this.$axios({
+            method:'post',
+            url:'/sampleGuide/set/isCanBeUpdateSampleBox',
+            data:({
+              id: this.checkedBoxlist[0].id
+            })
+          })
+          .then(({data})=>{
+            console.log(data)
+            if(data.data==0){
+              this.$message({
+                message: '该样本盒中存在非正常状态样本，不可转移！',
+                type: 'warning'
+              });
+            }else{
+              this.$emit('zhuanyun')
+            }
+          })
         }else{
           this.$alert('存在空样本，请移除后重试', '提示', {
             confirmButtonText: '确定',
@@ -266,25 +282,50 @@ export default {
           type: 'warning'
         });
       }else{
-        let boxInfo = this.checkedBoxlist.map((item)=>{
+        let boxInfo = this.checkedBoxlist.every((item)=>{
             return item.address
         })
-        alert(boxInfo)
-        // this.$confirm('已选中'+this.checkedBoxlist.length+'条数据，确定打印样本吗?', '提示', {
-        //   confirmButtonText: '确定',
-        //   cancelButtonText: '取消',
-        //   type: 'warning'
-        // }).then(() => {
-        //   this.$message({
-        //     type: 'success',
-        //     message: '打印成功!'
-        //   });
-        // }).catch(() => {
-        //   this.$message({
-        //     type: 'info',
-        //     message: '已取消打印'
-        //   });          
-        // });
+        if(boxInfo){
+          this.$confirm('已选中'+this.checkedBoxlist.length+'条数据，确定打印该标签吗?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            this.$axios({
+              method: 'post',
+              url:'/sampleGuide/set/selectSampleBoxDetailInfo',
+              data:({
+                id: this.checkedBoxlist[0].id
+              })
+            })
+            .then(({data})=>{
+              console.log(data)
+              try{
+                var myobject = new ActiveXObject("GoDEXATL.Function");
+                myobject.openport("6");
+                myobject.setup(20, 19, 4, 0, 3,0);
+                myobject.sendcommand("^L\r\n");
+								myobject.ecTextOut(260, 20, 17, "Arial", "SampleName: "+data.data[0].name+"");
+								myobject.ecTextOut(260, 50, 17, "Arial", "Period: "+data.data[0].sampleBoxStru.detailLocation+"");
+								myobject.sendcommand("E\r\n");
+              }catch(e){
+                alert("打印故障，请检查打印机是否连接！"); 
+              }finally{
+                myobject.closeport();
+              }
+            })
+          }).catch(() => {
+            this.$message({
+              type: 'info',
+              message: '已取消打印'
+            });          
+          });
+        }else{
+          this.$alert('存在空样本，请移除后重试', '提示', {
+            confirmButtonText: '确定',
+            type:'warning'
+          })
+        }
       }
     }
   },

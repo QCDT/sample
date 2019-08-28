@@ -1,126 +1,125 @@
 <template>
-  <!-- 新建样本:扫描页面的表单里的 新建按钮 -->
-
+  <!-- 新建/修改 样本盒:扫描页面的表单里的 新建，修改按钮 -->
   <div class="change-wrap-1">
     <h1 class="top-title" v-if="title">{{title}}</h1>
-      <div class="change-wrap">
-        <!-- 左边 -->
-        <el-form :model="ruleForm" label-position='left' :rules="rules" ref="formName" label-width="100px" :inline-message='inlineMsg' :status-icon='inlineMsg' class="fromInline">
-          <div class="left-box">
-              <el-form-item label="RFID编号" prop="boxRfid">
-                <el-input v-model="boxRfid" disabled></el-input>
-                <img src="@/assets/img/saomiao.gif" @click="replaceRfid" v-show="title == '修改样本盒'">
-              </el-form-item>
-              <el-form-item label="样本盒名称" prop="name" >
-                <el-input v-model="ruleForm.name"></el-input>
-              </el-form-item>
-              <div class="input-item">
-                <h1>位置信息</h1>
-              </div>
-              <div class="input-item">
-                    <span>冰箱</span>
-                    <el-select size="mini" v-model="labValue" class="input-option" placeholder="请选择" @change="showlabRow">
-                    <el-option
-                        v-for="item in labListOption"
-                        :key="item.value"
-                        :label="item.label"
-                        :value="item.value"
-                    ></el-option>
-                    </el-select>
-                    <span>层数</span>
-                    <el-select size="mini" v-model="labRowValue" class="input-option" placeholder="请选择" @change="showDrawer">
-                    <el-option
-                        v-for="item in labRow"
-                        :key="item.value"
-                        :label="item.label"
-                        :value="item.value"
-                    ></el-option>
-                    </el-select>
-                    <span>抽屉</span>
-                    <el-select size="mini" v-model="labDrawerValue" class="input-option" @change="showSampleBox" placeholder="请选择">
-                    <el-option
-                        v-for="item in labDrawer"
-                        :key="item.value"
-                        :label="item.label"
-                        :value="item.value"
-                    ></el-option>
-                    </el-select>
-                    <span>样本盒</span>
-                    <el-select size="mini"  v-model="sampleBox" placeholder="请选择">
-                    <el-option
-                        v-for="item in sampleBoxOption"
-                        :key="item.value"
-                        :label="item.label"
-                        :value="item.value"
-                    ></el-option>
-                    </el-select>
-              </div>
-              <div class="mark">
-                    <h1>备注</h1>
-                    <el-input
-                      type="textarea"
-                      :rows="4"
-                      placeholder="请输入内容"
-                      maxlength="1000"
-                      show-word-limit
-                      v-model="mark"
-                    ></el-input>
-              </div>
-          </div>
-          <!-- 右边 -->
-          <div class="right-box">
-            <div class="rightstyle"> 
-                <h1 class="location-info">
-                  样本盒规格
-                </h1>
-              <div class="input-item">
-                  <span>行</span>
-                  <el-select size="mini" v-model="rowValue" placeholder="请选择" class="input-option">
-                    <el-option
-                        v-for="item in 10"
-                        :key="item"
-                        :label="item"
-                        :value="item"
-                    ></el-option>
+    <div class="change-wrap">
+      <!-- 左边 -->
+      <el-form :model="ruleForm" label-position='left' :rules="rules" ref="formName" label-width="100px" :inline-message='inlineMsg' :status-icon='inlineMsg' class="fromInline">
+        <div class="left-box">
+            <el-form-item label="RFID编号" prop="boxRfid">
+              <el-input v-model="boxRfid" disabled></el-input>
+              <img src="@/assets/img/saomiao.gif" @click="replaceRfid" v-show="title == '修改样本盒'">
+            </el-form-item>
+            <el-form-item label="样本盒名称" prop="name" >
+              <el-input v-model="ruleForm.name"></el-input>
+            </el-form-item>
+            <div class="input-item">
+              <h1>位置信息</h1>
+            </div>
+            <div class="input-item">
+                  <span>冰箱</span>
+                  <el-select size="mini" :disabled="title=='修改样本盒'" v-model="labValue" class="input-option" placeholder="请选择" @change="showlabRow">
+                  <el-option
+                      v-for="item in labListOption"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value"
+                  ></el-option>
                   </el-select>
-                  <span>列</span>
-                  <el-select size="mini" v-model="colValue" placeholder="请选择" class="input-option">
+                  <span>层数</span>
+                  <el-select size="mini" :disabled="title=='修改样本盒'" v-model="labRowValue" placeholder="请选择" @change="showDrawer">
+                  <el-option
+                      v-for="item in labRow"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value"
+                  ></el-option>
+                  </el-select>
+                  <span>抽屉</span>
+                  <el-select size="mini" :disabled="title=='修改样本盒'" v-model="labDrawerValue" @change="showSampleBox" placeholder="请选择">
+                  <el-option
+                      v-for="item in labDrawer"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value"
+                  ></el-option>
+                  </el-select>
+                  <span>样本盒</span>
+                  <el-select size="mini" :disabled="title=='修改样本盒'" v-model="sampleBox" placeholder="请选择">
+                  <el-option
+                      v-for="item in sampleBoxOption"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value"
+                  ></el-option>
+                  </el-select>
+            </div>
+            <div class="mark">
+                  <h1>备注</h1>
+                  <el-input
+                    type="textarea"
+                    :rows="4"
+                    placeholder="请输入内容"
+                    maxlength="1000"
+                    show-word-limit
+                    v-model="mark"
+                  ></el-input>
+            </div>
+        </div>
+        <!-- 右边 -->
+        <div class="right-box">
+          <div class="rightstyle"> 
+              <h1 class="location-info">
+                样本盒规格
+              </h1>
+            <div class="input-item">
+                <span>行</span>
+                <el-select size="mini" v-model="rowValue" placeholder="请选择" class="input-option">
                   <el-option
                       v-for="item in 10"
                       :key="item"
                       :label="item"
                       :value="item"
                   ></el-option>
-                  </el-select>
-                  <span>显示模式</span>
-                  <el-select size="mini" v-model="showModel" placeholder="请选择">
-                  <el-option
-                      v-for="item in showModelOption"
-                      :key="item.value"
-                      :label="item.label"
-                      :value="item.value"
-                  ></el-option>
-                  </el-select>
-              </div>
-            </div>
-            <div class="row">
-              <table class="table">
-                <tr class="row" v-for="(index) in rowValue" :key="index">
-                  <td
-                    v-for="(ind) in colValue"
-                    :key="ind"
-                  >{{showTable(index,ind)}}</td>
-                </tr>
-              </table>
+                </el-select>
+                <span>列</span>
+                <el-select size="mini" v-model="colValue" placeholder="请选择" class="input-option">
+                <el-option
+                    v-for="item in 10"
+                    :key="item"
+                    :label="item"
+                    :value="item"
+                ></el-option>
+                </el-select>
+                <span>显示模式</span>
+                <el-select size="mini" v-model="showModel" placeholder="请选择">
+                <el-option
+                    v-for="item in showModelOption"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                ></el-option>
+                </el-select>
             </div>
           </div>
-        </el-form>
-      </div>
-      <div class="bot-btn">
-        <tmpButton @click="save">确认</tmpButton>
-        <tmpButton @click="$emit('goBack')">返回</tmpButton>
-      </div>
+          <div class="row">
+            <table class="table">
+              <tr class="row" v-for="(index) in rowValue" :key="index">
+                <td
+                  v-for="(ind) in colValue"
+                  :key="ind"
+                >{{showTable(index,ind)}}</td>
+              </tr>
+            </table>
+          </div>
+        </div>
+      </el-form>
     </div>
+    <div class="bot-btn">
+      <tmpButton @click="save">确认</tmpButton>
+      <tmpButton @click="$emit('goBack')">返回</tmpButton>
+    </div>
+  </div>
 </template>
 <script>
 import tmpButton from '@/components/tmp/zhanglan/tmpButton'
@@ -150,31 +149,52 @@ export default {
             }
           })
         }else{
-          callback()
+          this.$axios({
+            method:'post',
+            url:'/sampleGuide/set/isCanBeUsedName',
+            data:({
+              id:this.sampleBoxId,
+              name: this.ruleForm.name
+            })
+          })
+          .then(({data})=>{
+            if(data.data == 0){
+              callback(new Error('该样本名称已存在！'));
+            }else{
+              callback()
+            }
+            console.log(data)
+          })
         }
       }
     }
-    let sampleBoxRfid = (rule, value,callback)=>{
+    let sampleBoxRfid = (rule,value,callback)=>{
       this.$axios({
         method:'post',
         url:'/sampleGuide/set/isCanBeUsedRfidCode',
         data:({
           id: this.sampleBoxId,
-          rfidCode:value
+          rfidCode:this.boxRfid
         })
       })
       .then(({data})=>{
         console.log(data)
+        if(data.data == 1){
+          callback()
+        }else if(data.data == 0){
+          callback(new Error("该RFID已被占用！"))
+        }
       })
     }
     return {
-      showModel: '1', // 显示模式设置
+      showModel: 1, // 显示模式设置
       rowValue:'',// 样本盒行数
       colValue:'',// 样本盒列数
       labValue:'',// 冰箱id值
       labRowValue:'',//冰箱层数id值
       labDrawerValue:'',// 冰箱抽屉id值
       sampleBox:'',//样本盒位置id
+      reboxRfid: '',
       input: '',
       mark: '',
       inlineMsg: true,// 行内显示验证信息
@@ -187,23 +207,23 @@ export default {
       sampleBoxOption:[],
       showModelOption:[
         {
-          value: '1',
+          value: 1,
           label: '数字*数字'
         },
         {
-          value: '2',
+          value: 2,
           label: '数字*字母'
         },
         {
-          value: '3',
+          value:  3,
           label: '字母*数字'
         },
         {
-          value: '4',
+          value:  4,
           label: '字母*字母'
         },
         {
-          value:'5',
+          value:  5,
           label: '内部数字'
         }
       ],
@@ -249,7 +269,7 @@ export default {
         this.labRowValue = data.data[0].sampleBoxStru.tierStruId,//冰箱层数id值
         this.labDrawerValue = data.data[0].sampleBoxStru.drawerStruId,// 冰箱抽屉id值
         this.sampleBox = data.data[0].sampleBoxStru.row,//样本盒位置id
-        this.mark = data.data[0].sampleBoxStru.remarks
+        this.mark = data.data[0].remarks
         //sampleBoxStru
         console.log(data)
       })
@@ -263,30 +283,58 @@ export default {
             type: 'warning'
           });
         }else{
-        this.$axios({
-            method:'post',
-            url: 'sampleGuide/set/insertRfidSampleBox',
-            data:({
-              name: this.ruleForm.name,
-              rfidCode:this.boxRfid,
-              refrigeratorStruId :this.labValue,
-              tierStruId: this.labRowValue,
-              drawerStruId: this.labDrawerValue,
-              row: this.sampleBox,
-              structureRow:this.rowValue,
-              structureCol: this.colValue,
-              structureSpec:this.showModel,
-              remarks: this.mark
+        if(this.title == '新建样本盒'){
+          this.$axios({
+              method:'post',
+              url: 'sampleGuide/set/insertRfidSampleBox',
+              data:({
+                name: this.ruleForm.name,
+                rfidCode:this.boxRfid,
+                refrigeratorStruId :this.labValue,
+                tierStruId: this.labRowValue,
+                drawerStruId: this.labDrawerValue,
+                row: this.sampleBox,
+                structureRow:this.rowValue,
+                structureCol: this.colValue,
+                structureSpec:this.showModel,
+                remarks: this.mark
+            })
           })
-        })
-        .then(({data})=>{
+          .then(({data})=>{
+              console.log(data)
+              this.$message({
+                message: '新建样本盒成功！',
+                type: 'success'
+              });
+              this.reload()
+          })
+        }else{
+          this.$axios({
+            method:'post',
+            url: '/sampleGuide/set/updateRfidSampleBoxAndStru',
+            data:({
+                id: this.sampleBoxId,
+                name: this.ruleForm.name,
+                rfidCode:this.boxRfid,
+                refrigeratorStruId :this.labValue,
+                tierStruId: this.labRowValue,
+                drawerStruId: this.labDrawerValue,
+                row: this.sampleBox,
+                structureRow:this.rowValue,
+                structureCol: this.colValue,
+                structureSpec:this.showModel,
+                remarks: this.mark
+            })
+          })
+          .then(({data})=>{
             console.log(data)
             this.$message({
-              message: '新建样本盒成功！',
+              message: '修改样本盒成功！',
               type: 'success'
             });
             this.reload()
-        })
+          })
+        }
       }
     },
     replaceRfid(){
@@ -341,7 +389,8 @@ export default {
         let sTagID = sTagInfo[sTagInfo.length-1];
         alert(recordCnt)
         if(recordCnt == 1){
-          this.boxRfid = sTagID
+            this.$emit('changeBoxRfid',sTagID)
+          // this.boxRfid = sTagID
         }else{
           this.$alert('样本盒只能绑定一个！', '提示', {
             confirmButtonText: '确定',
@@ -465,6 +514,9 @@ export default {
     margin-top: 5px;
     cursor: pointer;
   }
+  .input-option{
+    width: 50%;
+  }
   .input-item{
     margin-left: 0px;
     /deep/.el-input{
@@ -489,9 +541,9 @@ export default {
     height: 100%;
     white-space: nowrap;
   }
-  .input-option{
-    width:30%
-  }
+  // .input-option{
+  //   width:30%
+  // }
 }
 
 .mark {

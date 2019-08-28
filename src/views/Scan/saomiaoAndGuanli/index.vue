@@ -108,7 +108,6 @@ export default {
                 name: "", // 样本名称
                 address: "", // 位置信息
                 status: "", // 状态
-                info: "", // 详细信息
               })
             }),
             data.data.sampleBoxMap.SampleBoxInfo.forEach((item)=>{             
@@ -118,7 +117,6 @@ export default {
                 name: item.name, // 样本名称
                 address: item.sampleBoxStru.detailLocation, // 位置信息
                 status: item.status ==1?'正常':'借出', // 状态
-                info: "详细信息", // 详细信息
               })
             }),
             console.log(data)
