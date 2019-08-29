@@ -4,5 +4,8 @@ module.exports.mutations = {
     },
     loanSearchStatus(state,name){
         state.loanSearchStatus =name
+    },
+    changeReturnBack (state, value) {
+      state.returnBackCodeing = value
     }
 }

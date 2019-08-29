@@ -17,9 +17,9 @@
             <div class="top">
               <div class="left">
                 <p><span class="leftItem">样本盒信息</span></p>
-                <p><span class="leftItem">样本盒名称:</span><span>AAA</span></p>
-                <p><span class="leftItem">样本盒位置:</span><span>AAA</span></p>
-                <p><span class="leftItem">可借出样本数:</span><span>AAA</span></p>
+                <p><span class="leftItem">样本盒名称:</span ><span >{{sampleBoxName}}</span></p>
+                <p><span class="leftItem">样本盒位置:</span><span>{{sampleBoxItem}}</span></p>
+                <p><span class="leftItem">可借出样本数:</span><span>{{sampleLoanNum}}</span></p>
               </div>
               <div class="right">
                   <table class="table">
@@ -58,6 +58,9 @@ export default {
       loanSearchStatus:false,
       scanStatus: true,
       RfidArr:[],
+      sampleBoxName:'',
+      sampleBoxItem:'',
+      sampleLoanNum:'',
       mapData: [
         { text: '已使用', bgc: '#7D7C7F' },
         { text: '借用', bgc: '#FCFD01' },
@@ -118,6 +121,10 @@ export default {
         return
       }
       recordCnt = MyActiveX1.RDR_GetRecordCnt()
+      if(recordCnt==0){
+        this.$message('没有扫描到样本')
+        return
+      }
       alert(recordCnt)
       for(let j=0;j<recordCnt;j++){
           // RfidArr = []
@@ -142,14 +149,22 @@ export default {
         })
         .then(({data})=>{
           console.log(data);
-          // this.AddBox = true;//显示扫描样本盒信息
+          this.sampleLoanNum=data.data.canUserSampleCount
+          data.data.scanSampleBoxLoanVo.forEach((item)=>{
+            console.log(item);
+            this.sampleBoxName=item.sampleBoxName
+            this.sampleBoxItem=item.detailLocation
+            this.scanStatus = false
+          })
+          /* this.sampleBoxName =data.data
+          this.sampleBoxItem =data. */
+          
         })
-       // this.scanStatus = false
     },
     addSample(){
       this.$emit('close')
       //this.scanStatus= this.$store.state.loanSearchStatus,
-      // this.scanStatus = false
+       this.scanStatus = false
     }
   },
   computed: {}

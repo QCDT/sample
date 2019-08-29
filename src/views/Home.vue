@@ -5,27 +5,59 @@
       <div class="labList" :class="{'labList-2': labRefrigerator, 'labList-3': refrigeratorInfo}">
         <p><span>实验室总数:</span><span class="labNum">{{labList.length}}</span></p>
         <div class="labWrap">
-          <ul>
+          <ul :style="{'left':calleft + 'px'}">
             <li v-for="(item,index) in labList" :key="index">
-              <img src="@/assets/img/lab.png" class="labImg" :class="{'labImgActive': labActive == index}" @click='refShow(index)'>
+              <img src="@/assets/img/lab.png" class="labImg" :class="{'labImgActive': labActive == index, 'labImg-2': labImgfangda }" @click='refShow(index, item.id)'>
               <p><span>{{item.labName}}</span></p>
             </li>
           </ul>
-          <img src="@/assets/img/arrowLeft.png" class="arrowL arrow">
-          <img src="@/assets/img/arrowRight.png" class="arrowR arrow">
+          <!--<img @click="gotoPage(prevIndex)" src="@/assets/img/arrowLeft.png" class="arrowL arrow">-->
+          <img @click="zuohua" src="@/assets/img/arrowLeft.png" class="arrowL arrow" v-show="labList.length  > 3 && calleft > -(labList.length - 3) * 300">
+          <img @click="youhua" src="@/assets/img/arrowRight.png" class="arrowR arrow" v-show="labList.length > 3 && calleft < 0">
+          <!--<img @click="gotoPage(nextIndex)" src="@/assets/img/arrowRight.png" class="arrowR arrow">-->
         </div>
       </div>
       <!-- 冰箱展示-->
       <div class="refrigeratorList" v-show="labRefrigerator" :class="{'refrigeratorList-2':refrigeratorInfo }">
         <p><span>冰箱总数:</span><span class="labNum">{{refrigeratorList.length}}</span></p>
         <div class="labWrap">
-          <ul>
+          <!--<ul :style="{'left':refCalleft + 'px'}">-->
+          <ul :style="{'left':refCalleft + 'px'}">
             <li v-for="(item,index) in refrigeratorList" :key="index">
-              <img src="@/assets/img/refrigerator.jpg" class="refImg" @click="showRefInfo">
+              <!--<img :src=item.pic class="refImg" :class="{'refImgActive':refActive == index}" @click="showRefInfo(index)">-->
+              <img :src=item.pic class="refImg" :class="{'refImgActive': refActive == index}" @click="showRefInfo(index, item.id)">
             </li>
           </ul>
-            <img src="@/assets/img/arrowLeft.png" class="arrowL arrow">
-            <img src="@/assets/img/arrowRight.png" class="arrowR arrow">
+            <img @click="refZuohua" src="@/assets/img/arrowLeft.png" class="arrowL arrow" v-show="refrigeratorList.length  > 3 && refCalleft > -(refrigeratorList.length - 3) * 300">
+            <img @click="refYouhua" src="@/assets/img/arrowRight.png" class="arrowR arrow" v-show="refrigeratorList.length > 3 && refCalleft < 0">
+        </div>
+      </div>
+      <!--数据分析-->
+      <div class="refrigeratorList analyze" v-show="refrigeratorInfo">
+        <div class="refInfoLeft">
+            <p><span>冰箱名称：</span>
+              <span>{{refName}}</span></p>
+            <p><span>冰箱品牌：</span>
+              <span>{{refBrand}}</span></p>
+            <p><span>冰箱型号：</span>
+              <span>{{refType}}</span></p>
+            <p><span>放置地点：</span>
+              <span>{{refPlace}}</span></p>
+            <p><span>设置温度：</span>
+              <span>{{refTemperature}}</span>℃</p>
+        </div>
+        <div class="refInfoCenter">
+          <h4>总体使用情况</h4>
+          <div id="allSpace" :style="{width: '300px', height: '200px'}">
+
+          </div>
+
+        </div>
+        <div class="refInfoRight">
+          <h4 :style="{marginLeft:'20px'}">每层使用情况</h4>
+          <div id="cellSpace" :style="{width: '300px', height: '200px'}">
+
+          </div>
         </div>
       </div>
     </div>
@@ -33,50 +65,47 @@
     <div class="refInfo" v-show="refrigeratorInfo">
         <img src="@/assets/img/ice_open.png">
         <div class="plies_wrap">
-         <div v-for="(item,index) in pliesNum" 
-              :key="index" class="plies" 
+         <div v-for="(item,index) in pliesNum"
+              :key="index" class="plies"
               :class="{'firstPlies': index==0}"
           >
-               <div 
-                  class="pliesMasking" 
-                  @click="openPliesMasking(index)"
-                  :class="{'opendoor': active==index}"
-              >
+               <div
+                  class="pliesMasking"
+                  @click="toggle(index)"
+                  :class="{'opendoor': isA && active==index}"
+               ><!--&& active==index-->
                 <div class="doorknobWrap">
                     <div class="doorknob"></div>
                     <div class="doorknob_btn1"></div>
                     <div class="doorknob_btn2"></div>
                 </div>
-              </div>         
+              </div>
               <table class="sampleTable" style="table-layout: fixed;">
-                <!-- <tr>
-                  <td>1</td>
-                  <td>1</td>
-                  <td>1</td>
-                  <td>1</td>
-                  <td>1</td>
-                </tr>
                 <tr>
-                  <td>1</td>
-                  <td>1</td>
-                  <td>1</td>
-                  <td>1</td>
-                  <td>1</td>
+                  <td>
+                    <div class="td-wrap">12
+                      <!--<div class="drawer">-->
+                        <!--<div class="btn">12</div>-->
+                      <!--</div>-->
+                      <!--<div class="drawer_tl">-->
+                        <!--<div class="bottom">-->
+                          <!--<div class="sampel_box1">-->
+                            <!--<div class="cap"></div>-->
+                            <!--<div class="befor"></div>-->
+                            <!--<div class="aside"></div>-->
+                          <!--</div>-->
+                          <!--<div class="front">-->
+                            <!--<div class="btn_2"></div>-->
+                          <!--</div>-->
+                          <!--<div class="left"></div>-->
+                          <!--<div class="right"></div>-->
+                        <!--</div>-->
+                      <!--</div>-->
+                    </div>
+                  </td>
+
                 </tr>
-                <tr>
-                  <td>1</td>
-                  <td>1</td>
-                  <td>1</td>
-                  <td>1</td>
-                  <td>1</td>
-                </tr>
-                <tr>
-                  <td>1</td>
-                  <td>1</td>
-                  <td>1</td>
-                  <td>1</td>
-                  <td>1</td>
-                </tr> -->
+
               </table>
           </div>
         </div>
@@ -84,14 +113,14 @@
     <!-- 相关事件报警 -->
     <div class="sampleWarning"  :style="{ transform:  `translateX(${sampleWarningShow? '0' : '85%'})`}">
       <div class="sampleWarningL" @click="warningShow">
-        <el-badge :value="12">
+        <el-badge :value="warningAll">
           <span>相关事件报警</span>
         </el-badge>
       </div>
       <div class="sampleWarningR">
         <ul class="sampleWarningList">
-          <li v-for="(item,index) in sampleWarningList" 
-              :key="index" 
+          <li v-for="(item,index) in sampleWarningList"
+              :key="index"
               :class="{'active': index==warningActive }"
               @click="warningSelect(index)"
               >
@@ -101,16 +130,20 @@
           </li>
         </ul>
         <div class="warningContent" v-show="warningActive == 0">
-          <p>11</p>
+          <p v-for="(item,index) in sampleWarningList[0].content"
+             :key="index"><span>{{item.name}}</span><span>({{item.sampleStru.detailLocation}})</span><span>已过期,请及时处理！</span></p>
         </div>
         <div class="warningContent" v-show="warningActive == 1" >
-          <p>22</p>
+          <p v-for="(item,index) in sampleWarningList[1].content"
+             :key="index"><span>{{item.name}}</span><span>({{item.sampleStru.detailLocation}})</span><span>已过期,请及时处理！</span></p>
         </div>
         <div class="warningContent" v-show="warningActive == 2">
-          <p>33</p>
+          <p v-for="(item,index) in sampleWarningList[2].content"
+             :key="index"><span>{{item.name}}</span><span>({{item.sampleStru.detailLocation}})</span><span>逾期,请及时处理！</span></p>
         </div>
         <div class="warningContent" v-show="warningActive == 3">
-          <p>44</p>
+          <p v-for="(item,index) in sampleWarningList[3].content"
+             :key="index"><span>{{item.name}}</span><span>({{item.sampleStru.detailLocation}})</span><span>即将逾期,请及时处理！</span></p>
         </div>
       </div>
     </div>
@@ -125,91 +158,348 @@ export default {
       labRefrigerator: false, // 冰箱展示开关
       refrigeratorInfo: false ,// 冰箱详情展示
       sampleWarningShow: false,
-      labActive: 0,
-      refActive: 0,
+      // labId:'',//冰箱id
+      labImgfangda: false,
+      labActive: -1,
+      refActive: -1,
       pliesNum: 4, //冰箱层数
+      isA: false,
       active: -1, //冰箱层数选中
       warningActive: 0, // 相关事件报警选中
+      warningAll:0,//相关事件报警总数
       labList:[ // 实验室列表
-        {
-          labName:'aaa',
-        },
-        {
-          labName:'aaa',
-        },
-        {
-          labName:'aaa',
-        },
-        {
-          labName:'aaa',
-        },
-        {
-          labName:'aaa',
-        },
-        {
-          labName:'aaa',
-        },
-        {
-          labName:'aaa',
-        },
-        {
-          labName:'aaa',
-        }
       ],
+      calleft: 0,
+      refCalleft: 0,
       refrigeratorList:[ // 冰箱列表
-        {
-
-        },
-        {
-
-        },
-        {
-
-        }
+        // {
+        //   // pic: ''
+        // },
+        // {
+        //
+        // },
+        // {
+        //
+        // }
       ],
       sampleWarningList:[
         {
           title: '已过期',
-          warningNum: 3
+          warningNum: 0,
+          content:[]
         },
         {
           title: '快过期',
-          warningNum: 6
+          warningNum: 0,
+          content:[]
         },
         {
           title: '逾期',
-          warningNum: 9
+          warningNum: 0,
+          content:[]
         },
         {
           title: '其它',
-          warningNum: 10
+          warningNum: 0,
+          content:[]
         }
-      ]
+      ],
+      refName:'',
+      refBrand:'',
+      refType:'',
+      refPlace:'',
+      refTemperature:'',
+      commonSampleNum:'',//饼图普通样本数量
+      commonSampleNumZhu:[],//柱状普通样本数量
+      totalSpace:'',//饼图总数
+      totalSpaceZhu:[],//柱状总数
+      surplus:'',//饼图剩余数量
+      surplusZhu:[]//饼图剩余数量
     };
   },
   created () {
-      
+    this.$axios({
+      method:'get',//相关事件报警
+      url:'sampleGuide/index/sampleEventAlarm'
+    })
+      .then(({data})=>{
+        // console.log(data);
+        this.warningAll = data.data.rfidSampleExpireList.length + data.data.rfidSampleNearExpireList.length + data.data.rfidLoanSampleExpireList.length + data.data.rfidLoanSampleAboutToExpireList.length
+        this.sampleWarningList[0].warningNum = data.data.rfidSampleExpireList.length
+        data.data.rfidSampleExpireList.forEach((item)=>{
+          this.sampleWarningList[0].content.push(item)
+        })
+        this.sampleWarningList[1].warningNum = data.data.rfidSampleNearExpireList.length
+        data.data.rfidSampleNearExpireList.forEach((item)=>{
+          this.sampleWarningList[1].content.push(item)
+        })
+        this.sampleWarningList[2].warningNum = data.data.rfidLoanSampleExpireList.length
+        data.data.rfidLoanSampleExpireList.forEach((item)=>{
+          this.sampleWarningList[2].content.push(item)
+        })
+        this.sampleWarningList[3].warningNum = data.data.rfidLoanSampleAboutToExpireList.length
+        data.data.rfidLoanSampleAboutToExpireList.forEach((item)=>{
+          this.sampleWarningList[3].content.push(item)
+        })
+      })
+    this.$axios({
+      method:'get',//实验室
+      url:'sampleGuide/index/findLaboratoryDictAndUserNameAndRefrigeratorStruAndSampleCount'
+    })
+      .then(({data})=>{
+        // console.log(data)
+        data.data.laboratoryDictList.forEach((item)=>{
+          this.labList.push({
+            id: item.id,
+            labName: item.name
+          })
+        })
+      })
+
+  },
+  mounted(){
+    // this.drawLine();
   },
   methods: {
-    refShow(index){
+    toggle:function (index) {
+      this.isA=!this.isA
+      this.active=index
+    },
+    refShow(index,labId){
+      // console.log(labId)
       this.labRefrigerator = true
       this.labActive = index
-      console.log(this.labActive);
+      this.refrigeratorList = []
+      this.$axios({
+        method: 'post',
+        url: 'sampleGuide/index/findAllRefrigeratorStruByLaboratoryDictId',
+        data: ({
+          id:labId
+        })
+      })
+        .then(({data})=>{  //冰箱展示
+          console.log(data)
+          data.data.forEach((item)=>{
+            // item.refrigeratorBrandTypeDict.pic:  require(`@/assets/img/${item.picture}`)
+            this.refrigeratorList.push({
+              id: item.id,
+              // name: item.name,
+              pic:  require(`@/assets/img/${item.refrigeratorBrandTypeDict.picture}`)
+          })
+          })
+        })
+      // console.log(this.labActive);
     },
     warningShow(){
       this.sampleWarningShow = !this.sampleWarningShow
     },
-    showRefInfo(){
+    showRefInfo(index,refId){
+      // console.log(refId)
+
+      this.labImgfangda = true
       this.refrigeratorInfo = true
+      this.refActive = index
+      this.commonSampleNumZhu = []
+      this.totalSpaceZhu = []
+      this.surplusZhu = []
+      this.$axios({
+        method: 'post',
+        url: 'sampleGuide/index/findRefrigeratorStruInfoById ',
+        data: ({
+          id:refId
+        })
+      })
+        .then(({data})=>{ //冰箱内部信息展示图表
+          // console.log(data)
+          //饼状图展示
+          this.commonSampleNum = data.data.commonBatchSampleTotalSpaceVO.commonSampleNum
+          this.totalSpace = data.data.commonBatchSampleTotalSpaceVO.totalSpace
+          this.surplus = this.totalSpace - this.commonSampleNum
+          this.refBrand = data.data.refrigeratorStruBrand
+          data.data.refrigeratorStruList.forEach((item)=>{
+            //冰箱信息展示
+            this.refName = item.name
+            this.refType = item.refrigeratorBrandTypeDict.name
+            this.refPlace = item.laboratoryDict.name
+            this.refTemperature = item.temperature
+          })
+          //柱状图表冰箱层数展示
+          for(let i in data.data.indexMap){
+              data.data.indexMap[i].forEach((item)=>{
+                  this.commonSampleNumZhu.push(item.commonSampleNum)
+                  this.totalSpaceZhu.push(item.totalSpace)
+                  this.surplusZhu.push(item.totalSpace - item.commonSampleNum)
+              })
+
+          }
+          this.drawLine();
+        })
+
     },
     openPliesMasking(index){
        this.active = index
     },
     warningSelect(index){
       this.warningActive = index
+    },
+    drawLine(){
+      // console.log(this.surplus)
+      let myChart = this.$echarts.init(document.getElementById('allSpace'))
+      let nPercent = 100;
+      myChart.setOption({
+        title: {		//中间显示标题
+          text: nPercent + '%',
+          /*subtext: '20%',*/
+          x: 'center',
+          y: 'center',
+          textStyle: {
+            fontSize: 24,
+            fontWeight: 'bolder',
+            color: '#7d7d7d'
+          }
+        },
+        color: ["#ccc", "#090ab7", "#01befe"],
+        tooltip: {
+          // show:refData[index].isCreatedRfidSampleBox,
+          trigger: 'item',
+          formatter: "{a} <br/>{b} : {c} ({d}%)"
+        },
+        legend: {
+          orient: 'horizontal',
+          x: 'left',
+          data: ['普通样本', '批量样本', '剩余空间'],
+          selectedMode: false	//禁止点击事件
+        },
+        calculable: true,
+        series: [
+          {
+            name: '总体使用情况',
+            type: 'pie',
+            radius: ['50%', '70%'],
+            itemStyle: {
+              normal: {
+                label: {
+                  show: false
+                },
+                labelLine: {
+                  show: false
+                }
+              }
+            },
+            data: [
+              {value: this.surplus, name: '剩余空间'},
+              {value: 0, name: '批量样本'},
+              {value: this.commonSampleNum, name: '普通样本'}
+            ]
+          }
+        ]
+      });
+
+      let cellChart = this.$echarts.init(document.getElementById('cellSpace'))
+      cellChart.setOption({
+        color: ["#01befe", "#090ab7", "#ccc"],
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+            type: 'none',			// 坐标轴指示器
+            shadowStyle: {
+              width: 'auto',
+              type: 'default'
+            }
+          }
+        },
+        grid: {
+          x: 40,
+          x2: 40
+        },
+        legend: {
+          data: ['普通样本', '批量样本', '剩余空间'],
+          selectedMode: false	//禁止点击事件
+        },
+        calculable: true,
+        xAxis: [
+          {
+            show: false,//坐标轴不显示
+            type: 'value',
+            splitLine: {
+              show: false //网格不显示
+            }
+          }
+
+        ],
+        yAxis: [
+          {
+            show: false,
+            type: 'category',
+            data : this.totalSpaceZhu,
+            splitLine: {
+              show: false
+            }
+          }
+
+        ],
+        series: [
+
+          {
+            name: '普通样本',
+            type: 'bar',
+            stack: '总量',
+            itemStyle: {normal: {label: {show: false, position: 'left'}, labelForeColor: 'blue'}},
+            data: this.commonSampleNumZhu,
+            barMaxWidth: 20
+          },
+          {
+            name: '批量样本',
+            type: 'bar',
+            stack: '总量',
+            itemStyle: {normal: {label: {show: false, position: 'center'}, labelForeColor: 'blue'}},
+            data: [],
+            barMaxWidth: 20
+          },
+          {
+            name: '剩余空间',
+            type: 'bar',
+            stack: '总量',
+            itemStyle: {normal: {label: {show: true, position: 'right'}, labelForeColor: 'blue'}},
+            data: this.surplusZhu,
+            barMaxWidth: 20
+
+          }
+
+        ]
+
+      });
+
+    },
+
+    //点击按钮左移
+    zuohua() {
+      this.calleft -= 300;
+      if (this.calleft < -((this.labList.length - 3) * 300)) {
+        this.calleft = -(this.labList.length - 3) * 300;
+      }
+    },
+    refZuohua() {
+      this.refCalleft -= 300;
+      if(this.refCalleft < -((this.refrigeratorList.length - 3) * 300)){
+        this.refCalleft = -(this.refrigeratorList.length - 3) * 300;
+      }
+    },
+    //点击按钮右移
+    youhua() {
+      this.calleft += 300;
+      if (this.calleft > 0) {
+        this.calleft = 0;
+      }
+    },
+    refYouhua() {
+      this.refCalleft += 300;
+      if (this.refCalleft > 0) {
+        this.refCalleft = 0;
+      }
     }
+
   },
-  computed: {}
 };
 </script>
 <style scoped lang='less'>
@@ -232,24 +522,40 @@ export default {
         margin-left: 10px;
       }
       .labWrap{
+        width: 900px;
+        position: relative;
         text-align: center;
         width: 100%;
         overflow: hidden;
         margin-top: 5px;
+        height: 160px;
+
+        /*transition:width 2s;*/
         ul{
+          position: absolute;
           width: 5000px;
           height: 100%;
+          left: 0px;
+          transition: 1s;
         }
         li{
           float: left;
           width: 300PX;
           text-align: center;
+
         }
         .labImg{
-          width: 200px;
-          // height: 200PX;
+          width: 150px;
+           /*height: 200PX;*/
           margin-bottom: 15px;
           cursor: pointer;
+        }
+        .labImg-2{
+          width: 100px;
+        }
+        .arrow{
+          width:30px;
+          height: 30px;
         }
       }
   }
@@ -270,26 +576,36 @@ export default {
       margin-left: 10px;
     }
     .labWrap{
+      position: relative;
+      height: 160px;
       text-align: center;
       width: 100%;
       overflow: hidden;
       margin-top: 5px;
       ul{
+        position: absolute;
         width: 5000px;
         height: 100%;
+        transition: 1s;
       }
       li{
         float: left;
         width: 300PX;
       }
       .refImg{
-        width: 81PX;
+        width: 78PX;
+        margin-top: 19px;
         cursor: pointer;
+      }
+      .arrow{
+        width:30px;
+        height: 30px;
       }
     }
   }
   .labImgActive{
     opacity: 1 !important;
+    transform: scale(1.2);
   }
   .labList-2{
     border: 1px solid rgb(204, 204, 204);
@@ -300,27 +616,38 @@ export default {
     margin-bottom: 15px;
     .labImg{
       opacity: 0.5;
+
     }
   }
   .labList-3{
     // border: 1px solid rgb(204, 204, 204);
     margin: 0;
-    margin-top: 10%;
-    width:600PX;
-    margin-bottom: 15px;
+    /*margin-top: 10%;*/
+    width:900PX;
+    margin-bottom: 10px;
     // border-radius: 5px;
     // padding: 5px;
     // margin-bottom: 15px;
     .labImg{
       opacity: 0.5;
+      /*height: 120px;*/
+      /*width: 120px;*/
     }
     // .labImg{
     //   width: 100PX;
     // }
   }
+  .refImgActive{
+    opacity: 1 !important;
+    transform: scale(1.2);
+  }
   .refrigeratorList-2{
-    width: 600PX;
+    width: 900PX;
     margin: 0;
+    margin-bottom: 10px;
+    .refImg{
+      opacity: 0.5;
+    }
   }
 }
 .refInfo{
@@ -401,10 +728,155 @@ export default {
           border-collapse: collapse;
           border-spacing: 0;
           // font-size: 10px;
+          border: 1px solid gray;
+          /*table-layout: fixed;*/
           td{
             border: none;
             border-right: 1px solid gray;
             border-bottom: 1px solid gray;
+            .td-wrap{
+              width:100%;
+              height:100%;
+              position:relative;
+              font-size: 8PX;
+              /*.drawer{*/
+                /*width:100%;*/
+                /*height:100%;*/
+                /*cursor: pointer;*/
+                /*position: relative;*/
+                /*.btn{*/
+                  /*width: 100%;*/
+                  /*height: 100%;*/
+                  /*position: absolute;*/
+                  /*top: 50%;*/
+                  /*margin-top: -25%;*/
+                  /*text-align:center;*/
+                  /*color:gray;*/
+                /*}*/
+              /*}*/
+              /*.drawer_tl{*/
+                /*position:absolute;*/
+                /*left: 50%;*/
+                /*margin-left: -13px;*/
+                /*!*display:none;*!*/
+                /*.bottom{*/
+                  /*position:absolute;*/
+                  /*width:26px;*/
+                  /*height:80px;*/
+                  /*background:#d3d3d3;*/
+                  /*z-index:10;*/
+                  /*transform-origin:top;*/
+                  /*transform:rotateX(60deg) skewX(30deg);*/
+
+                /*}*/
+                /*.bottom{*/
+                  /*.sampel_box1,.sampel_box2,.sampel_box3,.sampel_box4,.sampel_box5{*/
+                    /*position:absolute;*/
+                    /*width:24px;*/
+                    /*height:24px;*/
+                  /*}*/
+                  /*.sampel_box2{*/
+                    /*margin-top:33px;*/
+                  /*}*/
+                  /*.sampel_box3{*/
+                    /*margin-top:66px;*/
+                  /*}*/
+                  /*.sampel_box4{*/
+                    /*margin-top:99px;*/
+                  /*}*/
+                  /*.sampel_box5{*/
+                    /*margin-top:133px;*/
+                  /*}*/
+                  /*.sampel_box1 div{*/
+                    /*position:absolute;*/
+                  /*}*/
+                  /*div[class^="sampel_box"] .cap{*/
+                    /*background:linear-gradient(to bottom,#addaec,#eee);*/
+                  /*}*/
+                  /*div[class^="sampel_box"] .aside{*/
+                    /*background:linear-gradient(to left,skyblue,#eee);*/
+                  /*}*/
+                  /*div[class^="sampel_box"] .befor{*/
+                    /*background:#a6d7ec;*/
+                  /*}*/
+                  /*.sampel_box1 .cap{*/
+                    /*width:18px;*/
+                    /*height:30px;*/
+                    /*transform: skewX(-30deg) translateY(-24px);*/
+                    /*top:24px;*/
+                  /*}*/
+                  /*.sampel_box1 .aside{*/
+                    /*width: 22px;*/
+                    /*height: 25px;*/
+                    /*transform-origin: left;*/
+                    /*transform: skewY(-60deg);*/
+                    /*bottom: -14px;*/
+                  /*}*/
+                  /*.sampel_box1 .befor{*/
+                    /*width:18px;*/
+                    /*height:25px;*/
+                    /*transform: translateX(22px) translateY(-25px);*/
+                  /*}*/
+
+                  /*.sampel_box2 .cap,.sampel_box3 .cap,.sampel_box4 .cap,.sampel_box5 .cap{*/
+                    /*width:18px;*/
+                    /*height:30px;*/
+                    /*transform: skewX(-30deg) translateY(0px) translateX(14px);*/
+                    /*top:24px;*/
+                  /*}*/
+                  /*.sampel_box2 .aside,.sampel_box3 .aside,.sampel_box4 .aside,.sampel_box5 .aside{*/
+                    /*width: 22px;*/
+                    /*height: 25px;*/
+                    /*background:linear-gradient(to left,skyblue,#eee);*/
+                    /*transform-origin: left;*/
+                    /*transform: skewY(-60deg) translateY(-41px);*/
+                  /*}*/
+                  /*.sampel_box2 .befor,.sampel_box3 .befor,.sampel_box4 .befor,.sampel_box5 .befor{*/
+                    /*width:18px;*/
+                    /*height:25px;*/
+                    /*background:skyblue;*/
+                    /*transform:translateX(22px) translateY(-54px);*/
+                  /*}*/
+                /*}*/
+                 /*.bottom>div{*/
+                  /*position:absolute;*/
+                /*}*/
+                /*.front{*/
+                  /*position:absolute;*/
+                  /*width:26px;*/
+                  /*height:26px;*/
+                  /*line-height:26px;*/
+                  /*background:#eee;*/
+                  /*border:1px solid rgb(170, 170, 170);*/
+                  /*border-top:none;*/
+                  /*bottom:0;*/
+                  /*transform-origin:bottom;*/
+                  /*transform:skewX(-30deg);*/
+                  /*z-index:1;*/
+                  /*cursor:pointer;*/
+                  /*text-align:center;*/
+                  /*color:gray;*/
+                /*}*/
+                /*.left{*/
+                  /*width:8px;*/
+                  /*height:80px;*/
+                  /*background:#f6f6f6;*/
+                  /*transform-origin:left;*/
+                  /*transform:skewY(-60deg);*/
+                  /*border-left:1px solid rgb(170, 170, 170);*/
+                  /*z-index:10;*/
+                /*}*/
+               /*.right{*/
+                  /*width: 8px;*/
+                  /*height: 80px;*/
+                  /*background: #f6f6f6;*/
+                  /*transform-origin: left;*/
+                  /*transform: skewY(-60deg);*/
+                  /*right: -7px;*/
+                  /*z-index:-1;*/
+                /*}*/
+              /*}*/
+            }
             &:last-of-type{
               border-right: none;
             }
@@ -420,10 +892,14 @@ export default {
     .opendoor {
       transform: rotateY(180deg);
     }
+    .opendoor-2 {
+      transform: rotateY(0deg);
+    }
   }
 }
 .refWrap-2{
   float: left;
+
 }
 .arrow{
   position: absolute;
@@ -435,10 +911,10 @@ export default {
   opacity: 0;
 }
 .arrowL{
-  left: -6%;
+  left: 0;
 };
 .arrowR{
-  right: -6%;
+  right: 0;
 }
 .sampleWarning{
   width:450px;
@@ -504,11 +980,31 @@ export default {
     .warningContent{
       overflow-y: auto;
       height: 90%;
+      p{
+        margin-left: 5px;
+        color: red;
+        font-size: 12px;
+      }
     }
     .warningContentItem{
       word-wrap: break-word;
       margin-bottom: 5px;
     }
   }
+
 }
+.analyze{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.refInfoLeft{
+  p{
+    margin-bottom: 10px;
+  }
+  p>span{
+    font-size: 12px;
+  }
+}
+
 </style>

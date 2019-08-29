@@ -9,7 +9,7 @@
         <el-input v-model="ruleForm.name"></el-input>
       </el-form-item>
       <el-form-item label="备注">
-        <el-input  
+        <el-input
             type="textarea"
             v-model="ruleForm.desc"
             maxlength="1000"
@@ -29,7 +29,7 @@
     </div>
     <!--归还记录-->
     <el-dialog
-        title="历史接收记录"
+        title="历史归还记录"
         :visible.sync="dialogRecords"
         width="80%"
         center>
@@ -66,9 +66,9 @@
                     ref="multipleTable"
                     :data="sampleDataForm"
                     tooltip-effect="dark"
-                    @select-change='selectExportFrom'
+                    @selection-change='selectExportFrom'
                     @row-click="showSampleItem"
-                    style="width: 60%; float:left"
+                    style="width: 50%; float:left"
                     height="220"
                     :row-style="{height:'32px',textAlign: 'center',padding:'0px',cursor:'pointer'}"
                     :cell-style="{padding:'0px',textAlign: 'center'}"
@@ -78,10 +78,10 @@
                     <el-table-column
                         type="selection"
                         width="55"
-                    > 
+                    >
                     </el-table-column>
                     <el-table-column
-                    type="index"                       
+                    type="index"
                     label="序号"
                     >
                     </el-table-column>
@@ -109,15 +109,15 @@
                     ref="multipleTable"
                     :data="sampleDataItem"
                     tooltip-effect="dark"
-                    style="width: 40%; float:right"
+                    style="width: 50%; float:right"
                     height="220"
                     :row-style="{height:'32px',textAlign: 'center',padding:'0px',}"
                     :cell-style="{padding:'0px',textAlign: 'center'}"
                     :header-cell-style ="{height:'30px',textAlign:'center',padding:'0px', background:'#00c9ff',color:'white'}"
-                    border
+                    borderrecipients
                     >
                     <el-table-column
-                    type="index"                       
+                    type="index"
                     label="序号"
                     class="DataTable"
                     >
@@ -162,10 +162,9 @@
 <script>
 import tmpButton from '@/components/tmp/zhanglan/tmpButton'
 import masking from '@/components/tmp/zhanglan/maskTran'
-import record from '@/views/Scan-GiveBack/alert-record'
 export default {
   props: {},
-  components: { tmpButton, masking, record },
+  components: { tmpButton, masking },
   data () {
     let verificationName = (rule, value,callback)=>{
       if(value === ''){
@@ -178,6 +177,24 @@ export default {
         callback();
       }
     }
+      let verformName = (rule, value,callback)=>{
+      if(value === ''){
+        callback(new Error("请输入表单名称"))
+      }else{
+        this.$axios({
+          method: 'post',
+          url: 'sampleGuide/scan/existReturnTable',
+          data:({
+            returnTableName: value
+          })
+        })
+          .then(({data})=>{
+            console.log(data)
+          })
+        callback();
+      }
+    }
+
     return {
       dialogRecords: false,
       formName: '',
@@ -185,6 +202,8 @@ export default {
       recordsSampleName: '',// 样本名称
       choiceTime: '',// 盘点时间
       formNum: 0,
+      exportData:[],
+      sampleDataItem:[],
       sampleDataForm:[
 
       ],
@@ -198,7 +217,8 @@ export default {
           {validator:verificationName,trigger:'blur'}
         ],
         formName:[
-          { required: true, message: '请输入表单名称', trigger: 'blur' }
+          // { required: true, message: '请输入表单名称', trigger: 'blur' }
+          {validator:verformName,trigger:'blur'}
         ]
       }
     }
@@ -207,7 +227,39 @@ export default {
     submitForm(ruleForm){
        this.$refs[ruleForm].validate((valid) => {
           if (valid) {
-
+            if(this.$store.state.returnBackCodeing.length ==0){
+              this.$alert('请先选择需要归还的样本', '提示', {
+                confirmButtonText: '确定',
+                type: 'warning'
+              })
+            }
+            let returnCoding = this.$store.state.returnBackCodeing.map((item)=>{
+              return item.coding
+            })
+            this.$axios({
+              method: 'post',
+              url: 'sampleGuide/scan/createReturnOrder',
+              data:({
+                returnTableName: this.ruleForm.formName,
+                returnPerson: this.ruleForm.name,
+                remark: this.ruleForm.desc,
+                rfidCodeList: returnCoding
+              })
+            })
+              .then(({data})=>{
+                console.log(data)
+                if(data.code == 200){
+                  this.$alert('归还成功', '提示', {
+                    confirmButtonText: '确定',
+                    type: 'success'
+                  })
+                }else{
+                  this.$alert('归还失败', '提示', {
+                    confirmButtonText: '确定',
+                    type: 'warning'
+                  })
+                }
+              })
             // alert('submit!');
           } else {
             console.log('error submit!!');
@@ -215,16 +267,94 @@ export default {
           }
         });
     },
+    selectExportFrom(selection){
+        this.exportData = selection
+        // console.log(this.exportData )
+    },
     showRecord(){
       this.dialogRecords = true
     },
-    searchReception(){
-
+    searchReception(){ //历史纪录
+      this.sampleDataForm = []
+      // console.log(this.recordsformName,this.recordsSampleName)
+      this.$axios({
+        method: 'post',
+        url: 'sampleGuide/scan/findHistoryReturn',
+        data:({
+          orderName: this.recordsformName,
+          sampleName: this.recordsSampleName,
+          TimeStart: this.choiceTime[0],
+          TimeEnd: this.choiceTime[1]
+        })
+      })
+        .then(({data})=>{
+          // console.log(data)
+          this.formNum = data.data.length
+          data.data.forEach((item)=>{
+            this.sampleDataForm.push({ // 样本表单内容渲染
+              id:item.id,
+              formName: item.returnTableName,
+              recipients: item.returnPerson,
+              enteringData: item.returnTime
+            })
+          })
+        })
     },
-    showSampleItem(){
-       
+    showSampleItem(row){ // 归还记录中样本表单中样本内容
+      this.sampleDataItem = []
+      this.$axios({
+        method: 'post',
+        url: 'sampleGuide/scan/findReturnSampleByOrderId',
+        data:({
+          id: row.id
+        })
+      })
+        .then(({data})=>{
+          console.log(data)
+          data.data.forEach((item)=>{
+            this.sampleDataItem.push({ // 某个样本表单中样本内容
+              sampleName: item.name,
+              sampleType: item.sampleCategoryDictName,
+              patientNub: item.sampleSubject,
+              standingTime: item.standingTime
+            })
+          })
+        })
     },
     exportSampleFormExcel(){
+      // console.log(this.exportData)
+      if(this.exportData.length == 0){
+        this.$alert('请选择需要导出的表单', '提示', {
+          confirmButtonText: '确定',
+          type: 'warning'
+        })
+      }else {
+        let newExportArr = this.exportData.map((item)=>{
+          return item.id
+        })
+        //导出借出订单Excel
+          this.$axios({
+            method:'post',
+            url:'sampleGuide/scan/exportReturnExcel',
+            responseType: 'arraybuffer',
+            data:({
+              returnTableIdList: newExportArr
+            })
+          })
+            .then(({data})=>{
+              console.log(data);
+              var blob = new Blob([data], {type: 'application/vnd.ms-excel;charset=UTF-8'});
+              var a = document.createElement('a');
+              var href = window.URL.createObjectURL(blob); // 创建链接对象
+              a.href =  href;
+              a.download = '';   // 自定义文件名
+              document.body.appendChild(a);
+              a.click();
+              window.URL.revokeObjectURL(href);  //移除链接对象
+              document.body.removeChild(a); // 移除a元素
+            })
+
+      }
     },
     exportSampleFormPDF(){
     }
