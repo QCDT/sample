@@ -16,9 +16,7 @@
       ref="multipleTable"
       :data="tableData"
       tooltip-effect="dark"
-      :style="{width: '100%',margin:'0 auto',}"
-      :header-cell-style="getRowClass"
-      @selection-change="handleSelectionChange"
+      :style="{width: '100%'}"
     >
       <el-table-column type="index" label="序号" width="70"></el-table-column>
       <el-table-column label="订单名称" width="100">
@@ -34,7 +32,15 @@
       <el-table-column prop="status" label="订单状态" show-overflow-tooltip></el-table-column>
       <el-table-column fixed="right" label="操作" width="100">
         <template slot-scope="scope">
-          <i class="el-icon-delete del" @click="delDingdan(scope.row,scope.$index)"></i>
+           <el-tooltip class="item" effect="dark" content="导出PDF" placement="bottom">
+              <i class="icon icon-pdf del" @click="exportPdf(scope.row,scope.$index)" title="导出pdf"></i>
+            </el-tooltip>
+           <el-tooltip class="item" effect="dark" content="导出EXCEL" placement="bottom">
+              <i class="icon icon-excel del" @click="exportExcel(scope.row,scope.$index)" title=""></i>
+            </el-tooltip>
+            <el-tooltip class="item" effect="dark" content="删除" placement="bottom">
+              <i class="el-icon-delete del" @click="delDingdan(scope.row,scope.$index)"></i>
+            </el-tooltip>
         </template>
       </el-table-column>
     </el-table>
@@ -69,7 +75,8 @@ export default {
           status: '已核验' // 订单状态
         } */
       ],
-      multipleSelection: []
+      multipleSelection: [],
+      exportList: [], // 导出excel数据集合
     }
   },
   //借出表单初始化
@@ -91,33 +98,14 @@ export default {
                mark:item.loanremarks,//…………备注
                status:item.status==1?"已核验":"未核验", //…………订单状态
             })
-            
         })
       })
     },
   methods: {
-    // El UI ...
-    toggleSelection (rows) {
-      if (rows) {
-        rows.forEach(row => {
-          this.$refs.multipleTable.toggleRowSelection(row)
-        })
-      } else {
-        this.$refs.multipleTable.clearSelection()
-      }
-    },
-    handleSelectionChange (val) {
-      this.multipleSelection = val
-    },
-
-    getRowClass ({ rowIndex }) {
-      /* 表头样式 */
-      return rowIndex == 0 ? this.$store.getters.formTheme : ''
-    },
     // 删除订单
     delDingdan (row, index) {
-      //console.log(row.id)
-      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+     // console.log(row,index)
+      this.$confirm('确定要删除该订单吗?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
@@ -149,6 +137,47 @@ export default {
         })
     },
     
+    //导出借出订单PDF
+    /* exportPdf(row, index){
+      console.log(row,indeex);
+      this.$axios({
+        method:'post',
+        url:'sampleGuide/scan/delLoanOrder',
+        data:({
+          id:row.id,// 当前要删除的订单ID
+        })
+      })
+      .then(({data})=>{
+        console.log(data);
+      })
+    }, */
+
+    //导出借出订单Excel
+    exportExcel(row, index){
+      console.log(row,index);
+      this.$axios({
+        method:'post',
+        url:'sampleGuide/scan/exportLoanExcel',
+        responseType: 'arraybuffer',
+        data:({
+          id:row.id,// 当前要删除的订单ID
+        })
+      })
+      .then(({data})=>{
+        console.log(data);
+        var blob = new Blob([data], {type: 'application/vnd.ms-excel;charset=UTF-8'});
+        var a = document.createElement('a');
+        var href = window.URL.createObjectURL(blob); // 创建链接对象
+        a.href =  href;
+        a.download = '';   // 自定义文件名
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(href);  //移除链接对象
+        document.body.removeChild(a); // 移除a元素
+      })
+    },
+    
+
     //进入借出订单
     showOrder(row,index){
       //console.log(row)
@@ -180,8 +209,9 @@ export default {
   cursor: pointer;
 }
 .del{
-  font-size: 20px;
+  font-size:16px;
   cursor: pointer;
+  margin:0 5px;
 }
 .top {
   display: flex;

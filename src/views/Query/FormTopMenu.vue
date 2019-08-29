@@ -36,7 +36,7 @@
         </tmpinput>
       </div>
     </div>
-    <div class="right">
+    <div class="right" v-show="!$store.state.loanSearchStatus">
       <div class="item" @click="delSample">
         <i class="icon icon-shanchu"></i>
         <small>销毁</small>
@@ -58,7 +58,7 @@
       <!-- <router-link :to="{name:'changsample'}" style="color:#000"> -->
         <div class="item" @click="amendSample">
           <i class="icon icon-yemianxiugai"></i>
-          <small>批量修改</small>
+          <small>修改</small>
         </div>
       <!-- </router-link> -->
        <div class="item" @click="exportExcel">
@@ -71,7 +71,7 @@
       </div>
     </div>
 
-    <div class="right">
+    <div class="right" v-show="$store.state.loanSearchStatus" >
       <div class="item" @click="addLoanSample">
           <img src="@/assets/img/scan_bot_out.png" alt="" width=30>
           <small>添加借出</small>

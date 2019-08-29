@@ -4,15 +4,13 @@
     <fromName>表单信息</fromName>
     <div class="fotm-table-one">
       <el-table
-        :row-style="{height:'32px',textAlign: 'center',padding:'0px',}"
+        :row-style="{height:'32px',textAlign: 'center',padding:'0px'}"
         :cell-style="{padding:'0px',textAlign: 'center'}"
         border
-        stripe
         ref="multipleTable"
         :data="sampleData"
         tooltip-effect="dark"
         :style="{width: '100%'}"
-        @selection-change="handleSelectionChange"
       >
         <el-table-column prop="orderName" label="表单名称" show-overflow-tooltip></el-table-column>
         <el-table-column prop="newTime" label="创建时间" show-overflow-tooltip></el-table-column>
@@ -26,35 +24,30 @@
 
     <div class="fotm-table-two">
       <fromName>该表单样本信息</fromName>
-      <el-button round class="center" style="background-color: rgb(13, 207, 255);">开始核验</el-button>
-     <!--  v-show="loanOrderStatus == '0'||loanOrderStatus == '2'" -->
+      <el-button round  class="center" type="primary" v-show="status==0">开始核验</el-button>
+
       <div class="fotm-table-box">
-        <div class="form-two-menu">
+        <div class="form-two-menu" v-show="status==0">
           <img src="@/assets/img/yangbenhe.png" @click="add">
-          <!-- <i @click="add" class="icon icon-tianjia" title="扫描样本盒添加"></i> -->
-          <!-- <i @click="searchAdd" title="查询样本添加" class="icon el-icon-zoom-in" ></i> -->
+
           <img src="@/assets/img/yangben.png" @click="searchAdd">
         </div>
         <el-table
           :row-style="{height:'32px',textAlign: 'center',padding:'0px',}"
           :cell-style="{padding:'0px',textAlign: 'center'}"
           border
-          stripe
           ref="multipleTable"
           :data="tableData"
           tooltip-effect="dark"
-          :style="{width: '100%',margin:'0 auto',}"
-          @selection-change="handleSelectionChange"
+          :style="{width: '100%'}"
         >
           <el-table-column prop="Index" type="index" label="序号" width="70"></el-table-column>
           <el-table-column prop="RfidNmber" label="RFID编号" show-overflow-tooltip></el-table-column>
           <el-table-column prop="SampleName" label="样本名字"></el-table-column>
           <el-table-column prop="LocalItem" label="位置信息" show-overflow-tooltip></el-table-column>
-          <el-table-column fixed="Operitor" label="操作" width="100">
+          <el-table-column label="操作" width="100">
             <template slot-scope="scope">
-              <!-- <el-button @click="delDingdan(scope.row,scope.$index)" type="text" size="small"> -->
-                <i class="el-icon-delete del" @click="delDingdan(scope.row,scope.$index)" ></i>
-              <!-- </el-button> -->
+              <i v-show="status==0" class="el-icon-delete del" @click="delDingdan(scope.row,scope.$index)" ></i>
             </template>
           </el-table-column>
         </el-table>
@@ -69,13 +62,13 @@
         </div>
       </div>
 
-      <el-button round class="center enter-btn" style="  background-color: rgb(13, 207, 255);">确认核验</el-button>
-      <el-button class="center" type="primary" plain @click="$router.go(-1)" size="mini">返回</el-button>
+      <el-button round class="center enter-btn" type="primary" v-show="status==0">确认核验</el-button>
+      <el-button class="center" type="primary" @click="$router.go(-1)" size="mini">返回</el-button>
     </div>
     <!-- 添加扫描样本盒 -->
     <transition name="el-fade-in-linear">
-      <maskTran v-if="ifAddBox">
-        <add @close="ifAddBox=false"></add>
+      <maskTran v-if="AddBox">
+        <add @close="AddBox=false"></add>
       </maskTran>
     </transition>
   </div>
@@ -89,9 +82,11 @@ export default {
   components: { fromName, maskTran, add },
   data () {
     return {
-      ifAddBox: false,
+      //ifAddBox: false,
+      AddBox:false,
       ifSearchAddBox: false,
       LoanOrderStatus:'',
+      status: -1,
       /* 借出表单信息 */
       sampleData:[
         /* {
@@ -115,8 +110,8 @@ export default {
           takeOutName: 'meu', // 取走人
           returnTiem: 123123, // 预计归还时间
           mark: '无备注', // 备注
-          status: '已核验' // 表单状态
-        } */
+          status: '未核验' // 表单状态
+        }*/
       ],
       multipleSelection: []
     }
@@ -138,19 +133,20 @@ export default {
               orderName:data.data.loanOrder.name, // ...........借出表单名
               newUserName:data.data.loanOrder.createUserName,//………………创建用户名
               takeOutName:data.data.loanOrder.takeleave,//………………取走人
-              returnTiem:data.data.loanOrder.expectedreturndate,//………………预计归还时间
-              mark:data.data.loanOrder.loanremarks,//…………备注
+              returnTiem:data.data.loanOrder.expectedReturnDate,//………………预计归还时间
+              mark:data.data.loanOrder.loanRemarks,//…………备注
               status:data.data.loanOrder.status==1?"已核验":"未核验", //…………订单状态
           }),
+          this.status = data.data.loanOrder.status,
           this.LoanOrderStatus=data.data.loanOrder.status,
           //借出样本信息展示
           data.data.loanSamples.forEach((item)=>{
-            //console.log(item);
+            console.log(item);
               this.tableData.push({
                 Index:data.data.loanSamples.createTime,// ..........序号
-                RfidNmber:item.rfidCode, // ...........Rfid编号
-                SampleName:item.name,//………………样本名称
-                LocalItem:item.takeLeave,//………………位置信息
+                RfidNmber:item.rfidSampleCode, // ...........Rfid编号
+                SampleName:item.sampleName,//………………样本名称
+                LocalItem:item.sampleLocation,//………………位置信息
               })
           })
       })
@@ -158,11 +154,11 @@ export default {
 
   methods:{
     add () {
-      this.$message('扫描样本盒添加')
-      this.ifAddBox = true
+      this.AddBox = true
     },
     searchAdd () {
-      this.$message('查询样本添加')
+      this.$store.commit('loanSearchStatus', true)
+     // this.$message('查询样本添加')
       this.$router.push('/query');
     },
     toggleSelection (rows) {
@@ -177,14 +173,9 @@ export default {
     handleSelectionChange (val) {
       this.multipleSelection = val
     },
-
-    // getRowClass ({ rowIndex }) {
-    //   /* 表头样式 */
-    //   return rowIndex == 0 ? this.$store.getters.formTheme : ''
-    // },
-    // 删除订单
+    // 删除订单中样本
     delDingdan (row, index) {
-      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+      this.$confirm('确定要删除该样本吗?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
@@ -254,7 +245,8 @@ table {
   }
 }
 .del{
-  font-size: 18px;
+  font-size: 20px;
+  cursor: pointer;
 }
 h1 {
   display: flex;

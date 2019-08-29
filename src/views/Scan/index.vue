@@ -4,7 +4,7 @@
       <!-- 拉条:侧边导航栏:转运 分组合演 患者采血 自动录入 离心机 -->
       <BTNTopPosa></BTNTopPosa>
       <!-- 扫描动态图    -->
-      <saomiaoAndGuanli :switchSaoMiao="switchSaoMiao"></saomiaoAndGuanli>
+      <saomiaoAndGuanli :switchSaoMiao="switchSaoMiao"  @changeBox='changeBox'></saomiaoAndGuanli>
       <!-- 表单 -->
       <div class="table-box">
         <formTopContent :count="!switchSaoMiao ? tableData.length : boxData.length" :switchSaoMiao="switchSaoMiao">
@@ -21,8 +21,7 @@
                 :data="tableData"
                 tooltip-effect="dark"
                 style='width:100%'
-                @select="selects"
-                @select-all="selects"
+                @selection-change="selects"
               >
                 <el-table-column type="selection" width="55"></el-table-column>
                 <el-table-column type="index"  label="序号" width="70"></el-table-column>
@@ -30,7 +29,11 @@
                 <el-table-column prop="name" label="样本名称" show-overflow-tooltip></el-table-column>
                 <el-table-column prop="address" label="位置信息" show-overflow-tooltip></el-table-column>
                 <el-table-column prop="status" label="状态" width="120" show-overflow-tooltip ></el-table-column>
-                <el-table-column prop="info" label="详细信息" width="120" show-overflow-tooltip></el-table-column>
+                <el-table-column prop="info" label="详细信息" width="120" show-overflow-tooltip>
+                  <template slot-scope="scope">
+                    <span class="infoStyle" @click="sampleInfo(scope.row,scope.$index)">详细信息</span>
+                  </template>
+                </el-table-column>
                 <el-table-column label="操作" fixed="right" width="120">
                   <template slot-scope="scope">
                     <el-tooltip class="item" effect="dark" content="新建" placement="bottom-start" >
@@ -59,12 +62,11 @@
                 :row-style="{height:'32px',textAlign: 'center',padding:'0px'}"
                 :cell-style="{textAlign: 'center',padding: '0px'}"
                 border
-                stripe
                 :data="boxData"
                 max-height= '190'
                 tooltip-effect="dark"
                 :style="{width: '100%'}"
-                @selection-change="selects"
+                @selection-change="selectBox"
               >
                 <el-table-column type="selection" width="55" ></el-table-column>
                 <el-table-column type="index" width="70" label="序号" ></el-table-column>
@@ -74,15 +76,27 @@
                 <el-table-column prop="name" label="样本盒名称" show-overflow-tooltip></el-table-column>
                 <el-table-column prop="address" label="位置信息" show-overflow-tooltip></el-table-column>
                 <el-table-column prop="status" label="状态" show-overflow-tooltip ></el-table-column>
-                <el-table-column prop="info" label="详细信息" show-overflow-tooltip></el-table-column>
+                <el-table-column label="详细信息" show-overflow-tooltip>
+                    <template slot-scope="scope">
+                      <span class="infoStyle" @click="SampleBoxInfo(scope.row, scope.$index)">详细信息</span>
+                    </template>
+                </el-table-column>
                 <el-table-column label="操作">
                   <template slot-scope="scope">
                     <el-tooltip class="item" effect="dark" content="新建" placement="bottom-start" >
                       <img 
                         src="@/assets/img/scanBox.png" 
                         class="tb-img" 
-                        @click="newBoxMaskTran=true"  
+                        @click="newBoxMask(scope.row,scope.$index)"  
                         v-show="scope.row.address ? false : true"
+                      >
+                    </el-tooltip>
+                    <el-tooltip class="item" effect="dark" content="修改" placement="bottom-start" >
+                      <img 
+                        src="@/assets/img/editScanBox.png" 
+                        class="tb-img" 
+                        @click="reBoxMask(scope.row,scope.$index)"  
+                        v-show="scope.row.address ? true: false "
                       >
                     </el-tooltip>
                   </template>
@@ -91,7 +105,7 @@
             </div>
       </div>
       <!-- ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓  底部按钮 -->
-      <BTNbot :switchSaoMiao="switchSaoMiao" :switchGuanLi="switchGuanLi" :checkedlist="checkedlist" @zhuanyun="zhuanyun"></BTNbot>
+      <BTNbot :switchSaoMiao="switchSaoMiao"  :switchGuanLi="switchGuanLi" :checkedBoxlist="checkedBoxlist" :checkedlist="checkedlist" @zhuanyun="zhuanyun"></BTNbot>
       <!-- ↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑   -->
     </div> 
       <!-- 新建样本 -->
@@ -103,17 +117,15 @@
           <!-- rgba:透明度 -->
           <reSample v-if="reMaskTran" title="修改样本" @changeSave="changeSave" @goBack="reMaskTran=false"></reSample>
       </transition>
-      <!-- 新建样本盒 -->
+      <!-- 新建样本盒/修改样本盒 -->
       <transition name="el-fade-in-linear">
-        <!-- <maskTran :rgba="0"> -->
-          <newSampleBox v-if="newBoxMaskTran"  title="新建样本盒" @goBack="newBoxMaskTran=false" @save="save"></newSampleBox>
-        <!-- </maskTran> -->
+          <newSampleBox v-if="newBoxMaskTran" :sampleBoxId='sampleBoxId' :boxRfid='boxRfid'  :title="sampleBoxTitle" @goBack="newBoxMaskTran=false" @save="save"></newSampleBox>
       </transition>
       <!-- 转运 -->
       <transition name="el-fade-in-linear">
         <!-- <maskTran :rgba="0"> -->
           <!-- rgba:透明度 -->
-          <alertZhuanYun v-if="togegleZhuanYun" @save="saveZhuanYun" @goBack="togegleZhuanYun=false"></alertZhuanYun>
+          <alertZhuanYun :switchSaoMiao="switchSaoMiao" :checkedBoxlist='checkedBoxlist' :checkedlist='checkedlist' v-if="togegleZhuanYun" @save="saveZhuanYun" @goBack="togegleZhuanYun=false"></alertZhuanYun>
         <!-- </maskTran> -->
       </transition>
   </div>
@@ -146,11 +158,14 @@ export default {
   data() {
     return {
       checkedlist:[],  //选中项的数组
+      checkedBoxlist: [], //样本盒选中数组
       reMaskTran: false, // 修改样本
       newMaskTran: false, // 新建样本
-      // reBoxMaskTran: false, // 修改样本盒
       newBoxMaskTran: false, // 新建样本盒
+      sampleBoxTitle: '',
       RFID: '',
+      boxRfid: '',
+      sampleBoxId:-1,
       // 开关
       switchSaoMiao: false, // 扫描样本盒
       switchGuanLi: false, // 管理模式
@@ -163,99 +178,24 @@ export default {
           name: "Mark", // 样本名称
           address: "海尔冰箱3-1-101海尔冰箱", // 位置信息
           status: "正常", // 状态
-          info: "详细信息", // 详细信息
-          caozuo: "操作" // 操作
         },
         {
           coding: "123", // 序号编码
           name: "Mark", // 样本名称
           address: "", // 位置信息
           status: "正常", // 状态
-          info: "详细信息", // 详细信息
-          caozuo: "操作" // 操作
         }
       ],
       boxData: [
-        {
-          id:1,
-          coding: "111", // 序号编码
-          name: "Mark", // 样本名称
-          address: "海尔冰箱3-1-101海尔冰箱", // 位置信息
-          status: "正常", // 状态
-          info: "详细信息", // 详细信息
-          caozuo: "操作" // 操作
-      },{
-          coding: "122", // 序号编码
-          name: "sadad", // 样本名称
-          address: "", // 位置信息
-          status: "正常", // 状态
-          info: "详细信息", // 详细信息
-          caozuo: "操作" // 操作
-        },{
-          coding: "122", // 序号编码
-          name: "sadad", // 样本名称
-          address: "", // 位置信息
-          status: "正常", // 状态
-          info: "详细信息", // 详细信息
-          caozuo: "操作" // 操作
-        },{
-          coding: "122", // 序号编码
-          name: "sadad", // 样本名称
-          address: "", // 位置信息
-          status: "正常", // 状态
-          info: "详细信息", // 详细信息
-          caozuo: "操作" // 操作
-        },{
-          coding: "122", // 序号编码
-          name: "sadad", // 样本名称
-          address: "", // 位置信息
-          status: "正常", // 状态
-          info: "详细信息", // 详细信息
-          caozuo: "操作" // 操作
-        },{
-          coding: "122", // 序号编码
-          name: "sadad", // 样本名称
-          address: "", // 位置信息
-          status: "正常", // 状态
-          info: "详细信息", // 详细信息
-          caozuo: "操作" // 操作
-        },{
-          coding: "122", // 序号编码
-          name: "sadad", // 样本名称
-          address: "", // 位置信息
-          status: "正常", // 状态
-          info: "详细信息", // 详细信息
-          caozuo: "操作" // 操作
-        },{
-          coding: "122", // 序号编码
-          name: "sadad", // 样本名称
-          address: "", // 位置信息
-          status: "正常", // 状态
-          info: "详细信息", // 详细信息
-          caozuo: "操作" // 操作
-        },{
-          coding: "122", // 序号编码
-          name: "sadad", // 样本名称
-          address: "", // 位置信息
-          status: "正常", // 状态
-          info: "详细信息", // 详细信息
-          caozuo: "操作" // 操作
-        },{
-          coding: "122", // 序号编码
-          name: "sadad", // 样本名称
-          address: "", // 位置信息
-          status: "正常", // 状态
-          info: "详细信息", // 详细信息
-          caozuo: "操作" // 操作
-        },{
-          coding: "122", // 序号编码
-          name: "sadad", // 样本名称
-          address: "", // 位置信息
-          status: "正常", // 状态
-          info: "详细信息", // 详细信息
-          caozuo: "操作" // 操作
-        }
-        ],
+        // {
+        //   id:1,
+        //   coding: "111", // 序号编码
+        //   name: "Mark", // 样本名称
+        //   // address: "海尔冰箱3-1-101海尔冰箱", // 位置信息
+        //   status: "正常", // 状态
+        //   info: "详细信息", // 详细信息
+        // }
+      ],
       // multipleSelection: [],
       // toggleSaoMiao: false
     };
@@ -264,7 +204,6 @@ export default {
   methods: {
     /* 转运 */
     zhuanyun() {
-      console.log("1111111: ", 1111111);
       this.togegleZhuanYun = true;
     },
     /* 保存 */
@@ -283,6 +222,21 @@ export default {
       this.$message("确认保存-父组件");
       this.newMaskTran = false;
     },
+    changeBox (boxData) {
+      console.log(boxData)
+      this.boxData = boxData
+    },
+    sampleInfo(row,index){
+      
+    },
+    sampleBoxInfo(row,index){
+
+    },
+    newBoxMask(row){
+      this.newBoxMaskTran=true
+      this.boxRfid = row.coding
+      this.sampleBoxTitle = '新建样本盒'
+    },
     //   修改样本
     changeSave() {
       this.$message("确认保存-父组件");
@@ -293,12 +247,36 @@ export default {
       // this.RFID = row.coding
       console.log("index: ", index);
     },
+    reBoxMask(row){
+    //   this.reBoxMaskTran = true
 
-    reBoxMask(rowData, index){
-      this.reBoxMaskTran = true;
+      this.$axios({
+        method:'post',
+        url:'/sampleGuide/set/isCanBeUpdateSampleBox',
+        data:({
+          id: row.id
+        })
+      })
+      .then(({data})=>{
+          console.log(data)
+          if(data.data == 0){
+            this.$message({
+              message: '该样本盒中存在非正常状态样本，不可修改！',
+              type: 'warning'
+            });
+          }else{
+            this.boxRfid = row.coding
+            this.newBoxMaskTran=true
+            this.sampleBoxTitle = '修改样本盒'
+            this.sampleBoxId = row.id
+          }
+      })
     },
-    selects(selection) {
-      this.checkedlist = selection;
+    selectBox(selection) {
+      this.checkedBoxlist = selection
+    },
+    selects(selection){
+      this.checkedlist = selection
     }
   }
 };
@@ -310,6 +288,9 @@ export default {
   padding:  0 20px;
   // height: 100%;
   overflow: hidden;
+}
+.infoStyle{
+  cursor: pointer;
 }
 // 表单
 .table-box {
