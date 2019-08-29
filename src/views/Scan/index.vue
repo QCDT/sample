@@ -4,7 +4,7 @@
       <!-- 拉条:侧边导航栏:转运 分组合演 患者采血 自动录入 离心机 -->
       <BTNTopPosa></BTNTopPosa>
       <!-- 扫描动态图    -->
-      <saomiaoAndGuanli :switchSaoMiao="switchSaoMiao"  @changeBox='changeBox'></saomiaoAndGuanli>
+      <saomiaoAndGuanli :switchSaoMiao="switchSaoMiao"  @changeBox='changeBox' @changeSample="changeSample"></saomiaoAndGuanli>
       <!-- 表单 -->
       <div class="table-box">
         <formTopContent :count="!switchSaoMiao ? tableData.length : boxData.length" :switchSaoMiao="switchSaoMiao">
@@ -37,19 +37,19 @@
                 <el-table-column label="操作" fixed="right" width="120">
                   <template slot-scope="scope">
                     <el-tooltip class="item" effect="dark" content="新建" placement="bottom-start" >
-                      <img 
-                        src="@/assets/img/new.png" 
-                        class="tb-img" 
-                        @click="newMask(scope.row, scope.$index)"  
+                      <img
+                        src="@/assets/img/new.png"
+                        class="tb-img"
+                        @click="newMask(scope.row, scope.$index)"
                         v-show="scope.row.address ? false : true"
                       >
                     </el-tooltip>
                     <el-tooltip class="item" effect="dark" content="修改" placement="bottom-start" >
-                      <img 
-                        src="@/assets/img/xiugai2.png" 
-                        class="tb-img" 
-                        v-show="scope.row.address ? true : false"  
-                        @click="reMask(scope.row,scope.$index)" 
+                      <img
+                        src="@/assets/img/xiugai2.png"
+                        class="tb-img"
+                        v-show="scope.row.address ? true : false"
+                        @click="reMask(scope.row,scope.$index)"
                       >
                     </el-tooltip>
                   </template>
@@ -84,18 +84,18 @@
                 <el-table-column label="操作">
                   <template slot-scope="scope">
                     <el-tooltip class="item" effect="dark" content="新建" placement="bottom-start" >
-                      <img 
-                        src="@/assets/img/scanBox.png" 
-                        class="tb-img" 
-                        @click="newBoxMask(scope.row,scope.$index)"  
+                      <img
+                        src="@/assets/img/scanBox.png"
+                        class="tb-img"
+                        @click="newBoxMask(scope.row,scope.$index)"
                         v-show="scope.row.address ? false : true"
                       >
                     </el-tooltip>
                     <el-tooltip class="item" effect="dark" content="修改" placement="bottom-start" >
-                      <img 
-                        src="@/assets/img/editScanBox.png" 
-                        class="tb-img" 
-                        @click="reBoxMask(scope.row,scope.$index)"  
+                      <img
+                        src="@/assets/img/editScanBox.png"
+                        class="tb-img"
+                        @click="reBoxMask(scope.row,scope.$index)"
                         v-show="scope.row.address ? true: false "
                       >
                     </el-tooltip>
@@ -107,7 +107,7 @@
       <!-- ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓  底部按钮 -->
       <BTNbot :switchSaoMiao="switchSaoMiao"  :switchGuanLi="switchGuanLi" :checkedBoxlist="checkedBoxlist" :checkedlist="checkedlist" @zhuanyun="zhuanyun"></BTNbot>
       <!-- ↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑   -->
-    </div> 
+    </div>
       <!-- 新建样本 -->
       <transition name="el-fade-in-linear">
           <newSample  v-if="newMaskTran" title="新建样本" :RFID="RFID" @goBack="newMaskTran=false" @save="save"></newSample>
@@ -233,8 +233,12 @@ export default {
       console.log(boxData)
       this.boxData = boxData
     },
+    changeSample(tableData){
+      this.tableData = tableData
+      // this.$store.commit('changeReturnBack', selection)
+    },
     sampleInfo(row,index){
-      
+
     },
     sampleBoxInfo(row,index){
       this.sampleBoxId = row.id
@@ -286,6 +290,7 @@ export default {
     },
     selects(selection){
       this.checkedlist = selection
+      this.$store.commit('changeReturnBack', selection)
     }
   }
 };

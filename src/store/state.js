@@ -1,4 +1,5 @@
 module.exports.state = {
+  returnBackCodeing: [],
   OnOpen (devicetypeValue, OpentypeValue, comBaudRateValue, comFrameStructureValue, comPortValue, netIpAddress, netPort) {    // alert(comFrameStructureValue)
     let nret = -1
     if (OpentypeValue === 'COM') {

@@ -11,11 +11,11 @@
         </router-link>
       </div>
       <div class="item">
-        <router-link :to="{name:botGroupPic[1].link}">
+        <!--<router-link :to="{name:botGroupPic[1].link}">-->
           <el-tooltip class="item" effect="dark" content="归还">
-            <img :src="botGroupPic[1].pic">
+            <img :src="botGroupPic[1].pic" @click="returnBack">
           </el-tooltip>
-        </router-link>
+        <!--</router-link>-->
       </div>
       <div class="item">
         <el-tooltip class="item" effect="dark" content="销毁">
@@ -80,8 +80,8 @@
 <script>
 export default {
   inject:['reload'],
-  props: { 
-    switchSaoMiao: { type: Boolean, default: false }, 
+  props: {
+    switchSaoMiao: { type: Boolean, default: false },
     switchGuanLi: { type: Boolean, default: false },
     checkedlist: { type: Array, default: [] },
     checkedBoxlist:{type:Array,default:[]}
@@ -90,27 +90,27 @@ export default {
   data () {
     return {
       // 底部按钮组的 图片
-      botGroupPic: [ 
-        { 
-          pic: require('@/assets/img/scan_bot_out.png'), 
-          link: 'loan', title: '借出' 
-        }, 
-        { 
-          pic: require('@/assets/img/scan_bot_in.png'), 
-          link: 'guihuan', 
-          title: '归还' 
-        }, 
-        { 
-          pic: require('@/assets/img/scan_bot_laji.png'),  
-          title: '销毁' 
-        }, 
-        { 
-          pic: require('@/assets/img/scan_bot_tie.png'), 
-          title: '标签' 
-        }, 
-        { 
-          pic: require('@/assets/img/scan_bot_zhuanyi.png'), 
-          title: '转移' 
+      botGroupPic: [
+        {
+          pic: require('@/assets/img/scan_bot_out.png'),
+          link: 'loan', title: '借出'
+        },
+        {
+          pic: require('@/assets/img/scan_bot_in.png'),
+          link: 'guihuan',
+          title: '归还'
+        },
+        {
+          pic: require('@/assets/img/scan_bot_laji.png'),
+          title: '销毁'
+        },
+        {
+          pic: require('@/assets/img/scan_bot_tie.png'),
+          title: '标签'
+        },
+        {
+          pic: require('@/assets/img/scan_bot_zhuanyi.png'),
+          title: '转移'
         } ]
     }
   },
@@ -130,7 +130,26 @@ export default {
         this.$message('转运')
         this.$emit('zhuanyun')
       }
-      
+    },
+    returnBack(){
+      if(this.checkedlist.length==0){
+        this.$message({
+          message: '请选择需要归还的样本',
+          type: 'warning'
+        })
+      }else{
+        let boxInfo = this.checkedlist.every((item)=>{
+          return item.status == "借出"
+        })
+        if(boxInfo){
+            this.$router.push({ name: 'guihuan'})
+        }else{
+          this.$message({
+            message: '只有借出状态的样本才允许归还',
+            type: 'warning'
+          })
+        }
+      }
     },
     zhuanyunClickBox(){
       if(this.checkedBoxlist.length == 0){
@@ -194,7 +213,7 @@ export default {
           this.$message({
             type: 'info',
             message: '已取消删除'
-          });          
+          });
         });
       }
     },
@@ -241,7 +260,7 @@ export default {
             this.$message({
               type: 'info',
               message: '已取消删除'
-            });          
+            });
           });
         }else{
           this.$alert('存在空样本，请移除后重试', '提示', {
@@ -271,7 +290,7 @@ export default {
           this.$message({
             type: 'info',
             message: '已取消打印'
-          });          
+          });
         });
       }
     },
@@ -309,7 +328,7 @@ export default {
 								myobject.ecTextOut(260, 50, 17, "Arial", "Period: "+data.data[0].sampleBoxStru.detailLocation+"");
 								myobject.sendcommand("E\r\n");
               }catch(e){
-                alert("打印故障，请检查打印机是否连接！"); 
+                alert("打印故障，请检查打印机是否连接！");
               }finally{
                 myobject.closeport();
               }
@@ -318,7 +337,7 @@ export default {
             this.$message({
               type: 'info',
               message: '已取消打印'
-            });          
+            });
           });
         }else{
           this.$alert('存在空样本，请移除后重试', '提示', {
