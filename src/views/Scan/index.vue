@@ -4,7 +4,7 @@
       <!-- 拉条:侧边导航栏:转运 分组合演 患者采血 自动录入 离心机 -->
       <BTNTopPosa></BTNTopPosa>
       <!-- 扫描动态图    -->
-      <saomiaoAndGuanli :switchSaoMiao="switchSaoMiao"  @changeBox='changeBox'></saomiaoAndGuanli>
+      <saomiaoAndGuanli :switchSaoMiao="switchSaoMiao"  @changeBox='changeBox' ></saomiaoAndGuanli>
       <!-- 表单 -->
       <div class="table-box">
         <formTopContent :count="!switchSaoMiao ? tableData.length : boxData.length" :switchSaoMiao="switchSaoMiao">

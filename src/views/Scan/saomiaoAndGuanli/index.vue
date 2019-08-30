@@ -30,7 +30,7 @@ export default {
     return {
       RfidArr: [],
       tableData: [],
-      boxData: []
+      boxData: [] 
     }
   },
   methods: {

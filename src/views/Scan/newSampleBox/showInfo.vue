@@ -70,7 +70,7 @@ export default {
             boxPosition:'',// 样本盒位置
             rowValue: '',// 样本盒行
             colValue: '',// 样本盒列
-            sampleModel:''
+            showModel:''
         }
     },
     created(){
@@ -90,7 +90,7 @@ export default {
             this.boxPosition = data.data[0].sampleBoxStru.detailLocation,
             this.rowValue = data.data[0].sampleBoxStru.structureCol,
             this.colValue = data.data[0].sampleBoxStru.structureRow,
-            this.sampleModel = data.data[0].sampleBoxStru.structureSpec
+            this.showModel = data.data[0].sampleBoxStru.structureSpec
             // structureSpec
         })
     },
