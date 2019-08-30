@@ -36,6 +36,7 @@ export default {
   methods: {
     scanSample(){
       this.boxData = []
+      this.tableData = []
       this.RfidArr = []
       MyActiveX1.RDR_Close()
       let devicetypeValue = this.$cookies.get('readerType')
@@ -47,7 +48,7 @@ export default {
       let netPort = this.$cookies.get('netPortNo')
       let n = this.$store.state.OnOpen(devicetypeValue,OpentypeValue,comPortValue,comBaudRateValue,comFrameStructureValue,netIpAddress,netPort)
       if (n!=0) {
-        return 
+        return
       }
       let nret=0;
       //盘点标签初始化,申请盘点标签所需要的内存空间。返回，成功：0 ；失败：非0 （查看错误代码表）。
@@ -85,7 +86,7 @@ export default {
           // RfidArr = []
         	let sTagInfo = MyActiveX1.GetRecord(j).split("-")
           let sTagID = sTagInfo[sTagInfo.length-1]
-          console.log(sTagID)
+          // console.log(sTagID)
             this.RfidArr[j] = sTagID
       }
       // if(this.RfidArr.length == 0){
@@ -110,7 +111,7 @@ export default {
                 status: "", // 状态
               })
             }),
-            data.data.sampleBoxMap.SampleBoxInfo.forEach((item)=>{             
+            data.data.sampleBoxMap.SampleBoxInfo.forEach((item)=>{
               this.boxData.push({
                 id:item.id,
                 coding: item.rfidCode, // 序号编码
@@ -119,11 +120,40 @@ export default {
                 status: item.status ==1?'正常':'借出', // 状态
               })
             }),
-            console.log(data)
+            // console.log(data)
             this.$emit('changeBox',this.boxData)
         })
       }else{
-          alert(2)
+        this.$axios({
+          method:'post',
+          url: '/sampleGuide/scan/findRfidSampleByRfidCode',
+          data:({
+            rfidCodeList: this.RfidArr
+          })
+        })
+          .then(({data})=>{
+            console.log(data)
+            data.data.new.forEach((item)=>{
+              this.tableData.push({
+                id:'',
+                coding: item, // 序号编码
+                name: "", // 样本名称
+                address: "", // 位置信息
+                status: "", // 状态
+              })
+            }),
+              data.data.old.forEach((item)=>{
+                this.tableData.push({
+                  id:'',
+                  coding: item.rfidCode, // 序号编码
+                  name: item.name, // 样本名称
+                  address: item.sampleStru.detailLocation, // 位置信息
+                  status: item.status==1?"正常":2?"借出":'预留' // 状态
+                })
+              })
+            this.$emit('changeSample',this.tableData)
+          })
+
       }
 
     },

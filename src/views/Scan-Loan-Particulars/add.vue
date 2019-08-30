@@ -17,9 +17,9 @@
             <div class="top">
               <div class="left">
                 <p><span class="leftItem">样本盒信息</span></p>
-                <p><span class="leftItem">样本盒名称:</span><span>AAA</span></p>
-                <p><span class="leftItem">样本盒位置:</span><span>AAA</span></p>
-                <p><span class="leftItem">可借出样本数:</span><span>AAA</span></p>
+                <p><span class="leftItem">样本盒名称:</span ><span >{{sampleBoxName}}</span></p>
+                <p><span class="leftItem">样本盒位置:</span><span>{{sampleBoxItem}}</span></p>
+                <p><span class="leftItem">可借出样本数:</span><span>{{sampleLoanNum}}</span></p>
               </div>
               <div class="right">
                   <table class="table">
@@ -47,6 +47,7 @@
 </template>
 <script>
 import cardfile from "@/components/cardfile";
+
 export default {
   props: {},
   components: {
@@ -54,7 +55,12 @@ export default {
   },
   data () {
     return {
-      scanStatus:true,
+      loanSearchStatus:false,
+      scanStatus: true,
+      RfidArr:[],
+      sampleBoxName:'',
+      sampleBoxItem:'',
+      sampleLoanNum:'',
       mapData: [
         { text: '已使用', bgc: '#7D7C7F' },
         { text: '借用', bgc: '#FCFD01' },
@@ -69,11 +75,96 @@ export default {
   }},
   methods: {
     scanSampleBox(){
-      this.scanStatus = false
+     // this.boxData = []
+      this.RfidArr = []
+      MyActiveX1.RDR_Close()
+      let devicetypeValue = this.$cookies.get('readerType')
+      let OpentypeValue = this.$cookies.get('portType')
+      let comPortValue = this.$cookies.get('comPortNo')
+      let comBaudRateValue = this.$cookies.get('comBaudRate')
+      let comFrameStructureValue = this.$cookies.get('comFrameStructure')
+      let netIpAddress = this.$cookies.get('netIpAddress')
+      let netPort = this.$cookies.get('netPortNo')
+      let n = this.$store.state.OnOpen(devicetypeValue,OpentypeValue,comPortValue,comBaudRateValue,comFrameStructureValue,netIpAddress,netPort)
+      if (n!=0) {
+        return 
+      }
+      let nret=0;
+      //盘点标签初始化,申请盘点标签所需要的内存空间。返回，成功：0 ；失败：非0 （查看错误代码表）。
+	    nret = MyActiveX1.RDR_InitInventory();
+      if (nret!=0) {
+        alert("盘点标签初始化失败！")
+        return;
+      }
+      //盘点标签时，使能15693协议。返回，成功：0 ；失败：非0 （查看错误代码表）。
+      nret = MyActiveX1.RDR_Enable15693(0,0x00,0)
+      nret = MyActiveX1.RDR_Enable14443A()
+      if (nret!=0) {
+        //结束标签盘点操作，释放内存空间。
+          MyActiveX1.RDR_FinishInventory()
+        return;
+      }
+      this.readRfid()
+      MyActiveX1.RDR_Close()
+    },
+    //扫描
+    readRfid(){
+      let nret = 0
+      let recordCnt = ''
+      nret = MyActiveX1.RDR_Inventory(0,"")
+      if (nret !== 0) {
+        this.$alert('读取标签失败，请检查设备连接以及参数设置！', '提示', {
+          confirmButtonText: '确定',
+          type: 'error'
+        })
+        MyActiveX1.RDR_FinishInventory()
+        return
+      }
+      recordCnt = MyActiveX1.RDR_GetRecordCnt()
+      if(recordCnt==0){
+        this.$message('没有扫描到样本')
+        return
+      }
+      alert(recordCnt)
+      for(let j=0;j<recordCnt;j++){
+          // RfidArr = []
+        	let sTagInfo = MyActiveX1.GetRecord(j).split("-")
+          let sTagID = sTagInfo[sTagInfo.length-1]
+          console.log(sTagID)
+            this.RfidArr[j] = sTagID
+      }
+      // if(this.RfidArr.length == 0){
+      //   return
+      // }
+      console.log(this.RfidArr)
+
+      //扫描样本盒借出样本
+      this.$axios({
+          method:'post',
+          url: 'sampleGuide/scan/findSampleStruAndSampleBoxBySampleBoxId',
+          data:({
+            /* loanOrderId: this.$store.state.loanOrderId, */
+            sampleBoxRfidCodeList:this.RfidArr,
+          })
+        })
+        .then(({data})=>{
+          console.log(data);
+          this.sampleLoanNum=data.data.canUserSampleCount
+          data.data.scanSampleBoxLoanVo.forEach((item)=>{
+            console.log(item);
+            this.sampleBoxName=item.sampleBoxName
+            this.sampleBoxItem=item.detailLocation
+            this.scanStatus = false
+          })
+          /* this.sampleBoxName =data.data
+          this.sampleBoxItem =data. */
+          
+        })
     },
     addSample(){
       this.$emit('close')
-      // this.scanStatus = false
+      //this.scanStatus= this.$store.state.loanSearchStatus,
+       this.scanStatus = false
     }
   },
   computed: {}

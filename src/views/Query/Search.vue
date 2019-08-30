@@ -15,21 +15,23 @@
           </tmpinput>
           <tmpinput>
             借出人
-            <el-input
+            <el-select
               slot="elUI"
               size="small"
               v-model="sampleSearch.lender"
               clearable
-            ></el-input>
+              placeholder="请选择"
+            ></el-select>
           </tmpinput>
           <tmpinput>
             录入人
-            <el-input
+            <el-select
               slot="elUI"
               size="small"
               v-model="sampleSearch.enterClerk"
               clearable
-            ></el-input>
+              placeholder="请选择"
+            ></el-select>
           </tmpinput>
           <tmpinput>
             试管类别
@@ -42,7 +44,7 @@
             >
               <el-option
                 v-for="item in testTubeCategory"
-                :key="item.value"
+                :key="item.value + item.label"
                 :label="item.label"
                 :value="item.value"
               ></el-option>
@@ -193,6 +195,7 @@
               v-model="sampleSearch.refrigerator"
               placeholder="请选择"
               style="width:100%"
+              @change="selectIceBox"
             >
               <el-option
                 v-for="item in refrigerator"
@@ -211,6 +214,7 @@
               v-model="sampleSearch.layer"
               placeholder="请选择"
               style="width:100%"
+              @change="selectIcePlice"
             >
               <el-option
                 v-for="item in layer"
@@ -229,6 +233,7 @@
               v-model="sampleSearch.chouTi"
               placeholder="请选择"
               style="width:100%"
+              @change="selectDrawer"
             >
               <el-option
                 v-for="item in chouTi"
@@ -239,7 +244,7 @@
             </el-select>
           </tmpinput>
           <tmpinput>
-            样式盒
+            样本盒
             <el-select
               slot="elUI"
               size="small"
@@ -294,18 +299,21 @@ export default {
       /* 下拉选择 */
       /* 试管类别 testTubeCategory */
       testTubeCategory: [
-        { value: 'A类别', label: 'A类别' },
-        { value: 'B类别', label: 'B类别' }
+        /* { value: 'A类别', label: 'A类别' },
+        { value: 'B类别', label: 'B类别' } */
       ],
       /* 来源 source */
       source: [
         { value: 'A来源', label: 'A来源' },
         { value: 'B来源', label: 'B来源' }
       ],
+      //录入人
+      enterClerk:[],
       /* 状态 status */
       status: [
-        { value: '状态A', label: '状态A' },
-        { value: '状态B', label: '状态B' }
+        { value: '1', label: '正常' },
+        { value: '2', label: '借出' },
+        { value: '3', label: '预留' }
       ],
       /* 样本类别 sampleClass */
       sampleClass: [
@@ -339,7 +347,44 @@ export default {
       ]
     }
   },
-
+  //查询初始化
+  created(){
+    //类别
+    this.$axios({
+      method:'get',
+      url:'sampleGuide/queryCategoryDict/selectSampleCategory',
+    })
+    .then(({data})=>{
+         // console.log(data);
+          data.data.forEach((item)=>{
+              this.testTubeCategory.push({label:item,value:item});
+          })
+    }),
+    //来源
+      this.$axios({
+        method:'get',
+        url:'sampleGuide/querySampleSource/selectrfidSamplesource',
+      })
+      .then(({data})=>{
+            console.log(data);
+            data.data.forEach((label,value)=>{
+                this.source.push({label,value});
+              })
+        }),
+      //录入人
+        this.$axios({
+        method:'get',
+        url:'sampleGuide/userInfo/findAllUse',
+      })
+      .then(({data})=>{
+        console.log(data);
+        data.data.forEach((label,value)=>{
+            this.enterClerk.push({label,value});
+          })
+      })
+        
+    },
+    
   methods: {
     toggleAdvancedSearch () {
       /* 切换高级搜索 */
@@ -354,6 +399,18 @@ export default {
     startSearch () {
       /* 开始搜索 */
       this.$emit('startSearch', JSON.stringify(this.sampleSearch))
+    },
+    //选择冰箱
+    selectIceBox(){
+
+    },
+    //选择层
+    selectIcePlice(){
+
+    },
+    //选择抽屉
+    selectDrawer(){
+
     }
   }
 }

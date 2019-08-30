@@ -171,7 +171,7 @@ export default {
       margin-right: 1.5px;
       padding: 5px 15px 0;
 
-      background: #3cd7ff;
+      background: #00c9ff;
 
       &:first-child {
         border-right: 1px solid #00c9ff;
