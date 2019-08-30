@@ -408,26 +408,27 @@ export default {
             method:'post',
             url:'sampleGuide/query/findAllRfidSampleByCondition',
             data:({
-              sampleCategoryDict:1,// 当前要删除的订单ID
+              sampleCategoryDict:0,// 当前要删除的订单ID
+              name:'102',
             })
           })
           .then(({data})=>{
             console.log(data);
             data.data.forEach((item)=>{
-               //console.log(item);
+               console.log(item);
             this.searchTableData.push({ 
               color:item.capColor, // 管帽颜色
               sampleInfo:item.name, // 样本信息
-              enterClork:item.inputUserName, // 录入人
+              enterName:item.inputUserName, // 录入人
               enterData:item.inputTime, // 录入日期
-              samplingDate:item.samplingDate, // 采样日期
+              sampleBloodData:item.samplingDate, // 采样日期
               source:item.sampleSource, // 样本来源
-              pastDate:item.expireDate, // 过期日期
+              pastTime:item.expireDate, // 过期日期
               location:item.sampleStru.detailLocation, // 位置信息
               status:item.status, // 状态
-              sampleClass:item.sampleCategoryDict.name, // 类别
-              lender:item.loanUserName, // 借出人
-              outDate:item.loanTime// 借出日期
+              classify:item.sampleCategoryDict.name, // 类别
+              loanPerson:item.loanUserName, // 借出人
+              loanTime:item.loanTime// 借出日期
             })
         })
         this.$emit('changeTable', this.searchTableData)

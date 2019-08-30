@@ -39,8 +39,8 @@
           </el-table-column>
           <!--  -->
           <el-table-column prop="enterName" label="录入人" show-overflow-tooltip></el-table-column>
-          <el-table-column prop="enterTime" label="录入日期" show-overflow-tooltip></el-table-column>
-          <el-table-column prop="sampl" label="采样信息" show-overflow-tooltip></el-table-column>
+          <el-table-column prop="enterData" label="录入日期" show-overflow-tooltip></el-table-column>
+          <el-table-column prop="sampleBloodData" label="采样日期" show-overflow-tooltip></el-table-column>
           <el-table-column prop="source" label="样本来源" show-overflow-tooltip></el-table-column>
           <el-table-column prop="pastTime" label="过期日期" show-overflow-tooltip></el-table-column>
           <el-table-column prop="location" label="位置信息" show-overflow-tooltip></el-table-column>
@@ -72,21 +72,7 @@ export default {
     return {
       // ↓   表单
       tableData: [
-        // {
-        //   coding: '1', // 序号编码
-        //   color: '管帽颜色', // 管帽颜色
-        //   sampleInfo: '样本信息', // 样本信息
-        //   enterClork: '录入人', // 录入人
-        //   enterData: '录入日期', // 录入日期
-        //   samplingDate: '采样日期', // 采样日期
-        //   source: '样本来源', // 样本来源
-        //   pastDate: '过期日期', // 过期日期
-        //   location: '位置信息', // 位置信息
-        //   status: '状态', // 状态
-        //   sampleClass: '类别', // 类别
-        //   lender: '借出人', // 借出人
-        //   outDate: '2019' // 借出日期
-        // }
+        
       ],
       multipleSelection: []
       //   ↑ 表单
