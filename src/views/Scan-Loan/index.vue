@@ -96,7 +96,7 @@ export default {
                takeOutName:item.takeleave,//………………取走人
                returnTiem:item.expectedreturndate,//………………预计归还时间
                mark:item.loanremarks,//…………备注
-               status:item.status==1?"已核验":"未核验", //…………订单状态
+               status:item.status==0?"未核验":"已核验", //…………订单状态
             })
         })
       })
@@ -130,13 +130,13 @@ export default {
             }
 
           })
-          
+
         })
         .catch(() => {
           this.$message({ type: 'info', message: '已取消删除' })
         })
     },
-    
+
     //导出借出订单PDF
     /* exportPdf(row, index){
       console.log(row,indeex);
@@ -176,7 +176,7 @@ export default {
         document.body.removeChild(a); // 移除a元素
       })
     },
-    
+
 
     //进入借出订单
     showOrder(row,index){
