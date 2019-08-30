@@ -7,7 +7,7 @@
  -->
 <template>
   <div class="searchWrap">
-    <Search @startSearch="startSearch"></Search>
+    <Search @startSearch="startSearch" @changeTable = changeTable ></Search>
     <!-- 表单 ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓ -->
     <div class="bot-form">
       <div class="table-box">
@@ -72,21 +72,21 @@ export default {
     return {
       // ↓   表单
       tableData: [
-        {
-          coding: '1', // 序号编码
-          color: '管帽颜色', // 管帽颜色
-          sampleInfo: '样本信息', // 样本信息
-          enterClork: '录入人', // 录入人
-          enterData: '录入日期', // 录入日期
-          samplingDate: '采样日期', // 采样日期
-          source: '样本来源', // 样本来源
-          pastDate: '过期日期', // 过期日期
-          location: '位置信息', // 位置信息
-          status: '状态', // 状态
-          sampleClass: '类别', // 类别
-          lender: '借出人', // 借出人
-          outDate: '2019' // 借出日期
-        }
+        // {
+        //   coding: '1', // 序号编码
+        //   color: '管帽颜色', // 管帽颜色
+        //   sampleInfo: '样本信息', // 样本信息
+        //   enterClork: '录入人', // 录入人
+        //   enterData: '录入日期', // 录入日期
+        //   samplingDate: '采样日期', // 采样日期
+        //   source: '样本来源', // 样本来源
+        //   pastDate: '过期日期', // 过期日期
+        //   location: '位置信息', // 位置信息
+        //   status: '状态', // 状态
+        //   sampleClass: '类别', // 类别
+        //   lender: '借出人', // 借出人
+        //   outDate: '2019' // 借出日期
+        // }
       ],
       multipleSelection: []
       //   ↑ 表单
@@ -95,6 +95,9 @@ export default {
   methods: {
     handleSelectionChange (val) {
       this.multipleSelection = val
+    },
+    changeTable(tableData){
+        this.tableData = tableData
     },
     // 表格里的事件 ↓ row:行数据 index:索引
     handleClick (row, index) {
@@ -112,6 +115,9 @@ export default {
     },
     backLoanPage(){
       this.$router.push({name:'particulars'})
+    },
+    backLoanPage(){
+      
     }
   },
   computed: {}
