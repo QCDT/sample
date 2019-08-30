@@ -5,13 +5,30 @@
       <div class="data">
         <div class="row row-spall">
           <tmpinput>
-            样式名称
+            样本名称
             <el-input
               slot="elUI"
               size="small"
               v-model="sampleSearch.name"
               clearable
             ></el-input>
+          </tmpinput>
+          <tmpinput>
+            查询类别
+            <el-select
+              slot="elUI"
+              size="small"
+              clearable
+              v-model="sampleSearch.sampleItem"
+              placeholder="请选择"
+            >
+              <el-option
+                v-for="item in sampleItem"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              ></el-option>
+            </el-select>
           </tmpinput>
           <tmpinput>
             借出人
@@ -33,8 +50,11 @@
               placeholder="请选择"
             ></el-select>
           </tmpinput>
+          
+        </div>
+        <div class="row row-spall">
           <tmpinput>
-            试管类别
+            样本类别
             <el-select
               slot="elUI"
               size="small"
@@ -50,8 +70,6 @@
               ></el-option>
             </el-select>
           </tmpinput>
-        </div>
-        <div class="row row-spall">
           <tmpinput>
             样本来源
             <el-select
@@ -86,23 +104,7 @@
               ></el-option>
             </el-select>
           </tmpinput>
-          <tmpinput>
-            样本类别
-            <el-select
-              slot="elUI"
-              size="small"
-              clearable
-              v-model="sampleSearch.sampleClass"
-              placeholder="请选择"
-            >
-              <el-option
-                v-for="item in sampleClass"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              ></el-option>
-            </el-select>
-          </tmpinput>
+          
           <tmpinput>
             项目类别
             <el-select
@@ -284,11 +286,12 @@ export default {
       /* 是否高级搜索 */
       showAdvancedSearch: false,
       asHeight: 0,
+      searchTableData:[],
       /* 搜索参数 */
       sampleSearch: {
         /**
          * [样本名称:name] [借出人:lender] [录入人:enterClerk] [试管类别:testTubeCategory]
-         * [样本来源:source] [状态:status] [样本类别:sampleClass] [项目类别:itemClass]
+         * [样本来源:source] [状态:status] [样本类别:sampleItem] [项目类别:itemClass]
          * -- 高级搜索 --
          * [借出日期:outDate] [过期日期:pastDate]
          * [采样日期:samplingDate] [录入日期:enterData]
@@ -304,8 +307,8 @@ export default {
       ],
       /* 来源 source */
       source: [
-        { value: 'A来源', label: 'A来源' },
-        { value: 'B来源', label: 'B来源' }
+        /* { value: 'A来源', label: 'A来源' },
+        { value: 'B来源', label: 'B来源' } */
       ],
       //录入人
       enterClerk:[],
@@ -315,35 +318,37 @@ export default {
         { value: '2', label: '借出' },
         { value: '3', label: '预留' }
       ],
-      /* 样本类别 sampleClass */
-      sampleClass: [
-        { value: '样本类别A', label: '样本类别A' },
-        { value: '样本类别B', label: '样本类别B' }
+      /* 样本类别 sampleItem */
+      sampleItem: [
+        /* { value: '样本类别A', label: '样本类别A' },
+        { value: '样本类别B', label: '样本类别B' } */
+        { value: '1', label: '样本' },
+        { value: '2', label: '样本盒' },
       ],
       /* 项目类别 itemClass */
       itemClass: [
-        { value: '项目类别a', label: '项目类别a' },
-        { value: '项目类别b', label: '项目类别b' }
+        /* { value: '项目类别a', label: '项目类别a' },
+        { value: '项目类别b', label: '项目类别b' } */
       ],
       /* 冰箱 refrigerator */
       refrigerator: [
-        { value: 'refrigeratorA', label: 'refrigeratorA' },
-        { value: 'refrigeratorB', label: 'refrigeratorB' }
+        /* { value: 'refrigeratorA', label: 'refrigeratorA' },
+        { value: 'refrigeratorB', label: 'refrigeratorB' } */
       ],
       /* 层数 layer */
       layer: [
-        { value: 'layer1', label: 'layer1' },
-        { value: 'layer2', label: 'layer2' }
+        /* { value: 'layer1', label: 'layer1' },
+        { value: 'layer2', label: 'layer2' } */
       ],
       /* 抽屉 chouTi */
       chouTi: [
-        { value: 'chouTi1', label: 'chouTi1' },
-        { value: 'chouTi2', label: 'chouTi2' }
+       /*  { value: 'chouTi1', label: 'chouTi1' },
+        { value: 'chouTi2', label: 'chouTi2' } */
       ],
       /* 样式盒 styleBox */
       styleBox: [
-        { value: 'styleBox1', label: 'styleBox1' },
-        { value: 'styleBox2', label: 'styleBox2' }
+        /* { value: 'styleBox1', label: 'styleBox1' },
+        { value: 'styleBox2', label: 'styleBox2' } */
       ]
     }
   },
@@ -398,7 +403,36 @@ export default {
     },
     startSearch () {
       /* 开始搜索 */
-      this.$emit('startSearch', JSON.stringify(this.sampleSearch))
+    // this.$emit('startSearch', JSON.stringify(this.sampleSearch))
+      this.$axios({
+            method:'post',
+            url:'sampleGuide/query/findAllRfidSampleByCondition',
+            data:({
+              sampleCategoryDict:0,// 当前要删除的订单ID
+              name:'102',
+            })
+          })
+          .then(({data})=>{
+            console.log(data);
+            data.data.forEach((item)=>{
+               console.log(item);
+            this.searchTableData.push({ 
+              color:item.capColor, // 管帽颜色
+              sampleInfo:item.name, // 样本信息
+              enterName:item.inputUserName, // 录入人
+              enterData:item.inputTime, // 录入日期
+              sampleBloodData:item.samplingDate, // 采样日期
+              source:item.sampleSource, // 样本来源
+              pastTime:item.expireDate, // 过期日期
+              location:item.sampleStru.detailLocation, // 位置信息
+              status:item.status, // 状态
+              classify:item.sampleCategoryDict.name, // 类别
+              loanPerson:item.loanUserName, // 借出人
+              loanTime:item.loanTime// 借出日期
+            })
+        })
+        this.$emit('changeTable', this.searchTableData)
+          })
     },
     //选择冰箱
     selectIceBox(){

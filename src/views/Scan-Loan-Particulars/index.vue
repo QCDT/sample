@@ -24,7 +24,7 @@
 
     <div class="fotm-table-two">
       <fromName>该表单样本信息</fromName>
-      <el-button round  class="center" type="primary" v-show="status==0">开始核验</el-button>
+      <el-button round  class="center" type="primary" v-show="status==0" @click="startCheck">开始核验</el-button>
 
       <div class="fotm-table-box">
         <div class="form-two-menu" v-show="status==0">
@@ -85,8 +85,10 @@ export default {
       //ifAddBox: false,
       AddBox:false,
       ifSearchAddBox: false,
+      loanOrderId:'',
       LoanOrderStatus:'',
       status: -1,
+     
       /* 借出表单信息 */
       sampleData:[
         /* {
@@ -113,17 +115,19 @@ export default {
           status: '未核验' // 表单状态
         }*/
       ],
-      multipleSelection: []
+      multipleSelection: [],
+      RfidNmber:[],
     }
   },
 
   //点击表单名称获取当前ID
   created(){
+    this.loanOrderId = this.$store.state.loanOrderId
     this.$axios({
       method:'post',
       url:'sampleGuide/scan/findLoanOrderAndLoanSampleById',
       data:({
-        id: this.$store.state.loanOrderId,// 当前订单ID
+        id: this.loanOrderId,// 当前订单ID
       })
     })
     .then(({data})=>{
@@ -182,12 +186,40 @@ export default {
       })
         .then(() => {
           this.tableData.splice(index, 1)
-          this.$message({ type: 'success', message: '删除成功!' })
+          this.$axios({
+            method:'post',
+            url:'sampleGuide/scan/delLoanSampleInLoanOrder',
+            data:({
+              sampleIdList:this.RfidNmber,// 当前订单ID
+           })
+          })
+          .then((data)=>{
+            console.log(data)
+            
+            this.$message({ type: 'success', message: '删除成功!' })
+          })
         })
         .catch(() => {
           this.$message({ type: 'info', message: '已取消删除' })
         })
     },
+
+    //开始核验
+    /* startCheck(){
+      this.$axios({
+            method:'post',
+            url:'sampleGuide/scan/existSampleInLoanOrder',
+            data:({
+              loanOrderId:this.$store.state.loanOrderId,// 当前订单ID
+              rfidCodeList:this.RfidArr,
+           })
+          })
+          .then((data)=>{
+            console.log(data)
+            
+            this.$message({ type: 'success', message: '删除成功!' })
+          })
+    }, */
 
     // ↓    添加订单
     showAdd () {

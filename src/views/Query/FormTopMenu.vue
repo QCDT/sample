@@ -182,6 +182,12 @@ export default {
       }else{
         console.log(this.multipleSelection)
       }
+    },
+    addLoanSample(){
+
+    },
+    exportLoanPdf(){
+      
     }
   },
   computed: {}

@@ -23,8 +23,8 @@
               </div>
               <div class="right">
                   <table class="table">
-                    <tr v-for="(item,index) in 10" :key="index">
-                      <td v-for="(item,ind) in 10" :key="ind">{{ind}}</td>
+                    <tr v-for="(item,index) in 9" :key="index">
+                      <td v-for="(item,ind) in 9" :key="ind">{{ind+1}}</td>
                     </tr>
                   </table>
                   <div class="map">
@@ -49,6 +49,7 @@
 import cardfile from "@/components/cardfile";
 
 export default {
+  inject:['reload'],
   props: {},
   components: {
     cardfile
@@ -61,6 +62,7 @@ export default {
       sampleBoxName:'',
       sampleBoxItem:'',
       sampleLoanNum:'',
+      
       mapData: [
         { text: '已使用', bgc: '#7D7C7F' },
         { text: '借用', bgc: '#FCFD01' },
@@ -143,28 +145,42 @@ export default {
           method:'post',
           url: 'sampleGuide/scan/findSampleStruAndSampleBoxBySampleBoxId',
           data:({
-            /* loanOrderId: this.$store.state.loanOrderId, */
             sampleBoxRfidCodeList:this.RfidArr,
           })
         })
         .then(({data})=>{
-          console.log(data);
-          this.sampleLoanNum=data.data.canUserSampleCount
+          //console.log(data);
+          this.sampleLoanNum=data.data.canUserSampleCount//借出数量
           data.data.scanSampleBoxLoanVo.forEach((item)=>{
-            console.log(item);
-            this.sampleBoxName=item.sampleBoxName
-            this.sampleBoxItem=item.detailLocation
+            //console.log(item);
+            this.sampleBoxName=item.sampleBoxName//样本盒名称
+            this.sampleBoxItem=item.detailLocation//样本盒位置
             this.scanStatus = false
-          })
-          /* this.sampleBoxName =data.data
-          this.sampleBoxItem =data. */
-          
+          })     
         })
     },
     addSample(){
       this.$emit('close')
-      //this.scanStatus= this.$store.state.loanSearchStatus,
-       this.scanStatus = false
+      //this.scanStatus = false
+      this.$axios({
+        method:'post',
+        url: 'sampleGuide/scan/addInBoxSamplesToLoanOrder',
+        data:({
+          sampleBoxName:this.sampleBoxName,
+          loanOrderId: this.$store.state.loanOrderId,
+          rfidCodeList:this.RfidArr,
+        })
+      })
+      .then(({data})=>{
+        console.log(data);
+        this.reload()
+        /* this.sampleLoanNum=data.data.canUserSampleCount//借出数量
+        data.data.scanSampleBoxLoanVo.forEach((item)=>{
+          console.log(item);
+          this.sampleBoxName=item.sampleBoxName//样本盒名称
+          this.sampleBoxItem=item.detailLocation//样本盒位置
+          this.scanStatus = false */
+        })     
     }
   },
   computed: {}
