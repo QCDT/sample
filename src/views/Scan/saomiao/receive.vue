@@ -591,16 +591,16 @@ export default {
                 // } else { // IE10+下载
                 // navigator.msSaveBlob(blob, fileName)
                 // }
-                var blob = new Blob([res.data], {type: 'application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
-                //var fileName = decodeURI(res.headers['content-disposition'].split(";")[1])
-                var a = document.createElement('a');
-                var href = window.URL.createObjectURL(blob); // 创建链接对象
-                a.href =  href;
-                a.download = 'fileName';   // 自定义文件名
-                document.body.appendChild(a);
-                a.click();
-                window.URL.revokeObjectURL(href);  //移除链接对象
-                document.body.removeChild(a); // 移除a元素
+    //             var blob = new Blob([res.data], {type: 'application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
+    //             //var fileName = decodeURI(res.headers['content-disposition'].split(";")[1])
+    //             var a = document.createElement('a');
+    //             var href = window.URL.createObjectURL(blob); // 创建链接对象
+    //             a.href =  href;
+    //             a.download = 'fileName';   // 自定义文件名
+    //             document.body.appendChild(a);
+    //             a.click();
+    //             window.URL.revokeObjectURL(href);  //移除链接对象
+    //             document.body.removeChild(a); // 移除a元素
             })
         },
         exportSampleFormPDF(){
