@@ -23,7 +23,7 @@
         </div>
         <div>
           <span>时间</span>
-          <span class="centrifugeItem">{{centrifugeTime}}</span>
+          <span class="centrifugeItem">{{centrifugeTime |dateFilter}}</span>
         </div>
         <div>
           <span>转速</span>
@@ -37,7 +37,8 @@
       <div class="centrifugeOperation">
         <img src="@/assets/img/centrifugalSet.png" @click="centrifugalSet" />
         <img src="@/assets/img/centrifugalAdd.png" @click="addSample" />
-        <img src="@/assets/img/centrifugalStart1.png" class="mainBtn" />
+        <img v-show="!startCentrifuge" src="@/assets/img/centrifugalStart1.png" class="mainBtn" />
+        <img v-show="startCentrifuge" src="@/assets/img/centrifugalStart.png" class="mainBtn" />
         <img src="@/assets/img/orders.png" @click="exportOrders" />
         <img src="@/assets/img/record.png" @click="Ordersdetail" />
       </div>
@@ -87,29 +88,29 @@
         </div>
         <div class="sampleItem">
           <el-input placeholder="请输入内容" v-model="findValue" size="mini"></el-input>
-          <el-button size="mini" type="primary" class="findBtn">查询</el-button>
+          <el-button size="mini" type="primary"  class="findBtn" @click="searchSample">查询</el-button>
         </div>
         <el-table
           ref="multipleTable"
           :data="dialogSampleData"
           tooltip-effect="dark"
           style="width: 100%"
-          height="150"
+          max-height="150"
           :row-style="{height:'32px',textAlign: 'center',padding:'0px',}"
           :cell-style="{padding:'0px',textAlign: 'center'}"
           :header-cell-style="{height:'30px',textAlign:'center',padding:'0px', background:'#00c9ff',color:'white'}"
           border
+          @selection-change = selectAddSample
         >
           <el-table-column type="selection" width="50"></el-table-column>
-          <el-table-column type="index" width="70" label="序号" class="DataTable"></el-table-column>
-          <el-table-column prop="sampleName" label="样本名称" class="DataTable">
-            <template slot-scope="scope">{{ scope.row.date }}</template>
+          <el-table-column type="index" width="70" label="序号"></el-table-column>
+          <el-table-column prop="codeing" label="RFID编码">
           </el-table-column>
-          <el-table-column prop="projectName" label="项目名称" class="DataTable"></el-table-column>
+          <el-table-column prop="sampleName" label="样本名称"></el-table-column>
         </el-table>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button size="mini" type="primary" @click="dialogSample = false">添加到离心机</el-button>
+        <el-button size="mini" type="primary" @click="addCentrifuger">添加到离心机</el-button>
       </span>
     </el-dialog>
     <el-dialog title="导出订单" :visible.sync="dialogExport" width="60%" center>
@@ -117,38 +118,40 @@
         <div class="searchExport">
           <div class="searchName">
             <el-input v-model="exportName" placeholder="请输入订单名称" size="mini"></el-input>
-            <el-button type="primary" size="mini" class="searchBtn">搜索</el-button>
           </div>
           <div class="block">
             <el-date-picker
               size="mini"
-              v-model="value1"
+              v-model="timeValue"
               type="daterange"
+              value-format="yyyy-MM-dd HH:mm:ss"
               range-separator="至"
               start-placeholder="开始日期"
               end-placeholder="结束日期"
             ></el-date-picker>
-            <el-button type="primary" size="mini" class="searchBtn">搜索</el-button>
+            <el-button type="primary" size="mini" class="searchBtn" @click="searchOrder">搜索</el-button>
           </div>
         </div>
         <el-table
           ref="multipleTable"
-          :data="dialogOrderData"
+          :data="exportOrderData"
           tooltip-effect="dark"
           style="width: 100%"
           height="230"
+          @selection-change="handleSelectionChange"
           :row-style="{height:'32px',textAlign: 'center',padding:'0px',}"
           :cell-style="{padding:'0px',textAlign: 'center'}"
           :header-cell-style="{height:'30px',textAlign:'center',padding:'0px', background:'#00c9ff',color:'white'}"
           border
         >
+          <el-table-column type="selection" width="55"></el-table-column>
           <el-table-column type="index" width="70" label="序号" class="DataTable"></el-table-column>
           <el-table-column prop="orderName" label="订单名称" class="DataTable"></el-table-column>
           <el-table-column label="备注" prop="remarks" width="230"></el-table-column>
         </el-table>
       </div>
       <span slot="footer" class="dialog-footer">
-        <img src="@/assets/img/pdf.png" />
+        <img src="@/assets/img/pdf.png"  @click="exportPDF"/>
         <img src="@/assets/img/excel.png" />
       </span>
     </el-dialog>
@@ -171,8 +174,8 @@
           :header-cell-style="{height:'30px',textAlign:'center',padding:'0px', background:'#00c9ff',color:'white'}"
           border
         >
-          <el-table-column type="index" width="70" label="序号" class="DataTable"></el-table-column>
-          <el-table-column prop="orderName" label="名称" class="DataTable"></el-table-column>
+          <el-table-column type="index" width="70" label="序号"></el-table-column>
+          <el-table-column prop="orderName" label="样本名称"></el-table-column>
           <el-table-column label="操作" width="80">
             <template slot-scope="scope">
               <el-button
@@ -195,7 +198,9 @@ export default {
   inject:['reload'],
   data () {
     return {
+      RfidArr:[],// 扫描样本时扫到的rfid编码
       carouselIndex: 0 /* 轮播图的索引 */,
+      startCentrifuge: false,
       autoplay: false, // 轮播图是否自动播放
       dialogSet: false, // 离心机设置
       dialogSample: false,// 离心机样本添加
@@ -207,31 +212,19 @@ export default {
       centrifugeTemperature: '',// 离心机温度
       centrifugeId: '',//离心机id
       unitValue:'',// 单位值
-      exportName: '',
-      sampleNum: 0,
-      value1: '',
-      value2: '',
+      exportName: '',// 导出订单中要搜索的订单名称
+      timeValue:'',// 导出订单中要搜索订单的时间
+      sampleNum: 0, // 样本详情表中数量
       setTime: '', // 修改页面离心机时间
       setSpeed: '',// 修改页面离心机转速
       setTemperature:'',//修改页面离心机温度
       setBrand:'',//修改页面离心机转速
       setType: '', //修改页面离心机型号
-      findValue: '',
-      value: '',
+      findValue: '',// 查询样本添加时的条件
+      addSampleList:[], //添加时样本集合
       bannerHeight: '',
-      centrifugeList: [
-        // {
-        //   centrifugeName: '',
-        //   centrifugeTime: '',
-        //   centrifugeSpeed: '',
-        //   centrifugeTemperature: '',
-        // },
-        // {
-        //   centrifugeName: '',
-        //   centrifugeTime: '',
-        //   centrifugeSpeed: '',
-        //   centrifugeTemperature: '',
-        // },
+      multipleSelection:[],
+      centrifugeList: [ // 页面初始化显示所有离心机集合
         // {
         //   centrifugeName: '',
         //   centrifugeTime: '',
@@ -239,39 +232,18 @@ export default {
         //   centrifugeTemperature: '',
         // }
       ],
-      dialogSampleData: [
-        // 离心机添加样本数据
+      dialogSampleData: [ //离心机添加样本数据
         // {
         //   id: Date.now(),
+        //   codeing: 11111
         //   sampleName: '111',
-        //   projectName: 'sample',
-        // },
-        // {
-        //   id: Date.now(),
-        //   sampleName: '111',
-        //   projectName: 'sample',
-        // },
-        // {
-        //   id: Date.now(),
-        //   sampleName: '111',
-        //   projectName: 'sample',
         // }
       ],
-      dialogOrderData: [
-        // 离心机订单数据
+      exportOrderData: [], //可导出的订单数据
+      dialogOrderData: [  // 离心机订单数据     
         // {
         //   id: Date.now(),
         //   orderName: '111111111111111111111111111111111111111',
-        //   remarks:''
-        // },
-        // {
-        //   id: Date.now(),
-        //   orderName: '11111111111111111111111111111',
-        //   remarks:''
-        // },
-        // {
-        //   id: Date.now(),
-        //   orderName: '1111111111111111111111111111111111111',
         //   remarks:''
         // }
       ]
@@ -299,15 +271,16 @@ export default {
       this.centrifugeTime = this.centrifugeList[0].centrifugeTime
       this.centrifugeSpeed = this.centrifugeList[0].centrifugeSpeed
       this.centrifugeTemperature = this.centrifugeList[0].centrifugeTemperature
+      this.centrifugeId = this.centrifugeList[0].id
     })
   },
   mounted () {
     // element banner 高度自适应
     this.imgLoad();
-    this.$nextTick(function() {
-      this.bannerHeight = this.$refs.image[0].height;
-      console.log(this.bannerHeight);
-    });
+    // this.$nextTick(function() {
+    //   this.bannerHeight = this.$refs.image[0].height;
+    //   console.log(this.bannerHeight);
+    // });
     window.addEventListener("resize", () => {
       this.$nextTick(function() {
         this.bannerHeight = this.$refs.image[0].height;
@@ -316,7 +289,7 @@ export default {
     });
   },
   methods: {
-    change (v) {
+    change (v) { // 切换离心机时显示相应信息
       console.log(v)
       this.centrifugeName = this.centrifugeList[v].centrifugeName
       this.centrifugeTime = this.centrifugeList[v].centrifugeTime
@@ -327,8 +300,85 @@ export default {
       this.centrifugeId = this.centrifugeList[v].id
       this.carouselIndex = v /* 轮播图的索引 */
     },
-    scanSample(){
+    searchOrder(){ // 导出订单----搜索导出订单
+      console.log(this.centrifugeId)
+      this.$axios({
+        method:'post',
+        url:'sampleGuide/centrifuge/findCenOrderByCen',
+        data: ({
+          centrifugeId: this.centrifugeId,
+          name: this.exportName,
+          beforeTime: this.timeValue[0],
+          afterTime: this.timeValue[1]
+        })
+      })
+      .then(({data})=>{
+          console.log(data)
+          data.data.forEach((item)=>{
+              this.exportOrderData.push({
+                id: item.id,
+                orderName: item.name,
+                remarks:item.remarks
+              })
+          })
+      })
+    },
+    handleSelectionChange(selection){ // 选择需要导出的订单
+      console.log(selection)
+      this.multipleSelection = selection
+    },
+    exportPDF(){ // 导出PDF
+
+        this.$axios({
+            method: 'post',
+            url: 'sampleGuide/centrifuge/cenOrderExportPdf',
+            responseType: 'blob',
+            data:({
+                cenOrderIdList: this.multipleSelection.map((item)=>{return item.id})
+            })
+        })
+        .then((res)=>{
+            console.log(res)
+//             var blob = new Blob([res.data], {type: 'application/vnd.ms-pdf;charset=utf-8'});
+//             var a = document.createElement('a');
+//             var href = window.URL.createObjectURL(blob); // 创建链接对象
+//             a.href =  href;
+//             a.download = '';   // 自定义文件名
+//             document.body.appendChild(a);
+//             a.click();
+//             window.URL.revokeObjectURL(href);  //移除链接对象
+//             document.body.removeChild(a); // 移除a元素
+        })
+    },
+    selectAddSample(selection){ //选择需要添加到离心机的样本
+      this.addSampleList = selection
+    },
+    searchSample(){ //通过搜索样本名称添加样本到离心机
+      this.dialogSampleData = []
+      console.log(this.findValue)
+      this.$axios({
+        method: 'post',
+        url:'sampleGuide/centrifuge/findSampleByNameNoCen',
+        data:({
+          sampleName: this.findValue
+        })
+      })
+      .then(({data})=>{
+        console.log(data)
+        data.data.forEach((item)=>{
+          this.dialogSampleData.push({
+            id:item.id,
+            codeing:item.rfidCode,
+            sampleName:item.name,
+            centrifugeId: this.centrifugeId
+          })
+        })
+        this.findValue = ''
+      })
+    },
+    scanSample(){ // 通过扫描样本rfid添加样本到离心机
       MyActiveX1.RDR_Close();
+      this.dialogSampleData = []
       let devicetypeValue = this.$cookies.get('readerType')
       let OpentypeValue = this.$cookies.get('portType')
       let comPortValue = this.$cookies.get('comPortNo')
@@ -355,15 +405,14 @@ export default {
           MyActiveX1.RDR_FinishInventory()
         return;
       }
-    this.readRfid()
-    MyActiveX1.RDR_Close()
+      this.readRfid()
+      MyActiveX1.RDR_Close()
     },
     readRfid(){
       let nret = 0
       let recordCnt = ''
       let j =0
       nret = MyActiveX1.RDR_Inventory(0,"")
-      // alert(nret)
       if (nret !== 0) {
         this.$alert('读取标签失败，请检查设备连接以及参数设置！', '提示', {
           confirmButtonText: '确定',
@@ -372,19 +421,70 @@ export default {
         MyActiveX1.RDR_FinishInventory()
         return
       }
-      recordCnt = MyActiveX1.RDR_GetRecordCnt()
+      recordCnt = MyActiveX1.RDR_GetRecordCnt()     
       // console.log(recordCnt)
       let sTagInfo = MyActiveX1.GetRecord(j).split("-");
       let sTagID = sTagInfo[sTagInfo.length-1];
       alert(recordCnt)
-      // if(recordCnt == 1){
-      //   this.cardNub = sTagID
-      // }else{
-      //   this.$alert('IC卡只能绑定一个！', '提示', {
-      //     confirmButtonText: '确定',
-      //     type: 'error'
-      //   })
-      // }
+      for(let j=0;j<recordCnt;j++){
+        	let sTagInfo = MyActiveX1.GetRecord(j).split("-")
+          let sTagID = sTagInfo[sTagInfo.length-1]
+          console.log(sTagID)
+          this.RfidArr[j] = sTagID
+      }
+      console.log(this.RfidArr)
+      this.$axios({
+        method: 'post',
+        url: 'sampleGuide/centrifuge/findSampleByRfidNoCen',
+        data:({
+           rfidCodeList: this.RfidArr
+        })
+      })
+      .then(({data})=>{
+        console.log(data.data)
+        data.data.forEach((item)=>{
+          // console.log(item.id)
+          this.dialogSampleData.push({
+            id:item.id,
+            codeing:item.rfidCode,
+            sampleName:item.name,
+            centrifugeId: this.centrifugeId
+          })
+        })
+      })
+    },
+    addCentrifuger(){ // 将选择的样本添加到离心机
+      if(this.addSampleList.length == 0){
+        this.$message({
+          message: '请选择需要添加的样本',
+          type: 'warning'
+        });
+      }else{
+      let addData = []
+      this.addSampleList.forEach((item)=>{
+         addData.push({
+           sampleId: item.id,
+           centrifugeId: item.centrifugeId
+         })
+      })
+      console.log(addData)
+      this.$axios({
+        method: 'post',
+        url:'sampleGuide/cenSample/insertCenSample',
+        data:({
+          centrifugeSampleList: addData
+        })
+      })
+      .then(({data})=>{
+        console.log(data)
+        this.$message({
+          message: '添加成功！',
+          type: 'success'
+        });
+        this.startCentrifuge = true
+        this.dialogSample = false
+      })
+     }
     },
     centrifugalSet () {
       this.dialogSet = true
@@ -392,6 +492,9 @@ export default {
       this.setSpeed = parseFloat(this.centrifugeSpeed)
       this.setTemperature = parseFloat(this.centrifugeTemperature)
       this.unitValue = this.centrifugeSpeed.replace(/[^a-z]+/ig,"")
+    },
+    deleteRow(row,index){
+      console.log(row,index)
     },
     updateSet(){
       this.$axios({
@@ -428,6 +531,22 @@ export default {
     },
     Ordersdetail () {
       this.dialogOrder = true
+       this.$axios({
+          method:'post',
+          url: 'sampleGuide/cenSample/findNoCenSampleInOrder',
+          data:({
+            centrifugeId: this.centrifugeId
+          })
+        })
+        .then(({data})=>{
+          console.log(data)
+          data.data.forEach((item)=>{
+            this.dialogOrderData.push({
+              id: item.id,
+              orderName: item.name
+            })
+          })
+        })
     },
     imgLoad () {
       this.$nextTick(function () {
@@ -436,23 +555,36 @@ export default {
       })
     },
   },
+  watch:{
+    dialogSample(){
+      if(this.dialogSample == false){
+        this.dialogSampleData = []
+        this.findValue = ''
+      }
+    },
+    dialogOrderData(){
+       this.sampleNum = this.dialogSampleData.length
+    }
+  },
   computed: {}
 }
 </script>
-<style  lang='less'>
+<style  lang='less' scoped>
 .centrifugeImg {
-  width: 40%;
+  width: 60%;
   height: 50%;
+  text-align: center;
   // line-height: 50%;
   margin: 0 auto;
   img {
     width: 261px;
     height: 261px;
   }
-  .el-carousel__item--card.is-in-stage {
-    text-align: center;
-  }
+  // /deep/.el-carousel {
+  //   text-align: center;
+  // }
 }
+
 .centrifugeSet {
   width: 60%;
   margin: 0 auto;
@@ -505,10 +637,10 @@ export default {
       font-size: 16px;
     }
   }
-  .el-input {
+  /deep/.el-input {
     width: 40%;
   }
-  .el-select {
+  /deep/.el-select {
     width: 50%;
     margin-left: 10px;
   }
@@ -521,7 +653,7 @@ export default {
     width: 100px;
     cursor: pointer;
   }
-  .el-input {
+  /deep/.el-input {
     width: 50%;
   }
   .sampleItem {
@@ -544,22 +676,22 @@ export default {
       display: flex;
     }
   }
-  img {
-    width: 30px;
-    height: 34px;
-  }
-  .el-range-editor--mini.el-input__inner {
+  /deep/.el-range-editor--mini.el-input__inner {
     width: 70%;
-  }
-  .el-input {
-    width: 60%;
   }
   .searchBtn {
     margin-left: 15px;
     margin-right: 10px;
   }
 }
-.el-dialog__footer {
+.dialog-footer{
+  img {
+    width: 30px;
+    height: 34px;
+    cursor: pointer;
+  }
+}
+/deep/.el-dialog__footer {
   text-align: center;
   img {
     margin-right: 20px;
@@ -567,6 +699,7 @@ export default {
 }
 .dialogOrder {
   .orderNum {
+    text-align:left;
     margin-bottom: 10px;
   }
 }

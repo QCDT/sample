@@ -566,7 +566,7 @@ export default {
             this.$axios({
                 method: 'post',
                 url: 'sampleGuide/sampleReceive/exportExcelSelect',
-                responseType: 'blob',
+                responseType: 'blod',
                 headers: {
                     'Content-Type': 'application/json; charset=UTF-8'
                 },
@@ -576,19 +576,58 @@ export default {
             })
             .then((res)=>{
                 console.log(res)
-                var blob = new Blob([res.data], {type: 'application/vnd.ms-excel;charset=utf-8'});
-                var a = document.createElement('a');
-                var href = window.URL.createObjectURL(blob); // 创建链接对象
-                a.href =  href;
-                a.download = '';   // 自定义文件名
-                document.body.appendChild(a);
-                a.click();
-                window.URL.revokeObjectURL(href);  //移除链接对象
-                document.body.removeChild(a); // 移除a元素
+                // const content = res
+                // const blob = new Blob([content])
+                // const fileName = '导出信息.xlsx'
+                // if ('download' in document.createElement('a')) { // 非IE下载
+                // const elink = document.createElement('a')
+                // elink.download = fileName
+                // elink.style.display = 'none'
+                // elink.href = URL.createObjectURL(blob)
+                // document.body.appendChild(elink)
+                // elink.click()
+                // URL.revokeObjectURL(elink.href) // 释放URL 对象
+                // document.body.removeChild(elink)
+                // } else { // IE10+下载
+                // navigator.msSaveBlob(blob, fileName)
+                // }
+    //             var blob = new Blob([res.data], {type: 'application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
+    //             //var fileName = decodeURI(res.headers['content-disposition'].split(";")[1])
+    //             var a = document.createElement('a');
+    //             var href = window.URL.createObjectURL(blob); // 创建链接对象
+    //             a.href =  href;
+    //             a.download = 'fileName';   // 自定义文件名
+    //             document.body.appendChild(a);
+    //             a.click();
+    //             window.URL.revokeObjectURL(href);  //移除链接对象
+    //             document.body.removeChild(a); // 移除a元素
             })
         },
         exportSampleFormPDF(){
-
+            this.$axios({
+                method: 'post',
+                url: 'sampleGuide/sampleReceive/exportExcelSelect',
+                responseType: 'blob',
+                // headers: {
+                //     'Content-Type': 'application/json; charset=UTF-8'
+                // },
+                data:({
+                    idList: this.exportList
+                })
+            })
+            .then((res)=>{
+                console.log(res)
+                
+    //             var blob = new Blob([res.data], {type: 'application/excel ;charset=utf-8'})
+    //             var a = document.createElement('a');
+    //             var href = window.URL.createObjectURL(blob); // 创建链接对象
+    //             a.href =  href;
+    //             a.download = '';   // 自定义文件名
+    //             document.body.appendChild(a);
+    //             a.click();
+    //             window.URL.revokeObjectURL(href);  //移除链接对象
+    //             document.body.removeChild(a); // 移除a元素
+            })
         }
     }
 }

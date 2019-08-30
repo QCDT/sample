@@ -164,6 +164,7 @@ import tmpButton from '@/components/tmp/zhanglan/tmpButton'
 import masking from '@/components/tmp/zhanglan/maskTran'
 export default {
   props: {},
+  inject:['reload'],
   components: { tmpButton, masking },
   data () {
     let verificationName = (rule, value,callback)=>{
@@ -177,7 +178,7 @@ export default {
         callback();
       }
     }
-      let verformName = (rule, value,callback)=>{
+    let verformName = (rule, value,callback)=>{
       if(value === ''){
         callback(new Error("请输入表单名称"))
       }else{
@@ -190,8 +191,12 @@ export default {
         })
           .then(({data})=>{
             console.log(data)
+            if(data.data == false){
+              callback(new Error("表单名称重复"))
+            }else{
+              callback();
+            }
           })
-        callback();
       }
     }
 
@@ -217,7 +222,6 @@ export default {
           {validator:verificationName,trigger:'blur'}
         ],
         formName:[
-          // { required: true, message: '请输入表单名称', trigger: 'blur' }
           {validator:verformName,trigger:'blur'}
         ]
       }
@@ -253,6 +257,7 @@ export default {
                     confirmButtonText: '确定',
                     type: 'success'
                   })
+                  this.reload()
                 }else{
                   this.$alert('归还失败', '提示', {
                     confirmButtonText: '确定',

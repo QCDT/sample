@@ -13,6 +13,7 @@
       :cell-style="{padding:'0px',textAlign: 'center'}"
       border
       stripe
+      max-height="600"
       ref="multipleTable"
       :data="tableData"
       tooltip-effect="dark"
