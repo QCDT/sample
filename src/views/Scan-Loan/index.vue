@@ -182,8 +182,14 @@ export default {
     //进入借出订单
     showOrder(row,index){
       //console.log(row)
-      this.$router.push({name:'particulars'});
-      this.$store.commit('loanOrderFun',row.id);//传值
+      this.$router.push(
+        {
+        name:'particulars',
+        params:{
+             id: row.id
+            },
+        });
+      // this.$store.commit('loanOrderFun',row.id);//传值
     },
 
     // ↓    添加订单

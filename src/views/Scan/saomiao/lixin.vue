@@ -37,8 +37,8 @@
       <div class="centrifugeOperation">
         <img src="@/assets/img/centrifugalSet.png" @click="centrifugalSet" />
         <img src="@/assets/img/centrifugalAdd.png" @click="addSample" />
-        <img v-show="!startCentrifuge" src="@/assets/img/centrifugalStart1.png" class="mainBtn" />
-        <img v-show="startCentrifuge" src="@/assets/img/centrifugalStart.png" class="mainBtn" />
+        <img v-show="!startCentrifuge" src="@/assets/img/centrifugalStart1.png" class="mainBtn"  @click="start"/>
+        <img v-show="startCentrifuge" src="@/assets/img/centrifugalStart.png" class="mainBtn"  @click="start"/>
         <img src="@/assets/img/orders.png" @click="exportOrders" />
         <img src="@/assets/img/record.png" @click="Ordersdetail" />
       </div>
@@ -158,9 +158,13 @@
     <el-dialog title="订单详情" :visible.sync="dialogOrder" width="50%" center>
       <div class="dialogOrder">
         <div class="orderNum">
-          <p>
+          <p v-show="!finishOrder">
             <span>样本容量:</span>
             <span>{{sampleNum}}</span>
+          </p>
+          <p v-show="finishOrder">
+            <span>订单名称</span>
+            <span>{{orderNub}}</span>
           </p>
         </div>
         <el-table
@@ -176,7 +180,7 @@
         >
           <el-table-column type="index" width="70" label="序号"></el-table-column>
           <el-table-column prop="orderName" label="样本名称"></el-table-column>
-          <el-table-column label="操作" width="80">
+          <el-table-column label="操作" width="80" v-show="!finishOrder">
             <template slot-scope="scope">
               <el-button
                 @click.native.prevent="deleteRow(scope.$index, tableData)"
@@ -187,11 +191,16 @@
           </el-table-column>
         </el-table>
       </div>
+      <span slot="footer" class="dialog-footer" v-show="finishOrder">
+        <img src="@/assets/img/pdf.png"  @click="exportPDF"/>
+        <img src="@/assets/img/excel.png" />
+      </span>
     </el-dialog>
   </div>
 </template>
 <script>
 import cardfile from '@/components/cardfile'
+import { setInterval, clearInterval } from 'timers';
 export default {
   props: {},
   components: {cardfile},
@@ -207,7 +216,7 @@ export default {
       dialogExport: false,// 离心机样本导出
       dialogOrder: false,// 样本订单详情
       centrifugeName: '', // 离心机名称
-      centrifugeTime: '', // 离心机时间
+      centrifugeTime: '2min', // 离心机时间
       centrifugeSpeed:'',// 离心机转速
       centrifugeTemperature: '',// 离心机温度
       centrifugeId: '',//离心机id
@@ -222,6 +231,9 @@ export default {
       setType: '', //修改页面离心机型号
       findValue: '',// 查询样本添加时的条件
       addSampleList:[], //添加时样本集合
+      addData:[],
+      finishOrder: false,
+      orderNub: '',
       bannerHeight: '',
       multipleSelection:[],
       centrifugeList: [ // 页面初始化显示所有离心机集合
@@ -272,6 +284,7 @@ export default {
       this.centrifugeSpeed = this.centrifugeList[0].centrifugeSpeed
       this.centrifugeTemperature = this.centrifugeList[0].centrifugeTemperature
       this.centrifugeId = this.centrifugeList[0].id
+      this.querySample()
     })
   },
   mounted () {
@@ -289,6 +302,18 @@ export default {
     });
   },
   methods: {
+    querySample(){
+      this.$axios({
+        method: 'post',
+        url: 'sampleGuide/centrifuge/findCenSampleExist',
+        data:({
+          centrifugeId: this.centrifugeId
+        })
+      })
+      .then(({data})=>{
+        console.log(data)
+      })
+    },
     change (v) { // 切换离心机时显示相应信息
       console.log(v)
       this.centrifugeName = this.centrifugeList[v].centrifugeName
@@ -328,27 +353,29 @@ export default {
       this.multipleSelection = selection
     },
     exportPDF(){ // 导出PDF
-
-        this.$axios({
-            method: 'post',
-            url: 'sampleGuide/centrifuge/cenOrderExportPdf',
-            responseType: 'blob',
-            data:({
-                cenOrderIdList: this.multipleSelection.map((item)=>{return item.id})
-            })
-        })
-        .then((res)=>{
-            console.log(res)
-//             var blob = new Blob([res.data], {type: 'application/vnd.ms-pdf;charset=utf-8'});
-//             var a = document.createElement('a');
-//             var href = window.URL.createObjectURL(blob); // 创建链接对象
-//             a.href =  href;
-//             a.download = '';   // 自定义文件名
-//             document.body.appendChild(a);
-//             a.click();
-//             window.URL.revokeObjectURL(href);  //移除链接对象
-//             document.body.removeChild(a); // 移除a元素
-        })
+      this.$axios({
+          method: 'post',
+          url: 'sampleGuide/centrifuge/cenOrderExportPdf',
+          responseType: 'blob',
+          headers: {
+              'Content-Type': 'application/octet-stream'
+          },
+          data:({
+              cenOrderIdList: this.multipleSelection.map((item)=>{return item.id})
+          })
+      })
+      .then((res)=>{
+          console.log(res)
+          var blob = new Blob([res.data], {type: 'application/vnd.ms-excel;charset=utf-8'});
+          var a = document.createElement('a');
+          var href = window.URL.createObjectURL(blob); // 创建链接对象
+          a.href =  href;
+          a.download = '';   // 自定义文件名
+          document.body.appendChild(a);
+          a.click();
+          window.URL.revokeObjectURL(href);  //移除链接对象
+          document.body.removeChild(a); // 移除a元素
+      })
     },
     selectAddSample(selection){ //选择需要添加到离心机的样本
       this.addSampleList = selection
@@ -441,7 +468,7 @@ export default {
         })
       })
       .then(({data})=>{
-        console.log(data.data)
+        console.log(data)
         data.data.forEach((item)=>{
           // console.log(item.id)
           this.dialogSampleData.push({
@@ -460,19 +487,21 @@ export default {
           type: 'warning'
         });
       }else{
-      let addData = []
+      this.addData = []
+      let returnData = []
       this.addSampleList.forEach((item)=>{
-         addData.push({
+        returnData.push({
            sampleId: item.id,
            centrifugeId: item.centrifugeId
          })
+         this.addData.push(item.id)
       })
-      console.log(addData)
+      console.log(this.addData)
       this.$axios({
         method: 'post',
         url:'sampleGuide/cenSample/insertCenSample',
         data:({
-          centrifugeSampleList: addData
+          centrifugeSampleList: returnData
         })
       })
       .then(({data})=>{
@@ -485,6 +514,32 @@ export default {
         this.dialogSample = false
       })
      }
+    },
+    start(){
+      console.log(this.centrifugeId,this.centrifugeTime,this.addData)
+      // this.$axios({
+      //   method:'post',
+      //   url:'sampleGuide/centrifuge/insertCenOrder',
+      //   data:({
+      //     centrifugeId: this.centrifugeId,
+      //     centrifugeTime: this.centrifugeTime,
+      //     centrifugeSampleIdList: this.addData
+      //   })
+      // })
+      // .then(({data})=>{
+        // console.log(data)
+        // if(data.code== 200){
+          let timer = setInterval(()=>{
+             let time =  parseFloat(this.centrifugeTime)*60
+              time--
+             if(time <= 0){
+                time = 0
+                clearInterval(timer)
+              }
+              this.centrifugeTime = time/60 +'min'
+          },1000)
+        // }
+      // })
     },
     centrifugalSet () {
       this.dialogSet = true

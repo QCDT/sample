@@ -265,6 +265,7 @@
     </div>
 </template>
 <script>
+import { setTimeout } from 'timers';
 export default {
     data () {
         return {
@@ -576,6 +577,15 @@ export default {
             })
             .then((res)=>{
                 console.log(res)
+                let tmpDown = new Blod([this.s2ab(XLSX.write(tmpWB,
+                    {bookType:(type === undefined ? 'xlsx' : type), bookSST: false, type: 'binary'}
+                ))],{
+                    type: ''
+                })
+                navigator.msSaveBlob(tmpDown, this.outFile.download = downName + '.xlsx')
+                setTimeout(function(){
+                    URL.revokeObjectURL(tmpDown)
+                },100)
                 // const content = res
                 // const blob = new Blob([content])
                 // const fileName = '导出信息.xlsx'

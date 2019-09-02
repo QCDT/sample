@@ -1,5 +1,5 @@
 module.exports.mutations = {
-  loanOrderFun (state, loanOrderId ) {
+  loanOrderFun (state, loanOrderId) {
     state.loanOrderId = loanOrderId
   },
   loanSearchStatus (state, name) {

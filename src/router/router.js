@@ -375,7 +375,7 @@ export default new Router({
     },
     /* 借出详情 */
     {
-      path: '/scan/loan/particulars',
+      path: '/scan/loan/particulars/:id',
       name: 'particulars',
       components: {
         default: () => import(/* webpackChunkName: "scan" */ '@/views/Scan-Loan-Particulars'),

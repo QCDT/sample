@@ -6,6 +6,7 @@
       <el-table
         :row-style="{height:'32px',textAlign: 'center',padding:'0px'}"
         :cell-style="{padding:'0px',textAlign: 'center'}"
+        :row-class-name="bgColor"
         border
         ref="multipleTable"
         :data="sampleData"
@@ -122,12 +123,12 @@ export default {
 
   //点击表单名称获取当前ID
   created(){
-    this.loanOrderId = this.$store.state.loanOrderId
+    // this.loanOrderId = this.$store.state.loanOrderId
     this.$axios({
       method:'post',
       url:'sampleGuide/scan/findLoanOrderAndLoanSampleById',
       data:({
-        id: this.loanOrderId,// 当前订单ID
+        id: this.$route.params.id,// 当前订单ID
       })
     })
     .then(({data})=>{
@@ -159,6 +160,14 @@ export default {
   methods:{
     add () {
       this.AddBox = true
+    },
+    tableRowClassName({row, rowIndex}) {
+      if (rowIndex === 0) {
+        return 'bgColor';
+      } else if (rowIndex === 3) {
+        return 'success-row';
+      }
+      return '';
     },
     searchAdd () {
       this.$store.commit('loanSearchStatus', true)
@@ -245,7 +254,6 @@ export default {
   display: block;
   margin: 0 auto;
 }
-
 table {
   width: 100%;
   border-collapse: collapse;
