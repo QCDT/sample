@@ -4,124 +4,158 @@
     <div class="top">
       <div class="data">
         <div class="row row-spall">
-          <tmpinput>
-            样本名称
-            <el-input
-              slot="elUI"
-              size="small"
-              v-model="sampleSearch.name"
-              clearable
-            ></el-input>
-          </tmpinput>
-          <tmpinput>
-            查询类别
-            <el-select
-              slot="elUI"
-              size="small"
-              clearable
-              v-model="sampleSearch.sampleItem"
-              placeholder="请选择"
-            >
-              <el-option
-                v-for="item in sampleItem"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              ></el-option>
+          <div class="tmp-row-empty">
+            <!-- XXX:输入框 | 选择框 -->
+            <span class="tmp-row-empty-title">
+              样本名称:
+            </span>
+            <i class="tmp-row-empty-input">
+              <el-input
+                size="small"
+                v-model="name"
+                clearable
+              ></el-input>
+            </i>
+          </div>
+          <div class="tmp-row-empty">
+            <!-- XXX:输入框 | 选择框 -->
+            <span class="tmp-row-empty-title"> 查询类别</span>
+            <i class="tmp-row-empty-input">
+              <el-select
+                size="small"
+                clearable
+                v-model="sampleItem"
+                placeholder="请选择"
+              >
+                <el-option
+                  v-for="item in sampleItemOption"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                ></el-option>
+              </el-select>
+            </i>
+          </div>
+          <div class="tmp-row-empty">
+            <!-- XXX:输入框 | 选择框 -->
+            <span class="tmp-row-empty-title"> 借出人</span>
+            <i class="tmp-row-empty-input">
+              <el-select
+                size="small"
+                v-model="lender"
+                clearable
+                placeholder="请选择"
+              >
+                <el-option
+                  v-for="item in lenderOpention"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                ></el-option>
             </el-select>
-          </tmpinput>
-          <tmpinput>
-            借出人
-            <el-select
-              slot="elUI"
-              size="small"
-              v-model="sampleSearch.lender"
-              clearable
-              placeholder="请选择"
-            ></el-select>
-          </tmpinput>
-          <tmpinput>
-            录入人
-            <el-select
-              slot="elUI"
-              size="small"
-              v-model="sampleSearch.enterClerk"
-              clearable
-              placeholder="请选择"
-            ></el-select>
-          </tmpinput>
-          
+            </i>
+          </div>
+          <div class="tmp-row-empty">
+            <!-- XXX:输入框 | 选择框 -->
+            <span class="tmp-row-empty-title">录入人</span>
+            <i class="tmp-row-empty-input">
+              <el-select
+                size="small"
+                v-model="enterClerk"
+                clearable
+                placeholder="请选择"
+              >
+                <el-option
+                  v-for="item in enterClerkOption"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                ></el-option>
+              </el-select>
+            </i>
+          </div>
         </div>
         <div class="row row-spall">
-          <tmpinput>
-            样本类别
-            <el-select
-              slot="elUI"
-              size="small"
-              clearable
-              v-model="sampleSearch.testTubeCategory"
-              placeholder="请选择"
-            >
-              <el-option
-                v-for="item in testTubeCategory"
-                :key="item.value + item.label"
-                :label="item.label"
-                :value="item.value"
-              ></el-option>
-            </el-select>
-          </tmpinput>
-          <tmpinput>
-            样本来源
-            <el-select
-              slot="elUI"
-              size="small"
-              clearable
-              v-model="sampleSearch.source"
-              placeholder="请选择"
-            >
-              <el-option
-                v-for="item in source"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              ></el-option>
-            </el-select>
-          </tmpinput>
-          <tmpinput>
-           状态
-            <el-select
-              slot="elUI"
-              size="small"
-              clearable
-              v-model="sampleSearch.status"
-              placeholder="请选择"
-            >
-              <el-option
-                v-for="item in status"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              ></el-option>
-            </el-select>
-          </tmpinput>
-          
-          <tmpinput>
-            项目类别
-            <el-select
-              slot="elUI"
-              size="small"
-              clearable
-              v-model="sampleSearch.itemClass"
-              placeholder="请选择"
-            >
-              <el-option
-                v-for="item in itemClass"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              ></el-option>
-            </el-select>
-          </tmpinput>
+          <div class="tmp-row-empty">
+            <!-- XXX:输入框 | 选择框 -->
+            <span class="tmp-row-empty-title">样本类别</span>
+            <i class="tmp-row-empty-input">
+              <el-select
+                slot="elUI"
+                size="small"
+                clearable
+                v-model="testTubeCategory"
+                placeholder="请选择"
+              >
+                <el-option
+                  v-for="item in testTubeCategoryOption"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                ></el-option>
+              </el-select>
+            </i>
+          </div>
+          <div class="tmp-row-empty">
+            <!-- XXX:输入框 | 选择框 -->
+            <span class="tmp-row-empty-title">样本来源</span>
+            <i class="tmp-row-empty-input">
+              <el-select
+                slot="elUI"
+                size="small"
+                clearable
+                v-model="source"
+                placeholder="请选择"
+              >
+                <el-option
+                  v-for="item in sourceOption"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                ></el-option>
+              </el-select>
+            </i>
+          </div>
+          <div class="tmp-row-empty">
+            <!-- XXX:输入框 | 选择框 -->
+            <span class="tmp-row-empty-title">状态</span>
+            <i class="tmp-row-empty-input">
+              <el-select
+                slot="elUI"
+                size="small"
+                clearable
+                v-model="status"
+                placeholder="请选择"
+              >
+                <el-option
+                  v-for="item in statusOption"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                ></el-option>
+              </el-select>
+            </i>
+          </div>
+          <div class="tmp-row-empty">
+            <!-- XXX:输入框 | 选择框 -->
+            <span class="tmp-row-empty-title">项目类别</span>
+            <i class="tmp-row-empty-input">
+              <el-select
+                slot="elUI"
+                size="small"
+                clearable
+                v-model="itemClass"
+                placeholder="请选择"
+              >
+                <el-option
+                  v-for="item in itemClassOption"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                ></el-option>
+              </el-select>
+            </i>
+          </div>        
         </div>
       </div>
       <!-- 搜索按钮 -->
@@ -131,137 +165,163 @@
     <div class="advanced-search" :style="{height:asHeight}">
       <div v-show="showAdvancedSearch">
         <div class="row">
-          <tmpinput>
-            借出日期
-            <el-date-picker
-              slot="elUI"
-              clearable
-              size="small"
-              v-model="sampleSearch.outDate"
-              type="daterange"
-              range-separator="至"
-              start-placeholder="开始日期"
-              end-placeholder="结束日期"
-            ></el-date-picker>
-          </tmpinput>
-          <tmpinput>
-            过期日期
-            <el-date-picker
-              slot="elUI"
-              size="small"
-              clearable
-              v-model="sampleSearch.pastDate"
-              type="daterange"
-              range-separator="至"
-              start-placeholder="开始日期"
-              end-placeholder="结束日期"
-            ></el-date-picker>
-          </tmpinput>
+          <div class="tmp-row-empty">
+            <!-- XXX:输入框 | 选择框 -->
+            <span class="tmp-row-empty-title">借出日期</span>
+            <i class="tmp-row-empty-input">
+              <el-date-picker
+                slot="elUI"
+                clearable
+                size="small"
+                v-model="outDate"
+                type="daterange"
+                range-separator="至"
+                start-placeholder="开始日期"
+                end-placeholder="结束日期"
+              ></el-date-picker>
+            </i>
+          </div> 
+          <div class="tmp-row-empty">
+            <!-- XXX:输入框 | 选择框 -->
+            <span class="tmp-row-empty-title">过期日期</span>
+            <i class="tmp-row-empty-input">
+              <el-date-picker
+                slot="elUI"
+                size="small"
+                clearable
+                v-model="pastDate"
+                type="daterange"
+                range-separator="至"
+                start-placeholder="开始日期"
+                end-placeholder="结束日期"
+              ></el-date-picker>
+            </i>
+          </div> 
         </div>
         <div class="row">
-          <tmpinput>
-            采样日期
-            <el-date-picker
-              slot="elUI"
-              size="small"
-              clearable
-              v-model="sampleSearch.samplingDate"
-              type="daterange"
-              range-separator="至"
-              start-placeholder="开始日期"
-              end-placeholder="结束日期"
-            ></el-date-picker>
-          </tmpinput>
-          <tmpinput>
-            录入日期
-            <el-date-picker
-              slot="elUI"
-              size="small"
-              clearable
-              v-model="sampleSearch.enterData"
-              type="daterange"
-              range-separator="至"
-              start-placeholder="开始日期"
-              end-placeholder="结束日期"
-            ></el-date-picker>
-          </tmpinput>
+          <div class="tmp-row-empty">
+            <!-- XXX:输入框 | 选择框 -->
+            <span class="tmp-row-empty-title">采样日期</span>
+            <i class="tmp-row-empty-input">
+              <el-date-picker
+                slot="elUI"
+                size="small"
+                clearable
+                v-model="samplingDate"
+                type="daterange"
+                range-separator="至"
+                start-placeholder="开始日期"
+                end-placeholder="结束日期"
+              ></el-date-picker>
+            </i>
+          </div>
+          <div class="tmp-row-empty">
+            <!-- XXX:输入框 | 选择框 -->
+            <span class="tmp-row-empty-title"> 录入日期</span>
+            <i class="tmp-row-empty-input">
+              <el-date-picker
+                slot="elUI"
+                size="small"
+                clearable
+                v-model="enterData"
+                type="daterange"
+                range-separator="至"
+                start-placeholder="开始日期"
+                end-placeholder="结束日期"
+              ></el-date-picker>
+            </i>
+          </div> 
         </div>
         <div class="row">
           <h2 style="white-space: nowrap;margin-right:22px">位置信息:</h2>
+          <div class="tmp-row-empty">
+            <!-- XXX:输入框 | 选择框 -->
+            <span class="tmp-row-empty-title">冰箱</span>
+            <i class="tmp-row-empty-input">
+              <el-select
+                size="small"
+                clearable
+                v-model="refrigerator"
+                placeholder="请选择"
+                style="width:100%"
+                @change="selectIceBox"
+              >
+                <el-option
+                  v-for="item in refrigeratorOption"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                ></el-option>
+              </el-select>
+            </i>
+          </div>
+          <div class="tmp-row-empty">
+            <!-- XXX:输入框 | 选择框 -->
+            <span class="tmp-row-empty-title">层数</span>
+            <i class="tmp-row-empty-input">
+              <el-select
+                slot="elUI"
+                clearable
+                size="small"
+                v-model="layer"
+                placeholder="请选择"
+                style="width:100%"
+                @change="selectIcePlice"
+              >
+                <el-option
+                  v-for="item in layerOption"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                ></el-option>
+              </el-select>
+            </i>
+          </div> 
+          <div class="tmp-row-empty">
+            <!-- XXX:输入框 | 选择框 -->
+            <span class="tmp-row-empty-title">抽屉</span>
+            <i class="tmp-row-empty-input">
+              <el-select
+                slot="elUI"
+                size="small"
+                clearable
+                v-model="chouTi"
+                placeholder="请选择"
+                style="width:100%"
+                @change="selectDrawer"
+              >
+                <el-option
+                  v-for="item in chouTiOption"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                ></el-option>
+              </el-select>
+            </i>
+          </div> 
+          <div class="tmp-row-empty">
+            <!-- XXX:输入框 | 选择框 -->
+            <span class="tmp-row-empty-title">样本盒</span>
+            <i class="tmp-row-empty-input">
+              <el-select
+                slot="elUI"
+                size="small"
+                clearable
+                v-model="styleBox"
+                placeholder="请选择"
+                style="width:100%"
+              >
+                <el-option
+                  v-for="item in styleBoxOption"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                ></el-option>
+              </el-select>
+            </i>
+          </div> 
           <tmpinput>
-            冰箱
-            <el-select
-              slot="elUI"
-              size="small"
-              clearable
-              v-model="sampleSearch.refrigerator"
-              placeholder="请选择"
-              style="width:100%"
-              @change="selectIceBox"
-            >
-              <el-option
-                v-for="item in refrigerator"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              ></el-option>
-            </el-select>
-          </tmpinput>
-          <tmpinput>
-            层数
-            <el-select
-              slot="elUI"
-              clearable
-              size="small"
-              v-model="sampleSearch.layer"
-              placeholder="请选择"
-              style="width:100%"
-              @change="selectIcePlice"
-            >
-              <el-option
-                v-for="item in layer"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              ></el-option>
-            </el-select>
-          </tmpinput>
-          <tmpinput>
-            抽屉
-            <el-select
-              slot="elUI"
-              size="small"
-              clearable
-              v-model="sampleSearch.chouTi"
-              placeholder="请选择"
-              style="width:100%"
-              @change="selectDrawer"
-            >
-              <el-option
-                v-for="item in chouTi"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              ></el-option>
-            </el-select>
-          </tmpinput>
-          <tmpinput>
-            样本盒
-            <el-select
-              slot="elUI"
-              size="small"
-              clearable
-              v-model="sampleSearch.styleBox"
-              placeholder="请选择"
-              style="width:100%"
-            >
-              <el-option
-                v-for="item in styleBox"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              ></el-option>
-            </el-select>
+
           </tmpinput>
         </div>
       </div>
@@ -287,66 +347,74 @@ export default {
       showAdvancedSearch: false,
       asHeight: 0,
       searchTableData:[],
-      /* 搜索参数 */
-      sampleSearch: {
-        /**
-         * [样本名称:name] [借出人:lender] [录入人:enterClerk] [试管类别:testTubeCategory]
-         * [样本来源:source] [状态:status] [样本类别:sampleItem] [项目类别:itemClass]
-         * -- 高级搜索 --
-         * [借出日期:outDate] [过期日期:pastDate]
-         * [采样日期:samplingDate] [录入日期:enterData]
-         * (位置信息) [冰箱:refrigerator] [层数:layer] [抽屉:chouTi] [样式盒:styleBox]
-         */
-      },
-
+      name: '', //样本名称
+      sampleItem:0, //样本类别
+      lender:'', // 借出人
+      enterClerk:'',// 录入人
+      testTubeCategory:'',// 样本类别
+      source:'', //样本来源
+      status:'',//样本状态
+      itemClass:'', //项目类别
+      outDate:'',// 借出日期
+      pastDate:'', //过期日期
+      samplingDate:'', //采样日期
+      enterData:'', //录入日期
+      refrigerator:'',//冰箱
+      layer:'',//层数
+      chouTi: '',//抽屉
+      styleBox:'', //样本盒
       /* 下拉选择 */
-      /* 试管类别 testTubeCategory */
-      testTubeCategory: [
+      /* 样本类别 testTubeCategory */
+      testTubeCategoryOption: [
         /* { value: 'A类别', label: 'A类别' },
         { value: 'B类别', label: 'B类别' } */
       ],
       /* 来源 source */
-      source: [
+      sourceOption: [
         /* { value: 'A来源', label: 'A来源' },
         { value: 'B来源', label: 'B来源' } */
       ],
+      // 借出人
+      lenderOpention:[
+
+      ],
       //录入人
-      enterClerk:[],
+      enterClerkOption:[],
       /* 状态 status */
-      status: [
-        { value: '1', label: '正常' },
-        { value: '2', label: '借出' },
-        { value: '3', label: '预留' }
+      statusOption: [
+        { value: 1, label: '正常' },
+        { value: 2, label: '借出' },
+        { value: 3, label: '预留' }
       ],
       /* 样本类别 sampleItem */
-      sampleItem: [
+      sampleItemOption: [
         /* { value: '样本类别A', label: '样本类别A' },
         { value: '样本类别B', label: '样本类别B' } */
-        { value: '1', label: '样本' },
-        { value: '2', label: '样本盒' },
+        { value: 0, label: '样本' },
+        { value: 1, label: '样本盒' },
       ],
       /* 项目类别 itemClass */
-      itemClass: [
+      itemClassOption: [
         /* { value: '项目类别a', label: '项目类别a' },
         { value: '项目类别b', label: '项目类别b' } */
       ],
       /* 冰箱 refrigerator */
-      refrigerator: [
+      refrigeratorOption: [
         /* { value: 'refrigeratorA', label: 'refrigeratorA' },
         { value: 'refrigeratorB', label: 'refrigeratorB' } */
       ],
       /* 层数 layer */
-      layer: [
+      layerOption: [
         /* { value: 'layer1', label: 'layer1' },
         { value: 'layer2', label: 'layer2' } */
       ],
       /* 抽屉 chouTi */
-      chouTi: [
+      chouTiOption: [
        /*  { value: 'chouTi1', label: 'chouTi1' },
         { value: 'chouTi2', label: 'chouTi2' } */
       ],
       /* 样式盒 styleBox */
-      styleBox: [
+      styleBoxOption: [
         /* { value: 'styleBox1', label: 'styleBox1' },
         { value: 'styleBox2', label: 'styleBox2' } */
       ]
@@ -354,6 +422,19 @@ export default {
   },
   //查询初始化
   created(){
+    this.$axios({ // ........冰箱名称渲染
+      method: 'get',
+      url:'/sampleGuide/set/selectRefrigeratorName'
+    })
+    .then(({data})=>{
+      console.log(data)
+      data.data.forEach((item)=>{
+        this.refrigeratorOption.push({
+          value:item.id,
+          label: item.name
+        })
+      })
+    })
     //类别
     this.$axios({
       method:'get',
@@ -417,6 +498,7 @@ export default {
             data.data.forEach((item)=>{
                console.log(item);
             this.searchTableData.push({ 
+              id: item.id,
               color:item.capColor, // 管帽颜色
               sampleInfo:item.name, // 样本信息
               enterName:item.inputUserName, // 录入人
@@ -433,19 +515,91 @@ export default {
         })
         this.$emit('changeTable', this.searchTableData)
           })
+    }, 
+    selectIceBox(){ //切换冰箱加载该冰箱层数
+      this.layerOption = []
+      this.layer = ''
+      this.chouTi = '',
+      this.chouTiOption = []
+      this.styleBox = ''
+      this.styleBoxOption =[]
+      this.$axios({
+        method: 'post',
+        url:'sampleGuide/set/selectTier',
+        data:({
+          refrigeratorStruId: this.refrigerator
+        })
+      })
+      .then(({data})=>{
+        console.log(data)
+        data.data.forEach((item)=>{
+          this.layerOption.push({
+            value: item.id,
+            label:item.row
+          })
+        })
+      })
     },
-    //选择冰箱
-    selectIceBox(){
-
+    selectIcePlice(){//层数切换时加载相应的抽屉
+      this.$axios({
+        method: 'post',
+        url:'/sampleGuide/guest/selectDrawerStruByTierStru',
+        data:({
+          tierStruId:{
+            id:this.layer
+	        }
+        })
+      })
+      .then(({data})=>{
+          console.log(data)
+          data.data.forEach((item)=>{
+            this.chouTiOption.push({
+              value:item.id,
+              label:item.number
+            })
+          })
+      })
     },
-    //选择层
-    selectIcePlice(){
-
+    selectDrawer(){   //抽屉切换加载相应样本盒
+      this.styleBox = ''
+      this.styleBoxOption =[]
+      this.$axios({
+        method:'post',
+        url: 'sampleGuide/set/selectSampleBoxStru',
+        data:({
+          drawerStruId:this.chouTi
+        })
+      })
+      .then(({data})=>{
+        console.log(data)
+        data.data.forEach((item)=>{
+          this.styleBoxOption.push({
+            value: item.row,
+            label:item.row
+          })
+        })
+      })
     },
-    //选择抽屉
-    selectDrawer(){
-
-    }
+    // selectIceBox(){ //抽屉切换时加载相应可选的样本盒位置
+    //   this.sampleBoxOption = []
+    //   this.sampleBox = ''
+    //   this.$axios({
+    //     method:'post',
+    //     url: 'sampleGuide/set/selectSampleBoxStru',
+    //     data:({
+    //       drawerStruId:this.labDrawerValue
+    //     })
+    //   })
+    //   .then(({data})=>{
+    //     console.log(data)
+    //     data.data.forEach((item)=>{
+    //       this.sampleBoxOption.push({
+    //         value: item.row,
+    //         label:item.row
+    //       })
+    //     })
+    //   })
+    // } 
   }
 }
 </script>
@@ -563,5 +717,19 @@ export default {
       }
     }
   }
+}
+.tmp-row-empty {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  margin-right: 20px;
+}
+.tmp-row-empty-title {
+  margin-right: 0.5em;
+  white-space: nowrap;
+}
+.tmp-row-empty-input {
+  font-style: normal;
+  font-size: 14px;
 }
 </style>

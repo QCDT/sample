@@ -183,9 +183,39 @@ export default {
         console.log(this.multipleSelection)
       }
     },
+    //添加借出
     addLoanSample(){
-
+        if(this.multipleSelection.length == 0){
+        this.$alert('请选择需要借出的样本', '提示', {
+          confirmButtonText: '确定',
+          type: 'warning'
+        })
+      }else {
+        let newExportArr = this.multipleSelection.map((item)=>{
+          return item.id
+        })
+        console.log(newExportArr)
+          // //多样本添加到借出订单
+          this.$axios({
+            method:'post',
+            url:'sampleGuide/scan/addSamplesToLoanOrder',
+            data:({
+              sampleIdList:newExportArr,// 当前样本ID数组
+              loanOrderId:this.$route.params.id,//当前ID编号
+            })
+          })
+            .then(({data})=>{
+              console.log(data);
+              this.$router.push({
+                name:"particulars",
+                params:{
+                  id: this.$route.params.id
+                }
+              })
+            })
+      }
     },
+    //导出Excel
     exportLoanPdf(){
       
     }

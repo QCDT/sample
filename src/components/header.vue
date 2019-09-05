@@ -68,7 +68,7 @@ export default {
       homeLink: [
         { link: '/home', text: '首页' },
         { link: '/scan', text: '扫描' },
-        { link: '/query', text: '查询' },
+        { link: '/query/1', text: '查询' },
         { link: '/check', text: '盘点' },
         { link: '/set', text: '设置' },
         { link: '/analyze', text: '数据分析' }

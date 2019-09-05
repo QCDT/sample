@@ -22,7 +22,7 @@
           style="width:100%"
           @selection-change="handleSelectionChange"
         >
-          <el-table-column type="selection" show-overflow-tooltip></el-table-column>
+          <el-table-column type="selection" show-overflow-tooltip ></el-table-column>
           <el-table-column label="序号" type="index" width="70">
           </el-table-column>
           <el-table-column prop="color" label="管帽颜色" show-overflow-tooltip></el-table-column>
@@ -57,8 +57,8 @@
         </el-table>
       </div>
     </div>
-    <center class='backBtn' @click="backLoanPage()">返回</center>
     <!-- 表单 ↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑ -->
+    <div class='backBtn' @click="backLoanPage()" v-show="showBtn">返回</div>
   </div>
   
 </template>
@@ -70,6 +70,7 @@ export default {
   components: { Search, FormTopMenu },
   data () {
     return {
+      showBtn: true,
       // ↓   表单
       tableData: [
         
@@ -78,9 +79,18 @@ export default {
       //   ↑ 表单
     }
   },
+  created(){
+    if(this.$route.params.id == 1){
+      this.showBtn = false
+    }else{
+      this.showBtn = true
+    }
+    alert(this.$route.params.id)
+  },
   methods: {
     handleSelectionChange (val) {
       this.multipleSelection = val
+      
     },
     changeTable(tableData){
         this.tableData = tableData
@@ -138,6 +148,7 @@ export default {
   line-height:28px;
   margin:15px auto;
   border-radius:3px;
+  text-align: center;
   cursor:pointer;
 }
 </style>

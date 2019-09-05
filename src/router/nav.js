@@ -21,7 +21,8 @@ export const navBar = [
     }
   },
   {
-    path: '/query',
+    path: '/query/:id',
+    name:'query',
     components: {
       default: query,
       navbar: Header

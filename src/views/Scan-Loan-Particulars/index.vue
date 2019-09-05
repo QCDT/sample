@@ -78,6 +78,7 @@ import fromName from '@/components/tmp/zhanglan/fromName'
 import maskTran from '@/components/tmp/zhanglan/masking'
 import add from '@/views/Scan-Loan-Particulars/add'
 export default {
+  inject:['reload'],
   props: {},
   components: { fromName, maskTran, add },
   data () {
@@ -116,18 +117,18 @@ export default {
         }*/
       ],
       multipleSelection: [],
-      RfidNmber:[],
+      //RfidNmber:[],
     }
   },
 
   //点击表单名称获取当前ID
   created(){
-    this.loanOrderId = this.$store.state.loanOrderId
+    // this.loanOrderId = this.$store.state.loanOrderId
     this.$axios({
       method:'post',
       url:'sampleGuide/scan/findLoanOrderAndLoanSampleById',
       data:({
-        id: this.loanOrderId,// 当前订单ID
+        id:this.$route.params.id// 当前订单ID
       })
     })
     .then(({data})=>{
@@ -147,6 +148,7 @@ export default {
           data.data.loanSamples.forEach((item)=>{
             console.log(item);
               this.tableData.push({
+                id:item.id,
                 Index:data.data.loanSamples.createTime,// ..........序号
                 RfidNmber:item.rfidSampleCode, // ...........Rfid编号
                 SampleName:item.sampleName,//………………样本名称
@@ -163,7 +165,12 @@ export default {
     searchAdd () {
       this.$store.commit('loanSearchStatus', true)
      // this.$message('查询样本添加')
-      this.$router.push('/query');
+      this.$router.push({
+        name:'query',
+        params:{
+          id: this.$route.params.id
+        }
+      });
     },
     toggleSelection (rows) {
       if (rows) {
@@ -185,18 +192,19 @@ export default {
         type: 'warning'
       })
         .then(() => {
-          this.tableData.splice(index, 1)
+         // this.tableData.splice(index, 1)
           this.$axios({
             method:'post',
             url:'sampleGuide/scan/delLoanSampleInLoanOrder',
             data:({
-              sampleIdList:this.RfidNmber,// 当前订单ID
+              sampleIdList:[row.id],// 当前样本ID数组
+              loanOrderId: this.$store.state.loanOrderId,//当前ID编号
            })
           })
           .then((data)=>{
             console.log(data)
-            
             this.$message({ type: 'success', message: '删除成功!' })
+            this.reload()
           })
         })
         .catch(() => {
@@ -205,21 +213,21 @@ export default {
     },
 
     //开始核验
-    /* startCheck(){
-      this.$axios({
-            method:'post',
-            url:'sampleGuide/scan/existSampleInLoanOrder',
-            data:({
-              loanOrderId:this.$store.state.loanOrderId,// 当前订单ID
-              rfidCodeList:this.RfidArr,
-           })
-          })
-          .then((data)=>{
-            console.log(data)
+    //  startCheck(){
+    //   this.$axios({
+    //         method:'post',
+    //         url:'sampleGuide/scan/existSampleInLoanOrder',
+    //         data:({
+    //           loanOrderId:this.$store.state.loanOrderId,// 当前订单ID
+    //           rfidCodeList:this.RfidArr,
+    //        })
+    //       })
+    //       .then((data)=>{
+    //         console.log(data)
             
-            this.$message({ type: 'success', message: '删除成功!' })
-          })
-    }, */
+    //         this.$message({ type: 'success', message: '删除成功!' })
+    //       })
+    // }, 
 
     // ↓    添加订单
     showAdd () {
