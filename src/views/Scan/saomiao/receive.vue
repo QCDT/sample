@@ -94,8 +94,9 @@
         <div class="receiveBtnWrap">
             <el-button type="primary" size="mini" class="receiveBtn" @click="submitForm">确认</el-button>
         </div>
+        <ChangeUser :dialogLogin='dialogLogin' btnText= "验证"  @close='close' @userName='changeUserName'></ChangeUser>
           <!-- 验证登录-->
-        <el-dialog
+        <!-- <el-dialog
             :visible.sync="dialogLogin"
             width="30%"
             center
@@ -133,7 +134,7 @@
                 <el-button @click="dialogLogin = false" size="mini">返回</el-button>
                 <el-button type="primary" @click="verifyPerson" size="mini">验证</el-button>
             </span>
-        </el-dialog>
+        </el-dialog> -->
         <!--历史接收记录-->
         <el-dialog
             title="历史接收记录"
@@ -266,7 +267,11 @@
 </template>
 <script>
 import { setTimeout } from 'timers';
+import  ChangeUser from '@/components/ChangeUser'
 export default {
+    components: {
+        ChangeUser
+    },
     data () {
         return {
             scanNum: 0, // 扫描到样本总数
@@ -288,9 +293,6 @@ export default {
             sampleDataIdList: [], // 扫描到样本id集合
             dialogLogin: false, // 验证登录层
             dialogRecords: false,// 接收记录层
-            userName: '', // 登录用户名
-            userPassword: '',// 登录密码
-            LoginTab: true, // 扫码登录切换
             sampleData:[ // 样本列表
 
             ],
@@ -355,15 +357,18 @@ export default {
       }
     },
     methods:{
-        loginTab () { // 扫码登录切换
-            this.LoginTab = !this.LoginTab
-        },
         // customCondition () {
         //     if(this.condition == ''){
         //         return;
         //     }
         //     this.checkList.push(this.condition)
         // },
+        changeUserName(userName){
+            this.receivePerson = userName
+        },
+        close(value){
+            this.dialogLogin = false
+        },
         validateReceivePerson () { // 登录层显示
             this.dialogLogin = true 
         },
@@ -433,28 +438,6 @@ export default {
                     });                  
                 }
             })
-        },
-        verifyPerson(){ //验证接收人
-           this.$axios({
-                method: 'post',
-                url: 'sampleGuide/sampleReceive/checkReceivePerson',
-                headers: {
-                    'Content-Type': 'application/json; charset=UTF-8'
-                },
-                data:({
-                    username: this.userName,
-                    password: this.userPassword
-                })
-           })
-           .then(({data})=>{
-               console.log(data)
-               if(data.code == 200){
-                   this.receivePerson = data.data.username
-                   this.dialogLogin = false
-               }else{
-                     this.$message.error('用户名或密码错误');
-               }
-           })
         },
         submitForm() {  
             if(this.formName == ''){
@@ -753,89 +736,6 @@ export default {
     margin-top: 15px;
     .receiveBtn{
         width: 120px;
-    }
-}
-.loginTitle {
-    height: 62px;
-    .titleLeft {
-        margin-top: 20px;
-        float: left;
-        font-size: 18px;
-    }
-    .titleRight {
-        float: right;
-        margin-top: 7px;
-    span {
-        display: inline-block;
-        position: relative;
-        img {
-        vertical-align: middle;
-        }
-        em {
-        position: absolute;
-        top: 5px;
-        left: 21px;
-        font-size: 12px;
-        color: #00a0e9;
-        font-style: normal;
-        }
-    }
-    .togglePic {
-        background: url("~@/assets/img/tishi.png");
-        background-size: 121px 28px;
-        width: 121px;
-        height: 28px;
-        top: 8px;
-    }
-    .toggleText {
-        cursor: pointer;
-        img {
-        width: 47px;
-        height: 47px;
-        }
-    }
-    }
-    .lineBottom {
-    display: block;
-    width: 40px;
-    height: 3px;
-    margin-top: 3px;
-    background: linear-gradient(to right, #004de9, #21d4fd);
-    }
-}
-.loginCenter {
-    label {
-    display: block;
-    margin-top: 20px;
-    border-bottom: 1px solid #1ab6f9;
-    padding-bottom: 5px;
-    width: 80%;
-    img {
-        vertical-align: middle;
-        width: 30px;
-        height: 30px;
-    }
-    input {
-        vertical-align: middle;
-        border: none;
-        width: 70%;
-        height: 25px;
-        font-size: 14px;
-        padding-left: 15px;
-        outline: none;
-    }
-    }
-    .loginScan {
-    text-align: center;
-    img {
-        width: 128px;
-        height: 128px;
-    }
-    }
-}
-.dialogLogin{
-    .el-dialog__header{
-        display: none;
     }
 }
 </style>

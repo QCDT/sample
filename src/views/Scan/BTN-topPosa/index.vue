@@ -67,7 +67,7 @@ export default {
 // 布局[左右不同之处]
 .left {
   position: absolute;
-  top: 35px;
+  top: 40px;
   left: 0;
   z-index: 2;
   background-color: #fff;
@@ -77,7 +77,7 @@ export default {
 }
 .right {
   position: absolute;
-  top: 35px;
+  top: 40px;
   right: 0px;
   z-index: 2;
   background-color: #fff;

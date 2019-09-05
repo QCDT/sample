@@ -11,6 +11,7 @@
             <!-- 表格结构 样式中 :cell-style 单元格样式 :row-style 行样式 :header-cell-style 表头单元格样式 -->
             <el-table
                 ref="multipleTable"
+                max-height="300"
                 :data="tableData"
                 style="width: 100%"
                 size = 'mini'
@@ -110,20 +111,38 @@ export default {
       ],
       modelNubOption: [],
       tableData: [ // 冰箱信息数据
-        {
-          laboratory: 'I期临床试验室验室',
-          equipmentName: '检测样本冰箱',
-          trademark: 'MDF-U53V-519L',
-          temperature: '-85'
-        },
-        {
-          laboratory: 'I期临床试验室验室',
-          equipmentName: '检测样本冰箱',
-          trademark: 'MDF-U53V-519L',
-          temperature: '-85'
-        }
+        // {
+        //   laboratory: 'I期临床试验室验室',
+        //   equipmentName: '检测样本冰箱',
+        //   trademark: 'MDF-U53V-519L',
+        //   temperature: '-85'
+        // },
+        // {
+        //   laboratory: 'I期临床试验室验室',
+        //   equipmentName: '检测样本冰箱',
+        //   trademark: 'MDF-U53V-519L',
+        //   temperature: '-85'
+        // }
       ]
     }
+  },
+  created(){
+    this.$axios({
+      method: 'get',
+      url:'sampleGuide/refrigeratorStru/findAllRefrigeratorList'
+    })
+    .then(({data})=>{
+      data.data.forEach((item)=>{
+        this.tableData.push({
+          id:item.id,
+          laboratory: item.laboratoryDict.name,
+          equipmentName: item.name,
+          trademark:item.refrigeratorBrandTypeDict.name,
+          temperature: item.temperature
+        })
+      })
+      console.log(data)
+    })
   },
   methods: {
     amendrefrigerator (index, row) {
@@ -138,11 +157,39 @@ export default {
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          
-          this.$message({
-            type: 'success',
-            message: '删除成功!'
-          });
+          this.$axios({
+            method:'post',
+            url: 'sampleGuide/refrigeratorStru/deleteCheckSampleStru',
+            data:({
+              id:row.id
+            })
+          })
+          .then(({data})=>{
+            console.log(data)
+            if(data.data > 0){
+                this.$message({
+                  type: 'info',
+                  message: '当前冰箱中存在样本盒，不可删除!'
+                });
+            }else{
+              this.$axios({
+                method: 'post',
+                url:'sampleGuide/refrigeratorStru/deleteRefrigeratorStruById',
+                data:({
+                  id:row.id
+                })
+              })
+              .then(({data})=>{
+                console.log(data)
+                if(data.code == 200){
+                  this.$message({
+                    type: 'success',
+                    message: '删除成功!'
+                  });
+                }
+              })
+            }
+          })        
         }).catch(() => {
           this.$message({
             type: 'info',

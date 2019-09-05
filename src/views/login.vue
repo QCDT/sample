@@ -13,46 +13,48 @@
     <div class="loginCenter">
       <div class="bannerWrap">
         <!-- 轮播图 -->
-        <el-carousel :height="bannerHeight+'px'" arrow="never">
-          <el-carousel-item v-for="item in list" :key="item">
-            <img :src="item" ref="image" />
-          </el-carousel-item>
-        </el-carousel>
-        <div class="loginContent">
-          <!-- 登录框 -->
-          <div class="loginTitle">
-            <div class="titleLeft">
-              <span>{{ LoginTab ? "账号登录" : "扫码登录" }}</span>
-              <span class="lineBottom"></span>
+        <div class="banner">
+          <el-carousel :height="bannerHeight+'px'" arrow="never">
+            <el-carousel-item v-for="item in list" :key="item">
+              <img :src="item" ref="image" />
+            </el-carousel-item>
+          </el-carousel>
+          <div class="loginContent">
+            <!-- 登录框 -->
+            <div class="loginTitle">
+              <div class="titleLeft">
+                <span>{{ LoginTab ? "账号登录" : "扫码登录" }}</span>
+                <span class="lineBottom"></span>
+              </div>
+              <div class="titleRight">
+                <span class="togglePic">
+                  <em>{{ LoginTab ? "扫码登录更便捷" : "账密登录在这里" }}</em>
+                </span>
+                <span class="toggleText" @click="loginTab()">
+                  <img src="@/assets/img/codeImg.png" v-show="LoginTab" />
+                  <img src="@/assets/img/computer.png" v-show="!LoginTab" />
+                </span>
+              </div>
             </div>
-            <div class="titleRight">
-              <span class="togglePic">
-                <em>{{ LoginTab ? "扫码登录更便捷" : "账密登录在这里" }}</em>
-              </span>
-              <span class="toggleText" @click="loginTab()">
-                <img src="@/assets/img/codeImg.png" v-show="LoginTab" />
-                <img src="@/assets/img/computer.png" v-show="!LoginTab" />
-              </span>
+            <div class="loginCenter">
+              <label v-show="LoginTab">
+                <img src="@/assets/img/user.png" />
+                <input type="text" placeholder="请输入用户名" v-model="userName" />
+              </label>
+              <label v-show="LoginTab">
+                <img src="@/assets/img/password.png" />
+                <input type="password" placeholder="请输入密码" v-model="userPassword" />
+              </label>
+              <div v-show="!LoginTab" class="loginScan">
+                <img src="@/assets/img/saomiao.gif" />
+              </div>
             </div>
+            <button class="loginBtn" @click="loginIng">登录</button>
           </div>
-          <div class="loginCenter">
-            <label v-show="LoginTab">
-              <img src="@/assets/img/user.png" />
-              <input type="text" placeholder="请输入用户名" v-model="userName" />
-            </label>
-            <label v-show="LoginTab">
-              <img src="@/assets/img/password.png" />
-              <input type="password" placeholder="请输入密码" v-model="userPassword" />
-            </label>
-            <div v-show="!LoginTab" class="loginScan">
-              <img src="@/assets/img/saomiao.gif" />
-            </div>
-          </div>
-          <button class="loginBtn" @click="loginIng">登录</button>
         </div>
       </div>
     </div>
-    <div class="footer">
+      <div class="footer">
       <!-- 页脚 -->
       <span>技术支持: 惠通启恒医疗科技(北京)有限公司</span>
       <span>联系电话 010-68683182</span>
@@ -77,7 +79,7 @@ export default {
   },
   mounted() {
     // element banner 高度自适应
-    this.imgLoad();
+    // this.imgLoad();
     this.$nextTick(function() {
       this.bannerHeight = this.$refs.image[0].height;
       console.log(this.$refs.image[0].height);
@@ -100,7 +102,6 @@ export default {
       })
     },
     loginIng() {
-      // this.$router.push("/Home");
       this.$axios({
         method: "post",
         url: "sampleGuide/doLogin/selectByName",
@@ -159,6 +160,12 @@ export default {
 }
 .bannerWrap {
   position: relative;
+  height: 35vw;
+  .banner{
+    position: absolute;
+    top:5%;
+    width: 100%;
+  }
   // text-align: center;
   img {
     width: 1920px;
@@ -222,6 +229,7 @@ export default {
     }
   }
   .loginCenter {
+    height: 100%;
     label {
       display: block;
       margin-top: 20px;
@@ -268,7 +276,7 @@ export default {
   display: flex;
   justify-content: space-around;
   align-items: center;
-  height: 40px;
   font-size: 16px;
+  width: 100%;
 }
 </style>

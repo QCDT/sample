@@ -143,7 +143,7 @@ export default {
           .then(({data})=>{
             // console.log(data.data)
             if(data.data === 0){
-              callback(new Error('该样本名称已存在！'));
+              callback(new Error('该样本盒名称已存在！'));
             }else{
               callback()
             }

@@ -22,6 +22,7 @@
       <el-table
         :row-style="{height:'32px',textAlign: 'center',padding:'0px',}"
         :cell-style="{padding:'0px',textAlign: 'center'}"
+        max-height="300"
         border
         ref="multipleTable"
         :data="tableData"

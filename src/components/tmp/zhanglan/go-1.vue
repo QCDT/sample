@@ -28,7 +28,7 @@ export default {
   left: 0;
   right: 0;
 
-  height: 150px;
+  height: 60px;
 
   button {
     width: 6.25rem;
