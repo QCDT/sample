@@ -8,7 +8,7 @@
       <el-button type="primary" @click="delEl()" size="small">删除实验室</el-button>
     </div>
     <div class="labListWrap">
-      <ul class="labList">
+      <ul class="labList" :style="{'left':calleft + 'px'}">
         <li
           v-for="(item,index) in list"
           :key="index"
@@ -28,9 +28,9 @@
           </div>
         </li>
       </ul>
-      <img src="@/assets/img/arrowLeft.png" class="arrowL arrow">
-      <img src="@/assets/img/arrowRight.png" class="arrowR arrow">
     </div>
+    <img @click="zuohua" src="@/assets/img/arrowLeft.png" class="arrowL arrow" v-show="list.length  > 3 && calleft > -(list.length - 3) * 232">
+    <img @click="youhua" src="@/assets/img/arrowRight.png" class="arrowR arrow" v-show="list.length > 3 && calleft < 0">
     <div class="labBtn">
       <el-button type="primary" size="small">保存</el-button>
       <el-button type="primary" @click="returnup()" size="small">返回</el-button>
@@ -45,6 +45,7 @@ export default {
   data() {
     return {
       laboratoryName: "",
+      calleft: 0,
       activeClass: -1,
       delIndex: -1,
       list: [
@@ -96,6 +97,12 @@ export default {
       });
     },
     addEl() {
+      if(this.list.length >=3){
+        this.calleft -= 232;
+      }else{
+        this.calleft = 0
+      }
+      // this.calleft -= 232;
       this.list.push({
         id: Date.now(),
         laboratoryName: "",
@@ -132,6 +139,20 @@ export default {
           });
       }
       console.log(this.delIndex);
+    },
+    //点击按钮左移
+    zuohua() {
+      this.calleft -= 232;
+      if (this.calleft < -((this.list.length - 3) * 232)) {
+        this.calleft = -(this.list.length - 3) * 232;
+      }
+    },
+    //点击按钮右移
+    youhua() {
+      this.calleft += 232;
+      if (this.calleft > 0) {
+        this.calleft = 0;
+      }
     }
   }
 };
@@ -154,16 +175,21 @@ export default {
       width: 696PX;
       margin: 0 auto;
       overflow: hidden;
-      &:hover .arrow{
-        opacity: 1;
-      }
+      position: relative;
+      height: 180px;
+      /*&:hover .arrow{*/
+        /*opacity: 1;*/
+      /*}*/
     }
     .labList{
         width: 50000px;
         height: 100%;
+        position: absolute;
         // display: flex;
         // justify-content: center;
         text-align: center;
+        left: 0px;
+        transition: 1s;
         // margin-top: 30px;
         li{
             width: 200PX;
@@ -201,7 +227,7 @@ export default {
     position: absolute;
     top: 50%;
     cursor: pointer;
-    opacity: 0;
+    opacity: 1;
     transition: 3s;
 }
 .arrowL{
