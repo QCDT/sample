@@ -71,7 +71,7 @@
       </div>
     </div>
 
-    <div class="right" v-show="$store.state.loanSearchStatus" >
+    <div class="right" v-show="$route.params.id !==1 " >
       <div class="item" @click="addLoanSample">
           <img src="@/assets/img/scan_bot_out.png" alt="" width=30>
           <small>添加借出</small>

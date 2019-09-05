@@ -1,6 +1,7 @@
 <template>
   <!-- 借出详情 -->
   <div class="loadn-particulars-index">
+    <cardfile></cardfile>
     <fromName>表单信息</fromName>
     <div class="fotm-table-one">
       <el-table
@@ -24,7 +25,7 @@
 
     <div class="fotm-table-two">
       <fromName>该表单样本信息</fromName>
-      <el-button round  class="center" type="primary" v-show="status==0" @click="startCheck">开始核验</el-button>
+      <el-button round  class="center" type="primary" v-show="status==0" @click="stratHeyan">开始核验</el-button>
 
       <div class="fotm-table-box">
         <div class="form-two-menu" v-show="status==0">
@@ -33,8 +34,9 @@
           <img src="@/assets/img/yangben.png" @click="searchAdd">
         </div>
         <el-table
-          :row-style="{height:'32px',textAlign: 'center',padding:'0px',}"
+          :row-style="{height:'32px',textAlign: 'center',padding:'0px'}"
           :cell-style="{padding:'0px',textAlign: 'center'}"
+          :row-class-name ='bgColor'
           border
           ref="multipleTable"
           :data="tableData"
@@ -54,15 +56,29 @@
         <h1>详细异常描述</h1>
         <div class="checkDetailsContent">
           <div class="checkLeft">
-            <p><span>异常详情</span></p>
+            <p class="ps"><span>异常详情</span></p>
+            <p v-show="sampleYanBen2.length != 0">
+              <span>该芯片未被录入</span>
+            </p>
+            <p v-show="sampleYanBen.length != 0">
+              <span>该样本不属于此表单里的样本</span>
+            </p>
+
+            <!--<p></p>-->
           </div>
-          <div>
-            <p><span>样本名称(位置信息)</span></p>
+          <div class="checkRight">
+            <p class="ps"><span>样本名称(位置信息)</span></p>
+            <p>
+              <span v-for="item in sampleYanBen2" :key="item.text">{{item.text}}</span>
+            </p>
+            <p >
+              <span v-for="item in sampleYanBen" :key="item.text">{{item.text}}</span>
+            </p>
           </div>
         </div>
       </div>
 
-      <el-button round class="center enter-btn" type="primary" v-show="status==0">确认核验</el-button>
+      <el-button round class="center enter-btn" type="primary" v-show="status==0" @click="queRenHeYan">确认核验</el-button>
       <el-button class="center" type="primary" @click="$router.go(-1)" size="mini">返回</el-button>
     </div>
     <!-- 添加扫描样本盒 -->
@@ -77,19 +93,31 @@
 import fromName from '@/components/tmp/zhanglan/fromName'
 import maskTran from '@/components/tmp/zhanglan/masking'
 import add from '@/views/Scan-Loan-Particulars/add'
+import cardfile from "@/components/cardfile"
 export default {
   inject:['reload'],
   props: {},
-  components: { fromName, maskTran, add },
+  components: { fromName, maskTran, add, cardfile },
   data () {
     return {
       //ifAddBox: false,
+      RfidArr: [],
       AddBox:false,
       ifSearchAddBox: false,
       loanOrderId:'',
       LoanOrderStatus:'',
       status: -1,
-     
+
+      seen : false,
+      seen_2 : false,
+      sampleYanBen: [
+        // {text:'123'},
+        // {text:'123453'}
+      ],
+      sampleYanBen2: [
+        // {text:'123'},
+        // {text:'123453'}
+      ],
       /* 借出表单信息 */
       sampleData:[
         /* {
@@ -140,13 +168,13 @@ export default {
               takeOutName:data.data.loanOrder.takeleave,//………………取走人
               returnTiem:data.data.loanOrder.expectedReturnDate,//………………预计归还时间
               mark:data.data.loanOrder.loanRemarks,//…………备注
-              status:data.data.loanOrder.status==1?"已核验":"未核验", //…………订单状态
+              status:data.data.loanOrder.status==0?"未核验":"已核验", //…………订单状态
           }),
           this.status = data.data.loanOrder.status,
           this.LoanOrderStatus=data.data.loanOrder.status,
           //借出样本信息展示
           data.data.loanSamples.forEach((item)=>{
-            console.log(item);
+            // console.log(item);
               this.tableData.push({
                 id:item.id,
                 Index:data.data.loanSamples.createTime,// ..........序号
@@ -159,6 +187,11 @@ export default {
   },
 
   methods:{
+    // bgColor ({ row,rowIndex }) {
+    //   if (row === 1 && rowIndex === 1) {
+    //     return 'bgColor'
+    //   }
+    // },
     add () {
       this.AddBox = true
     },
@@ -211,23 +244,115 @@ export default {
           this.$message({ type: 'info', message: '已取消删除' })
         })
     },
+    stratHeyan () {//开始核验
+      this.RfidArr = []
+      this.sampleYanBen = []
+      this.sampleYanBen2 = []
+      MyActiveX1.RDR_Close()
+      let devicetypeValue = this.$cookies.get('readerType')
+      let OpentypeValue = this.$cookies.get('portType')
+      let comPortValue = this.$cookies.get('comPortNo')
+      let comBaudRateValue = this.$cookies.get('comBaudRate')
+      let comFrameStructureValue = this.$cookies.get('comFrameStructure')
+      let netIpAddress = this.$cookies.get('netIpAddress')
+      let netPort = this.$cookies.get('netPortNo')
+      let n = this.$store.state.OnOpen(devicetypeValue,OpentypeValue,comPortValue,comBaudRateValue,comFrameStructureValue,netIpAddress,netPort)
+      if (n!=0) {
+        return
+      }
+      let nret=0;
+      //盘点标签初始化,申请盘点标签所需要的内存空间。返回，成功：0 ；失败：非0 （查看错误代码表）。
+      nret = MyActiveX1.RDR_InitInventory();
+      if (nret!=0) {
+        alert("盘点标签初始化失败！")
+        return;
+      }
+      //盘点标签时，使能15693协议。返回，成功：0 ；失败：非0 （查看错误代码表）。
+      nret = MyActiveX1.RDR_Enable15693(0,0x00,0)
+      nret = MyActiveX1.RDR_Enable14443A()
+      if (nret!=0) {
+        //结束标签盘点操作，释放内存空间。
+        MyActiveX1.RDR_FinishInventory()
+        return;
+      }
+      this.readRfid()
+      MyActiveX1.RDR_Close()
+    },
+    readRfid(){
+      let nret = 0
+      let recordCnt = ''
+      nret = MyActiveX1.RDR_Inventory(0,"")
+      if (nret !== 0) {
+        this.$alert('读取标签失败，请检查设备连接以及参数设置！', '提示', {
+          confirmButtonText: '确定',
+          type: 'error'
+        })
+        MyActiveX1.RDR_FinishInventory()
+        return
+      }
+      recordCnt = MyActiveX1.RDR_GetRecordCnt()
+      alert(recordCnt)
+      for(let j=0;j<recordCnt;j++){
+        let sTagInfo = MyActiveX1.GetRecord(j).split("-")
+        let sTagID = sTagInfo[sTagInfo.length-1]
+        this.RfidArr[j] = sTagID
+      }
+      this.$axios({
+        method:'post',
+        url: '/sampleGuide/scan/existSampleInLoanOrder',
+        data:({
+          rfidCodeList: this.RfidArr,
+          loanOrderId: this.$store.state.loanOrderId
+        })
+      })
+        .then(({data})=>{
+          console.log(data)
+          // data.data.yes.forEach((item)=>{
+          //   this.tableData.forEach((a,index)=>{
+          //     if(a.RfidNmber[index] == item.rfidCode){
+          //
+          //     }else{
+          //
+          //     }
+          //   })
+          // })
+          data.data.new.forEach((item)=>{
+            this.sampleYanBen2.push({
+              text:item
+            })
+          })
 
-    //开始核验
-    //  startCheck(){
-    //   this.$axios({
-    //         method:'post',
-    //         url:'sampleGuide/scan/existSampleInLoanOrder',
-    //         data:({
-    //           loanOrderId:this.$store.state.loanOrderId,// 当前订单ID
-    //           rfidCodeList:this.RfidArr,
-    //        })
-    //       })
-    //       .then((data)=>{
-    //         console.log(data)
-            
-    //         this.$message({ type: 'success', message: '删除成功!' })
-    //       })
-    // }, 
+            data.data.no.forEach((item)=>{
+                  this.sampleYanBen.push({
+                    text: `${item.name}(${item.sampleStru.detailLocation})`
+                  })
+              })
+        })
+    },
+    queRenHeYan () {//确认核验
+      if(this.sampleYanBen2.length != 0 || this.sampleYanBen.length !=0){
+        this.$alert('核验异常', '提示', {
+          confirmButtonText: '确定',
+          type: 'warning'
+        })
+      }else{
+        this.$axios({
+          method:'post',
+          url: '/sampleGuide/scan/submitLoadOrder',
+          data:({
+            id: this.$store.state.loanOrderId
+          })
+        })
+          .then(({data})=>{
+            if(data.code == 200){
+              this.$alert('核验成功', '提示', {
+                confirmButtonText: '确定',
+                type: 'success'
+              })
+            }
+          })
+      }
+    },
 
     // ↓    添加订单
     showAdd () {
@@ -273,6 +398,9 @@ table {
 }
 .fotm-table-box {
   margin: 0px 20px 50px;
+  .bgColor{
+    background-color: #fa3849!important;
+  }
 }
 .form-two-menu {
   display: flex;
@@ -309,14 +437,25 @@ h1 {
   justify-content: center;
   align-items: center;
   margin-top: 10px;
-  p{
+  .ps{
     border: 1px solid #ccc;
     width: 45vw;
     text-align: center;
   }
   .checkLeft{
+    height: 100%;
     p{
       border-right: none;
+      /*height: 20px;*/
+    }
+  }
+  .checkRight{
+    height: 100%;
+    p{
+      /*height: 20px;*/
+    }
+    p span{
+     display: block;
     }
   }
 }

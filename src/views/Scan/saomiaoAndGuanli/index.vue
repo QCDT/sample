@@ -83,15 +83,10 @@ export default {
       recordCnt = MyActiveX1.RDR_GetRecordCnt()
       alert(recordCnt)
       for(let j=0;j<recordCnt;j++){
-          // RfidArr = []
         	let sTagInfo = MyActiveX1.GetRecord(j).split("-")
           let sTagID = sTagInfo[sTagInfo.length-1]
-          // console.log(sTagID)
             this.RfidArr[j] = sTagID
       }
-      // if(this.RfidArr.length == 0){
-      //   return
-      // }
       console.log(this.RfidArr)
       if(this.switchSaoMiao){
         this.$axios({

@@ -32,8 +32,8 @@
           <div class="item" @mouseenter="showIndex=1" @mouseleave="showIndex=-1">
             <img src="@/assets/img/header_user1.png">
             <p :class="{show:showIndex===1}">
-              <span>用户名: admin</span>
-              <span>角色名: 管理员</span>
+              <span>用户名: {{userName}}</span>
+              <span>角色名: {{roleName}}</span>
             </p>
           </div>
           <div class="item" @mouseenter="showIndex=2" @mouseleave="showIndex=-1">
@@ -49,22 +49,30 @@
           <div class="item logout-wrap" @mouseenter="showIndex=4" @mouseleave="showIndex=-1">
             <img src="@/assets/img/header_home1.png">
             <p class="logout" :class="{show:showIndex===4}">
-              <span>切换用户</span>
-              <span>退出</span>
+              <span @click="userTab">切换用户</span>
+              <span @click="quit">退出</span>
             </p>
           </div>
         </div>
       </div>
     </div>
+    <ChangeUser :dialogLogin = 'dialogLogin'btnText="登录" @close='close'></ChangeUser>
   </div>
 </template>
 <script>
+import  ChangeUser from '@/components/ChangeUser'
 export default {
+  components:{
+    ChangeUser
+  },
   data () {
     return {
       active: 0,
       show: false,
       showIndex: -1,
+      dialogLogin: false,
+      userName:'',
+      roleName:'',
       homeLink: [
         { link: '/home', text: '首页' },
         { link: '/scan', text: '扫描' },
@@ -75,8 +83,27 @@ export default {
       ]
     }
   },
-
+  beforeUpdate(){
+    // console.log(this.$cookies.get('roleName'),this.$cookies.get('userName'))
+      this.userName = this.$cookies.get('userName');
+      this.roleName = this.$cookies.get('roleName')
+  },
   methods: {
+    quit(){
+      this.$router.push("/")
+    },
+    userTab(){
+      this.dialogLogin = true
+    },
+    close(value){
+        this.dialogLogin = false
+    },
+    // changeRoleName(value){
+    //   this.roleName = value
+    // },
+    // changeUserName(value){
+    //   this.userName = value
+    // },
     setActive () {
       let routName = {
         home: 0,
@@ -283,7 +310,7 @@ h3 {
 .icon-wrap {
   display: flex;
   justify-content: space-between;
-
+  cursor: pointer;
   .item {
     position: relative;
 
