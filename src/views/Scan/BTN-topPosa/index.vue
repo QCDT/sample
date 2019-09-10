@@ -40,8 +40,8 @@ export default {
         { pic: require('@/assets/img/zhuangyun1.png'), linkName: 'zhuanyun' },
         { pic: require('@/assets/img/huanzhecaixue.png'), linkName: 'caixue' },
         { pic: require('@/assets/img/revise-icon.png'), linkName: 'receive' },
-        { pic: require('@/assets/img/fenzuheyan1.png'), linkName: 'fenzu' },
         { pic: require('@/assets/img/lixinji1.png'), linkName: 'lixin' },
+        { pic: require('@/assets/img/fenzuheyan1.png'), linkName: 'fenzu' },
         { pic: require('@/assets/img/zidongluru.png'), linkName: 'zidong' },
       ],
       //   右边

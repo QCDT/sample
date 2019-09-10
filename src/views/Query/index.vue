@@ -25,11 +25,11 @@
           <el-table-column type="selection" show-overflow-tooltip ></el-table-column>
           <el-table-column label="序号" type="index" width="70">
           </el-table-column>
-          <el-table-column prop="color" label="管帽颜色" show-overflow-tooltip></el-table-column>
+          <el-table-column prop="color" label="帽色" show-overflow-tooltip></el-table-column>
 
           <!--  -->
           <el-table-column label="样本信息" show-overflow-tooltip>
-            <template slot-scope="scope"> 
+            <template slot-scope="scope">
                 <!--           -->
                   <span class="cellStyle" @click="sampleInfoClick">
                       {{tableData[scope.$index].sampleInfo}}
@@ -52,7 +52,7 @@
           <el-table-column label="日志信息"  fixed="right">
             <template>
                 <span class="cellStyle" @click="sampleLog">查看</span>
-            </template> 
+            </template>
           </el-table-column>
         </el-table>
       </div>
@@ -60,7 +60,7 @@
     <!-- 表单 ↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑ -->
     <div class='backBtn' @click="backLoanPage()" v-show="showBtn">返回</div>
   </div>
-  
+
 </template>
 <script>
 import Search from './Search'
@@ -73,7 +73,7 @@ export default {
       showBtn: true,
       // ↓   表单
       tableData: [
-        
+
       ],
       multipleSelection: []
       //   ↑ 表单
@@ -90,7 +90,7 @@ export default {
   methods: {
     handleSelectionChange (val) {
       this.multipleSelection = val
-      
+
     },
     changeTable(tableData){
         this.tableData = tableData
@@ -113,7 +113,7 @@ export default {
       this.$router.push({name:'particulars'})
     },
     backLoanPage(){
-      
+
     }
   },
   computed: {}

@@ -5,7 +5,7 @@
     </transition>
     <div class="top">
       <fromName>借出订单列表</fromName>
-      <tmpButton @click="showAdd" style="height:26px">添加订单</tmpButton>
+      <tmpButton @click="showAdd" style="height:36px">添加订单</tmpButton>
     </div>
 
     <el-table
@@ -20,7 +20,7 @@
       :style="{width: '100%'}"
     >
       <el-table-column type="index" label="序号" width="70"></el-table-column>
-      <el-table-column label="订单名称" width="100">
+      <el-table-column label="订单名称" show-overflow-tooltip>
         <template slot-scope="scope">
             <span class="orderName" @click="showOrder(scope.row,scope.$index)">{{tableData[scope.$index].orderName}}</span>
         </template>
@@ -31,7 +31,7 @@
       <el-table-column prop="returnTiem" label="预计归还时间" show-overflow-tooltip></el-table-column>
       <el-table-column prop="mark" label="备注" show-overflow-tooltip></el-table-column>
       <el-table-column prop="status" label="订单状态" show-overflow-tooltip></el-table-column>
-      <el-table-column fixed="right" label="操作" width="100">
+      <el-table-column fixed="right" label="操作" width="130">
         <template slot-scope="scope">
            <el-tooltip class="item" effect="dark" content="导出PDF" placement="bottom">
               <i class="icon icon-pdf del" @click="exportPdf(scope.row,scope.$index)" title="导出pdf"></i>

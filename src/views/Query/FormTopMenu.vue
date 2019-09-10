@@ -87,6 +87,7 @@
 <script>
 import tmpinput from '@/components/tmp/zhanglan/tmp-empty-input'
 export default {
+  inject:['reload'],
   props: {
     count: Number,
     multipleSelection: { type: Array, default: () => [] }
@@ -117,7 +118,52 @@ export default {
             type: 'warning'
           });
        }else{
-          console.log(this.multipleSelection)
+          // console.log(this.multipleSelection)
+         let sampleInfo = this.multipleSelection.every((item)=>{
+           return item.status == '正常'
+         })
+         if(sampleInfo){
+           this.$confirm('已选中'+this.multipleSelection.length+'条数据，确定销毁样本吗?', '提示', {
+             confirmButtonText: '确定',
+             cancelButtonText: '取消',
+             type: 'warning'
+           }).then(() => {
+             this.$axios({
+               method:'post',
+               url:'sampleGuide/query/deleteListSampleById',
+               data:({
+                 list: this.multipleSelection.map((item)=>{return item.id})
+               })
+             })
+               .then(({data})=>{
+                 console.log(data)
+                 if(data.data == 0){
+                   this.$message({
+                     type: 'success',
+                     message: '删除成功!'
+                   });
+                   this.reload()
+                 }else{
+                   this.$message({
+                     type: 'warning',
+                     message: data.data
+                   });
+                 }
+
+               })
+           }).catch(() => {
+             this.$message({
+               type: 'info',
+               message: '已取消删除'
+             });
+           });
+         }else{
+           this.$message({
+             message: '请选择样本状态为正常的样本',
+             type: 'warning'
+           });
+         }
+
        }
     },
     // 打印标签
@@ -217,7 +263,7 @@ export default {
     },
     //导出Excel
     exportLoanPdf(){
-      
+
     }
   },
   computed: {}

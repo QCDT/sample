@@ -3,7 +3,7 @@
   <div class="guihuan-wrap">
     <el-form ref="ruleForm" :model="ruleForm"  status-icon label-width="120px" label-position="left"  :rules="rules">
       <el-form-item label="归还表单名称" prop="formName" required>
-        <el-input v-model="ruleForm.formName"></el-input>
+        <el-input v-model="ruleForm.formName" disabled></el-input>
       </el-form-item>
         <el-form-item label="归还人" prop="name" required>
         <el-input v-model="ruleForm.name"></el-input>
@@ -227,6 +227,16 @@ export default {
       }
     }
   },
+  created(){
+    this.$axios({
+      method:'get',
+      url:'sampleGuide/scan/getOrderName',
+    })
+      .then(({data})=>{
+        console.log(data);
+        this.ruleForm.formName = data.data
+      })
+  },
   methods: {
     submitForm(ruleForm){
        this.$refs[ruleForm].validate((valid) => {
@@ -345,19 +355,47 @@ export default {
             data:({
               returnTableIdList: newExportArr
             })
+
           })
+            .then(function(response) {
+              if(status == 200){
+                console.log(response.headers);
+              }
+
+            })
+            // .then(({data})=>{
+            //   console.log(data);
+            //   var blob = new Blob([data], {type: 'application/vnd.ms-excel;charset=UTF-8'});
+            //   var a = document.createElement('a');
+            //   var href = window.URL.createObjectURL(blob); // 创建链接对象
+            //   a.href =  href;
+            //   a.download = '';   // 自定义文件名
+            //   document.body.appendChild(a);
+            //   a.click();
+            //   window.URL.revokeObjectURL(href);  //移除链接对象
+            //   document.body.removeChild(a); // 移除a元素
+            // })
             .then(({data})=>{
               console.log(data);
-              var blob = new Blob([data], {type: 'application/vnd.ms-excel;charset=UTF-8'});
-              var a = document.createElement('a');
-              var href = window.URL.createObjectURL(blob); // 创建链接对象
-              a.href =  href;
-              a.download = '';   // 自定义文件名
-              document.body.appendChild(a);
-              a.click();
-              window.URL.revokeObjectURL(href);  //移除链接对象
-              document.body.removeChild(a); // 移除a元素
+              let blob = new Blob([data], {type: 'application/vnd.ms-excel;charset=UTF-8'});
+              // let fileName =
+              if(window.navigator.msSaveBlob){
+                window.navigator.msSaveBlob(blob);
+              }else{
+                // var blob = new Blob([data], {type: 'application/vnd.ms-excel;charset=UTF-8'});
+                let a = document.createElement('a');
+                let href = window.URL.createObjectURL(blob); // 创建链接对象
+                a.href =  href;
+                a.download = '';   // 自定义文件名
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(href);  //移除链接对象
+                document.body.removeChild(a);
+              }
             })
+
+
+
 
       }
     },

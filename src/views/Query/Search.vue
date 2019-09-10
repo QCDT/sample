@@ -47,7 +47,7 @@
                 placeholder="请选择"
               >
                 <el-option
-                  v-for="item in lenderOpention"
+                  v-for="item in lenderOption"
                   :key="item.value"
                   :label="item.label"
                   :value="item.value"
@@ -61,8 +61,8 @@
             <i class="tmp-row-empty-input">
               <el-select
                 size="small"
-                v-model="enterClerk"
                 clearable
+                v-model="enterClerk"
                 placeholder="请选择"
               >
                 <el-option
@@ -81,7 +81,6 @@
             <span class="tmp-row-empty-title">样本类别</span>
             <i class="tmp-row-empty-input">
               <el-select
-                slot="elUI"
                 size="small"
                 clearable
                 v-model="testTubeCategory"
@@ -138,7 +137,7 @@
           </div>
           <div class="tmp-row-empty">
             <!-- XXX:输入框 | 选择框 -->
-            <span class="tmp-row-empty-title">项目类别</span>
+            <span class="tmp-row-empty-title">项目名称</span>
             <i class="tmp-row-empty-input">
               <el-select
                 slot="elUI"
@@ -155,7 +154,7 @@
                 ></el-option>
               </el-select>
             </i>
-          </div>        
+          </div>
         </div>
       </div>
       <!-- 搜索按钮 -->
@@ -171,6 +170,7 @@
             <i class="tmp-row-empty-input">
               <el-date-picker
                 slot="elUI"
+                value-format="yyyy-MM-dd HH:mm:ss"
                 clearable
                 size="small"
                 v-model="outDate"
@@ -180,13 +180,14 @@
                 end-placeholder="结束日期"
               ></el-date-picker>
             </i>
-          </div> 
+          </div>
           <div class="tmp-row-empty">
             <!-- XXX:输入框 | 选择框 -->
             <span class="tmp-row-empty-title">过期日期</span>
             <i class="tmp-row-empty-input">
               <el-date-picker
                 slot="elUI"
+                value-format="yyyy-MM-dd HH:mm:ss"
                 size="small"
                 clearable
                 v-model="pastDate"
@@ -196,7 +197,7 @@
                 end-placeholder="结束日期"
               ></el-date-picker>
             </i>
-          </div> 
+          </div>
         </div>
         <div class="row">
           <div class="tmp-row-empty">
@@ -205,6 +206,7 @@
             <i class="tmp-row-empty-input">
               <el-date-picker
                 slot="elUI"
+                value-format="yyyy-MM-dd HH:mm:ss"
                 size="small"
                 clearable
                 v-model="samplingDate"
@@ -221,6 +223,7 @@
             <i class="tmp-row-empty-input">
               <el-date-picker
                 slot="elUI"
+                value-format="yyyy-MM-dd HH:mm:ss"
                 size="small"
                 clearable
                 v-model="enterData"
@@ -230,7 +233,7 @@
                 end-placeholder="结束日期"
               ></el-date-picker>
             </i>
-          </div> 
+          </div>
         </div>
         <div class="row">
           <h2 style="white-space: nowrap;margin-right:22px">位置信息:</h2>
@@ -276,7 +279,7 @@
                 ></el-option>
               </el-select>
             </i>
-          </div> 
+          </div>
           <div class="tmp-row-empty">
             <!-- XXX:输入框 | 选择框 -->
             <span class="tmp-row-empty-title">抽屉</span>
@@ -298,7 +301,7 @@
                 ></el-option>
               </el-select>
             </i>
-          </div> 
+          </div>
           <div class="tmp-row-empty">
             <!-- XXX:输入框 | 选择框 -->
             <span class="tmp-row-empty-title">样本盒</span>
@@ -319,7 +322,7 @@
                 ></el-option>
               </el-select>
             </i>
-          </div> 
+          </div>
           <tmpinput>
 
           </tmpinput>
@@ -375,11 +378,13 @@ export default {
         { value: 'B来源', label: 'B来源' } */
       ],
       // 借出人
-      lenderOpention:[
+      lenderOption:[
 
       ],
       //录入人
-      enterClerkOption:[],
+      enterClerkOption:[
+
+      ],
       /* 状态 status */
       statusOption: [
         { value: 1, label: '正常' },
@@ -427,7 +432,7 @@ export default {
       url:'/sampleGuide/set/selectRefrigeratorName'
     })
     .then(({data})=>{
-      console.log(data)
+      // console.log(data)
       data.data.forEach((item)=>{
         this.refrigeratorOption.push({
           value:item.id,
@@ -443,7 +448,12 @@ export default {
     .then(({data})=>{
          // console.log(data);
           data.data.forEach((item)=>{
-              this.testTubeCategory.push({label:item,value:item});
+            this.testTubeCategoryOption.push(
+              {
+                label:item,
+                value:item
+              }
+            )
           })
     }),
     //来源
@@ -453,24 +463,48 @@ export default {
       })
       .then(({data})=>{
             console.log(data);
-            data.data.forEach((label,value)=>{
-                this.source.push({label,value});
+            data.data.forEach((item)=>{
+                this.sourceOption.push({
+                  label:item,
+                  value:item
+                });
               })
         }),
       //录入人
-        this.$axios({
+      this.$axios({
         method:'get',
-        url:'sampleGuide/userInfo/findAllUse',
+        url:'sampleGuide/userInfo/findAllUser',
       })
       .then(({data})=>{
-        console.log(data);
-        data.data.forEach((label,value)=>{
-            this.enterClerk.push({label,value});
+        // console.log(data);
+        data.data.forEach((item)=>{
+            this.enterClerkOption.push({
+              value:item.id,
+              label:item.chinesename
+            });
+          this.lenderOption.push({
+            value:item.id,
+            label:item.chinesename
           })
+          })
+      }),
+      //项目类别
+      this.$axios({
+        method:'get',
+        url:'sampleGuide/guest/selectProjectAll',
       })
-        
+        .then(({data})=>{
+          // console.log(data);
+          data.data.forEach((item)=>{
+            this.itemClassOption.push({
+              label:item.name,
+              value:item.id
+            });
+          })
+        })
+
     },
-    
+
   methods: {
     toggleAdvancedSearch () {
       /* 切换高级搜索 */
@@ -482,22 +516,48 @@ export default {
         this.asHeight = '170px'
       }
     },
+
     startSearch () {
+      this.searchTableData=[]
       /* 开始搜索 */
     // this.$emit('startSearch', JSON.stringify(this.sampleSearch))
+    //   if(data.data==0){
+    //     return
+    //   }else{
+    //
+    //   }
+
       this.$axios({
             method:'post',
             url:'sampleGuide/query/findAllRfidSampleByCondition',
             data:({
-              sampleCategoryDict:0,// 当前要删除的订单ID
-              name:'102',
+              sampleCategoryDict:this.sampleItem,// 样本或者样本盒
+              name :this.name,//样本名称
+              loanUserName:this.lender,//借出人
+              inputUserId:this.enterClerk,//录入人id
+              sampleCategoryDictId:this.sampleItem,//样本类别
+              sampleSource:this.source,//样本来源
+              status:this.status,//状态
+              ProjectId:this.itemClass,//项目名称
+              minLoanTime:this.outDate[0],//借出日期
+              maxLoanTime:this.outDate[1],
+              minOverdueTime:this.pastDate[0],//过期日期
+              maxOverdueTime:this.pastDate[1],
+              minSamplingDateTime:this.samplingDate[0],//采样日期
+              maxSamplingDateTime:this.samplingDate[1],
+              minInputTime:this.enterData[0],//录入日期
+              maxInputTime:this.enterData[1],
+              refrigeratorStruId:this.refrigerator,//冰箱名称
+              tierStruId:this.layer,//层
+              drawStruId:this.chouTi,//抽屉
+              sampleBoxStruId:this.styleBox,//样本盒
             })
           })
           .then(({data})=>{
             console.log(data);
             data.data.forEach((item)=>{
                console.log(item);
-            this.searchTableData.push({ 
+            this.searchTableData.push({
               id: item.id,
               color:item.capColor, // 管帽颜色
               sampleInfo:item.name, // 样本信息
@@ -507,7 +567,7 @@ export default {
               source:item.sampleSource, // 样本来源
               pastTime:item.expireDate, // 过期日期
               location:item.sampleStru.detailLocation, // 位置信息
-              status:item.status, // 状态
+              status:item.status == 1 ? '正常' : '借出' , // 状态
               classify:item.sampleCategoryDict.name, // 类别
               loanPerson:item.loanUserName, // 借出人
               loanTime:item.loanTime// 借出日期
@@ -515,7 +575,7 @@ export default {
         })
         this.$emit('changeTable', this.searchTableData)
           })
-    }, 
+    },
     selectIceBox(){ //切换冰箱加载该冰箱层数
       this.layerOption = []
       this.layer = ''
@@ -531,7 +591,7 @@ export default {
         })
       })
       .then(({data})=>{
-        console.log(data)
+        // console.log(data)
         data.data.forEach((item)=>{
           this.layerOption.push({
             value: item.id,
@@ -599,7 +659,7 @@ export default {
     //       })
     //     })
     //   })
-    // } 
+    // }
   }
 }
 </script>

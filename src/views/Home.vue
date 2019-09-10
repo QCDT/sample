@@ -71,8 +71,8 @@
           >
                <div
                   class="pliesMasking"
-                  @click="toggle(index)"
-                  :class="{'opendoor': isA && active==index}"
+                  @click="openPliesMasking(index)"
+                  :class="{'opendoor': active==index}"
                ><!--&& active==index-->
                 <div class="doorknobWrap">
                     <div class="doorknob"></div>
@@ -124,7 +124,7 @@
               :class="{'active': index==warningActive }"
               @click="warningSelect(index)"
               >
-              <el-badge :value="item.warningNum">
+              <el-badge :value="item.warningNum" :hidden="item.warningNum == 0 ? true : false ">
                   <span>{{item.title}}</span>
               </el-badge>
           </li>
@@ -261,10 +261,10 @@ export default {
     // this.drawLine();
   },
   methods: {
-    toggle:function (index) {
-      this.isA=!this.isA
-      this.active=index
-    },
+    // toggleRef(index) {
+    //   // this.isA=!this.isA
+    //   this.active=this.active == index ? '' : index
+    // },
     refShow(index,labId){
       // console.log(labId)
       this.labRefrigerator = true
@@ -310,7 +310,7 @@ export default {
         })
       })
         .then(({data})=>{ //冰箱内部信息展示图表
-          // console.log(data)
+          console.log(data)
           //饼状图展示
           this.commonSampleNum = data.data.commonBatchSampleTotalSpaceVO.commonSampleNum
           this.totalSpace = data.data.commonBatchSampleTotalSpaceVO.totalSpace
@@ -337,7 +337,7 @@ export default {
 
     },
     openPliesMasking(index){
-       this.active = index
+      this.active = this.active === index ? -1 : index
     },
     warningSelect(index){
       this.warningActive = index
@@ -970,7 +970,7 @@ export default {
         /deep/.el-badge__content.is-fixed{
           top: 8px;
           right: 1px;
-          background: #00c9ff;
+          /*background: #00c9ff;*/
         }
         span{
           font-size: 14px;
