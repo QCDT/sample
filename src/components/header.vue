@@ -56,7 +56,7 @@
         </div>
       </div>
     </div>
-    <ChangeUser :dialogLogin = 'dialogLogin'btnText="登录" @close='close'></ChangeUser>
+    <ChangeUser :dialogLogin = 'dialogLogin' btnText="登录" @close='close'></ChangeUser>
   </div>
 </template>
 <script>

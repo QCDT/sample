@@ -1,85 +1,100 @@
 <template>
   <!-- 借出详情 -->
   <div class="loadn-particulars-index">
-    <cardfile></cardfile>
+    <cardfile @reception= 'refData'></cardfile>
     <fromName>表单信息</fromName>
-    <div class="fotm-table-one">
-      <el-table
-        :row-style="{height:'32px',textAlign: 'center',padding:'0px'}"
-        :cell-style="{padding:'0px',textAlign: 'center'}"
-        border
-        ref="multipleTable"
-        :data="sampleData"
-        tooltip-effect="dark"
-        :style="{width: '100%'}"
-      >
-        <el-table-column prop="orderName" label="表单名称" show-overflow-tooltip></el-table-column>
-        <el-table-column prop="newTime" label="创建时间" show-overflow-tooltip></el-table-column>
-        <el-table-column prop="newUserName" label="创建用户名"></el-table-column>
-        <el-table-column prop="takeOutName" label="取走人" show-overflow-tooltip></el-table-column>
-        <el-table-column prop="returnTime" label="预计归还时间" show-overflow-tooltip></el-table-column>
-        <el-table-column prop="make" label="备注" show-overflow-tooltip></el-table-column>
-        <el-table-column prop="status" label="表单状态" show-overflow-tooltip></el-table-column>
-      </el-table>
+    <div class="form-one">
+      <div class="form-Info">
+        <div>
+          <span>表单名称:</span>
+          <span>{{orderName}}</span>
+        </div>
+        <div>
+          <span>创建时间:</span>
+          <span>{{newTime}}</span>
+        </div>
+        <div>
+          <span>创建用户名:</span>
+          <span>{{newUserName}}</span>
+        </div>
+      </div>
+      <div class="form-Info">
+        <div>
+          <span>取走人:</span>
+          <span>{{takeOutName}}</span>
+        </div>
+        <div>
+          <span>预计归还时间:</span>
+          <span>{{returnTime}}</span>
+        </div>
+        <div>
+          <span>表单状态:</span>
+          <span :class="{red:status==0}">{{formStatus}}</span>
+        </div>
+      </div>
+      <div class="form-Info">
+        <div>
+          <span>备注:</span>
+          <span>{{make}}</span>
+        </div>
+      </div>
     </div>
 
-    <div class="fotm-table-two">
+    <div class="form-table-two">
       <fromName>该表单样本信息</fromName>
-      <el-button round  class="center" type="primary" v-show="status==0" @click="stratHeyan">开始核验</el-button>
-
-      <div class="fotm-table-box">
+      <img class="startScan" src="@/assets/img/saomiao.gif" v-show="status==0" @click="stratHeyan">
+      <div class="form-table-box">
         <div class="form-two-menu" v-show="status==0">
           <img src="@/assets/img/yangbenhe.png" @click="add">
-
           <img src="@/assets/img/yangben.png" @click="searchAdd">
+          <img src="@/assets/img/laji.png" @click="delDingdanSample">
         </div>
         <el-table
           :row-style="{height:'32px',textAlign: 'center',padding:'0px'}"
           :cell-style="{padding:'0px',textAlign: 'center'}"
-          :row-class-name ='bgColor'
+          :row-class-name="changeTrStyle"
+          @selection-change="handleSelectionChange"
+          max-height="300"
           border
           ref="multipleTable"
           :data="tableData"
           tooltip-effect="dark"
           :style="{width: '100%'}"
         >
-          <el-table-column prop="Index" type="index" label="序号" width="70"></el-table-column>
+          <el-table-column type="selection" width="55"></el-table-column>
+          <el-table-column type="index" label="序号" width="70"></el-table-column>
           <el-table-column prop="RfidNmber" label="RFID编号" show-overflow-tooltip></el-table-column>
           <el-table-column prop="SampleName" label="样本名字"></el-table-column>
           <el-table-column prop="LocalItem" label="位置信息" show-overflow-tooltip></el-table-column>
-          <el-table-column label="操作" width="100">
-            <template slot-scope="scope">
-              <i v-show="status==0" class="el-icon-delete del" @click="delDingdan(scope.row,scope.$index)" ></i>
-            </template>
-          </el-table-column>
+          <el-table-column prop="status" label="状态" show-overflow-tooltip></el-table-column>
         </el-table>
-        <h1>详细异常描述</h1>
-        <div class="checkDetailsContent">
+        <h1 v-show="sampleYanBen2.length != 0 || sampleYanBen.length != 0">详细异常描述</h1>
+        <h2 v-show="status==0" class="red">{{scanNum}} / {{actualNum}}</h2>
+        <div class="checkDetailsContent" v-show="sampleYanBen2.length != 0 || sampleYanBen.length != 0">
           <div class="checkLeft">
-            <p class="ps"><span>异常详情</span></p>
+            <p><span>异常详情</span></p>
             <p v-show="sampleYanBen2.length != 0">
               <span>该芯片未被录入</span>
             </p>
             <p v-show="sampleYanBen.length != 0">
               <span>该样本不属于此表单里的样本</span>
             </p>
-
-            <!--<p></p>-->
           </div>
           <div class="checkRight">
-            <p class="ps"><span>样本名称(位置信息)</span></p>
-            <p>
-              <span v-for="item in sampleYanBen2" :key="item.text">{{item.text}}</span>
+            <p><span>样本名称(位置信息)</span></p>
+            <p  v-show="sampleYanBen2.length != 0">
+              <span v-for="(item,index) in sampleYanBen2" :key="index">{{item.text}}</span>
             </p>
-            <p >
-              <span v-for="item in sampleYanBen" :key="item.text">{{item.text}}</span>
+            <p v-show="sampleYanBen.length != 0">
+              <span v-for="(item,index) in sampleYanBen" :key="index">{{item.text}}</span>
             </p>
           </div>
         </div>
       </div>
-
-      <el-button round class="center enter-btn" type="primary" v-show="status==0" @click="queRenHeYan">确认核验</el-button>
-      <el-button class="center" type="primary" @click="$router.go(-1)" size="mini">返回</el-button>
+      <div class="footer">
+        <el-button  class="enter-btn" type="primary" size="small"  v-show="status==0" @click="queRenHeYan">确认借出</el-button>
+        <el-button  class="enter-btn" type="primary" size="small"  @click="$router.go(-1)">返回</el-button>
+      </div>
     </div>
     <!-- 添加扫描样本盒 -->
     <transition name="el-fade-in-linear">
@@ -101,13 +116,22 @@ export default {
   data () {
     return {
       //ifAddBox: false,
+      newTime:'', //创建时间
+      orderName:'', //表单名称
+      newUserName:'',//创建用户名
+      takeOutName:'', //取走人
+      returnTime: '', // 预计归还时间
+      make:'', //备注
+      formStatus:'',// 表单状态
+      scanNum:0,//扫描到的总数
+      actualNum:'',//实际总数
       RfidArr: [],
       AddBox:false,
       ifSearchAddBox: false,
-      loanOrderId:'',
       LoanOrderStatus:'',
       status: -1,
-
+      elref:'',
+      checkArr:[],
       seen : false,
       seen_2 : false,
       sampleYanBen: [
@@ -160,42 +184,45 @@ export default {
       })
     })
     .then(({data})=>{
-          //console.log(data);
-          this.sampleData.push({ //.............借出表格数据
-              newTime:data.data.loanOrder.createTime,// ..........创建时间
-              orderName:data.data.loanOrder.name, // ...........借出表单名
-              newUserName:data.data.loanOrder.createUserName,//………………创建用户名
-              takeOutName:data.data.loanOrder.takeleave,//………………取走人
-              returnTiem:data.data.loanOrder.expectedReturnDate,//………………预计归还时间
-              mark:data.data.loanOrder.loanRemarks,//…………备注
-              status:data.data.loanOrder.status==0?"未核验":"已核验", //…………订单状态
-          }),
-          this.status = data.data.loanOrder.status,
+          console.log(data)
+          this.newTime = data.data.loanOrder.createTime
+          this.orderName = data.data.loanOrder.name
+          this.newUserName = data.data.loanOrder.createUserName
+          this.takeOutName = data.data.loanOrder.takeleave
+          this.returnTime = data.data.loanOrder.expectedReturnDate
+          this.make = data.data.loanOrder.loanRemarks
+          this.formStatus = data.data.loanOrder.status==0?"未核验":"已借出"
+          this.status = data.data.loanOrder.status
           this.LoanOrderStatus=data.data.loanOrder.status,
           //借出样本信息展示
+          this.actualNum = data.data.loanSamples.length
           data.data.loanSamples.forEach((item)=>{
             // console.log(item);
               this.tableData.push({
                 id:item.id,
-                Index:data.data.loanSamples.createTime,// ..........序号
                 RfidNmber:item.rfidSampleCode, // ...........Rfid编号
                 SampleName:item.sampleName,//………………样本名称
                 LocalItem:item.sampleLocation,//………………位置信息
+                status:item.sampleStatus==1?'正常':'借出'
               })
           })
       })
   },
-
   methods:{
-    // bgColor ({ row,rowIndex }) {
-    //   if (row === 1 && rowIndex === 1) {
-    //     return 'bgColor'
-    //   }
-    // },
-    add () {
+    changeTrStyle({row}){
+      for(let i=0; i<this.RfidArr.length; i++){
+        if(this.RfidArr[i] == row.RfidNmber){
+          return 'bgColor'
+        }
+      }
+    },
+    refData(value){
+      this.elref = value
+    },
+    add () { //扫描样本盒添加样本
       this.AddBox = true
     },
-    searchAdd () {
+    searchAdd () { //搜索样本添加
       this.$store.commit('loanSearchStatus', true)
      // this.$message('查询样本添加')
       this.$router.push({
@@ -205,50 +232,45 @@ export default {
         }
       });
     },
-    toggleSelection (rows) {
-      if (rows) {
-        rows.forEach(row => {
-          this.$refs.multipleTable.toggleRowSelection(row)
-        })
-      } else {
-        this.$refs.multipleTable.clearSelection()
-      }
-    },
-    handleSelectionChange (val) {
-      this.multipleSelection = val
+    handleSelectionChange(val){
+         this.multipleSelection = val;
     },
     // 删除订单中样本
-    delDingdan (row, index) {
-      this.$confirm('确定要删除该样本吗?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      })
-        .then(() => {
-         // this.tableData.splice(index, 1)
-          this.$axios({
-            method:'post',
-            url:'sampleGuide/scan/delLoanSampleInLoanOrder',
-            data:({
-              sampleIdList:[row.id],// 当前样本ID数组
-              loanOrderId: this.$store.state.loanOrderId,//当前ID编号
-           })
-          })
-          .then((data)=>{
-            console.log(data)
-            this.$message({ type: 'success', message: '删除成功!' })
-            this.reload()
-          })
+    delDingdanSample () {
+      if(this.multipleSelection.length == 0){
+        this.$message({ type: 'warning', message: '请先选择需要移除的样本' })
+      }else{
+        this.$confirm(`已选中${this.multipleSelection.length}条样本,确定要从表单中移除吗?`, '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
         })
-        .catch(() => {
-          this.$message({ type: 'info', message: '已取消删除' })
-        })
+          .then(() => {
+            this.$axios({
+              method:'post',
+              url:'sampleGuide/scan/delLoanSampleInLoanOrder',
+              data:({
+                sampleIdList:this.multipleSelection.map((item)=>{ return item.id}),// 当前样本ID数组
+                loanOrderId: this.$route.params.id,//当前表单ID编号
+            })
+            })
+            .then((data)=>{
+              console.log(data)
+              this.$message({ type: 'success', message: '删除成功!' })
+              this.reload()
+            })
+          })
+          .catch(() => {
+            this.$message({ type: 'info', message: '已取消删除' })
+          })
+      }
     },
     stratHeyan () {//开始核验
       this.RfidArr = []
       this.sampleYanBen = []
       this.sampleYanBen2 = []
-      MyActiveX1.RDR_Close()
+      // this.checkArr = []
+      this.elref.RDR_Close()
       let devicetypeValue = this.$cookies.get('readerType')
       let OpentypeValue = this.$cookies.get('portType')
       let comPortValue = this.$cookies.get('comPortNo')
@@ -256,44 +278,45 @@ export default {
       let comFrameStructureValue = this.$cookies.get('comFrameStructure')
       let netIpAddress = this.$cookies.get('netIpAddress')
       let netPort = this.$cookies.get('netPortNo')
-      let n = this.$store.state.OnOpen(devicetypeValue,OpentypeValue,comPortValue,comBaudRateValue,comFrameStructureValue,netIpAddress,netPort)
+      let n = this.$store.state.OnOpen(this.elref,devicetypeValue,OpentypeValue,comPortValue,comBaudRateValue,comFrameStructureValue,netIpAddress,netPort)
       if (n!=0) {
         return
       }
       let nret=0;
       //盘点标签初始化,申请盘点标签所需要的内存空间。返回，成功：0 ；失败：非0 （查看错误代码表）。
-      nret = MyActiveX1.RDR_InitInventory();
+      nret = this.elref.RDR_InitInventory();
       if (nret!=0) {
         alert("盘点标签初始化失败！")
         return;
       }
       //盘点标签时，使能15693协议。返回，成功：0 ；失败：非0 （查看错误代码表）。
-      nret = MyActiveX1.RDR_Enable15693(0,0x00,0)
-      nret = MyActiveX1.RDR_Enable14443A()
+      nret = this.elref.RDR_Enable15693(0,0x00,0)
+      nret = this.elref.RDR_Enable14443A()
       if (nret!=0) {
         //结束标签盘点操作，释放内存空间。
-        MyActiveX1.RDR_FinishInventory()
+        this.elref.RDR_FinishInventory()
         return;
       }
       this.readRfid()
-      MyActiveX1.RDR_Close()
+      this.elref.RDR_Close()
     },
     readRfid(){
       let nret = 0
       let recordCnt = ''
-      nret = MyActiveX1.RDR_Inventory(0,"")
+      nret = this.elref.RDR_Inventory(0,"")
       if (nret !== 0) {
         this.$alert('读取标签失败，请检查设备连接以及参数设置！', '提示', {
           confirmButtonText: '确定',
           type: 'error'
         })
-        MyActiveX1.RDR_FinishInventory()
+        this.elref.RDR_FinishInventory()
         return
       }
-      recordCnt = MyActiveX1.RDR_GetRecordCnt()
-      alert(recordCnt)
+      recordCnt = this.elref.RDR_GetRecordCnt()
+      this.scanNum = recordCnt
+      // alert(recordCnt)
       for(let j=0;j<recordCnt;j++){
-        let sTagInfo = MyActiveX1.GetRecord(j).split("-")
+        let sTagInfo = this.elref.GetRecord(j).split("-")
         let sTagID = sTagInfo[sTagInfo.length-1]
         this.RfidArr[j] = sTagID
       }
@@ -302,34 +325,27 @@ export default {
         url: '/sampleGuide/scan/existSampleInLoanOrder',
         data:({
           rfidCodeList: this.RfidArr,
-          loanOrderId: this.$store.state.loanOrderId
+          loanOrderId: this.$route.params.id
         })
       })
-        .then(({data})=>{
-          console.log(data)
-          // data.data.yes.forEach((item)=>{
-          //   this.tableData.forEach((a,index)=>{
-          //     if(a.RfidNmber[index] == item.rfidCode){
-          //
-          //     }else{
-          //
-          //     }
-          //   })
-          // })
-          data.data.new.forEach((item)=>{
-            this.sampleYanBen2.push({
-              text:item
-            })
+      .then(({data})=>{
+        console.log(data)
+        data.data.yes.forEach((item)=>{
+          this.checkArr.push(item.rfidCode)
+        })
+        data.data.new.forEach((item)=>{
+          this.sampleYanBen2.push({
+            text:item
           })
-
-            data.data.no.forEach((item)=>{
-                  this.sampleYanBen.push({
-                    text: `${item.name}(${item.sampleStru.detailLocation})`
-                  })
+        })
+        data.data.no.forEach((item)=>{
+              this.sampleYanBen.push({
+                text: `${item.name}(${item.sampleStru.detailLocation})`
               })
         })
+      })
     },
-    queRenHeYan () {//确认核验
+    queRenHeYan () {//确认借出
       if(this.sampleYanBen2.length != 0 || this.sampleYanBen.length !=0){
         this.$alert('核验异常', '提示', {
           confirmButtonText: '确定',
@@ -340,67 +356,77 @@ export default {
           method:'post',
           url: '/sampleGuide/scan/submitLoadOrder',
           data:({
-            id: this.$store.state.loanOrderId
+            id: this.$route.params.id
           })
         })
           .then(({data})=>{
             if(data.code == 200){
-              this.$alert('核验成功', '提示', {
+              this.$alert('借出成功', '提示', {
                 confirmButtonText: '确定',
                 type: 'success'
               })
+              this.reload()
             }
           })
       }
-    },
-
-    // ↓    添加订单
-    showAdd () {
-      /* 显示 */ this.showDingdan = true
-    },
-    clearAdd () {
-      /* 隐藏 */ this.showDingdan = false
-    },
-    submitForm (v) {
-      /* 添加订单 */ this.tableData.push(v)
-      this.clearAdd()
     }
-    // ↑
-  },
-  computed: {}
+  }
 }
 </script>
 <style scoped lang='less'>
 .loadn-particulars-index {
   padding: 0 20px;
 }
-.center {
-  display: block;
-  margin: 0 auto;
+/deep/.el-table .bgColor{
+  background: #8bfb8b;
+  color:white
 }
-
-table {
+/deep/.el-table__body tr:hover>td {
+		background-color:#8bfb8b  !important;
+}
+.red{
+  color: red;
+}
+.form-one {
   width: 100%;
-  border-collapse: collapse;
-  margin-bottom: 10px;
-}
-.fotm-table-one {
-  margin: 10px 20px 50px;
-}
-.fotm-table-two {
-  &/deep/ .from-name h1 {
-    border-left-color: rgb(127, 255, 212) !important;
+  margin: 20px 0 30px 50px; 
+  .form-Info{
+    display: flex;
+    justify-content:flex-start;
+    margin-top: 20px;
+    div{
+      width: 50%;
+    }
+    span:first-child{
+      display: inline-block;
+      width: 7vw;
+    }
+    span:last-child{
+      margin-left: 15px;
+      font-weight: 600;
+    }
   }
-  &/deep/.is-leaf {
-    color: #333 !important;
-    background-color: rgb(127, 255, 212) !important;
+}
+.form-table-two{
+  .startScan{
+    width: 90px;
+    display: block;
+    margin: 0 auto;
+    cursor: pointer;
   }
 }
-.fotm-table-box {
+// .form-table-two {
+//   &/deep/ .from-name h1 {
+//     border-left-color: rgb(127, 255, 212) !important;
+//   }
+//   &/deep/.is-leaf {
+//     color: #333 !important;
+//     background-color: rgb(127, 255, 212) !important;
+//   }
+// }
+
+.form-table-box {
   margin: 0px 20px 50px;
-  .bgColor{
-    background-color: #fa3849!important;
-  }
 }
 .form-two-menu {
   display: flex;
@@ -419,28 +445,42 @@ table {
 h1 {
   display: flex;
   justify-content: center;
-  padding-top: 20px;
+  margin-top: 20px;
   margin-bottom: 10px;
 }
-.enter-btn {
+h2{
+  display: flex;
+  justify-content: center;
+  font-size: 16px;
+  margin-top: 10px;
+}
+// .enter-btn {
+//   margin-bottom: 20px;
+// }
+.footer{
+  display: flex;
+  justify-content: center;
   margin-bottom: 20px;
-}
-.icon{
-    cursor: pointer;
-}
-.el-icon-zoom-in{
-    font-size: 17px;
-    margin: 0 20px 5px;
+  .enter-btn{
+    background-color: #00c9ff;
+    border: 1px solid #00c9ff;
+  }
 }
 .checkDetailsContent{
   display: flex;
   justify-content: center;
   align-items: center;
   margin-top: 10px;
-  .ps{
+  p{
     border: 1px solid #ccc;
     width: 45vw;
+    height: 10%;
     text-align: center;
+    border-top: none;
+    padding: 5px;
+    &:first-child{
+      border-top:1px solid #ccc;
+    }
   }
   .checkLeft{
     height: 100%;
@@ -451,11 +491,10 @@ h1 {
   }
   .checkRight{
     height: 100%;
-    p{
-      /*height: 20px;*/
-    }
-    p span{
-     display: block;
+    p {
+      span{
+        display: block;
+      }
     }
   }
 }

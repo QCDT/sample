@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+// import { vuexAlong } from 'vuex-along'
 import { state } from './state'
 import { getters } from './getters'
 import { mutations } from './mutations'
@@ -10,6 +11,6 @@ export default new Vuex.Store({
   state,
   getters,
   mutations,
-  actions,
-  
+  actions
+  // plugins: vuexAlong
 })

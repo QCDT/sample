@@ -58,7 +58,7 @@ export default {
   data () {
     return {
       setSampleId: '',
-      setSampleBoxId: '',
+      setSampleBoxId:'',
       printListA:[],
       printListB: [],
       printA:[],
@@ -168,43 +168,68 @@ export default {
         id: 1
       })
     })
-      .then(({data})=>{
-        console.log(data)
-        this.setSampleId =data.data[0].id ? data.data[0].id : ''
-        this.setSampleBoxId =data.data[1].id ? data.data[1].id : ''
-        this.printListA = [data.data[0].firstLine, data.data[0].secondLine, data.data[0].thirdLine]
-        this.printListB = [data.data[1].firstLine, data.data[1].secondLine, data.data[1].thirdLine]
-      })
-      .catch((error)=>{
+    .then(({data})=>{
+      console.log(data)
+      this.setSampleId =data.data[0].id ? data.data[0].id : ''
+      this.setSampleBoxId =data.data[1].id ? data.data[1].id : ''
+      this.printListA = [data.data[0].firstLine, data.data[0].secondLine, data.data[0].thirdLine]
+      this.printListB = [data.data[1].firstLine, data.data[1].secondLine, data.data[1].thirdLine]
+    })
+    .catch((error)=>{
         console.log(error)
       })
   },
   methods:{
     savePrint(){
+        console.log(this.printListA[0],this.printListB[0])
         if(this.printListA.length === 0 && this.printListB.length === 0){
           return
         }
-        this.$axios({
-          method:'post',
-          url: 'sampleGuide/printerSetting/addOrUpdatePrinterSettingByUser',
-          data:({
-              id: this.setId,
-              category: this.printValue,
-              firstLine: this.printListA[0],
-              secondLine: this.printListA[1] ? this.printListA[1] : "",
-              thirdLine: this.printListA[2] ? this.printListA[2] : ""
+        if(this.printValue == 'sample'){
+          this.$axios({
+            method:'post',
+            url: 'sampleGuide/printerSetting/addOrUpdatePrinterSettingByUser',
+            data:({
+                id: this.setSampleId,
+                category: this.printValue,
+                firstLine: this.printListA[0],
+                secondLine: this.printListA[1] ? this.printListA[1] : "",
+                thirdLine: this.printListA[2] ? this.printListA[2] : ""
+            })
           })
-        })
-        .then(({data})=>{
-          this.$message({
-            message: '保存成功!',
-            type: 'success'
-          });
-            console.log(data)
-        })
-        .catch((error)=>{
-            console.log(error)
-        })
+            .then(({data})=>{
+              this.$message({
+                message: '保存成功!',
+                type: 'success'
+              });
+              console.log(data)
+            })
+            .catch((error)=>{
+              console.log(error)
+            })
+        }else{
+          this.$axios({
+            method:'post',
+            url: 'sampleGuide/printerSetting/addOrUpdatePrinterSettingByUser',
+            data:({
+              id: this.setSampleBoxId,
+              category: this.printValue,
+              firstLine: this.printListB[0],
+              secondLine: this.printListB[1] ? this.printListA[1] : "",
+              thirdLine: this.printListB[2] ? this.printListA[2] : ""
+            })
+          })
+            .then(({data})=>{
+              this.$message({
+                message: '保存成功!',
+                type: 'success'
+              });
+              console.log(data)
+            })
+            .catch((error)=>{
+              console.log(error)
+            })
+        }
     },
     chooseDelete1(){
       this.printA = []
@@ -213,8 +238,8 @@ export default {
     chooseDelete2(){
       this.printB = []
       this.printListB = []
+        }
     }
-  }
 }
 </script>
 <style lang="less" scoped>

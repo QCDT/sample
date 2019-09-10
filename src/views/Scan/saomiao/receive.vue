@@ -1,6 +1,7 @@
 <template>
     <div>
         <!-- 扫描按钮-->
+        <cardfile @reception= 'refData'></cardfile>
         <div class="receiveTop">
             <img src="@/assets/img/saomiao.gif" @click="sampleReceive">
             <p><span>接收录入扫描</span></p>
@@ -94,47 +95,8 @@
         <div class="receiveBtnWrap">
             <el-button type="primary" size="mini" class="receiveBtn" @click="submitForm">确认</el-button>
         </div>
-        <ChangeUser :dialogLogin='dialogLogin' btnText="验证" @close='close' @userName='changeUserName'></ChangeUser>
           <!-- 验证登录-->
-        <!-- <el-dialog
-            :visible.sync="dialogLogin"
-            width="30%"
-            center
-            class="dialogLogin"
-            >
-            <div class="loginTitle">
-                <div class="titleLeft">
-                <span>{{ LoginTab ? "账号登录" : "扫码登录" }}</span>
-                <span class="lineBottom"></span>
-                </div>
-                <div class="titleRight">
-                <span class="togglePic">
-                    <em>{{ LoginTab ? "扫码登录更便捷" : "账密登录在这里" }}</em>
-                </span>
-                <span class="toggleText" @click="loginTab()">
-                    <img src="@/assets/img/codeImg.png" v-show="LoginTab">
-                    <img src="@/assets/img/computer.png" v-show="!LoginTab">
-                </span>
-                </div>
-            </div>
-            <div class="loginCenter">
-                <label v-show="LoginTab">
-                <img src="@/assets/img/user.png">
-                <input type="text" placeholder="请输入用户名" v-model="userName">
-                </label>
-                <label v-show="LoginTab">
-                <img src="@/assets/img/password.png">
-                <input type="password" placeholder="请输入密码" v-model="userPassword">
-                </label>
-                <div v-show="!LoginTab" class="loginScan">
-                <img src="@/assets/img/saomiao.gif">
-                </div>
-            </div>
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="dialogLogin = false" size="mini">返回</el-button>
-                <el-button type="primary" @click="verifyPerson" size="mini">验证</el-button>
-            </span>
-        </el-dialog> -->
+        <ChangeUser :dialogLogin='dialogLogin' btnText="验证" @close='close' @userName='changeUserName'></ChangeUser>
         <!--历史接收记录-->
         <el-dialog
             title="历史接收记录"
@@ -268,12 +230,15 @@
 <script>
 import { setTimeout } from 'timers';
 import  ChangeUser from '@/components/ChangeUser'
+import cardfile from "@/components/cardfile"
 export default {
     components: {
-        ChangeUser
+        ChangeUser,
+        cardfile
     },
     data () {
         return {
+            elref: '',
             scanNum: 0, // 扫描到样本总数
             formName: '', // 表单名称
             bloodPlace: '', // 采血地
@@ -289,7 +254,7 @@ export default {
             recordsformName: '', //接收记录中表单名称
             recordsSampleName: '',// 接收记录中样本名称
             exportList: [], // 导出excel数据集合
-            rfidCodeList: ["E004015094E5FCAA"], // 扫描到的rfid数据
+            rfidCodeList: [], // 扫描到的rfid数据
             sampleDataIdList: [], // 扫描到样本id集合
             dialogLogin: false, // 验证登录层
             dialogRecords: false,// 接收记录层
@@ -363,6 +328,9 @@ export default {
         //     }
         //     this.checkList.push(this.condition)
         // },
+        refData(value){
+            this.elref = value
+        },
         changeUserName(userName){
             this.receivePerson = userName
         },
@@ -399,12 +367,60 @@ export default {
             })
         },
         sampleReceive(){ // 扫描按钮点击事件
+            this.rfidCodeList = []
+            this.elref.RDR_Close()
+            let devicetypeValue = this.$cookies.get('readerType')
+            let OpentypeValue = this.$cookies.get('portType')
+            let comPortValue = this.$cookies.get('comPortNo')
+            let comBaudRateValue = this.$cookies.get('comBaudRate')
+            let comFrameStructureValue = this.$cookies.get('comFrameStructure')
+            let netIpAddress = this.$cookies.get('netIpAddress')
+            let netPort = this.$cookies.get('netPortNo')
+            let n = this.$store.state.OnOpen(this.elref,devicetypeValue,OpentypeValue,comPortValue,comBaudRateValue,comFrameStructureValue,netIpAddress,netPort)
+            if (n!=0) {
+                return
+            }
+            let nret=0;
+            //盘点标签初始化,申请盘点标签所需要的内存空间。返回，成功：0 ；失败：非0 （查看错误代码表）。
+                nret = this.elref.RDR_InitInventory();
+            if (nret!=0) {
+                alert("盘点标签初始化失败！")
+                return;
+            }
+            //盘点标签时，使能15693协议。返回，成功：0 ；失败：非0 （查看错误代码表）。
+            nret = this.elref.RDR_Enable15693(0,0x00,0)
+            nret = this.elref.RDR_Enable14443A()
+            if (nret!=0) {
+                //结束标签盘点操作，释放内存空间。
+                this.elref.RDR_FinishInventory()
+                return;
+            }
+            this.readRfid()
+            this.elref.RDR_Close()
+        },
+        readRfid(){
+            let nret = 0
+            let recordCnt = ''
+            nret = this.elref.RDR_Inventory(0,"")
+            if (nret !== 0) {
+                this.$alert('读取标签失败，请检查设备连接以及参数设置！', '提示', {
+                confirmButtonText: '确定',
+                type: 'error'
+                })
+                this.elref.RDR_FinishInventory()
+                return
+            }
+            recordCnt = this.elref.RDR_GetRecordCnt()
+            alert(recordCnt)
+            for(let j=0;j<recordCnt;j++){
+                    let sTagInfo = this.elref.GetRecord(j).split("-")
+                let sTagID = sTagInfo[sTagInfo.length-1]
+                    this.rfidCodeList[j] = sTagID
+            }
+            console.log(this.rfidCodeList)
             this.$axios({
                 method: 'post',
                 url: 'sampleGuide/sampleReceive/findRfidSampleByRfidCode',
-                headers: {
-                    'Content-Type': 'application/json; charset=UTF-8'
-                },
                 data:({
                     rfidCodeList : this.rfidCodeList
                 })
@@ -439,7 +455,7 @@ export default {
                 }
             })
         },
-        submitForm() {
+        submitForm() {  
             if(this.formName == ''){
                 this.$alert(`表单名称不能为空!`,'提示', {
                     confirmButtonText: '确定',
@@ -547,53 +563,39 @@ export default {
         },
         exportSampleFormExcel(){
             console.log(this.exportList)
+            if(this.exportList.length == 0){
+                this.$message({
+                    message: '请先选择需要导出的数据',
+                    type: 'warning'
+                })
+            }
             this.$axios({
                 method: 'post',
                 url: 'sampleGuide/sampleReceive/exportExcelSelect',
                 responseType: 'blod',
                 headers: {
-                    'Content-Type': 'application/json; charset=UTF-8'
+                    'Access-Control-Expose-Headers': 'filename'
                 },
                 data:({
                     idList: this.exportList
                 })
             })
-            .then((res)=>{
-                console.log(res)
-                let tmpDown = new Blod([this.s2ab(XLSX.write(tmpWB,
-                    {bookType:(type === undefined ? 'xlsx' : type), bookSST: false, type: 'binary'}
-                ))],{
-                    type: ''
-                })
-                navigator.msSaveBlob(tmpDown, this.outFile.download = downName + '.xlsx')
-                setTimeout(function(){
-                    URL.revokeObjectURL(tmpDown)
-                },100)
-                // const content = res
-                // const blob = new Blob([content])
-                // const fileName = '导出信息.xlsx'
-                // if ('download' in document.createElement('a')) { // 非IE下载
-                // const elink = document.createElement('a')
-                // elink.download = fileName
-                // elink.style.display = 'none'
-                // elink.href = URL.createObjectURL(blob)
-                // document.body.appendChild(elink)
-                // elink.click()
-                // URL.revokeObjectURL(elink.href) // 释放URL 对象
-                // document.body.removeChild(elink)
-                // } else { // IE10+下载
-                // navigator.msSaveBlob(blob, fileName)
-                // }
-    //             var blob = new Blob([res.data], {type: 'application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
-    //             //var fileName = decodeURI(res.headers['content-disposition'].split(";")[1])
-    //             var a = document.createElement('a');
-    //             var href = window.URL.createObjectURL(blob); // 创建链接对象
-    //             a.href =  href;
-    //             a.download = 'fileName';   // 自定义文件名
-    //             document.body.appendChild(a);
-    //             a.click();
-    //             window.URL.revokeObjectURL(href);  //移除链接对象
-    //             document.body.removeChild(a); // 移除a元素
+            .then((data)=>{
+                console.log(data)
+                let fileName = data.headers.filename;
+                let blob = new Blob([data.data], {type: 'application/vnd.ms-excel;charset=UTF-8'});
+                if(window.navigator.msSaveBlob){
+                window.navigator.msSaveBlob(blob,fileName);
+                }else{
+                let a = document.createElement('a');
+                let href = window.URL.createObjectURL(blob); // 创建链接对象
+                a.href =  href;
+                a.download = fileName;   // 自定义文件名
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(href);  //移除链接对象
+                document.body.removeChild(a);
+            }
             })
         },
         exportSampleFormPDF(){

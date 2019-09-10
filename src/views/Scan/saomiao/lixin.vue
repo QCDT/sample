@@ -1,6 +1,6 @@
 <template>
   <div>
-    <cardfile></cardfile>
+    <cardfile @reception= 'refData'></cardfile>
     <div class="centrifugeImg">
       <el-carousel
         :initial-index="carouselIndex"
@@ -38,7 +38,7 @@
         <img src="@/assets/img/centrifugalSet.png" @click="centrifugalSet" />
         <img src="@/assets/img/centrifugalAdd.png" @click="addSample" />
         <img v-show="!startCentrifuge" src="@/assets/img/centrifugalStart1.png" class="mainBtn" />
-        <img v-show="startCentrifuge" src="@/assets/img/centrifugalStart.png" class="mainBtn" />
+        <img v-show="startCentrifuge" src="@/assets/img/centrifugalStart.png" class="mainBtn" @click="start"/>
         <img src="@/assets/img/orders.png" @click="exportOrders" />
         <img src="@/assets/img/record.png" @click="Ordersdetail" />
       </div>
@@ -272,6 +272,7 @@ export default {
       this.centrifugeSpeed = this.centrifugeList[0].centrifugeSpeed
       this.centrifugeTemperature = this.centrifugeList[0].centrifugeTemperature
       this.centrifugeId = this.centrifugeList[0].id
+      this.querySample()
     })
   },
   mounted () {
@@ -289,6 +290,9 @@ export default {
     });
   },
   methods: {
+    refData(value){
+      this.elref = value
+    },
     change (v) { // 切换离心机时显示相应信息
       console.log(v)
       this.centrifugeName = this.centrifugeList[v].centrifugeName
@@ -299,6 +303,18 @@ export default {
       this.setType = this.centrifugeList[v].type
       this.centrifugeId = this.centrifugeList[v].id
       this.carouselIndex = v /* 轮播图的索引 */
+    },
+    querySample(){
+      this.$axios({
+        method: 'post',
+        url: 'sampleGuide/centrifuge/findCenSampleExist',
+        data:({
+          centrifugeId: this.centrifugeId
+        })
+      })
+      .then(({data})=>{
+        console.log(data)
+      })
     },
     searchOrder(){ // 导出订单----搜索导出订单
       console.log(this.centrifugeId)
@@ -326,6 +342,32 @@ export default {
     handleSelectionChange(selection){ // 选择需要导出的订单
       console.log(selection)
       this.multipleSelection = selection
+    },
+    start(){
+      console.log(this.centrifugeId,this.centrifugeTime,this.addData)
+      this.$axios({
+        method:'post',
+        url:'sampleGuide/centrifuge/insertCenOrder',
+        data:({
+          centrifugeId: this.centrifugeId,
+          centrifugeTime: this.centrifugeTime,
+          centrifugeSampleIdList: this.addData
+        })
+      })
+      .then(({data})=>{
+        console.log(data)
+        if(data.code== 200){
+          let timer = setInterval(()=>{
+             let time =  parseFloat(this.centrifugeTime)*60
+              time--
+             if(time <= 0){
+                time = 0
+                clearInterval(timer)
+              }
+              this.centrifugeTime = time/60 +'min'
+          },1000)
+        }
+      })
     },
     exportPDF(){ // 导出PDF
 
@@ -377,7 +419,7 @@ export default {
       })
     },
     scanSample(){ // 通过扫描样本rfid添加样本到离心机
-      MyActiveX1.RDR_Close();
+      this.elref.RDR_Close();
       this.dialogSampleData = []
       let devicetypeValue = this.$cookies.get('readerType')
       let OpentypeValue = this.$cookies.get('portType')
@@ -386,48 +428,48 @@ export default {
       let comFrameStructureValue = this.$cookies.get('comFrameStructure')
       let netIpAddress = this.$cookies.get('netIpAddress')
       let netPort = this.$cookies.get('netPortNo')
-      let n = this.$store.state.OnOpen(devicetypeValue,OpentypeValue,comPortValue,comBaudRateValue,comFrameStructureValue,netIpAddress,netPort)
+      let n = this.$store.state.OnOpen(this.elref,devicetypeValue,OpentypeValue,comPortValue,comBaudRateValue,comFrameStructureValue,netIpAddress,netPort)
       if (n!=0) {
           return 
       }
       let nret=0;
       //盘点标签初始化,申请盘点标签所需要的内存空间。返回，成功：0 ；失败：非0 （查看错误代码表）。
-	    nret = MyActiveX1.RDR_InitInventory();
+	    nret = this.elref.RDR_InitInventory();
       if (nret!=0) {
         alert("盘点标签初始化失败！")
         return;
       }
       //盘点标签时，使能15693协议。返回，成功：0 ；失败：非0 （查看错误代码表）。
-      nret = MyActiveX1.RDR_Enable15693(0,0x00,0)
-      nret = MyActiveX1.RDR_Enable14443A()
+      nret = this.elref.RDR_Enable15693(0,0x00,0)
+      nret = this.elref.RDR_Enable14443A()
       if (nret!=0) {
         //结束标签盘点操作，释放内存空间。
-          MyActiveX1.RDR_FinishInventory()
+          this.elref.RDR_FinishInventory()
         return;
       }
       this.readRfid()
-      MyActiveX1.RDR_Close()
+      this.elref.RDR_Close()
     },
     readRfid(){
       let nret = 0
       let recordCnt = ''
       let j =0
-      nret = MyActiveX1.RDR_Inventory(0,"")
+      nret = this.elref.RDR_Inventory(0,"")
       if (nret !== 0) {
         this.$alert('读取标签失败，请检查设备连接以及参数设置！', '提示', {
           confirmButtonText: '确定',
           type: 'error'
         })
-        MyActiveX1.RDR_FinishInventory()
+        this.elref.RDR_FinishInventory()
         return
       }
-      recordCnt = MyActiveX1.RDR_GetRecordCnt()     
+      recordCnt = this.elref.RDR_GetRecordCnt()     
       // console.log(recordCnt)
-      let sTagInfo = MyActiveX1.GetRecord(j).split("-");
+      let sTagInfo = this.elref.GetRecord(j).split("-");
       let sTagID = sTagInfo[sTagInfo.length-1];
       alert(recordCnt)
       for(let j=0;j<recordCnt;j++){
-        	let sTagInfo = MyActiveX1.GetRecord(j).split("-")
+        	let sTagInfo = this.elref.GetRecord(j).split("-")
           let sTagID = sTagInfo[sTagInfo.length-1]
           console.log(sTagID)
           this.RfidArr[j] = sTagID
@@ -531,6 +573,7 @@ export default {
     },
     Ordersdetail () {
       this.dialogOrder = true
+      this.dialogOrderData = []
        this.$axios({
           method:'post',
           url: 'sampleGuide/cenSample/findNoCenSampleInOrder',
@@ -543,7 +586,7 @@ export default {
           data.data.forEach((item)=>{
             this.dialogOrderData.push({
               id: item.id,
-              orderName: item.name
+              orderName: item.rfidSample.name
             })
           })
         })

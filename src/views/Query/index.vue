@@ -11,7 +11,7 @@
     <!-- 表单 ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓ -->
     <div class="bot-form">
       <div class="table-box">
-        <FormTopMenu :count="Number(tableData.length)" :multipleSelection="multipleSelection"></FormTopMenu>
+        <FormTopMenu :count="Number(tableData.length)" :multipleSelection="multipleSelection" ></FormTopMenu>
         <el-table
           :row-style="{height:'32px',textAlign: 'center',padding:'0px',}"
           :cell-style="{padding:0 , textAlign: 'center',}"
@@ -70,7 +70,6 @@ export default {
   components: { Search, FormTopMenu },
   data () {
     return {
-      showBtn: true,
       // ↓   表单
       tableData: [
 
@@ -80,12 +79,6 @@ export default {
     }
   },
   created(){
-    if(this.$route.params.id == 1){
-      this.showBtn = false
-    }else{
-      this.showBtn = true
-    }
-    alert(this.$route.params.id)
   },
   methods: {
     handleSelectionChange (val) {

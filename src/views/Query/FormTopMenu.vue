@@ -36,7 +36,7 @@
         </tmpinput>
       </div>
     </div>
-    <div class="right" v-show="!$store.state.loanSearchStatus">
+    <div class="right" v-show="$route.params.id == 1">
       <div class="item" @click="delSample">
         <i class="icon icon-shanchu"></i>
         <small>销毁</small>
@@ -71,7 +71,7 @@
       </div>
     </div>
 
-    <div class="right" v-show="$route.params.id !==1 " >
+    <div class="right" v-show="$route.params.id != 1" >
       <div class="item" @click="addLoanSample">
           <img src="@/assets/img/scan_bot_out.png" alt="" width=30>
           <small>添加借出</small>
@@ -90,6 +90,7 @@ export default {
   inject:['reload'],
   props: {
     count: Number,
+    showBtn: Boolean,
     multipleSelection: { type: Array, default: () => [] }
   },
   components: { tmpinput },
@@ -252,12 +253,19 @@ export default {
           })
             .then(({data})=>{
               console.log(data);
-              this.$router.push({
-                name:"particulars",
-                params:{
-                  id: this.$route.params.id
-                }
-              })
+              if(data.code == 200){
+                this.$router.push({
+                  name:"particulars",
+                  params:{
+                    id: this.$route.params.id
+                  }
+                })
+              }else{
+                  this.$alert(data.message, '提示', {
+                    confirmButtonText: '确定',
+                    type:'warning'
+                  });
+              }
             })
       }
     },

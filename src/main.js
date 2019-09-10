@@ -3,14 +3,14 @@ import App from './App.vue'
 import router from './router/router'
 import store from './store/index'
 import '@/assets/css/app.css'
-// import '@/assets/css/reset.css'
+import '@/assets/css/reset.css'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import qs from 'qs'
 import axios from 'axios'
 import VueCookies from 'vue-cookies'
 import echarts from 'echarts'
-axios.defaults.baseURL = 'http://192.168.1.78:8071'
+axios.defaults.baseURL = 'http://192.168.1.99:8071'
 axios.defaults.headers['Content-Type'] = 'application/json;charset=UTF-8'
 Vue.config.productionTip = false
 Vue.use(ElementUI)
@@ -32,7 +32,7 @@ Vue.filter('dateFilter', function (value) {
     if (sec < 10) { t += '0' }
     t += sec.toFixed(2)
   }
-  // t = t.substring(0, t.length - 3)
+  t = t.substring(0, t.length - 3)
   return t
 })
 Vue.prototype.qs = qs

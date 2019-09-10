@@ -6,44 +6,7 @@
             <div>
                 <el-button type="primary" size="mini" @click="addbackups">添加</el-button>
                 <el-button type="danger" size="mini" @click="delbackups">删除</el-button>
-            </div> <!-- 添加的弹窗 -->
-            <el-dialog
-                title="添加表单信息"
-                :visible.sync="centerDialogVisible"
-                width="35%"
-                class="addBoxWrap"
-                >
-                <div class="addBox">
-                  <div class="addContent">
-                      <span>路径:</span>
-                      <el-input  v-model="addpath" placeholder="请输入内容" size="mini" class="addInput" disabled></el-input>
-                  </div>
-                  <div class="addContent">
-                      <span>用户名:</span>
-                      <el-input v-model="username" placeholder="请输入内容" size="mini" class="addInput" disabled></el-input>
-                  </div>
-                  <div class="addContent">
-                      <span>密码:</span>
-                      <el-input v-model="password"  placeholder="请输入内容" size="mini" class="addInput" disabled show-password></el-input>
-                  </div>
-                  <div class="addContent">
-                      <span>端口号:</span>
-                      <el-input v-model="port" placeholder="请输入内容" size="mini" class="addInput" disabled></el-input>
-                  </div>
-                  <div class="addContent">
-                      <span>数据库名称:</span>
-                      <el-input v-model="name"  placeholder="请输入内容" size="mini" class="addInput" disabled></el-input>
-                  </div>
-                  <div class="addContent">
-                      <span>IP:</span>
-                      <el-input  v-model="ip" placeholder="请输入内容" size="mini" class="addInput" disabled></el-input>
-                  </div>
-                </div>
-                <span slot="footer" class="dialog-footer">
-                    <el-button @click="centerDialogVisible = false" size="mini">取 消</el-button>
-                    <el-button type="primary" @click="addbackupsContent" size="mini">确 定</el-button>
-                </span>
-            </el-dialog>
+            </div> 
         </div>
         <div>       <!-- 表格结构 样式中 :cell-style 单元格样式 :row-style 行样式 :header-cell-style 表头单元格样式 -->
             <el-table
@@ -96,6 +59,44 @@
             </el-table>
         </div>
       </div>
+      <!-- 添加的弹窗 -->
+      <el-dialog
+        title="添加表单信息"
+        :visible.sync="centerDialogVisible"
+        width="35%"
+        class="addBoxWrap"
+        >
+        <div class="addBox">
+          <div class="addContent">
+              <span>路径:</span>
+              <el-input  v-model="addpath" placeholder="请输入内容" size="mini" class="addInput" disabled></el-input>
+          </div>
+          <div class="addContent">
+              <span>用户名:</span>
+              <el-input v-model="username" placeholder="请输入内容" size="mini" class="addInput" disabled></el-input>
+          </div>
+          <div class="addContent">
+              <span>密码:</span>
+              <el-input v-model="password"  placeholder="请输入内容" size="mini" class="addInput" disabled show-password></el-input>
+          </div>
+          <div class="addContent">
+              <span>端口号:</span>
+              <el-input v-model="port" placeholder="请输入内容" size="mini" class="addInput" disabled></el-input>
+          </div>
+          <div class="addContent">
+              <span>数据库名称:</span>
+              <el-input v-model="name"  placeholder="请输入内容" size="mini" class="addInput" disabled></el-input>
+          </div>
+          <div class="addContent">
+              <span>IP:</span>
+              <el-input  v-model="ip" placeholder="请输入内容" size="mini" class="addInput" disabled></el-input>
+          </div>
+        </div>
+        <span slot="footer" class="dialog-footer">
+            <el-button @click="centerDialogVisible = false" size="mini">取 消</el-button>
+            <el-button type="primary" @click="addbackupsContent" size="mini">确 定</el-button>
+        </span>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -155,7 +156,7 @@ export default {
       url: 'sampleGuide/backupDatabase/findDatabaseInfo'
     })
     .then(({data})=>{
-      console.log(data)
+      // console.log(data)
       data.data.forEach((item)=>{
         this.username = item.dbUsername
         this.password = item.dbPassword

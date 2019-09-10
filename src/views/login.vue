@@ -1,6 +1,6 @@
 <template>
   <div class="loginWrap">
-    <cardfile></cardfile>
+    <cardfile @reception= 'refData'></cardfile>
     <div class="loginHeader">
       <a href="http://www.sampleguide.cn">
         <img src="@/assets/img/logo.png" />
@@ -14,46 +14,48 @@
     <div class="loginCenter">
       <div class="bannerWrap">
         <!-- 轮播图 -->
-        <el-carousel :height="bannerHeight+'px'" arrow="never">
-          <el-carousel-item v-for="item in list" :key="item">
-            <img :src="item" ref="image" />
-          </el-carousel-item>
-        </el-carousel>
-        <div class="loginContent">
-          <!-- 登录框 -->
-          <div class="loginTitle">
-            <div class="titleLeft">
-              <span>{{ LoginTab ? "账号登录" : "扫码登录" }}</span>
-              <span class="lineBottom"></span>
+        <div class="banner">
+          <el-carousel :height="bannerHeight+'px'" arrow="never">
+            <el-carousel-item v-for="item in list" :key="item">
+              <img :src="item" ref="image" />
+            </el-carousel-item>
+          </el-carousel>
+          <div class="loginContent">
+            <!-- 登录框 -->
+            <div class="loginTitle">
+              <div class="titleLeft">
+                <span>{{ LoginTab ? "账号登录" : "扫码登录" }}</span>
+                <span class="lineBottom"></span>
+              </div>
+              <div class="titleRight">
+                <span class="togglePic">
+                  <em>{{ LoginTab ? "扫码登录更便捷" : "账密登录在这里" }}</em>
+                </span>
+                <span class="toggleText" @click="loginTab()">
+                  <img src="@/assets/img/codeImg.png" v-show="LoginTab" />
+                  <img src="@/assets/img/computer.png" v-show="!LoginTab" />
+                </span>
+              </div>
             </div>
-            <div class="titleRight">
-              <span class="togglePic">
-                <em>{{ LoginTab ? "扫码登录更便捷" : "账密登录在这里" }}</em>
-              </span>
-              <span class="toggleText" @click="loginTab()">
-                <img src="@/assets/img/codeImg.png" v-show="LoginTab" />
-                <img src="@/assets/img/computer.png" v-show="!LoginTab" />
-              </span>
+            <div class="loginCenter">
+              <label v-show="LoginTab">
+                <img src="@/assets/img/user.png" />
+                <input type="text" placeholder="请输入用户名" v-model="userName" />
+              </label>
+              <label v-show="LoginTab">
+                <img src="@/assets/img/password.png" />
+                <input type="password" placeholder="请输入密码" v-model="userPassword" />
+              </label>
+              <div v-show="!LoginTab" class="loginScan">
+                <img src="@/assets/img/saomiao.gif" @click="bindingCard"/>
+              </div>
             </div>
+            <button class="loginBtn" @click="loginIng" v-show="LoginTab">登录</button>
           </div>
-          <div class="loginCenter">
-            <label v-show="LoginTab">
-              <img src="@/assets/img/user.png" />
-              <input type="text" placeholder="请输入用户名" v-model="userName" />
-            </label>
-            <label v-show="LoginTab">
-              <img src="@/assets/img/password.png" />
-              <input type="password" placeholder="请输入密码" v-model="userPassword" />
-            </label>
-            <div v-show="!LoginTab" class="loginScan">
-              <img @click="bindingCard" src="@/assets/img/saomiao.gif" />
-            </div>
-          </div>
-          <button class="loginBtn" @click="loginIng" v-show="LoginTab">登录</button>
         </div>
       </div>
     </div>
-    <div class="footer">
+      <div class="footer">
       <!-- 页脚 -->
       <span>技术支持: 惠通启恒医疗科技(北京)有限公司</span>
       <span>联系电话 010-68683182</span>
@@ -62,7 +64,7 @@
   </div>
 </template>
 <script>
-  import cardfile from '@/components/cardfile'
+import cardfile from '@/components/cardfile'
 export default {
   components:{
     cardfile
@@ -73,6 +75,7 @@ export default {
       userPassword: "",
       LoginTab: true,
       bannerHeight: "",
+      elref:'',
       cardNub: '',
       list: [
         require("@/assets/img/banner-1.png"),
@@ -83,7 +86,7 @@ export default {
   },
   mounted() {
     // element banner 高度自适应
-    this.imgLoad();
+    // this.imgLoad();
     this.$nextTick(function() {
       this.bannerHeight = this.$refs.image[0].height;
       console.log(this.$refs.image[0].height);
@@ -96,6 +99,9 @@ export default {
     });
   },
   methods: {
+    refData(value){
+      this.elref = value
+    },
     loginTab() {
       this.LoginTab = !this.LoginTab;
     },
@@ -138,7 +144,7 @@ export default {
         });
     },
     bindingCard(){
-      MyActiveX1.RDR_Close();
+      this.elref.RDR_Close();
       let devicetypeValue = this.$cookies.get('readerType')
       let OpentypeValue = this.$cookies.get('portType')
       let comPortValue = this.$cookies.get('comPortNo')
@@ -146,46 +152,45 @@ export default {
       let comFrameStructureValue = this.$cookies.get('comFrameStructure')
       let netIpAddress = this.$cookies.get('netIpAddress')
       let netPort = this.$cookies.get('netPortNo')
-      console.log(devicetypeValue,OpentypeValue,comPortValue,comBaudRateValue,comFrameStructureValue,netIpAddress,netPort)
-      let n = this.$store.state.OnOpen(devicetypeValue,OpentypeValue,comPortValue,comBaudRateValue,comFrameStructureValue,netIpAddress,netPort)
+      let n = this.$store.state.OnOpen(this.elref,devicetypeValue,OpentypeValue,comPortValue,comBaudRateValue,comFrameStructureValue,netIpAddress,netPort)
       if (n!=0) {
         return
       }
       let nret=0;
       //盘点标签初始化,申请盘点标签所需要的内存空间。返回，成功：0 ；失败：非0 （查看错误代码表）。
-      nret = MyActiveX1.RDR_InitInventory();
+      nret = this.elref.RDR_InitInventory();
       if (nret!=0) {
         alert("盘点标签初始化失败！")
         return;
       }
       //盘点标签时，使能15693协议。返回，成功：0 ；失败：非0 （查看错误代码表）。
-      nret = MyActiveX1.RDR_Enable15693(0,0x00,0)
-      nret = MyActiveX1.RDR_Enable14443A()
+      nret = this.elref.RDR_Enable15693(0,0x00,0)
+      nret = this.elref.RDR_Enable14443A()
       if (nret!=0) {
         //结束标签盘点操作，释放内存空间。
-        MyActiveX1.RDR_FinishInventory()
+        this.elref.RDR_FinishInventory()
         return;
       }
       this.readRfid()
-      MyActiveX1.RDR_Close()
+      this.elref.RDR_Close()
     },
     readRfid(){
       let nret = 0
       let recordCnt = ''
       let j =0
-      nret = MyActiveX1.RDR_Inventory(0,"")
+      nret = this.elref.RDR_Inventory(0,"")
       // alert(nret)
       if (nret !== 0) {
         this.$alert('读取标签失败，请检查设备连接以及参数设置！', '提示', {
           confirmButtonText: '确定',
           type: 'error'
         })
-        MyActiveX1.RDR_FinishInventory()
+        this.elref.RDR_FinishInventory()
         return
       }
-      recordCnt = MyActiveX1.RDR_GetRecordCnt()
+      recordCnt = this.elref.RDR_GetRecordCnt()
       // console.log(recordCnt)
-      let sTagInfo = MyActiveX1.GetRecord(j).split("-");
+      let sTagInfo = this.elref.GetRecord(j).split("-");
       let sTagID = sTagInfo[sTagInfo.length-1];
 
       if(recordCnt == 1){
@@ -204,11 +209,13 @@ export default {
           .then(({data})=>{
             console.log(data)
             if(data.code = 200){
+              this.$cookies.set('userName', data.loginedUser, '1y')
+              this.$cookies.set('roleName', data.role, '1y')
               this.$router.push("/Home");
             }
           })
       }else{
-        this.$alert('IC卡只能绑定一个！', '提示', {
+        this.$alert('请扫描一个IC卡！', '提示', {
           confirmButtonText: '确定',
           type: 'error'
         })
@@ -249,6 +256,12 @@ export default {
 }
 .bannerWrap {
   position: relative;
+  height: 35vw;
+  .banner{
+    position: absolute;
+    top:5%;
+    width: 100%;
+  }
   // text-align: center;
   img {
     width: 1920px;
@@ -312,6 +325,7 @@ export default {
     }
   }
   .loginCenter {
+    height: 100%;
     label {
       display: block;
       margin-top: 20px;
@@ -338,6 +352,7 @@ export default {
       img {
         width: 128px;
         height: 128px;
+        cursor: pointer;
       }
     }
   }
@@ -358,7 +373,7 @@ export default {
   display: flex;
   justify-content: space-around;
   align-items: center;
-  height: 40px;
   font-size: 16px;
+  width: 100%;
 }
 </style>

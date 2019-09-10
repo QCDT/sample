@@ -640,26 +640,6 @@ export default {
         })
       })
     },
-    // selectIceBox(){ //抽屉切换时加载相应可选的样本盒位置
-    //   this.sampleBoxOption = []
-    //   this.sampleBox = ''
-    //   this.$axios({
-    //     method:'post',
-    //     url: 'sampleGuide/set/selectSampleBoxStru',
-    //     data:({
-    //       drawerStruId:this.labDrawerValue
-    //     })
-    //   })
-    //   .then(({data})=>{
-    //     console.log(data)
-    //     data.data.forEach((item)=>{
-    //       this.sampleBoxOption.push({
-    //         value: item.row,
-    //         label:item.row
-    //       })
-    //     })
-    //   })
-    // }
   }
 }
 </script>

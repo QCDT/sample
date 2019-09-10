@@ -1,6 +1,6 @@
 <template>
  <div>
-     <cardfile></cardfile>
+     <cardfile  @reception= 'refData'></cardfile>
      <div class="userWrap">  
         <div class="userTitle">  <!-- 搜索用户和角色部分  -->
             <div class="userType">
@@ -9,7 +9,7 @@
             </div>
             <div class="userType">
                 <i>{{userType?"角色名": '权限'}}</i>
-                <el-select v-model="roleValue" placeholder="请选择" size="mini" v-show="userType">
+                <el-select v-model="roleValue" clearable placeholder="请选择" size="mini" v-show="userType">
                   <el-option
                     v-for="item in roleOptions"
                     :key="item.value"
@@ -262,6 +262,7 @@ export default {
       addUserType: true, // 切换添加和修改弹窗
       selectValue: '', //谁可以看下拉框
       jurisdictionValue: '', // 权限的id
+      elref: '',
       list: [
 
       ], // 选择
@@ -422,6 +423,9 @@ export default {
     },
   },
   methods: {
+    refData(value){
+      this.elref = value
+    },
     TabUser () { // 用户切换和角色切换的方法
       this.userType = !this.userType
       this.searchUserName = ''
@@ -564,7 +568,9 @@ export default {
       })
     },
     bindingCard(){
-      MyActiveX1.RDR_Close();
+      console.log(this.elref)
+      //console.log(this.$refs.MyActive)
+      this.elref.RDR_Close()
       let devicetypeValue = this.$cookies.get('readerType')
       let OpentypeValue = this.$cookies.get('portType')
       let comPortValue = this.$cookies.get('comPortNo')
@@ -572,46 +578,47 @@ export default {
       let comFrameStructureValue = this.$cookies.get('comFrameStructure')
       let netIpAddress = this.$cookies.get('netIpAddress')
       let netPort = this.$cookies.get('netPortNo')
-      console.log(devicetypeValue,OpentypeValue,comPortValue,comBaudRateValue,comFrameStructureValue,netIpAddress,netPort)
-      let n = this.$store.state.OnOpen(devicetypeValue,OpentypeValue,comPortValue,comBaudRateValue,comFrameStructureValue,netIpAddress,netPort)
+      //console.log(devicetypeValue,OpentypeValue,comPortValue,comBaudRateValue,comFrameStructureValue,netIpAddress,netPort)
+      let n = this.$store.state.OnOpen(this.elref,devicetypeValue,OpentypeValue,comPortValue,comBaudRateValue,comFrameStructureValue,netIpAddress,netPort)
+      alert(n);
       if (n!=0) {
           return 
       }
       let nret=0;
       //盘点标签初始化,申请盘点标签所需要的内存空间。返回，成功：0 ；失败：非0 （查看错误代码表）。
-	    nret = MyActiveX1.RDR_InitInventory();
+	    nret = this.elref.RDR_InitInventory();
       if (nret!=0) {
         alert("盘点标签初始化失败！")
         return;
       }
       //盘点标签时，使能15693协议。返回，成功：0 ；失败：非0 （查看错误代码表）。
-      nret = MyActiveX1.RDR_Enable15693(0,0x00,0)
-      nret = MyActiveX1.RDR_Enable14443A()
+      nret = this.elref.RDR_Enable15693(0,0x00,0)
+      nret = this.elref.RDR_Enable14443A()
       if (nret!=0) {
         //结束标签盘点操作，释放内存空间。
-          MyActiveX1.RDR_FinishInventory()
+          this.elref.RDR_FinishInventory()
         return;
       }
-    this.readRfid()
-    MyActiveX1.RDR_Close()
+     this.readRfid()
+     this.elref.RDR_Close()
     },
     readRfid(){
       let nret = 0
       let recordCnt = ''
       let j =0
-      nret = MyActiveX1.RDR_Inventory(0,"")
+      nret = this.elref.RDR_Inventory(0,"")
       // alert(nret)
       if (nret !== 0) {
         this.$alert('读取标签失败，请检查设备连接以及参数设置！', '提示', {
           confirmButtonText: '确定',
           type: 'error'
         })
-        MyActiveX1.RDR_FinishInventory()
+        this.elref.RDR_FinishInventory()
         return
       }
-      recordCnt = MyActiveX1.RDR_GetRecordCnt()
+      recordCnt = this.elref.RDR_GetRecordCnt()
       // console.log(recordCnt)
-      let sTagInfo = MyActiveX1.GetRecord(j).split("-");
+      let sTagInfo = this.elref.GetRecord(j).split("-");
       let sTagID = sTagInfo[sTagInfo.length-1];
       alert(recordCnt)
       if(recordCnt == 1){
