@@ -5,22 +5,22 @@
     </transition>
     <div class="top">
       <fromName>借出订单列表</fromName>
-      <tmpButton @click="showAdd" style="height:26px">添加订单</tmpButton>
+      <tmpButton @click="showAdd" style="height:36px">添加订单</tmpButton>
     </div>
 
     <el-table
       :row-style="{height:'32px',textAlign: 'center',padding:'0px',}"
-      :cell-style="{padding:'0px',textAlign: 'center'}"
+      :cell-class-name="cellStyle"
       border
       stripe
-      max-height="380"
+      max-height="350"
       ref="multipleTable"
       :data="tableData"
       tooltip-effect="dark"
       :style="{width: '100%'}"
     >
       <el-table-column type="index" label="序号" width="70"></el-table-column>
-      <el-table-column label="订单名称" width="100">
+      <el-table-column label="订单名称" show-overflow-tooltip>
         <template slot-scope="scope">
             <span class="orderName" @click="showOrder(scope.row,scope.$index)">{{tableData[scope.$index].orderName}}</span>
         </template>
@@ -31,7 +31,8 @@
       <el-table-column prop="returnTiem" label="预计归还时间" show-overflow-tooltip></el-table-column>
       <el-table-column prop="mark" label="备注" show-overflow-tooltip></el-table-column>
       <el-table-column prop="status" label="订单状态" show-overflow-tooltip></el-table-column>
-      <el-table-column fixed="right" label="操作" width="100">
+      <el-table-column prop="formNum" label="已归还/总数" show-overflow-tooltip></el-table-column>
+      <el-table-column fixed="right" label="操作">
         <template slot-scope="scope">
            <el-tooltip class="item" effect="dark" content="导出PDF" placement="bottom">
               <i class="icon icon-pdf del" @click="exportPdf(scope.row,scope.$index)" title="导出pdf"></i>
@@ -40,7 +41,7 @@
               <i class="icon icon-excel del" @click="exportExcel(scope.row,scope.$index)" title=""></i>
             </el-tooltip>
             <el-tooltip class="item" effect="dark" content="删除" placement="bottom">
-              <i class="el-icon-delete del" @click="delDingdan(scope.row,scope.$index)"></i>
+              <i v-show="scope.row.status == '未核验'" class="el-icon-delete del" @click="delDingdan(scope.row,scope.$index)"></i>
             </el-tooltip>
         </template>
       </el-table-column>
@@ -74,6 +75,7 @@ export default {
           returnTiem: 123123, // 预计归还时间
           mark: '暂无备注', // 备注
           status: '已核验' // 订单状态
+          
         } */
       ],
       multipleSelection: [],
@@ -87,7 +89,7 @@ export default {
       url:'sampleGuide/scan/findAllLoanForm',
     })
     .then(({data})=>{
-      //console.log(data);
+      console.log(data);
       data.data.forEach((item)=>{
             this.tableData.push({ //.............借出表格数据
                id: item.id,  // ...........序号
@@ -97,12 +99,20 @@ export default {
                takeOutName:item.takeleave,//………………取走人
                returnTiem:item.expectedreturndate,//………………预计归还时间
                mark:item.loanremarks,//…………备注
-               status:item.status==0?"未核验":"已核验", //…………订单状态
+               status:item.status==0?"未核验":"已借出", //…………订单状态
+               formNum:item.loanSampleCount+'/'+(item.returnSampleCount+item.loanSampleCount)
             })
         })
       })
     },
   methods: {
+    cellStyle({row, column, rowIndex, columnIndex}){
+      if(columnIndex == 9){
+        return 'lastColumn'
+      }else{
+       return 'columnStyle'
+      }
+    },
     // 删除订单
     delDingdan (row, index) {
      // console.log(row,index)
@@ -182,13 +192,12 @@ export default {
     //进入借出订单
     showOrder(row,index){
       //console.log(row)
-      this.$router.push(
-        {
+      this.$router.push({
         name:'particulars',
         params:{
-             id: row.id
-            },
-        });
+          id:row.id
+        }
+      });
       // this.$store.commit('loanOrderFun',row.id);//传值
     },
 
@@ -211,6 +220,16 @@ export default {
 <style scoped lang='less'>
 .loan-wrap {
   padding: 20px 20px 0;
+  height: 36vw;
+  position: relative;
+}
+/deep/.el-table .columnStyle{
+  padding: 0px;
+  text-align: center
+}
+/deep/.el-table .lastColumn{
+  padding: 0;
+  text-align: left
 }
 .orderName{
   cursor: pointer;

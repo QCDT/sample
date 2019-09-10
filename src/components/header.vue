@@ -50,13 +50,13 @@
             <img src="@/assets/img/header_home1.png">
             <p class="logout" :class="{show:showIndex===4}">
               <span @click="userTab">切换用户</span>
-              <span>退出</span>
+              <span @click="quit">退出</span>
             </p>
           </div>
         </div>
       </div>
     </div>
-    <ChangeUser :dialogLogin = 'dialogLogin' btnText= '登录' @close='close' @userName = 'changeUserName' @roleName='changeRoleName'></ChangeUser>
+    <ChangeUser :dialogLogin = 'dialogLogin' btnText="登录" @close='close'></ChangeUser>
   </div>
 </template>
 <script>
@@ -76,27 +76,34 @@ export default {
       homeLink: [
         { link: '/home', text: '首页' },
         { link: '/scan', text: '扫描' },
-        { link: '/query', text: '查询' },
+        { link: '/query/1', text: '查询' },
         { link: '/check', text: '盘点' },
         { link: '/set', text: '设置' },
         { link: '/analyze', text: '数据分析' }
       ]
     }
   },
-
+  beforeUpdate(){
+    // console.log(this.$cookies.get('roleName'),this.$cookies.get('userName'))
+      this.userName = this.$cookies.get('userName');
+      this.roleName = this.$cookies.get('roleName')
+  },
   methods: {
+    quit(){
+      this.$router.push("/")
+    },
     userTab(){
       this.dialogLogin = true
     },
     close(value){
         this.dialogLogin = false
     },
-    changeRoleName(value){
-      this.roleName = value
-    },
-    changeUserName(value){
-      this.userName = value
-    },
+    // changeRoleName(value){
+    //   this.roleName = value
+    // },
+    // changeUserName(value){
+    //   this.userName = value
+    // },
     setActive () {
       let routName = {
         home: 0,
@@ -303,7 +310,7 @@ h3 {
 .icon-wrap {
   display: flex;
   justify-content: space-between;
-
+  cursor: pointer;
   .item {
     position: relative;
 

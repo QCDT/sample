@@ -238,6 +238,7 @@ export default {
       }
     }
   },
+  
   created(){
     this.$axios({ // ........冰箱名称渲染
       method: 'get',

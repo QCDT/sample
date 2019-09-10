@@ -36,7 +36,7 @@
         </tmpinput>
       </div>
     </div>
-    <div class="right" v-show="!$store.state.loanSearchStatus">
+    <div class="right" v-show="$route.params.id == 1">
       <div class="item" @click="delSample">
         <i class="icon icon-shanchu"></i>
         <small>销毁</small>
@@ -71,7 +71,7 @@
       </div>
     </div>
 
-    <div class="right" v-show="$store.state.loanSearchStatus" >
+    <div class="right" v-show="$route.params.id != 1" >
       <div class="item" @click="addLoanSample">
           <img src="@/assets/img/scan_bot_out.png" alt="" width=30>
           <small>添加借出</small>
@@ -89,6 +89,7 @@ import tmpinput from '@/components/tmp/zhanglan/tmp-empty-input'
 export default {
   props: {
     count: Number,
+    showBtn: Boolean,
     multipleSelection: { type: Array, default: () => [] }
   },
   components: { tmpinput },
@@ -183,9 +184,46 @@ export default {
         console.log(this.multipleSelection)
       }
     },
+    //添加借出
     addLoanSample(){
-
+        if(this.multipleSelection.length == 0){
+        this.$alert('请选择需要借出的样本', '提示', {
+          confirmButtonText: '确定',
+          type: 'warning'
+        })
+      }else {
+        let newExportArr = this.multipleSelection.map((item)=>{
+          return item.id
+        })
+        console.log(newExportArr)
+          // //多样本添加到借出订单
+          this.$axios({
+            method:'post',
+            url:'sampleGuide/scan/addSamplesToLoanOrder',
+            data:({
+              sampleIdList:newExportArr,// 当前样本ID数组
+              loanOrderId:this.$route.params.id,//当前ID编号
+            })
+          })
+            .then(({data})=>{
+              console.log(data);
+              if(data.code == 200){
+                this.$router.push({
+                  name:"particulars",
+                  params:{
+                    id: this.$route.params.id
+                  }
+                })
+              }else{
+                  this.$alert(data.message, '提示', {
+                    confirmButtonText: '确定',
+                    type:'warning'
+                  });
+              }
+            })
+      }
     },
+    //导出Excel
     exportLoanPdf(){
       
     }

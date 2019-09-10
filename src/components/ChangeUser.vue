@@ -33,10 +33,10 @@
             <input type="password" placeholder="请输入密码" v-model="userPassword">
             </label>
             <div v-show="!LoginTab" class="loginScan">
-            <img src="@/assets/img/saomiao.gif">
+            <img src="@/assets/img/saomiao.gif" @click="bindingCard">
             </div>
         </div>
-        <span slot="footer" class="dialog-footer">
+        <span slot="footer" class="dialog-footer" v-show="LoginTab">
             <el-button @click="goBack" size="mini">返回</el-button>
             <el-button type="primary" @click="verifyPerson" size="mini">{{btnText}}</el-button>
         </span>
@@ -55,7 +55,7 @@ export default {
         userName: '', // 登录用户名
         userPassword: '',// 登录密码
         LoginTab: true, // 扫码登录切换
-        roleName:'' ,
+        roleName:'',
         receivePerson: ''
       }
     },
@@ -64,31 +64,147 @@ export default {
             this.LoginTab = !this.LoginTab
         },
         verifyPerson(){ //登录验证
-            this.reload()
-        //    this.$axios({
-        //         method: 'post',
-        //         url: 'sampleGuide/sampleReceive/checkReceivePerson',
-        //         data:({
-        //             username: this.userName,
-        //             password: this.userPassword
-        //         })
-        //    })
-        //    .then(({data})=>{
-        //        console.log(data)
-        //        if(data.code == 200){
-        //            this.receivePerson = data.data.username
-        //         //    this.roleName = data.data
-        //            this.$emit('close', false)
-        //            this.$emit('userName', this.receivePerson)
-        //            this.$emit('roleName', this.roleName)
-        //        }else{
-        //              this.$message.error('用户名或密码错误');
-        //        }
-        //    })
+          if(this.userName =='' || this.userPassword ==''){
+            this.$message.error('用户名或密码不能为空');
+          }
+          if(this.btnText=='登录'){
+            this.$axios({
+              method: 'post',
+              url: 'sampleGuide/doLogin/selectByName',
+              headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+              },
+              data:this.qs.stringify({
+                username: this.userName,
+                password: this.userPassword
+              })
+            })
+              .then(({data})=>{
+                console.log(data)
+                if(data.code == 400){
+                  this.$message.error('用户名或密码错误');
+                  this.$router.push("/")
+                }else{
+                  // this.receivePerson = data.loginedUser
+                  //    this.roleName = data.role
+                  this.$cookies.set('userName', data.loginedUser, '1y')
+                  this.$cookies.set('roleName', data.role, '1y')
+                  this.$emit('close', false)
+                  // this.reload()
+                  // this.$emit('userName', this.receivePerson)
+                  // this.$emit('roleName', this.roleName)
+                }
+              })
+          }else if(this.btnText=='验证'){
+            this.$axios({
+              method: 'post',
+              url: 'sampleGuide/sampleReceive/checkReceivePerson',
+              data:({
+                username: this.userName,
+                password: this.userPassword
+              })
+            })
+              .then(({data})=>{
+                console.log(data)
+                if(data.code == 400){
+                  this.$message.error('用户名或密码错误');
+
+                }else{
+                  if(data.data.chinesename){
+                    this.receivePerson = data.data.chinesename
+                  }else {
+                    this.receivePerson = data.data.username
+                  }
+                  this.$emit('userName', this.receivePerson)
+                  this.$emit('close', false)
+                }
+              })
+          }
+
         },
         goBack(){
             this.$emit('close', false)
+        },
+        bindingCard(){
+        MyActiveX1.RDR_Close();
+        let devicetypeValue = this.$cookies.get('readerType')
+        let OpentypeValue = this.$cookies.get('portType')
+        let comPortValue = this.$cookies.get('comPortNo')
+        let comBaudRateValue = this.$cookies.get('comBaudRate')
+        let comFrameStructureValue = this.$cookies.get('comFrameStructure')
+        let netIpAddress = this.$cookies.get('netIpAddress')
+        let netPort = this.$cookies.get('netPortNo')
+        console.log(devicetypeValue,OpentypeValue,comPortValue,comBaudRateValue,comFrameStructureValue,netIpAddress,netPort)
+        let n = this.$store.state.OnOpen(devicetypeValue,OpentypeValue,comPortValue,comBaudRateValue,comFrameStructureValue,netIpAddress,netPort)
+        if (n!=0) {
+          return
         }
+        let nret=0;
+        //盘点标签初始化,申请盘点标签所需要的内存空间。返回，成功：0 ；失败：非0 （查看错误代码表）。
+        nret = MyActiveX1.RDR_InitInventory();
+        if (nret!=0) {
+          alert("盘点标签初始化失败！")
+          return;
+        }
+        //盘点标签时，使能15693协议。返回，成功：0 ；失败：非0 （查看错误代码表）。
+        nret = MyActiveX1.RDR_Enable15693(0,0x00,0)
+        nret = MyActiveX1.RDR_Enable14443A()
+        if (nret!=0) {
+          //结束标签盘点操作，释放内存空间。
+          MyActiveX1.RDR_FinishInventory()
+          return;
+        }
+        this.readRfid()
+        MyActiveX1.RDR_Close()
+      },
+        readRfid(){
+        let nret = 0
+        let recordCnt = ''
+        let j =0
+        nret = MyActiveX1.RDR_Inventory(0,"")
+        // alert(nret)
+        if (nret !== 0) {
+          this.$alert('读取标签失败，请检查设备连接以及参数设置！', '提示', {
+            confirmButtonText: '确定',
+            type: 'error'
+          })
+          MyActiveX1.RDR_FinishInventory()
+          return
+        }
+        recordCnt = MyActiveX1.RDR_GetRecordCnt()
+        // console.log(recordCnt)
+        let sTagInfo = MyActiveX1.GetRecord(j).split("-");
+        let sTagID = sTagInfo[sTagInfo.length-1];
+
+        if(recordCnt == 1){
+          this.cardNub = sTagID;
+          // alert(this.cardNub)
+          this.$axios({
+            method:'post',
+            url: '/sampleGuide/doLogin/selectByCode',
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            data:this.qs.stringify({
+              rfidCode: this.cardNub
+            })
+          })
+            .then(({data})=>{
+              console.log(data)
+              if(data.code = 200){
+                this.$cookies.set('userName', data.loginedUser, '1y')
+                this.$cookies.set('roleName', data.role, '1y')
+                this.$emit('close', false)
+                // this.$router.push("/Home");
+              }
+            })
+        }else{
+          this.$alert('IC卡只能绑定一个！', '提示', {
+            confirmButtonText: '确定',
+            type: 'error'
+          })
+        }
+      },
     }
 }
 </script>

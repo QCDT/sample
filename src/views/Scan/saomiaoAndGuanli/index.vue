@@ -1,6 +1,6 @@
 <template>
   <div>
-    <cardfile></cardfile>
+    <cardfile @reception= 'refData'></cardfile>
     <div class="sample-tmp" v-show="!switchSaoMiao">
       <div class="pic">
         <img src="@/assets/img/sample.gif" @click="scanSample">
@@ -30,15 +30,19 @@ export default {
     return {
       RfidArr: [],
       tableData: [],
-      boxData: [] 
+      boxData: [], 
+      elref:''
     }
   },
   methods: {
+    refData(value){
+      this.elref = value
+    },
     scanSample(){
       this.boxData = []
       this.tableData = []
       this.RfidArr = []
-      MyActiveX1.RDR_Close()
+      this.elref.RDR_Close()
       let devicetypeValue = this.$cookies.get('readerType')
       let OpentypeValue = this.$cookies.get('portType')
       let comPortValue = this.$cookies.get('comPortNo')
@@ -46,44 +50,44 @@ export default {
       let comFrameStructureValue = this.$cookies.get('comFrameStructure')
       let netIpAddress = this.$cookies.get('netIpAddress')
       let netPort = this.$cookies.get('netPortNo')
-      let n = this.$store.state.OnOpen(devicetypeValue,OpentypeValue,comPortValue,comBaudRateValue,comFrameStructureValue,netIpAddress,netPort)
+      let n = this.$store.state.OnOpen(this.elref,devicetypeValue,OpentypeValue,comPortValue,comBaudRateValue,comFrameStructureValue,netIpAddress,netPort)
       if (n!=0) {
         return
       }
       let nret=0;
       //盘点标签初始化,申请盘点标签所需要的内存空间。返回，成功：0 ；失败：非0 （查看错误代码表）。
-	    nret = MyActiveX1.RDR_InitInventory();
+	    nret = this.elref.RDR_InitInventory();
       if (nret!=0) {
         alert("盘点标签初始化失败！")
         return;
       }
       //盘点标签时，使能15693协议。返回，成功：0 ；失败：非0 （查看错误代码表）。
-      nret = MyActiveX1.RDR_Enable15693(0,0x00,0)
-      nret = MyActiveX1.RDR_Enable14443A()
+      nret = this.elref.RDR_Enable15693(0,0x00,0)
+      nret = this.elref.RDR_Enable14443A()
       if (nret!=0) {
         //结束标签盘点操作，释放内存空间。
-          MyActiveX1.RDR_FinishInventory()
+          this.elref.RDR_FinishInventory()
         return;
       }
       this.readRfid()
-      MyActiveX1.RDR_Close()
+      this.elref.RDR_Close()
     },
     readRfid(){
       let nret = 0
       let recordCnt = ''
-      nret = MyActiveX1.RDR_Inventory(0,"")
+      nret = this.elref.RDR_Inventory(0,"")
       if (nret !== 0) {
         this.$alert('读取标签失败，请检查设备连接以及参数设置！', '提示', {
           confirmButtonText: '确定',
           type: 'error'
         })
-        MyActiveX1.RDR_FinishInventory()
+        this.elref.RDR_FinishInventory()
         return
       }
-      recordCnt = MyActiveX1.RDR_GetRecordCnt()
+      recordCnt = this.elref.RDR_GetRecordCnt()
       alert(recordCnt)
       for(let j=0;j<recordCnt;j++){
-        	let sTagInfo = MyActiveX1.GetRecord(j).split("-")
+        	let sTagInfo = this.elref.GetRecord(j).split("-")
           let sTagID = sTagInfo[sTagInfo.length-1]
             this.RfidArr[j] = sTagID
       }
@@ -163,7 +167,7 @@ export default {
   // justify-content:center;
   align-items: center;
   flex-direction: column;
-  margin-top: 3%;
+  margin-top: 1%;
   width: 100%;
 
   color: #00c9ff;

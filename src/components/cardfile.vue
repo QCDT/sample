@@ -1,5 +1,5 @@
 <template>
-    <object id="MyActiveX1" width=0 height=0
+    <object id="MyActiveX1" width=0 height=0 ref="MyActive"
         classid="clsid:38BEF3F4-E284-4548-8E7B-FE20AE443AD8">
         <param name="_Version" value="65536"/>
         <param name="_ExtentX" value="2646"/>
@@ -7,3 +7,10 @@
         <param name="_StockProps" value="0"/>
     </object>
 </template>
+<script>
+export default {
+    mounted(){
+        this.$emit('reception', this.$refs.MyActive)
+    }
+}
+</script>

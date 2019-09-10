@@ -1,9 +1,9 @@
 <template>
   <!-- 归还 -->
   <div class="guihuan-wrap">
-    <el-form ref="ruleForm" :model="ruleForm"  status-icon label-width="120px" label-position="left"  :rules="rules">
+    <el-form ref="ruleForm" :model="ruleForm"  label-width="120px" label-position="left"  :rules="rules">
       <el-form-item label="归还表单名称" prop="formName" required>
-        <el-input v-model="ruleForm.formName"></el-input>
+        <el-input disabled  v-model="ruleForm.formName"></el-input>
       </el-form-item>
         <el-form-item label="归还人" prop="name" required>
         <el-input v-model="ruleForm.name"></el-input>
@@ -109,12 +109,12 @@
                     ref="multipleTable"
                     :data="sampleDataItem"
                     tooltip-effect="dark"
-                    style="width: 50%; float:right"
-                    height="220"
+                    style="width: 45%; float:right"
+                    max-height="220"
                     :row-style="{height:'32px',textAlign: 'center',padding:'0px',}"
                     :cell-style="{padding:'0px',textAlign: 'center'}"
                     :header-cell-style ="{height:'30px',textAlign:'center',padding:'0px', background:'#00c9ff',color:'white'}"
-                    borderrecipients
+                    border
                     >
                     <el-table-column
                     type="index"
@@ -178,28 +178,6 @@ export default {
         callback();
       }
     }
-    let verformName = (rule, value,callback)=>{
-      if(value === ''){
-        callback(new Error("请输入表单名称"))
-      }else{
-        this.$axios({
-          method: 'post',
-          url: 'sampleGuide/scan/existReturnTable',
-          data:({
-            returnTableName: value
-          })
-        })
-          .then(({data})=>{
-            console.log(data)
-            if(data.data == false){
-              callback(new Error("表单名称重复"))
-            }else{
-              callback();
-            }
-          })
-      }
-    }
-
     return {
       dialogRecords: false,
       formName: '',
@@ -221,11 +199,18 @@ export default {
         name:[
           {validator:verificationName,trigger:'blur'}
         ],
-        formName:[
-          {validator:verformName,trigger:'blur'}
-        ]
       }
     }
+  },
+  created(){
+    this.$axios({
+      method:'get',
+      url:'sampleGuide/scan/getOrderName',
+    })
+      .then(({data})=>{
+        console.log(data);
+        this.ruleForm.formName = data.data
+      })
   },
   methods: {
     submitForm(ruleForm){
@@ -281,15 +266,14 @@ export default {
     },
     searchReception(){ //历史纪录
       this.sampleDataForm = []
-      // console.log(this.recordsformName,this.recordsSampleName)
       this.$axios({
         method: 'post',
         url: 'sampleGuide/scan/findHistoryReturn',
         data:({
           orderName: this.recordsformName,
           sampleName: this.recordsSampleName,
-          TimeStart: this.choiceTime[0],
-          TimeEnd: this.choiceTime[1]
+          returnTimeStart: this.choiceTime[0],
+          returnTimeEnd: this.choiceTime[1]
         })
       })
         .then(({data})=>{
@@ -337,31 +321,81 @@ export default {
         let newExportArr = this.exportData.map((item)=>{
           return item.id
         })
-        //导出借出订单Excel
+        //导出归还订单Excel
           this.$axios({
             method:'post',
             url:'sampleGuide/scan/exportReturnExcel',
-            responseType: 'arraybuffer',
+            responseType: 'blob',
+            headers: {
+            'Access-Control-Expose-Headers': 'filename'
+            },
             data:({
               returnTableIdList: newExportArr
             })
           })
-            .then(({data})=>{
-              console.log(data);
-              var blob = new Blob([data], {type: 'application/vnd.ms-excel;charset=UTF-8'});
-              var a = document.createElement('a');
-              var href = window.URL.createObjectURL(blob); // 创建链接对象
+          .then((data)=>{
+            console.log(data);
+            let fileName = data.headers.filename;
+            let blob = new Blob([data.data], {type: 'application/vnd.ms-excel;charset=UTF-8'});
+            if(window.navigator.msSaveBlob){
+              window.navigator.msSaveBlob(blob,fileName);
+            }else{
+              let a = document.createElement('a');
+              let href = window.URL.createObjectURL(blob); // 创建链接对象
               a.href =  href;
-              a.download = '';   // 自定义文件名
+              a.download = fileName;   // 自定义文件名
               document.body.appendChild(a);
               a.click();
               window.URL.revokeObjectURL(href);  //移除链接对象
-              document.body.removeChild(a); // 移除a元素
-            })
+              document.body.removeChild(a);
+          }
+        })
 
       }
     },
     exportSampleFormPDF(){
+      if(this.exportData.length == 0){
+        this.$alert('请选择需要导出的表单', '提示', {
+          confirmButtonText: '确定',
+          type: 'warning'
+        })
+      }else {
+        let newExportArr = this.exportData.map((item)=>{
+          return item.id
+        })
+        //导出归还订单pdf
+          this.$axios({
+            method:'post',
+            url:'sampleGuide/scan/exportReturnPDF',
+            responseType: 'blob',
+            headers: {
+            'Access-Control-Expose-Headers': 'filename',
+            'Connection':'keep-alive',
+            'Token':'token'
+            },
+            data:({
+              returnTableIdList: newExportArr
+            })
+          })
+          .then((data)=>{
+            console.log(data);
+            // let fileName = data.headers.filename;
+          //   let blob = new Blob([data.data], {type: 'application/pdf;charset=UTF-8'});
+          //   if(window.navigator.msSaveBlob){
+          //     window.navigator.msSaveBlob(blob);
+          //   }else{
+          //     // var blob = new Blob([data], {type: 'application/vnd.ms-excel;charset=UTF-8'});
+          //     let a = document.createElement('a');
+          //     let href = window.URL.createObjectURL(blob); // 创建链接对象
+          //     a.href =  href;
+          //     a.download = '';   // 自定义文件名
+          //     document.body.appendChild(a);
+          //     a.click();
+          //     window.URL.revokeObjectURL(href);  //移除链接对象
+          //     document.body.removeChild(a);
+          // }
+        })
+      }
     }
   },
   computed: {}

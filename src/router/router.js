@@ -16,7 +16,6 @@ import equipmentConstruction from '@/views/set/refrigerator/equipmentConstructio
 import receive from '@/views/Scan/saomiao/receive'
 import sampleBox from '@/views/set/sampleBox'
 
-//import searchAdd from '@/views/Scan-Loan-Particulars/searchAdd'//借出查询
 import { zlRouter } from './zl'
 Vue.use(Router)
 

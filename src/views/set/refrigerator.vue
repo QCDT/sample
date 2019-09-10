@@ -99,6 +99,7 @@
 </template>
 <script>
 export default {
+  inject:['reload'],
   data () {
     return {
       DialogVisible: false,
@@ -187,6 +188,7 @@ export default {
                     message: '删除成功!'
                   });
                 }
+                this.reload()
               })
             }
           })        

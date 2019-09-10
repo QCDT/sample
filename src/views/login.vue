@@ -1,5 +1,6 @@
 <template>
   <div class="loginWrap">
+    <cardfile @reception= 'refData'></cardfile>
     <div class="loginHeader">
       <a href="http://www.sampleguide.cn">
         <img src="@/assets/img/logo.png" />
@@ -46,10 +47,10 @@
                 <input type="password" placeholder="请输入密码" v-model="userPassword" />
               </label>
               <div v-show="!LoginTab" class="loginScan">
-                <img src="@/assets/img/saomiao.gif" />
+                <img src="@/assets/img/saomiao.gif" @click="bindingCard"/>
               </div>
             </div>
-            <button class="loginBtn" @click="loginIng">登录</button>
+            <button class="loginBtn" @click="loginIng" v-show="LoginTab">登录</button>
           </div>
         </div>
       </div>
@@ -63,13 +64,19 @@
   </div>
 </template>
 <script>
+import cardfile from '@/components/cardfile'
 export default {
+  components:{
+    cardfile
+  },
   data() {
     return {
       userName: "",
       userPassword: "",
       LoginTab: true,
       bannerHeight: "",
+      elref:'',
+      cardNub: '',
       list: [
         require("@/assets/img/banner-1.png"),
         require("@/assets/img/banner-2.png"),
@@ -92,6 +99,9 @@ export default {
     });
   },
   methods: {
+    refData(value){
+      this.elref = value
+    },
     loginTab() {
       this.LoginTab = !this.LoginTab;
     },
@@ -102,6 +112,10 @@ export default {
       })
     },
     loginIng() {
+      if(this.userName =='' || this.userPassword ==''){
+        this.$message.error('用户名或密码不能为空');
+      }
+      // this.$router.push("/Home");
       this.$axios({
         method: "post",
         url: "sampleGuide/doLogin/selectByName",
@@ -116,15 +130,97 @@ export default {
         .then(({ data }) => {
           console.log(data);
           if (data.code == 400) {
-            alert("用户名或密码错误");
+            this.$alert('用户名或密码错误！', '提示', {
+              confirmButtonText: '确定',
+              type: 'error'})
           } else {
+            this.$cookies.set('userName', data.loginedUser, '1y')
+            this.$cookies.set('roleName', data.role, '1y')
             this.$router.push("/Home");
           }
         })
         .catch(error => {
           console.log(error);
         });
-    }
+    },
+    bindingCard(){
+      this.elref.RDR_Close();
+      let devicetypeValue = this.$cookies.get('readerType')
+      let OpentypeValue = this.$cookies.get('portType')
+      let comPortValue = this.$cookies.get('comPortNo')
+      let comBaudRateValue = this.$cookies.get('comBaudRate')
+      let comFrameStructureValue = this.$cookies.get('comFrameStructure')
+      let netIpAddress = this.$cookies.get('netIpAddress')
+      let netPort = this.$cookies.get('netPortNo')
+      let n = this.$store.state.OnOpen(this.elref,devicetypeValue,OpentypeValue,comPortValue,comBaudRateValue,comFrameStructureValue,netIpAddress,netPort)
+      if (n!=0) {
+        return
+      }
+      let nret=0;
+      //盘点标签初始化,申请盘点标签所需要的内存空间。返回，成功：0 ；失败：非0 （查看错误代码表）。
+      nret = this.elref.RDR_InitInventory();
+      if (nret!=0) {
+        alert("盘点标签初始化失败！")
+        return;
+      }
+      //盘点标签时，使能15693协议。返回，成功：0 ；失败：非0 （查看错误代码表）。
+      nret = this.elref.RDR_Enable15693(0,0x00,0)
+      nret = this.elref.RDR_Enable14443A()
+      if (nret!=0) {
+        //结束标签盘点操作，释放内存空间。
+        this.elref.RDR_FinishInventory()
+        return;
+      }
+      this.readRfid()
+      this.elref.RDR_Close()
+    },
+    readRfid(){
+      let nret = 0
+      let recordCnt = ''
+      let j =0
+      nret = this.elref.RDR_Inventory(0,"")
+      // alert(nret)
+      if (nret !== 0) {
+        this.$alert('读取标签失败，请检查设备连接以及参数设置！', '提示', {
+          confirmButtonText: '确定',
+          type: 'error'
+        })
+        this.elref.RDR_FinishInventory()
+        return
+      }
+      recordCnt = this.elref.RDR_GetRecordCnt()
+      // console.log(recordCnt)
+      let sTagInfo = this.elref.GetRecord(j).split("-");
+      let sTagID = sTagInfo[sTagInfo.length-1];
+
+      if(recordCnt == 1){
+        this.cardNub = sTagID;
+        // alert(this.cardNub)
+        this.$axios({
+          method:'post',
+          url: '/sampleGuide/doLogin/selectByCode',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          },
+          data:this.qs.stringify({
+            rfidCode: this.cardNub
+          })
+        })
+          .then(({data})=>{
+            console.log(data)
+            if(data.code = 200){
+              this.$cookies.set('userName', data.loginedUser, '1y')
+              this.$cookies.set('roleName', data.role, '1y')
+              this.$router.push("/Home");
+            }
+          })
+      }else{
+        this.$alert('请扫描一个IC卡！', '提示', {
+          confirmButtonText: '确定',
+          type: 'error'
+        })
+      }
+    },
   }
 };
 </script>
@@ -256,6 +352,7 @@ export default {
       img {
         width: 128px;
         height: 128px;
+        cursor: pointer;
       }
     }
   }
