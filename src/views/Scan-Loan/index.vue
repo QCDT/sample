@@ -1,10 +1,18 @@
 <template>
   <div class="loan-wrap">
     <transition name="el-fade-in-linear">
-      <Add :showDingdan="showDingdan" @clearAdd="clearAdd" @submitForm="submitForm"/>
+      <Add :showDingdan="showDingdan" :projectOption='projectOption' @clearAdd="clearAdd" @submitForm="submitForm"/>
     </transition>
     <div class="top">
       <fromName>借出订单列表</fromName>
+        <el-select v-model="projectValue" placeholder="请选择" size="mini">
+          <el-option
+            v-for="item in projectOption"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
       <tmpButton @click="showAdd" style="height:36px">添加订单</tmpButton>
     </div>
 
@@ -62,6 +70,8 @@ export default {
   components: { goBack, fromName, Add, tmpButton },
   data () {
     return {
+      projectValue:'', //项目value
+      projectOption:[], //所有项目
       // 切换 添加借出订单选项
       showDingdan: false,
       tableData: [
@@ -89,7 +99,7 @@ export default {
       url:'sampleGuide/scan/findAllLoanForm',
     })
     .then(({data})=>{
-      console.log(data);
+      // console.log(data);
       data.data.forEach((item)=>{
             this.tableData.push({ //.............借出表格数据
                id: item.id,  // ...........序号
@@ -104,6 +114,19 @@ export default {
             })
         })
       })
+     this.$axios.get("/sampleGuide/guest/selectProjectAll")
+      .then(({data})=>{
+        console.log(data)
+        data.data.forEach((item)=>{
+          this.projectOption.push({
+            value:item.id,
+            label:item.name
+          })
+        })
+    })
+    .catch((error)=>{
+      console.log(error)
+    })
     },
   methods: {
     cellStyle({row, column, rowIndex, columnIndex}){

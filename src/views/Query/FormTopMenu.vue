@@ -76,10 +76,6 @@
           <img src="@/assets/img/scan_bot_out.png" alt="" width=30>
           <small>添加借出</small>
       </div>
-      <div class="item" @click="exportLoanPdf">
-          <i class="icon icon-excel" style="color:#217346"></i>
-          <small>导出Excel</small>
-      </div>
     </div>
 
   </div>
@@ -222,10 +218,6 @@ export default {
               }
             })
       }
-    },
-    //导出Excel
-    exportLoanPdf(){
-      
     }
   },
   computed: {}

@@ -414,6 +414,7 @@ export default {
   },
   computed:{
     jurisdictionList(){ 
+      this.list = []
       this.authority.forEach((item)=>{
         if(item.checked){
            this.list.push(item.value)
@@ -631,7 +632,7 @@ export default {
       }
     },
     roleOperation () {
-      console.log(this.jurisdictionList)
+      // console.log(this.jurisdictionList)
         if(this.addUserType){ //...........新增角色
           this.$axios({ 
             method: 'post',

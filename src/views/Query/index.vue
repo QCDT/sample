@@ -1,10 +1,3 @@
-<!--
- * @Description: In User Settings Edit
- * @Author: 刘一帆
- * @Date: 2019-07-15 16:37:07
- * @LastEditTime: 2019-08-08 19:54:25
- * @LastEditors: Please set LastEditors
- -->
 <template>
   <div class="searchWrap">
     <Search @startSearch="startSearch" @changeTable = changeTable ></Search>

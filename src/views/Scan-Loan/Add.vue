@@ -7,6 +7,7 @@
       <el-form
         :model="ruleForm"
         :rules="rules"
+        size="mini"
         ref="ruleForm"
         status-icon
         label-width="110px"
@@ -18,6 +19,16 @@
         </el-form-item>
         <el-form-item label="取走人" prop="takes" required>
           <el-input v-model="ruleForm.takes"></el-input>
+        </el-form-item>
+        <el-form-item label="所属项目" prop="projectValue" required>
+            <el-select v-model="ruleForm.projectValue" placeholder="请选择">
+              <el-option
+                v-for="item in projectOption"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
         </el-form-item>
         <el-form-item label="预计归还时间" required>
           <el-col :span="7">
@@ -53,8 +64,8 @@
 </template>
 <script>
 export default {
-  props: { showDingdan: Boolean },
-   inject:['reload'],
+  props: { showDingdan: Boolean , projectOption: Array},
+  inject:['reload'],
   components: {},
   data () {
     let orderName = (rule, value, callback) => {
@@ -93,11 +104,13 @@ export default {
       }
     }
     return {
+      // projectValue:'',
       ruleForm: {
         name: '',
         takes:'',
         date: '',
         delivery: false,
+        projectValue:'',
         type: [],
         resource: '',
         desc: ''
@@ -116,6 +129,9 @@ export default {
         takes:[
           { validator: verificationTakes, trigger: 'blur' }
         ],
+        projectValue: [
+            { required: true, message: '请选择所属项目', trigger: 'blur' }
+          ],
         date: [
           {
             required: true,
