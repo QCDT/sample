@@ -1,7 +1,7 @@
 <template>
  <div>
      <cardfile  @reception= 'refData'></cardfile>
-     <div class="userWrap">  
+     <div class="userWrap">
         <div class="userTitle">  <!-- 搜索用户和角色部分  -->
             <div class="userType">
                 <i>{{userType?"用户名": '角色名'}}</i>
@@ -39,7 +39,7 @@
               <img src="@/assets/img/ren.png" v-show ="!userType" @click="TabUser"/>
           </el-tooltip>
         </div>
-        <div class="userList"> 
+        <div class="userList">
           <!-- 用户列表展示 -->
             <el-table
                 ref="multipleTable"
@@ -136,6 +136,7 @@
                 <div>
                   <div class="jurisdiction">
                       <span>权限操作</span>
+                      <el-checkbox class="checkedAll" v-model="checkedAll"></el-checkbox>
                   </div>
                   <div>
                       <el-checkbox v-model="item.checked" v-for="(item,index) in authority"  :key="index" class="jurisdictionType">{{item.label}}</el-checkbox>
@@ -227,9 +228,11 @@
 </template>
 <script>
 import cardfile from "@/components/cardfile";
+import ElCheckbox from "element-ui/packages/checkbox/src/checkbox";
 export default {
   inject:['reload'],
   components:{
+    ElCheckbox,
     cardfile
   },
   data () {
@@ -327,12 +330,12 @@ export default {
         },
         {
           value: 4,
-          label: '导出Excel',
+          label: '转移样本及样本盒',
           checked: false
         },
         {
           value: 5,
-          label: '转移样本及样本盒',
+          label: '导出Excel',
           checked: false
         },
         {
@@ -413,7 +416,8 @@ export default {
       })
   },
   computed:{
-    jurisdictionList(){ 
+    jurisdictionList(){
+      this.list =[]
       this.authority.forEach((item)=>{
         if(item.checked){
            this.list.push(item.value)
@@ -421,6 +425,16 @@ export default {
       })
       return this.list
     },
+    checkedAll:{
+      get(){
+        return this.authority.every(item => item.checked)
+      },
+      set(val){
+        return this.authority.forEach((item)=>{
+          item.checked = val
+        })
+      }
+    }
   },
   methods: {
     refData(value){
@@ -526,7 +540,7 @@ export default {
                   this.Userdisabled = false
                   this.userNamemsg = ''
                 }
-            })  
+            })
           }else{
             this.$axios({
               method:'post',
@@ -582,7 +596,7 @@ export default {
       let n = this.$store.state.OnOpen(this.elref,devicetypeValue,OpentypeValue,comPortValue,comBaudRateValue,comFrameStructureValue,netIpAddress,netPort)
       alert(n);
       if (n!=0) {
-          return 
+          return
       }
       let nret=0;
       //盘点标签初始化,申请盘点标签所需要的内存空间。返回，成功：0 ；失败：非0 （查看错误代码表）。
@@ -633,7 +647,7 @@ export default {
     roleOperation () {
       console.log(this.jurisdictionList)
         if(this.addUserType){ //...........新增角色
-          this.$axios({ 
+          this.$axios({
             method: 'post',
             url: 'sampleGuide/rolePerm/insertRole',
             data: ({
@@ -655,8 +669,8 @@ export default {
             this.$message.error('新增角色失败，请重试');
           })
         }else{ // ...............修改角色
-          console.log(this.jurisdictionList)
-          this.$axios({ 
+          // console.log(this.jurisdictionList)
+          this.$axios({
             method: 'post',
             url: 'sampleGuide/rolePerm/updateRole',
             data: ({
@@ -681,7 +695,7 @@ export default {
     },
     userOperation () {
         if(this.addUserType){ //........新增用户
-          console.log(this.roleName)         
+          console.log(this.roleName)
           this.$axios({
             method: 'post',
             url: 'sampleGuide/userOther/insertUser',
@@ -854,14 +868,14 @@ export default {
             this.$message.error('获取信息失败，请重试');
           })
       } else {
-        // console.log(row)
+        console.log(row.jurisdiction)
         this.RoleDialogVisible = true
         this.roleMsg = ''
         this.newRoleName = row.roleName //.....修改的角色名的获取
         this.roleId = row.id
         this.list = []
         this.authority.forEach((item)=>{
-             item.checked = false
+            item.checked = false
             row.jurisdiction.split(',').forEach((option)=>{
               if(item.label == option){
                 item.checked = true
@@ -903,7 +917,7 @@ export default {
           this.$message({
             type: 'info',
             message: '已取消删除'
-          });          
+          });
         });
       }else{
         this.$confirm('确认删除该角色吗?', '提示', {
@@ -956,9 +970,9 @@ export default {
           this.$message({
             type: 'info',
             message: '已取消删除'
-          });          
+          });
         });
-     
+
       }
     },
     AddType () { // 添加方法
@@ -967,7 +981,7 @@ export default {
         this.userName = ''
         this.roleOptionValue = ''
         this.userPassword = ''
-        this.repeatPassword = ''       
+        this.repeatPassword = ''
         this.compellation = ''
         this.userNamemsg = ''
         this.selectValue = 0
@@ -1066,6 +1080,9 @@ export default {
     }
     .jurisdiction{
         margin-bottom: 10px;
+      .checkedAll{
+        margin-left: 20px;
+      }
     }
     .jurisdictionType{
         width: 38%;

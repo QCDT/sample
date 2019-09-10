@@ -58,7 +58,7 @@
       </div>
     </div>
     <!-- 表单 ↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑ -->
-    <div class='backBtn' @click="backLoanPage()" v-show="showBtn">返回</div>
+    <div class='backBtn' @click="backLoanPage()" v-show="$route.params.id != 1">返回</div>
   </div>
 
 </template>
