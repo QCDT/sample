@@ -388,8 +388,7 @@ export default {
       /* 状态 status */
       statusOption: [
         { value: 1, label: '正常' },
-        { value: 2, label: '借出' },
-        { value: 3, label: '预留' }
+        { value: 2, label: '借出' }
       ],
       /* 样本类别 sampleItem */
       sampleItemOption: [
@@ -462,7 +461,7 @@ export default {
         url:'sampleGuide/querySampleSource/selectrfidSamplesource',
       })
       .then(({data})=>{
-            console.log(data);
+            // console.log(data);
             data.data.forEach((item)=>{
                 this.sourceOption.push({
                   label:item,
@@ -556,9 +555,10 @@ export default {
           .then(({data})=>{
             console.log(data);
             data.data.forEach((item)=>{
-               console.log(item);
+               // console.log(item);
             this.searchTableData.push({
               id: item.id,
+              rfId:item.rfidCode,
               color:item.capColor, // 管帽颜色
               sampleInfo:item.name, // 样本信息
               enterName:item.inputUserName, // 录入人

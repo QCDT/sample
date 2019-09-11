@@ -228,11 +228,11 @@
 </template>
 <script>
 import cardfile from "@/components/cardfile";
-import ElCheckbox from "element-ui/packages/checkbox/src/checkbox";
+// import ElCheckbox from "element-ui/packages/checkbox/src/checkbox";
 export default {
   inject:['reload'],
   components:{
-    ElCheckbox,
+    // ElCheckbox,
     cardfile
   },
   data () {
