@@ -1,6 +1,10 @@
 <template>
   <!-- 共有多少条数据...销毁..打印标签..转移..导出... -->
   <div class="selection-box">
+    <object id="LODOP_OB"
+            classid="clsid:2105C259-1E0C-4534-8141-A753534CB4CA" width=0 height=0>
+      <embed id="LODOP_EM" type="application/x-print-lodop" width=0 height=0/>
+    </object>
     <div class="sum">
       <div class="item">
         <span>共有:</span>
@@ -82,6 +86,7 @@ export default {
   components: { tmpinput },
   data () {
     return {
+      CreatedOKLodop7766:null,
       options: [
         {
           value: '选项1',
@@ -124,7 +129,7 @@ export default {
              })
                .then(({data})=>{
                  console.log(data)
-                 if(data.data == 0){
+                 if(data.code == 200){
                    this.$message({
                      type: 'success',
                      message: '删除成功!'
@@ -216,11 +221,59 @@ export default {
     printLocation(){
       if(this.multipleSelection.length == 0){
         this.$message({
-          message: '请选择需要打印位置信息的样本',
+          message: '请先选择要打印标签的样本',
           type: 'warning'
         });
       }else{
-         console.log(this.multipleSelection)
+        let sampleInfo = this.multipleSelection.every((item)=>{
+          return item.location
+        })
+        // console.log(sampleInfo)
+        if(sampleInfo){
+          this.$confirm('已选中'+this.multipleSelection.length+'条数据，确定打印该位置信息吗?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            this.$axios({
+              method: 'post',
+              url:'sampleGuide/query/queryPrint',
+              data:({
+                sampleCategoryDict:0,
+                rfidCodeList: this.multipleSelection.map((item)=>{return item.rfId})
+              })
+            }).then(({data})=>{
+                console.log(data)
+             if(data.code == 200){             
+               let LODOP = this.getLodop();
+               LODOP.PRINT_INIT("打印位置信息");
+               LODOP.SET_PRINTER_INDEXA("XP-58");
+               LODOP.SET_PRINT_PAGESIZE(3, '550', '', ''); //设置纸张宽度和高度，单位为：0.1mm
+               let distanceTop = 0
+               distanceTop += 80
+               data.data.forEach((item)=>{
+                 distanceTop += 20;
+                 LODOP.ADD_PRINT_TEXT(distanceTop, 20, 120, 15, item.name);
+                 distanceTop += 20;
+                 LODOP.ADD_PRINT_TEXT(distanceTop, 20, 220, 15, item.refrigeratorStruName);
+                 distanceTop += 20;
+                 LODOP.ADD_PRINT_TEXT(distanceTop, 20, 220, 15, item.locationNoRefName);
+                 distanceTop += 20;
+                 LODOP.ADD_PRINT_TEXT(distanceTop, 20, 220, 15, "---------------------");
+               })
+               distanceTop += 20;
+               let date = LODOP.FORMAT("TIME:yyyy-mm-dd hh:mm:ss", "now");
+               LODOP.ADD_PRINT_TEXT(distanceTop, 20, 220, 15, date);
+               LODOP.PRINT(); //直接打印
+             }else{
+               this.$message({
+                 message: '打印故障，请检查打印机是否连接！',
+                 type: 'warning'
+               }); 
+             }
+              })
+          })
+        }
       }
     },
     amendSample(){
@@ -295,7 +348,83 @@ export default {
               }
             })
       }
+    },
+    //导出Excel
+    exportLoanPdf(){
+
+    },
+    getLodop(oOBJECT,oEMBED){
+      /**************************
+       本函数根据浏览器类型决定采用哪个页面元素作为Lodop对象：
+       IE系列、IE内核系列的浏览器采用oOBJECT，
+       其它浏览器(Firefox系列、Chrome系列、Opera系列、Safari系列等)采用oEMBED,
+       如果页面没有相关对象元素，则新建一个或使用上次那个,避免重复生成。
+       64位浏览器指向64位的安装程序install_lodop64.exe。
+       **************************/
+
+      var strHtmInstall="<br><font color='#FF00FF'>打印控件未安装!点击这里<a href='../resources/plugins/install_lodop32.exe' target='_self'>执行安装</a>,安装后请刷新页面或重新进入。</font>";
+      var strHtmUpdate="<br><font color='#FF00FF'>打印控件需要升级!点击这里<a href='../resources/plugins/install_lodop32.exe' target='_self'>执行升级</a>,升级后请重新进入。</font>";
+      var strHtm64_Install="<br><font color='#FF00FF'>打印控件未安装!点击这里<a href='../resources/plugins/install_lodop64.exe' target='_self'>执行安装</a>,安装后请刷新页面或重新进入。</font>";
+      var strHtm64_Update="<br><font color='#FF00FF'>打印控件需要升级!点击这里<a href='../resources/plugins/install_lodop64.exe' target='_self'>执行升级</a>,升级后请重新进入。</font>";
+      var strHtmFireFox="<br><br><font color='#FF00FF'>（注意：如曾安装过Lodop旧版附件npActiveXPLugin,请在【工具】->【附加组件】->【扩展】中先卸它）</font>";
+      var strHtmChrome="<br><br><font color='#FF00FF'>(如果此前正常，仅因浏览器升级或重安装而出问题，需重新执行以上安装）</font>";
+      var LODOP;
+      try{
+        //=====判断浏览器类型:===============
+        var isIE	 = (navigator.userAgent.indexOf('MSIE')>=0) || (navigator.userAgent.indexOf('Trident')>=0);
+        var is64IE  = isIE && (navigator.userAgent.indexOf('x64')>=0);
+        //=====如果页面有Lodop就直接使用，没有则新建:==========
+        if (oOBJECT!=undefined || oEMBED!=undefined) {
+          if (isIE)
+            LODOP=oOBJECT;
+          else
+            LODOP=oEMBED;
+        } else {
+          if (this.CreatedOKLodop7766==null){
+            LODOP=document.createElement("object");
+            LODOP.setAttribute("width",0);
+            LODOP.setAttribute("height",0);
+            LODOP.setAttribute("style","position:absolute;left:0px;top:-100px;width:0px;height:0px;");
+            if (isIE) LODOP.setAttribute("classid","clsid:2105C259-1E0C-4534-8141-A753534CB4CA");
+            else LODOP.setAttribute("type","application/x-print-lodop");
+            document.documentElement.appendChild(LODOP);
+            this.CreatedOKLodop7766=LODOP;
+          } else
+            LODOP=this.CreatedOKLodop7766;
+        };
+
+
+
+        //=====判断Lodop插件是否安装过，没有安装或版本过低就提示下载安装:==========
+        if ((LODOP==null)||(typeof(LODOP.VERSION)=="undefined")) {
+          document.documentElement.innerHTML="";
+          if (navigator.userAgent.indexOf('Chrome')>=0)
+            document.documentElement.innerHTML=strHtmChrome+document.documentElement.innerHTML;
+          if (navigator.userAgent.indexOf('Firefox')>=0)
+            document.documentElement.innerHTML=strHtmFireFox+document.documentElement.innerHTML;
+          if (is64IE) document.write(strHtm64_Install); else
+          if (isIE)   document.write(strHtmInstall);    else
+            document.documentElement.innerHTML=strHtmInstall+document.documentElement.innerHTML;
+          return LODOP;
+        } else
+        if (LODOP.VERSION<"6.1.9.8") {
+          if (is64IE) document.write(strHtm64_Update); else
+          if (isIE) document.write(strHtmUpdate); else
+            document.documentElement.innerHTML=strHtmUpdate+document.documentElement.innerHTML;
+          return LODOP;
+        };
+        //=====如下空白位置适合调用统一功能(如注册码、语言选择等):====
+        LODOP.SET_LICENSES("","66D3272D394565664366F195E9A46B6E","C94CEE276DB2187AE6B65D56B3FC2848","");
+        //============================================================
+        return LODOP;
+      } catch(err) {
+        if (is64IE)
+          document.documentElement.innerHTML="Error:"+strHtm64_Install+document.documentElement.innerHTML;else
+          document.documentElement.innerHTML="Error:"+strHtmInstall+document.documentElement.innerHTML;
+        return LODOP;
+      }
     }
+
   },
   computed: {}
 }

@@ -3,23 +3,23 @@
     <div class="refWrap" :class="{'refWrap-2': refrigeratorInfo}">
       <!-- 实验室展示层-->
       <div class="labList" :class="{'labList-2': labRefrigerator, 'labList-3': refrigeratorInfo}">
-        <p><span>实验室总数:</span><span class="labNum">{{labList.length}}</span></p>
-        <div class="labWrap">
+        <p><span class="tatol">实验室总数:</span><span class="labNum">{{labList.length}}</span></p>
+        <img @click="youhua" src="@/assets/img/arrowRight.png" class="arrowR arrow" :class="{'arrowR-2': labImgfangda }" v-show="labList.length > 3 && calleft < 0">
+        <img @click="zuohua" src="@/assets/img/arrowLeft.png" class="arrowL arrow" :class="{'arrowL-2': labImgfangda }" v-show="labList.length  > 3 && calleft > -(labList.length - 3) * 300">
+        <div class="labWrap" :class="{'labWrap-2': labImgfangda }" >
           <ul :style="{'left':calleft + 'px'}">
             <li v-for="(item,index) in labList" :key="index">
               <img src="@/assets/img/lab.png" class="labImg" :class="{'labImgActive': labActive == index, 'labImg-2': labImgfangda }" @click='refShow(index, item.id)'>
-              <p><span>{{item.labName}}</span></p>
+              <p><span :class="{'labName': labActive == index, 'labName1': labRefrigerator }">{{item.labName}}</span></p>
             </li>
           </ul>
-          <!--<img @click="gotoPage(prevIndex)" src="@/assets/img/arrowLeft.png" class="arrowL arrow">-->
-          <img @click="zuohua" src="@/assets/img/arrowLeft.png" class="arrowL arrow" v-show="labList.length  > 3 && calleft > -(labList.length - 3) * 300">
-          <img @click="youhua" src="@/assets/img/arrowRight.png" class="arrowR arrow" v-show="labList.length > 3 && calleft < 0">
-          <!--<img @click="gotoPage(nextIndex)" src="@/assets/img/arrowRight.png" class="arrowR arrow">-->
         </div>
       </div>
       <!-- 冰箱展示-->
       <div class="refrigeratorList" v-show="labRefrigerator" :class="{'refrigeratorList-2':refrigeratorInfo }">
-        <p><span>冰箱总数:</span><span class="labNum">{{refrigeratorList.length}}</span></p>
+        <p><span class="tatol">冰箱总数:</span><span class="labNum">{{refrigeratorList.length}}</span></p>
+        <img @click="refYouhua" src="@/assets/img/arrowRight.png" class="arrowR arrow" :class="{'arrowR-2': labImgfangda }" v-show="refrigeratorList.length > 3 && refCalleft < 0">
+        <img @click="refZuohua" src="@/assets/img/arrowLeft.png" class="arrowL arrow" :class="{'arrowL-2': labImgfangda }" v-show="refrigeratorList.length  > 3 && refCalleft > -(refrigeratorList.length - 3) * 300">
         <div class="labWrap">
           <!--<ul :style="{'left':refCalleft + 'px'}">-->
           <ul :style="{'left':refCalleft + 'px'}">
@@ -28,12 +28,10 @@
               <img :src=item.pic class="refImg" :class="{'refImgActive': refActive == index}" @click="showRefInfo(index, item.id)">
             </li>
           </ul>
-            <img @click="refZuohua" src="@/assets/img/arrowLeft.png" class="arrowL arrow" v-show="refrigeratorList.length  > 3 && refCalleft > -(refrigeratorList.length - 3) * 300">
-            <img @click="refYouhua" src="@/assets/img/arrowRight.png" class="arrowR arrow" v-show="refrigeratorList.length > 3 && refCalleft < 0">
         </div>
       </div>
       <!--数据分析-->
-      <div class="refrigeratorList analyze" v-show="refrigeratorInfo">
+      <div class="refrigeratorList" :class="{'analyze': labImgfangda }" v-show="refrigeratorInfo">
         <div class="refInfoLeft">
             <p><span>冰箱名称：</span>
               <span>{{refName}}</span></p>
@@ -507,6 +505,9 @@ export default {
   padding-left:30px;
 }
 .refWrap{
+  .tatol{
+    color: #00c9ff;
+  }
   .labList{
       width: 900PX;
       margin: 0 auto;
@@ -514,13 +515,26 @@ export default {
       position: relative;
       padding:10px;
       transition: 1s;
-      &:hover .arrow{
-        opacity: 1;
-        transition: 2s;
-      }
+      /*&:hover .arrow{*/
+        /*opacity: 1;*/
+        /*transition: 2s;*/
+      /*}*/
+    .arrow{
+      width:30px;
+      height: 30px;
+    }
       .labNum{
         margin-left: 10px;
       }
+      .labWrap-2{
+        height: 160px !important;
+      }
+      .arrowL-2{
+        left: -5% !important;
+       }
+     .arrowR-2{
+      right: -5% !important;
+     }
       .labWrap{
         width: 900px;
         position: relative;
@@ -528,7 +542,7 @@ export default {
         width: 100%;
         overflow: hidden;
         margin-top: 5px;
-        height: 160px;
+        height: 190px;
 
         /*transition:width 2s;*/
         ul{
@@ -545,33 +559,34 @@ export default {
 
         }
         .labImg{
-          width: 150px;
+          width: 90%;
            /*height: 200PX;*/
           margin-bottom: 15px;
           cursor: pointer;
         }
         .labImg-2{
-          width: 100px;
+          width: 73%;
         }
-        .arrow{
-          width:30px;
-          height: 30px;
-        }
+
       }
   }
   .refrigeratorList{
     width: 900PX;
     margin: 0 auto;
-    border: 1px solid rgb(204, 204, 204);
+    /*border: 1px solid rgb(204, 204, 204);*/
     margin: 0 auto;
     border-radius: 5px;
     padding: 5px;
     position: relative;
     transition: 1s;
-    &:hover .arrow{
-      opacity: 1;
-      transition: 2s;
+    .arrow{
+      width:30px;
+      height: 30px;
     }
+    /*&:hover .arrow{*/
+      /*opacity: 1;*/
+      /*transition: 2s;*/
+    /*}*/
     .labNum{
       margin-left: 10px;
     }
@@ -593,30 +608,32 @@ export default {
         width: 300PX;
       }
       .refImg{
-        width: 78PX;
+        width: 60%;
         margin-top: 19px;
         cursor: pointer;
-      }
-      .arrow{
-        width:30px;
-        height: 30px;
       }
     }
   }
   .labImgActive{
     opacity: 1 !important;
-    transform: scale(1.2);
+    transform: scale(1.1)!important;
+  }
+  .labName{
+    opacity: 1!important;
   }
   .labList-2{
-    border: 1px solid rgb(204, 204, 204);
+    /*border: 1px solid rgb(204, 204, 204);*/
     margin: 0 auto;
     margin-top: 4%;
     border-radius: 5px;
     padding: 5px;
     margin-bottom: 15px;
     .labImg{
-      opacity: 0.5;
-
+      opacity: 0.3;
+      transform: scale(0.8);
+    }
+    .labName1{
+      opacity: 0.3;
     }
   }
   .labList-3{
@@ -625,11 +642,24 @@ export default {
     /*margin-top: 10%;*/
     width:900PX;
     margin-bottom: 10px;
+    margin-left: 5%;
     // border-radius: 5px;
     // padding: 5px;
     // margin-bottom: 15px;
+    animation:mymove 2s;
+    @keyframes mymove
+    {
+      from {
+        margin-bottom:10%;
+        /*margin-left:15%;*/
+      }
+      to {
+        margin-bottom:10px;
+        /*margin-left:5%;*/
+      }
+    }
     .labImg{
-      opacity: 0.5;
+      opacity: 0.3;
       /*height: 120px;*/
       /*width: 120px;*/
     }
@@ -639,19 +669,31 @@ export default {
   }
   .refImgActive{
     opacity: 1 !important;
-    transform: scale(1.2);
+    transform: scale(1.1) !important;
   }
   .refrigeratorList-2{
     width: 900PX;
     margin: 0;
     margin-bottom: 10px;
+    margin-left: 5%;
+    animation:mymove 1s;
     .refImg{
-      opacity: 0.5;
+      opacity: 0.3;
+      transform: scale(0.8);
     }
+    .arrowR-2{
+      right: -5% !important;
+    }
+    .arrowL-2{
+      left: -5% !important;
+    }
+  }
+  .analyze{
+    margin-left: 5% !important;
   }
 }
 .refInfo{
-  width: 50%;
+  width: 45%;
   margin-top:5%;
   float: right;
   text-align: center;
@@ -664,7 +706,7 @@ export default {
     width: 100px;
     position: absolute;
     top: 22%;
-    left: 39%;
+    left: 38%;
     display: flex;
     justify-content: flex-start;
     flex-wrap: wrap;
@@ -908,13 +950,13 @@ export default {
   cursor:pointer;
   width: 48px;
   height:48px;
-  opacity: 0;
+  opacity: 1;
 }
 .arrowL{
-  left: 0;
-};
+  left: -10%;
+}
 .arrowR{
-  right: 0;
+  right: -10%;
 }
 .sampleWarning{
   width:450px;
