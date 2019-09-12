@@ -295,7 +295,7 @@ export default {
                this.$message({
                  message: '打印故障，请检查打印机是否连接！',
                  type: 'warning'
-               }); 
+               });
              }
               })
           })
