@@ -3,7 +3,6 @@ import App from './App.vue'
 import router from './router/router'
 import store from './store/index'
 import '@/assets/css/app.css'
-import '@/assets/css/reset.css'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import qs from 'qs'
@@ -16,6 +15,9 @@ Vue.config.productionTip = false
 Vue.use(ElementUI)
 Vue.use(VueCookies)
 Vue.filter('dateFilter', function (value) {
+  if (value === '') {
+    return
+  }
   let times = parseFloat(value) * 60
   let t = null
   if (times > -1) {

@@ -1,13 +1,6 @@
 <template>
   <!-- 扫描样本盒添加 -->
   <div class="add-box">
-    <!-- <object id="MyActiveX1" width=0 height=0 ref="MyActive"
-        classid="clsid:38BEF3F4-E284-4548-8E7B-FE20AE443AD8">
-        <param name="_Version" value="65536"/>
-        <param name="_ExtentX" value="2646"/>
-        <param name="_ExtentY" value="1323"/>
-        <param name="_StockProps" value="0"/>
-    </object> -->
     <cardfile @reception= 'refData'></cardfile>
     <div class="content">
         <div class='title'>
@@ -30,9 +23,12 @@
               </div>
               <div class="right">
                   <table class="table">
-                    <tr v-for="(item,index) in 10" :key="index">
-                      <td v-for="(item,ind) in 10" :key="ind">{{ind}}</td>
-                    </tr>
+                      <tr v-for="(index) in rowValue" :key="index">
+                        <td
+                          v-for="(ind) in colValue"
+                          :key="ind"
+                        >{{showTable(index,ind)}}</td>
+                      </tr>
                   </table>
                   <div class="map">
                     <span
@@ -55,12 +51,16 @@
 <script>
 import cardfile from "@/components/cardfile";
 export default {
+  inject:['reload'],
   props: { },
   components: {
     cardfile
   },
   data () {
     return {
+      rowValue:'',//样本盒行数
+      colValue:'',//样本盒列数
+      showModel:'',//样本盒显示模式
       scanStatus:true,
       sampleLoanNum:'',
       sampleBoxItem:'',
@@ -80,9 +80,7 @@ export default {
       this.elref = value
     },
     scanSampleBox(){
-      console.log(this.elref)
       this.RfidArr = []
-      //console.log(this.$refs.MyActive)
       this.elref.RDR_Close()
       let devicetypeValue = this.$cookies.get('readerType')
       let OpentypeValue = this.$cookies.get('portType')
@@ -130,7 +128,6 @@ export default {
         return
       }
       recordCnt = this.elref.RDR_GetRecordCnt()
-      // console.log(recordCnt)
       let sTagInfo = this.elref.GetRecord(j).split("-");
       let sTagID = sTagInfo[sTagInfo.length-1];
       alert(recordCnt)
@@ -147,40 +144,57 @@ export default {
           })
         })
         .then(({data})=>{
-          //console.log(data);
+          console.log(data);
           this.sampleLoanNum=data.data.canUserSampleCount//借出数量
           data.data.scanSampleBoxLoanVo.forEach((item)=>{
             //console.log(item);
             this.sampleBoxName=item.sampleBoxName//样本盒名称
             this.sampleBoxItem=item.detailLocation//样本盒位置
-            this.scanStatus = false
-          })     
+          })  
+          this.scanStatus = false
         })
     },
     addSample(){
-      this.$emit('close')
-      this.$emit('close')
       //this.scanStatus = false
       this.$axios({
         method:'post',
         url: 'sampleGuide/scan/addInBoxSamplesToLoanOrder',
         data:({
           sampleBoxName:this.sampleBoxName,
-          loanOrderId: this.$store.state.loanOrderId,
+          loanOrderId: this.$route.params.id,
           rfidCodeList:this.RfidArr,
         })
       })
       .then(({data})=>{
-        console.log(data);
-        this.reload()
-        /* this.sampleLoanNum=data.data.canUserSampleCount//借出数量
-        data.data.scanSampleBoxLoanVo.forEach((item)=>{
-          console.log(item);
-          this.sampleBoxName=item.sampleBoxName//样本盒名称
-          this.sampleBoxItem=item.detailLocation//样本盒位置
-          this.scanStatus = false */
+        console.log(data)
+        if(data.code == 500){
+          this.$message({
+            message: data.message,
+            type: 'success'
+          });
+        }else{
+          this.$message({
+            message: '添加成功！',
+            type: 'success'
+          });
+          this.reload()
+        }
         }) 
-      // this.scanStatus = false
+    },
+    showTable (row,col) {
+      let res = ''
+      if(this.showModel == 1){
+        res = row+'/'+col
+      }else if(this.showModel == 2){
+        res = row+'/'+String.fromCharCode(64 + col)
+      }else if(this.showModel == 3){
+        res = String.fromCharCode(64 + row)+'/'+col
+      }else if(this.showModel == 4){
+        res = String.fromCharCode(64 + row) +'/'+ String.fromCharCode(64 + col)
+      }else{
+        res = (row-1)*this.colValue+col
+      }
+      return res
     }
   },
   computed: {}

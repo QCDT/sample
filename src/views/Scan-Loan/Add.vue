@@ -7,6 +7,7 @@
       <el-form
         :model="ruleForm"
         :rules="rules"
+        size="mini"
         ref="ruleForm"
         status-icon
         label-width="110px"
@@ -19,13 +20,23 @@
         <el-form-item label="取走人" prop="takes" required>
           <el-input v-model="ruleForm.takes"></el-input>
         </el-form-item>
+        <el-form-item label="所属项目" prop="projectValue" required>
+            <el-select v-model="ruleForm.projectValue" placeholder="请选择">
+              <el-option
+                v-for="item in projectOption"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
+        </el-form-item>
         <el-form-item label="预计归还时间" required>
           <el-col :span="7">
             <el-form-item prop="date">
               <el-date-picker
                 type="date"
                 placeholder="选择日期"
-                value-format="yyyy-MM-dd"
+                value-format="yyyy-MM-dd HH:MM:SS"
                 :picker-options="pickerOptions"
                 v-model="ruleForm.date"
               ></el-date-picker>
@@ -53,8 +64,8 @@
 </template>
 <script>
 export default {
-  props: { showDingdan: Boolean },
-   inject:['reload'],
+  props: { showDingdan: Boolean , projectOption: Array},
+  inject:['reload'],
   components: {},
   data () {
     let orderName = (rule, value, callback) => {
@@ -72,13 +83,15 @@ export default {
               })
             })
             .then(({data})=>{
-              if({data}.code !== 200){
-                callback(new Error(data.data ));
+              console.log(data)
+              if(data.data == 0){
+                callback();
                 // this.$message({ type: 'info', message:data.data })
+              }else{
+                callback(new Error("该名称已重复"));
               }
             })
           }
-          callback();
         }
       };
     let  verificationTakes = (rule, value, callback) =>{
@@ -93,11 +106,13 @@ export default {
       }
     }
     return {
+      // projectValue:'',
       ruleForm: {
         name: '',
         takes:'',
         date: '',
         delivery: false,
+        projectValue:'',
         type: [],
         resource: '',
         desc: ''
@@ -116,6 +131,9 @@ export default {
         takes:[
           { validator: verificationTakes, trigger: 'blur' }
         ],
+        projectValue: [
+            { required: true, message: '请选择所属项目', trigger: 'blur' }
+          ],
         date: [
           {
             required: true,
@@ -134,21 +152,15 @@ export default {
       console.log(formName);
       this.$refs[formName].validate(valid => {
         if (valid) {
-          // this.$emit('submitForm', JSON.parse(JSON.stringify(this.ruleForm)))
           this.$axios({
             method:'post',
             url:'sampleGuide/scan/addLoanOrder',
             data:({
-              /* id:,// 当前订单ID */
               name:this.ruleForm.name,//借出订单名称
-              /* createTime:,//创建时间
-              createUserId:,//创建的用户的id
-              createUserName:,//创建的用户的姓名 */
+              projectId: this.ruleForm.projectValue,
               takeleave:this.ruleForm.takes,//取走人
-              //expectedreturndate:this.ruleForm.date,//预计归还时间
+              expectedreturndate:this.ruleForm.date,//预计归还时间
               loanremarks:this.ruleForm.desc,//备注
-              /* status:,//订单状态
-              deleteStatus:,//删除状态 */
             })
           }).then((data)=>{
             console.log(data);

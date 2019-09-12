@@ -519,13 +519,6 @@ export default {
     startSearch () {
       this.searchTableData=[]
       /* 开始搜索 */
-    // this.$emit('startSearch', JSON.stringify(this.sampleSearch))
-    //   if(data.data==0){
-    //     return
-    //   }else{
-    //
-    //   }
-
       this.$axios({
             method:'post',
             url:'sampleGuide/query/findAllRfidSampleByCondition',

@@ -228,11 +228,9 @@
 </template>
 <script>
 import cardfile from "@/components/cardfile";
-// import ElCheckbox from "element-ui/packages/checkbox/src/checkbox";
 export default {
   inject:['reload'],
   components:{
-    // ElCheckbox,
     cardfile
   },
   data () {
@@ -476,48 +474,49 @@ export default {
        }
     },
     verifyRole(){ // ................角色验证
-      if(this.newRoleName==''){
-        this.roleMsg = '角色名称不能为空'
-      }
-      if(this.addUserType){
-         this.$axios({
-           method:'post',
-           url:'sampleGuide/rolePerm/findResetRoleName',
-           data:({
-              name: this.newRoleName
-           })
-         })
-         .then(({data})=>{
-           if(data.data === 1){
-            this.roleMsg = '角色名称已存在'
-           }else{
-             this.roleMsg = ''
-           }
-           console.log(data)
-         })
-         .catch((error)=>{
-            console.log(error)
-         })
+      if(this.newRoleName ==''){
+        this.roleMsg = '角色名称不能为空!'
       }else{
-         this.$axios({
-           method:'post',
-           url:'sampleGuide/rolePerm/findResetRoleNameUpdate',
-           data:({
-              id: this.roleId,
-              name: this.newRoleName
-           })
-         })
-         .then(({data})=>{
-           if(data.data == 2){
-             this.roleMsg = '角色名称已存在'
-           }else{
-             this.roleMsg = ''
-           }
-           console.log(data)
-         })
-         .catch((error)=>{
-            console.log(error)
-         })
+        if(this.addUserType){
+          this.$axios({
+            method:'post',
+            url:'sampleGuide/rolePerm/findResetRoleName',
+            data:({
+                name: this.newRoleName
+            })
+          })
+          .then(({data})=>{
+            if(data.data === 1){
+              this.roleMsg = '角色名称已存在!'
+            }else{
+              this.roleMsg = ''
+            }
+            console.log(data)
+          })
+          .catch((error)=>{
+              console.log(error)
+          })
+        }else{
+          this.$axios({
+            method:'post',
+            url:'sampleGuide/rolePerm/findResetRoleNameUpdate',
+            data:({
+                id: this.roleId,
+                name: this.newRoleName
+            })
+          })
+          .then(({data})=>{
+            if(data.data == 2){
+              this.roleMsg = '角色名称已存在'
+            }else{
+              this.roleMsg = ''
+            }
+            console.log(data)
+          })
+          .catch((error)=>{
+              console.log(error)
+          })
+        }
       }
     },
     rulesUserName () { //...........用户名验证
@@ -645,7 +644,13 @@ export default {
       }
     },
     roleOperation () {
-      console.log(this.jurisdictionList)
+      if(this.newRoleName == '' || this.jurisdictionList.length == 0){
+        this.$message({
+          message: '请完善角色信息',
+          type: 'warning'
+        });
+      }else{
+      // console.log(this.jurisdictionList)
         if(this.addUserType){ //...........新增角色
           this.$axios({
             method: 'post',
@@ -692,6 +697,7 @@ export default {
                 this.$message.error('修改角色失败,请重试!');
             })
         }
+      }
     },
     userOperation () {
         if(this.addUserType){ //........新增用户

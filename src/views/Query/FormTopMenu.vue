@@ -1,16 +1,9 @@
-<!--
- * @Description: In User Settings Edit
- * @Author: 刘一帆
- * @Date: 2019-07-15 16:37:07
- * @LastEditTime: 2019-08-08 19:52:34
- * @LastEditors: Please set LastEditors
- -->
 <template>
   <!-- 共有多少条数据...销毁..打印标签..转移..导出... -->
   <div class="selection-box">
     <object id="LODOP_OB"
             classid="clsid:2105C259-1E0C-4534-8141-A753534CB4CA" width=0 height=0>
-      <embed id="LODOP_EM" type="application/x-print-lodop" width=0 height=0></embed>
+      <embed id="LODOP_EM" type="application/x-print-lodop" width=0 height=0/>
     </object>
     <div class="sum">
       <div class="item">
@@ -49,7 +42,6 @@
         <i class="icon icon-print"></i>
         <small>打印标签</small>
       </div>
-      <!-- <router-link :to="{name:'transfer'}" style="color:#000"> -->
         <div class="item" @click="transfer">
           <i class="icon icon-zhuanyi"></i>
           <small>转移</small>
@@ -59,12 +51,10 @@
         <i class="icon icon-weizhi"></i>
         <small>打印位置信息</small>
       </div>
-      <!-- <router-link :to="{name:'changsample'}" style="color:#000"> -->
         <div class="item" @click="amendSample">
           <i class="icon icon-yemianxiugai"></i>
           <small>修改</small>
         </div>
-      <!-- </router-link> -->
        <div class="item" @click="exportExcel">
         <i class="icon icon-pdf" style="color:#A33639"></i>
         <small>导出PDF</small>
@@ -79,10 +69,6 @@
       <div class="item" @click="addLoanSample">
           <img src="@/assets/img/scan_bot_out.png" alt="" width=30>
           <small>添加借出</small>
-      </div>
-      <div class="item" @click="exportLoanPdf">
-          <i class="icon icon-excel" style="color:#217346"></i>
-          <small>导出Excel</small>
       </div>
     </div>
 
@@ -180,11 +166,6 @@ export default {
           type: 'warning'
         });
       }else{
-        let sampleInfo = this.multipleSelection.every((item)=>{
-          return item.location
-        })
-        console.log(sampleInfo)
-        if(sampleInfo){
           this.$confirm('已选中'+this.multipleSelection.length+'条数据，确定打印该标签吗?', '提示', {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
@@ -202,21 +183,20 @@ export default {
                 console.log(data)
                 data.data.forEach((item)=>{
                   try{
-                    var myobject = new ActiveXObject("GoDEXATL.Function");
-                    myobject.openport("6");
-                    myobject.setup(20, 19, 4, 0, 3,0);
-                    myobject.sendcommand("^L\r\n");
-                    myobject.ecTextOut(260, 20, 17, "Arial", item.firstLine);
-                    myobject.ecTextOut(260, 50, 17, "Arial", item.secondLine);
-                    myobject.ecTextOut(260, 50, 17, "Arial", item.thirdLine);
-                    myobject.sendcommand("E\r\n");
+                      var myobject = new ActiveXObject("GoDEXATL.Function");
+                      myobject.openport("6")
+                      myobject.setup(20, 19, 4, 0, 3,0)
+                      myobject.sendcommand("^L\r\n");
+                      myobject.ecTextOut(260, 20, 17, "Arial", item.firstLine);
+                      myobject.ecTextOut(260, 50, 17, "Arial", item.secondLine);
+                      myobject.ecTextOut(260, 50, 17, "Arial", item.thirdLine);
+                      myobject.sendcommand("E\r\n")
                   }catch(e){
-                    alert("打印故障，请检查打印机是否连接！");
+                      alert("打印故障，请检查打印机是否连接！")
                   }finally{
-                    myobject.closeport();
+                      myobject.closeport();
                   }
                 })
-
               })
           }).catch(() => {
             this.$message({
@@ -224,13 +204,7 @@ export default {
               message: '已取消打印'
             });
           });
-        }else{
-          this.$alert('存在空样本，请移除后重试', '提示', {
-            confirmButtonText: '确定',
-            type:'warning'
-          })
-        }
-      }
+  }
     },
     // 转移样本
     transfer(){
@@ -270,7 +244,7 @@ export default {
               })
             }).then(({data})=>{
                 console.log(data)
-             if(data.code == 200){
+             if(data.code == 200){             
                let LODOP = this.getLodop();
                LODOP.PRINT_INIT("打印位置信息");
                LODOP.SET_PRINTER_INDEXA("XP-58");
@@ -355,18 +329,22 @@ export default {
           })
             .then(({data})=>{
               console.log(data);
-              if(data.code == 200){
+              if(data.code == 500){
+                this.$message({
+                  message: data.message,
+                  type: 'success'
+                });
+              }else{
+                this.$message({
+                  message: '添加成功！',
+                  type: 'success'
+                });
                 this.$router.push({
                   name:"particulars",
                   params:{
                     id: this.$route.params.id
                   }
                 })
-              }else{
-                  this.$alert(data.message, '提示', {
-                    confirmButtonText: '确定',
-                    type:'warning'
-                  });
               }
             })
       }
@@ -375,8 +353,6 @@ export default {
     exportLoanPdf(){
 
     },
-
-
     getLodop(oOBJECT,oEMBED){
       /**************************
        本函数根据浏览器类型决定采用哪个页面元素作为Lodop对象：
@@ -446,7 +422,7 @@ export default {
           document.documentElement.innerHTML="Error:"+strHtm64_Install+document.documentElement.innerHTML;else
           document.documentElement.innerHTML="Error:"+strHtmInstall+document.documentElement.innerHTML;
         return LODOP;
-      };
+      }
     }
 
   },

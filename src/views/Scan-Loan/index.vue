@@ -1,10 +1,18 @@
 <template>
   <div class="loan-wrap">
     <transition name="el-fade-in-linear">
-      <Add :showDingdan="showDingdan" @clearAdd="clearAdd" @submitForm="submitForm"/>
+      <Add :showDingdan="showDingdan" :projectOption='projectOption' @clearAdd="clearAdd" @submitForm="submitForm"/>
     </transition>
     <div class="top">
       <fromName>借出订单列表</fromName>
+        <el-select v-model="projectValue" clearable placeholder="请选择" size="mini" @change="searchDingdan">
+          <el-option
+            v-for="item in projectOption"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
       <tmpButton @click="showAdd" style="height:36px">添加订单</tmpButton>
     </div>
 
@@ -62,6 +70,8 @@ export default {
   components: { goBack, fromName, Add, tmpButton },
   data () {
     return {
+      projectValue:'', //项目value
+      projectOption:[], //所有项目
       // 切换 添加借出订单选项
       showDingdan: false,
       tableData: [
@@ -85,10 +95,60 @@ export default {
   //借出表单初始化
   created(){
     this.$axios({
-      method:'get',
+      method:'post',
       url:'sampleGuide/scan/findAllLoanForm',
+      data:({
+        id:this.projectValue
+      })
     })
     .then(({data})=>{
+      // console.log(data);
+      data.data.forEach((item)=>{
+            this.tableData.push({ //.............借出表格数据
+               id: item.id,  // ...........序号
+               orderName: item.name, // ...........借出表单名
+               newTime: item.createTime,// ..........创建表单时间
+               newUserName:item.createUserName,//………………创建用户名
+               takeOutName:item.takeleave,//………………取走人
+               returnTiem:item.expectedreturndate,//………………预计归还时间
+               mark:item.loanremarks,//…………备注
+               status:item.status==0?"未核验":"已借出", //…………订单状态
+               formNum:item.loanSampleCount+'/'+(item.returnSampleCount+item.loanSampleCount)
+            })
+        })
+      })
+     this.$axios.get("/sampleGuide/guest/selectProjectAll")
+      .then(({data})=>{
+        console.log(data)
+        data.data.forEach((item)=>{
+          this.projectOption.push({
+            value:item.id,
+            label:item.name
+          })
+        })
+    })
+    .catch((error)=>{
+      console.log(error)
+    })
+    },
+  methods: {
+    cellStyle({row, column, rowIndex, columnIndex}){
+      if(columnIndex == 9){
+        return 'lastColumn'
+      }else{
+       return 'columnStyle'
+      }
+    },
+    searchDingdan(){
+      this.tableData = []
+      this.$axios({
+      method:'post',
+      url:'sampleGuide/scan/findAllLoanForm',
+      data:({
+        id:this.projectValue
+        })
+      })
+      .then(({data})=>{
       console.log(data);
       data.data.forEach((item)=>{
             this.tableData.push({ //.............借出表格数据
@@ -104,14 +164,6 @@ export default {
             })
         })
       })
-    },
-  methods: {
-    cellStyle({row, column, rowIndex, columnIndex}){
-      if(columnIndex == 9){
-        return 'lastColumn'
-      }else{
-       return 'columnStyle'
-      }
     },
     // 删除订单
     delDingdan (row, index) {
@@ -135,7 +187,7 @@ export default {
               this.$message({ type: 'warning', message:data.data})
             }else if(data.code==200){
               this.$message({ type: 'success', message: '删除成功!' });
-              this.reload();
+              this.searchDingdan()
             }else{
               this.$message({ type: 'info', message:data.data })
             }

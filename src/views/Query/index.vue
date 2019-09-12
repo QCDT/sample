@@ -1,13 +1,6 @@
-<!--
- * @Description: In User Settings Edit
- * @Author: 刘一帆
- * @Date: 2019-07-15 16:37:07
- * @LastEditTime: 2019-08-08 19:54:25
- * @LastEditors: Please set LastEditors
- -->
 <template>
   <div class="searchWrap">
-    <Search @startSearch="startSearch" @changeTable = changeTable ></Search>
+    <Search  @changeTable = changeTable ></Search>
     <!-- 表单 ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓ -->
     <div class="bot-form">
       <div class="table-box">
@@ -58,7 +51,7 @@
       </div>
     </div>
     <!-- 表单 ↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑ -->
-    <div class='backBtn' @click="backLoanPage()" v-show="$route.params.id != 1">返回</div>
+    <div class='backBtn' @click="backLoanPage" v-show="$route.params.id != 1">返回</div>
   </div>
 
 </template>
@@ -81,32 +74,26 @@ export default {
   created(){
   },
   methods: {
-    handleSelectionChange (val) {
+  
+    handleSelectionChange (val) {  //选中数据的集合
       this.multipleSelection = val
-
     },
-    changeTable(tableData){
+    changeTable(tableData){ //根据查询条件改变table中内容
         this.tableData = tableData
     },
-    // 表格里的事件 ↓ row:行数据 index:索引
-    handleClick (row, index) {
-      console.log(row, index)
-    },
-    sampleInfoClick(){
+    sampleInfoClick(){//样本信息展示
       this.$router.push({name: 'sample'})
     },
-    sampleLog(){
+    sampleLog(){//日志信息展示
       this.$router.push({name:'log'})
     },
-    startSearch (payload) {
-      /* 搜索{} */
-      console.log('payload: ', payload)
-    },
-    backLoanPage(){
-      this.$router.push({name:'particulars'})
-    },
-    backLoanPage(){
-
+    backLoanPage(){//返回借出表单详情页
+      this.$router.push({
+        name:'particulars',
+        params:{
+          id: this.$route.params.id
+        }
+      })
     }
   },
   computed: {}

@@ -71,6 +71,7 @@
                     style="width: 50%; float:left"
                     height="220"
                     :row-style="{height:'32px',textAlign: 'center',padding:'0px',cursor:'pointer'}"
+                    :row-class-name="activeRow"
                     :cell-style="{padding:'0px',textAlign: 'center'}"
                     :header-cell-style ="{height:'30px',textAlign:'center',padding:'0px', background:'#00c9ff',color:'white'}"
                     border
@@ -180,6 +181,7 @@ export default {
     }
     return {
       dialogRecords: false,
+      activeIndex: '',//表单记录中当前行id
       formName: '',
       recordsformName: '',// 表单名称
       recordsSampleName: '',// 样本名称
@@ -213,6 +215,12 @@ export default {
       })
   },
   methods: {
+    activeRow({row}){
+      console.log(this.activeIndex)
+      if(row.id == this.activeIndex){
+        return 'rowColor'
+      }
+    },
     submitForm(ruleForm){
        this.$refs[ruleForm].validate((valid) => {
           if (valid) {
@@ -290,7 +298,9 @@ export default {
         })
     },
     showSampleItem(row){ // 归还记录中样本表单中样本内容
+      console.log(row.id)
       this.sampleDataItem = []
+      this.activeIndex = row.id
       this.$axios({
         method: 'post',
         url: 'sampleGuide/scan/findReturnSampleByOrderId',
@@ -402,6 +412,9 @@ export default {
 }
 </script>
 <style scoped lang='less'>
+/deep/ .el-table .rowColor{
+  background: #00c9ff;
+}
 .guihuan-wrap {
    width: 50%;
    margin: 0 auto;

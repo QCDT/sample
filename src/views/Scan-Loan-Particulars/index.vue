@@ -189,7 +189,7 @@ export default {
           this.orderName = data.data.loanOrder.name
           this.newUserName = data.data.loanOrder.createUserName
           this.takeOutName = data.data.loanOrder.takeleave
-          this.returnTime = data.data.loanOrder.expectedReturnDate
+          this.returnTime = data.data.loanOrder.expectedreturndate
           this.make = data.data.loanOrder.loanRemarks
           this.formStatus = data.data.loanOrder.status==0?"未核验":"已借出"
           this.status = data.data.loanOrder.status
@@ -210,8 +210,8 @@ export default {
   },
   methods:{
     changeTrStyle({row}){
-      for(let i=0; i<this.RfidArr.length; i++){
-        if(this.RfidArr[i] == row.RfidNmber){
+      for(let i=0; i<this.checkArr.length; i++){
+        if(this.checkArr[i] == row.RfidNmber){
           return 'bgColor'
         }
       }
@@ -269,7 +269,7 @@ export default {
       this.RfidArr = []
       this.sampleYanBen = []
       this.sampleYanBen2 = []
-      // this.checkArr = []
+      this.checkArr = []
       this.elref.RDR_Close()
       let devicetypeValue = this.$cookies.get('readerType')
       let OpentypeValue = this.$cookies.get('portType')
