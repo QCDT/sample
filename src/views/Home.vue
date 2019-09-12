@@ -44,16 +44,16 @@
             <p><span>设置温度：</span>
               <span>{{refTemperature}}</span>℃</p>
         </div>
-        <div class="refInfoCenter">
-          <h4>总体使用情况</h4>
-          <div id="allSpace" :style="{width: '300px', height: '200px'}">
+        <div class="refInfoCenter" :style="{width: '38%'}">
+          <h4 :style="{marginLeft:'35px'}">总体使用情况</h4>
+          <div id="allSpace" :style="{width: '235px',height: '200px',right:'-30px'}">
 
           </div>
 
         </div>
-        <div class="refInfoRight">
-          <h4 :style="{marginLeft:'20px'}">每层使用情况</h4>
-          <div id="cellSpace" :style="{width: '300px', height: '200px'}">
+        <div class="refInfoRight" :style="{width: '38%'}">
+          <h4 :style="{marginLeft:'35px'}">每层使用情况</h4>
+          <div id="cellSpace" :style="{width: '235px',height: '200px'}">
 
           </div>
         </div>
@@ -351,7 +351,7 @@ export default {
           x: 'center',
           y: 'center',
           textStyle: {
-            fontSize: 24,
+            fontSize: 18,
             fontWeight: 'bolder',
             color: '#7d7d7d'
           }
@@ -373,7 +373,7 @@ export default {
           {
             name: '总体使用情况',
             type: 'pie',
-            radius: ['50%', '70%'],
+            radius: ['30%', '50%'],
             itemStyle: {
               normal: {
                 label: {
@@ -505,11 +505,12 @@ export default {
   padding-left:30px;
 }
 .refWrap{
+  /*width: 100%;*/
   .tatol{
     color: #00c9ff;
   }
   .labList{
-      width: 900PX;
+      width: 50%;
       margin: 0 auto;
       margin-top: 10%;
       position: relative;
@@ -536,7 +537,7 @@ export default {
       right: -5% !important;
      }
       .labWrap{
-        width: 900px;
+        /*width: 900px;*/
         position: relative;
         text-align: center;
         /*width: 100%;*/
@@ -559,19 +560,19 @@ export default {
 
         }
         .labImg{
-          width: 90%;
+          width: 60%;
            /*height: 200PX;*/
           margin-bottom: 15px;
           cursor: pointer;
         }
         .labImg-2{
-          width: 73%;
+          width: 49%;
         }
 
       }
   }
   .refrigeratorList{
-    width: 900PX;
+    width: 50%;
     margin: 0 auto;
     /*border: 1px solid rgb(204, 204, 204);*/
     margin: 0 auto;
@@ -608,7 +609,7 @@ export default {
         width: 300PX;
       }
       .refImg{
-        width: 60%;
+        width: 45%;
         margin-top: 19px;
         cursor: pointer;
       }
@@ -623,6 +624,7 @@ export default {
   }
   .labList-2{
     /*border: 1px solid rgb(204, 204, 204);*/
+    /*width: 100%;*/
     margin: 0 auto;
     margin-top: 4%;
     border-radius: 5px;
@@ -640,7 +642,7 @@ export default {
     // border: 1px solid rgb(204, 204, 204);
     margin: 0;
     /*margin-top: 10%;*/
-    width:900PX;
+    width:100%;
     margin-bottom: 10px;
     margin-left: 5%;
     // border-radius: 5px;
@@ -672,7 +674,7 @@ export default {
     transform: scale(1.1) !important;
   }
   .refrigeratorList-2{
-    width: 900PX;
+    width: 100%;
     margin: 0;
     margin-bottom: 10px;
     margin-left: 5%;
@@ -689,7 +691,8 @@ export default {
     }
   }
   .analyze{
-    margin-left: 5% !important;
+    /*margin-left: 5% !important;*/
+    width: 100%;
   }
 }
 .refInfo{
@@ -940,6 +943,7 @@ export default {
   }
 }
 .refWrap-2{
+  width: 50%;
   float: left;
 
 }
