@@ -1,6 +1,6 @@
 <template>
   <div class="searchWrap">
-    <Search @startSearch="startSearch" @changeTable = changeTable ></Search>
+    <Search  @changeTable = changeTable ></Search>
     <!-- 表单 ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓ -->
     <div class="bot-form">
       <div class="table-box">
@@ -18,11 +18,11 @@
           <el-table-column type="selection" show-overflow-tooltip ></el-table-column>
           <el-table-column label="序号" type="index" width="70">
           </el-table-column>
-          <el-table-column prop="color" label="管帽颜色" show-overflow-tooltip></el-table-column>
+          <el-table-column prop="color" label="帽色" show-overflow-tooltip></el-table-column>
 
           <!--  -->
           <el-table-column label="样本信息" show-overflow-tooltip>
-            <template slot-scope="scope"> 
+            <template slot-scope="scope">
                 <!--           -->
                   <span class="cellStyle" @click="sampleInfoClick">
                       {{tableData[scope.$index].sampleInfo}}
@@ -45,15 +45,15 @@
           <el-table-column label="日志信息"  fixed="right">
             <template>
                 <span class="cellStyle" @click="sampleLog">查看</span>
-            </template> 
+            </template>
           </el-table-column>
         </el-table>
       </div>
     </div>
     <!-- 表单 ↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑ -->
-    <div class='backBtn' @click="backLoanPage()" v-show="showBtn">返回</div>
+    <div class='backBtn' @click="backLoanPage" v-show="$route.params.id != 1">返回</div>
   </div>
-  
+
 </template>
 <script>
 import Search from './Search'
@@ -65,7 +65,7 @@ export default {
     return {
       // ↓   表单
       tableData: [
-        
+
       ],
       multipleSelection: []
       //   ↑ 表单
@@ -74,32 +74,26 @@ export default {
   created(){
   },
   methods: {
-    handleSelectionChange (val) {
+  
+    handleSelectionChange (val) {  //选中数据的集合
       this.multipleSelection = val
-      
     },
-    changeTable(tableData){
+    changeTable(tableData){ //根据查询条件改变table中内容
         this.tableData = tableData
     },
-    // 表格里的事件 ↓ row:行数据 index:索引
-    handleClick (row, index) {
-      console.log(row, index)
-    },
-    sampleInfoClick(){
+    sampleInfoClick(){//样本信息展示
       this.$router.push({name: 'sample'})
     },
-    sampleLog(){
+    sampleLog(){//日志信息展示
       this.$router.push({name:'log'})
     },
-    startSearch (payload) {
-      /* 搜索{} */
-      console.log('payload: ', payload)
-    },
-    backLoanPage(){
-      this.$router.push({name:'particulars'})
-    },
-    backLoanPage(){
-      
+    backLoanPage(){//返回借出表单详情页
+      this.$router.push({
+        name:'particulars',
+        params:{
+          id: this.$route.params.id
+        }
+      })
     }
   },
   computed: {}

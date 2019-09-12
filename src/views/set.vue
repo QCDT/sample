@@ -86,7 +86,7 @@ export default {
         // 硬件设置的数据
         {
           imgUrl: require("@/assets/img/card_setting.png"),
-          setTitle: "读卡器设置",
+          setTitle: "读写器设置",
           setTitleE: "Card setting",
           link: "set/cardReader"
         },
@@ -149,6 +149,7 @@ export default {
   padding: 15px;
   cursor: pointer;
   background: white;
+  border-radius: 10px;
 }
 .setList .setItem img {
   width: 114px;
@@ -184,6 +185,7 @@ export default {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12), 0 0 6px rgba(0, 0, 0, 0.04);
   padding: 15px;
   cursor: pointer;
+  border-radius: 10px;
 }
 .secondMenu li .setItem img {
   width: 72px;

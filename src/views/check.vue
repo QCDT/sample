@@ -56,7 +56,7 @@
             <div class="choiceItem">
               <span>选择抽屉</span>
               <el-select v-model="value" placeholder="请选择" size="mini">
-                  <el-option value="">
+                  <el-option>
 
                   </el-option>
               </el-select>
@@ -94,7 +94,7 @@
             </table>
         </div>
       </div>
-    </div>  
+    </div>
     <!--盘点记录按钮-->
     <div class="checkRecord" @click="checkRecord">
         <div><img src="@/assets/img/sample-receive.png"></div>
@@ -184,7 +184,7 @@
                 </el-table-column>
                 <el-table-column
                 type="index"
-                
+
                 label="序号"
                 class="DataTable"
                 >
@@ -220,7 +220,7 @@
                 border
                 >
                 <el-table-column
-                type="index"               
+                type="index"
                 label="序号"
                 class="DataTable"
                 >
@@ -263,14 +263,13 @@
 export default {
   props: {},
   components: {},
-  data () { 
+  data () {
     return {
       check: true,
       value: '',
       DialogVisible: false,
       input: '',
       value1: '',
-      value:[],
       tableData:[],
       colorData:[
         {
@@ -479,7 +478,7 @@ export default {
           color: #00c9ff;
       }
     }
-  } 
+  }
   .checkDetails{
      text-align: center;
      margin: 20px 0;

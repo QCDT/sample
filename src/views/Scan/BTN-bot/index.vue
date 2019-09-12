@@ -227,6 +227,7 @@ export default {
         let boxInfo = this.checkedBoxlist.every((item)=>{
             return item.address
         })
+        // console.log(boxInfo)
         if(boxInfo){
           this.$confirm('已选中'+this.checkedBoxlist.length+'条数据，确定销毁样本盒吗?', '提示', {
             confirmButtonText: '确定',

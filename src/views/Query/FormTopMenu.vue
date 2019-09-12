@@ -1,10 +1,3 @@
-<!--
- * @Description: In User Settings Edit
- * @Author: 刘一帆
- * @Date: 2019-07-15 16:37:07
- * @LastEditTime: 2019-08-08 19:52:34
- * @LastEditors: Please set LastEditors
- -->
 <template>
   <!-- 共有多少条数据...销毁..打印标签..转移..导出... -->
   <div class="selection-box">
@@ -45,7 +38,6 @@
         <i class="icon icon-print"></i>
         <small>打印标签</small>
       </div>
-      <!-- <router-link :to="{name:'transfer'}" style="color:#000"> -->
         <div class="item" @click="transfer">
           <i class="icon icon-zhuanyi"></i>
           <small>转移</small>
@@ -55,12 +47,10 @@
         <i class="icon icon-weizhi"></i>
         <small>打印位置信息</small>
       </div>
-      <!-- <router-link :to="{name:'changsample'}" style="color:#000"> -->
         <div class="item" @click="amendSample">
           <i class="icon icon-yemianxiugai"></i>
           <small>修改</small>
         </div>
-      <!-- </router-link> -->
        <div class="item" @click="exportExcel">
         <i class="icon icon-pdf" style="color:#A33639"></i>
         <small>导出PDF</small>
@@ -83,6 +73,7 @@
 <script>
 import tmpinput from '@/components/tmp/zhanglan/tmp-empty-input'
 export default {
+  inject:['reload'],
   props: {
     count: Number,
     showBtn: Boolean,
@@ -114,19 +105,101 @@ export default {
             type: 'warning'
           });
        }else{
-          console.log(this.multipleSelection)
+          // console.log(this.multipleSelection)
+         let sampleInfo = this.multipleSelection.every((item)=>{
+           return item.status == '正常'
+         })
+         if(sampleInfo){
+           this.$confirm('已选中'+this.multipleSelection.length+'条数据，确定销毁样本吗?', '提示', {
+             confirmButtonText: '确定',
+             cancelButtonText: '取消',
+             type: 'warning'
+           }).then(() => {
+             this.$axios({
+               method:'post',
+               url:'sampleGuide/query/deleteListSampleById',
+               data:({
+                 list: this.multipleSelection.map((item)=>{return item.id})
+               })
+             })
+               .then(({data})=>{
+                 console.log(data)
+                 if(data.data == 0){
+                   this.$message({
+                     type: 'success',
+                     message: '删除成功!'
+                   });
+                   this.reload()
+                 }else{
+                   this.$message({
+                     type: 'warning',
+                     message: data.data
+                   });
+                 }
+
+               })
+           }).catch(() => {
+             this.$message({
+               type: 'info',
+               message: '已取消删除'
+             });
+           });
+         }else{
+           this.$message({
+             message: '请选择样本状态为正常的样本',
+             type: 'warning'
+           });
+         }
+
        }
     },
     // 打印标签
     printTag(){
       if(this.multipleSelection.length == 0){
         this.$message({
-          message: '请选择需要打印标签的样本',
+          message: '请先选择要打印标签的样本',
           type: 'warning'
         });
       }else{
-        console.log(this.multipleSelection)
-      }
+          this.$confirm('已选中'+this.multipleSelection.length+'条数据，确定打印该标签吗?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            this.$axios({
+              method: 'post',
+              url:'sampleGuide/query/printLabel',
+              data:({
+                sampleCategoryDict:0,
+                rfidCodeList: this.multipleSelection.map((item)=>{return item.rfId})
+              })
+            })
+              .then(({data})=>{
+                console.log(data)
+                data.data.forEach((item)=>{
+                  try{
+                      var myobject = new ActiveXObject("GoDEXATL.Function");
+                      myobject.openport("6")
+                      myobject.setup(20, 19, 4, 0, 3,0)
+                      myobject.sendcommand("^L\r\n");
+                      myobject.ecTextOut(260, 20, 17, "Arial", item.firstLine);
+                      myobject.ecTextOut(260, 50, 17, "Arial", item.secondLine);
+                      myobject.ecTextOut(260, 50, 17, "Arial", item.thirdLine);
+                      myobject.sendcommand("E\r\n")
+                  }catch(e){
+                      alert("打印故障，请检查打印机是否连接！")
+                  }finally{
+                      myobject.closeport();
+                  }
+                })
+              })
+          }).catch(() => {
+            this.$message({
+              type: 'info',
+              message: '已取消打印'
+            });
+          });
+  }
     },
     // 转移样本
     transfer(){
@@ -203,18 +276,22 @@ export default {
           })
             .then(({data})=>{
               console.log(data);
-              if(data.code == 200){
+              if(data.code == 500){
+                this.$message({
+                  message: data.message,
+                  type: 'success'
+                });
+              }else{
+                this.$message({
+                  message: '添加成功！',
+                  type: 'success'
+                });
                 this.$router.push({
                   name:"particulars",
                   params:{
                     id: this.$route.params.id
                   }
                 })
-              }else{
-                  this.$alert(data.message, '提示', {
-                    confirmButtonText: '确定',
-                    type:'warning'
-                  });
               }
             })
       }

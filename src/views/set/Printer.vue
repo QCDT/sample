@@ -19,7 +19,7 @@
             <div>
                 <p><span class="choiceType">选择打印内容</span></p>
                 <div  v-show="printValue == 'sample'">
-                   <el-checkbox-group 
+                   <el-checkbox-group
                       v-model="printListA"
                       :max="3">
                       <el-checkbox v-for="(item,index) in printContentA" :key='index' :label="item.value" class="choiceContent">{{item.label}}</el-checkbox>
@@ -27,20 +27,22 @@
                   <!-- <el-checkbox  v-model="item.checked" >{{item.title}}</el-checkbox> -->
                 </div>
                 <div v-show="printValue == 'sampleBox'">
-                  <el-checkbox-group 
+                  <el-checkbox-group
                       v-model="printListB"
                       :max="3">
                       <el-checkbox v-for="(item,index) in printContentB" :key='index' :label="item.value" class="choiceContent">{{item.label}}</el-checkbox>
                   </el-checkbox-group>
                 </div>
                 <div class="btns">
-                   <el-button type="primary" size="mini" @click="savePrint">保存</el-button>
-                    <el-button type="primary" size="mini" @click="$router.go(-1)">返回</el-button>
+                   <el-button class="btn" @click="savePrint">保存</el-button>
+                    <el-button class="btn" @click="$router.go(-1)">返回</el-button>
                 </div>
             </div>
         </div>
         <div class="printerRight">
             <span><img src="@/assets/img/printer.jpg"/></span>
+          <span class="chooseDelete" @click="chooseDelete1" v-show="printA.length>0 && printValue == 'sample'">×</span>
+          <span class="chooseDelete" @click="chooseDelete2" v-show="printB.length>0 && printValue == 'sampleBox'">×</span>
             <div class="preview" v-show="printValue === 'sample'">
               <p v-for="item in printA" :key="item.label"><span >{{item.label}}</span></p>
             </div>
@@ -96,7 +98,7 @@ export default {
         {
           label:'过期时间',
           value: 'sample_expireTime'
-        },        
+        },
         {
           label:'样本来源',
           value: 'sample_sampleSource'
@@ -130,7 +132,7 @@ export default {
         {
           label:'样本盒位置',
           value: 'sampleBox_location'
-        }     
+        }
       ]
     }
   },
@@ -160,10 +162,10 @@ export default {
   },
   created(){
     this.$axios({
-      method: 'post',
-      url: 'sampleGuide/printerSetting/findPrinterSettingByUserId',
+      method: 'post',
+      url: 'sampleGuide/printerSetting/findPrinterSettingByUserId',
       data:({
-        id: 1
+        id: 1
       })
     })
     .then(({data})=>{
@@ -175,7 +177,7 @@ export default {
     })
     .catch((error)=>{
         console.log(error)
-    })
+      })
   },
   methods:{
     savePrint(){
@@ -195,41 +197,49 @@ export default {
                 thirdLine: this.printListA[2] ? this.printListA[2] : ""
             })
           })
-          .then(({data})=>{
-            this.$message({
-              message: '保存成功!',
-              type: 'success'
-            });
+            .then(({data})=>{
+              this.$message({
+                message: '保存成功!',
+                type: 'success'
+              });
               console.log(data)
-          })
-          .catch((error)=>{
+            })
+            .catch((error)=>{
               console.log(error)
-          })
+            })
         }else{
           this.$axios({
             method:'post',
             url: 'sampleGuide/printerSetting/addOrUpdatePrinterSettingByUser',
             data:({
-                id: this.setSampleId,
-                category: this.printValue,
-                firstLine: this.printListB[0],
-                secondLine: this.printListB[1] ? this.printListA[1] : "",
-                thirdLine: this.printListB[2] ? this.printListA[2] : ""
+              id: this.setSampleBoxId,
+              category: this.printValue,
+              firstLine: this.printListB[0],
+              secondLine: this.printListB[1] ? this.printListA[1] : "",
+              thirdLine: this.printListB[2] ? this.printListA[2] : ""
             })
           })
-          .then(({data})=>{
-            this.$message({
-              message: '保存成功!',
-              type: 'success'
-            });
+            .then(({data})=>{
+              this.$message({
+                message: '保存成功!',
+                type: 'success'
+              });
               console.log(data)
-          })
-          .catch((error)=>{
+            })
+            .catch((error)=>{
               console.log(error)
-          })
+            })
+        }
+    },
+    chooseDelete1(){
+      this.printA = []
+      this.printListA = []
+    },
+    chooseDelete2(){
+      this.printB = []
+      this.printListB = []
         }
     }
-  }
 }
 </script>
 <style lang="less" scoped>
@@ -250,13 +260,25 @@ export default {
     .btns{
       text-align: center;
       margin-top: 50px;
-    
-      button{
-        margin-right: 10px;
-        width: 100px;
-        background: #00c9ff;
-        border: 1px solid #00c9ff;
-      }
+      /*width: 100%;*/
+        .btn {
+          width: 100px;
+          /*background: #00c9ff;*/
+          border: 1px solid #00c9ff;
+          color: #01c8ff;
+          // background-color: #00c9ff;
+        }
+        .btn:hover{
+          color: #fff;
+          background: #01c8ff;
+        }
+
+      /*button{*/
+        /*margin-right: 10px;*/
+        /*width: 100px;*/
+        /*background: #00c9ff;*/
+        /*border: 1px solid #00c9ff;*/
+      /*}*/
     }
     .printerLeft{
         margin-top: 60px;
@@ -289,10 +311,20 @@ export default {
             width: 300px;
             height: 350px;
         }
+      .chooseDelete{
+        font-size: 25px;
+        position: absolute;
+        bottom: 115px;
+        right: 80px;
+        cursor: pointer;
+        /*display: none;*/
+      }
         .preview{
           position: absolute;
           left: 41%;
           top: 65%;
+          background-color: #fff;
+
           p{
             margin-bottom: 10px;
           }

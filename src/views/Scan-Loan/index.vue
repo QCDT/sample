@@ -5,7 +5,7 @@
     </transition>
     <div class="top">
       <fromName>借出订单列表</fromName>
-        <el-select v-model="projectValue" placeholder="请选择" size="mini">
+        <el-select v-model="projectValue" clearable placeholder="请选择" size="mini" @change="searchDingdan">
           <el-option
             v-for="item in projectOption"
             :key="item.value"
@@ -85,7 +85,7 @@ export default {
           returnTiem: 123123, // 预计归还时间
           mark: '暂无备注', // 备注
           status: '已核验' // 订单状态
-          
+
         } */
       ],
       multipleSelection: [],
@@ -95,8 +95,11 @@ export default {
   //借出表单初始化
   created(){
     this.$axios({
-      method:'get',
+      method:'post',
       url:'sampleGuide/scan/findAllLoanForm',
+      data:({
+        id:this.projectValue
+      })
     })
     .then(({data})=>{
       // console.log(data);
@@ -136,6 +139,32 @@ export default {
        return 'columnStyle'
       }
     },
+    searchDingdan(){
+      this.tableData = []
+      this.$axios({
+      method:'post',
+      url:'sampleGuide/scan/findAllLoanForm',
+      data:({
+        id:this.projectValue
+        })
+      })
+      .then(({data})=>{
+      console.log(data);
+      data.data.forEach((item)=>{
+            this.tableData.push({ //.............借出表格数据
+               id: item.id,  // ...........序号
+               orderName: item.name, // ...........借出表单名
+               newTime: item.createTime,// ..........创建表单时间
+               newUserName:item.createUserName,//………………创建用户名
+               takeOutName:item.takeleave,//………………取走人
+               returnTiem:item.expectedreturndate,//………………预计归还时间
+               mark:item.loanremarks,//…………备注
+               status:item.status==0?"未核验":"已借出", //…………订单状态
+               formNum:item.loanSampleCount+'/'+(item.returnSampleCount+item.loanSampleCount)
+            })
+        })
+      })
+    },
     // 删除订单
     delDingdan (row, index) {
      // console.log(row,index)
@@ -158,7 +187,7 @@ export default {
               this.$message({ type: 'warning', message:data.data})
             }else if(data.code==200){
               this.$message({ type: 'success', message: '删除成功!' });
-              this.reload();
+              this.searchDingdan()
             }else{
               this.$message({ type: 'info', message:data.data })
             }

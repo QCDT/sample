@@ -82,8 +82,8 @@
         </div>
       </div>
       <div class="btns">
-        <el-button type="primary" size="small" class="btn" @click="saveCardReader">保存</el-button>
-        <el-button type="primary" size="small" class="btn" @click="$router.go(-1)">返回</el-button>
+        <el-button class="btn" @click="saveCardReader">保存</el-button>
+        <el-button class="btn" @click="$router.go(-1)">返回</el-button>
       </div>
     </div>
   </div>
@@ -109,17 +109,17 @@ export default {
       devicetype: [
         {
           value: 'M201',
-          label: '大读卡器'
+          label: '大读写器'
         },
         {
           value: 'RL8000',
-          label: '小读卡器'
+          label: '小读写器'
         },
         {
           value: 'RD242',
-          label: '3D读卡器'
+          label: '3D读写器'
         }
-      ],     
+      ],
        Opentype: [
         {
           value: 'COM',
@@ -243,7 +243,7 @@ export default {
           value: 'COM20',
           label: 'COM20'
         }
-      ] 
+      ]
     })
   },
   watch:{
@@ -292,7 +292,7 @@ export default {
     saveCardReader(){
       // this.elref.RDR_Close();
       this.$cookies.set('readerType', this.devicetypeValue, '1y')
-      this.$cookies.set('portType', this.OpentypeValue, '1y') 
+      this.$cookies.set('portType', this.OpentypeValue, '1y')
       this.$cookies.set('comPortNo',this.comPortValue, '1y')
       this.$cookies.set('comBaudRate',this.comBaudRateValue, '1y')
       this.$cookies.set('comFrameStructure', this.comFrameStructureValue, '1y')
@@ -316,10 +316,15 @@ export default {
         margin-top: 25px;
 
         .btn {
-            width: 120px;
-            background: #00c9ff;
+            width: 100px;
+            /*background: #00c9ff;*/
             border: 1px solid #00c9ff;
+            color: #01c8ff;
             // background-color: #00c9ff;
+        }
+        .btn:hover{
+          color: #fff;
+          background: #01c8ff;
         }
     }
 

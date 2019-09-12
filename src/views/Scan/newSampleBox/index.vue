@@ -1,6 +1,7 @@
 <template>
   <!-- 新建/修改 样本盒:扫描页面的表单里的 新建，修改按钮 -->
   <div class="change-wrap-1">
+    <cardfile  @reception= 'refData'></cardfile>
     <h1 class="top-title" v-if="title">{{title}}</h1>
     <div class="change-wrap">
       <!-- 左边 -->
@@ -122,8 +123,9 @@
   </div>
 </template>
 <script>
+import cardfile from "@/components/cardfile";
 import tmpButton from '@/components/tmp/zhanglan/tmpButton'
-export default {
+export default { 
   props: { title: String, boxRfid:String , sampleBoxId:{type:Number,default:-1}},
   components: {tmpButton},
   inject:['reload'],
@@ -187,6 +189,7 @@ export default {
       })
     }
     return {
+      elref:'',
       showModel: 1, // 显示模式设置
       rowValue:'',// 样本盒行数
       colValue:'',// 样本盒列数
@@ -277,6 +280,9 @@ export default {
     }
   },
   methods: {
+    refData(value){
+      this.elref = value
+    },
     save () {
         if(this.ruleForm.name==''|| this.rowValue == '' || this.colValue == '' || this.labRowValue =='' || this.labValue == '' || this.labDrawerValue =='' || this.sampleBox =='' ){
           this.$alert('请完善该页面信息', '提示', {
@@ -339,7 +345,7 @@ export default {
       }
     },
     replaceRfid(){
-      MyActiveX1.RDR_Close();
+      this.elref.RDR_Close();
       let devicetypeValue = this.$cookies.get('readerType')
       let OpentypeValue = this.$cookies.get('portType')
       let comPortValue = this.$cookies.get('comPortNo')
@@ -348,45 +354,45 @@ export default {
       let netIpAddress = this.$cookies.get('netIpAddress')
       let netPort = this.$cookies.get('netPortNo')
       console.log(devicetypeValue,OpentypeValue,comPortValue,comBaudRateValue,comFrameStructureValue,netIpAddress,netPort)
-      let n = this.$store.state.OnOpen(devicetypeValue,OpentypeValue,comPortValue,comBaudRateValue,comFrameStructureValue,netIpAddress,netPort)
+      let n = this.$store.state.OnOpen(this.elref , devicetypeValue,OpentypeValue,comPortValue,comBaudRateValue,comFrameStructureValue,netIpAddress,netPort)
       if (n!=0) {
           return 
       }
       let nret=0;
       //盘点标签初始化,申请盘点标签所需要的内存空间。返回，成功：0 ；失败：非0 （查看错误代码表）。
-	    nret = MyActiveX1.RDR_InitInventory();
+	    nret = this.elref.RDR_InitInventory();
       if (nret!=0) {
         alert("盘点标签初始化失败！")
         return;
       }
       //盘点标签时，使能15693协议。返回，成功：0 ；失败：非0 （查看错误代码表）。
-      nret = MyActiveX1.RDR_Enable15693(0,0x00,0)
-      nret = MyActiveX1.RDR_Enable14443A()
+      nret = this.elref.RDR_Enable15693(0,0x00,0)
+      nret = this.elref.RDR_Enable14443A()
       if (nret!=0) {
         //结束标签盘点操作，释放内存空间。
-          MyActiveX1.RDR_FinishInventory()
+          this.elref.RDR_FinishInventory()
         return;
       }
       this.readRfid()
-      MyActiveX1.RDR_Close()
+      this.elref.RDR_Close()
     },
     readRfid(){
       let nret = 0
       let recordCnt = ''
       let j =0
-      nret = MyActiveX1.RDR_Inventory(0,"")
+      nret = this.elref.RDR_Inventory(0,"")
       // alert(nret)
       if (nret !== 0) {
         this.$alert('读取标签失败，请检查设备连接以及参数设置！', '提示', {
           confirmButtonText: '确定',
           type: 'error'
         })
-        MyActiveX1.RDR_FinishInventory()
+        this.elref.RDR_FinishInventory()
         return
       }
-        recordCnt = MyActiveX1.RDR_GetRecordCnt()
+        recordCnt = this.elref.RDR_GetRecordCnt()
         // console.log(recordCnt)
-        let sTagInfo = MyActiveX1.GetRecord(j).split("-");
+        let sTagInfo = this.elref.GetRecord(j).split("-");
         let sTagID = sTagInfo[sTagInfo.length-1];
         alert(recordCnt)
         if(recordCnt == 1){

@@ -36,7 +36,7 @@
               <el-date-picker
                 type="date"
                 placeholder="选择日期"
-                value-format="yyyy-MM-dd"
+                value-format="yyyy-MM-dd HH:MM:SS"
                 :picker-options="pickerOptions"
                 v-model="ruleForm.date"
               ></el-date-picker>
@@ -83,13 +83,15 @@ export default {
               })
             })
             .then(({data})=>{
-              if({data}.code !== 200){
-                callback(new Error(data.data ));
+              console.log(data)
+              if(data.data == 0){
+                callback();
                 // this.$message({ type: 'info', message:data.data })
+              }else{
+                callback(new Error("该名称已重复"));
               }
             })
           }
-          callback();
         }
       };
     let  verificationTakes = (rule, value, callback) =>{
@@ -150,21 +152,15 @@ export default {
       console.log(formName);
       this.$refs[formName].validate(valid => {
         if (valid) {
-          // this.$emit('submitForm', JSON.parse(JSON.stringify(this.ruleForm)))
           this.$axios({
             method:'post',
             url:'sampleGuide/scan/addLoanOrder',
             data:({
-              /* id:,// 当前订单ID */
               name:this.ruleForm.name,//借出订单名称
-              /* createTime:,//创建时间
-              createUserId:,//创建的用户的id
-              createUserName:,//创建的用户的姓名 */
+              projectId: this.ruleForm.projectValue,
               takeleave:this.ruleForm.takes,//取走人
-              //expectedreturndate:this.ruleForm.date,//预计归还时间
+              expectedreturndate:this.ruleForm.date,//预计归还时间
               loanremarks:this.ruleForm.desc,//备注
-              /* status:,//订单状态
-              deleteStatus:,//删除状态 */
             })
           }).then((data)=>{
             console.log(data);
