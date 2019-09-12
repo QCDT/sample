@@ -395,31 +395,31 @@ export default {
       })
       .then(({data})=>{
         console.log(data)
-        // if(data.code== 200){
-        //   this.orderId = data.cenOrderId
-        //   let timer = setInterval(()=>{
-        //      let time =  parseFloat(this.centrifugeTime)*60
-        //       time--
-        //      if(time <= 0){
-        //         time = 0
-        //         clearInterval(timer)
-        //         this.disabledAmend = false
-        //         this.finishCentrifuge = true
-        //         this.$axios({
-        //           method: 'post',
-        //           url: 'sampleGuide/centrifuge/cenEnd',
-        //           data:({
-        //              id: this.orderId,
-        //              centrifugeTime:this.centrifugeTime
-        //           })
-        //         })
-        //         .then(({data})=>{
-        //             console.log(data)
-        //         })
-        //       }
-        //       this.centrifugeTime = time/60 +'min'
-        //   },1000)
-        // }
+        if(data.code== 200){
+          this.orderId = data.cenOrderId
+          let timer = setInterval(()=>{
+             let time =  parseFloat(this.centrifugeTime)*60
+              time--
+             if(time <= 0){
+                time = 0
+                clearInterval(timer)
+                this.disabledAmend = false
+                this.finishCentrifuge = true
+                this.$axios({
+                  method: 'post',
+                  url: 'sampleGuide/centrifuge/cenEnd',
+                  data:({
+                     id: this.orderId,
+                     centrifugeTime:this.centrifugeTime
+                  })
+                })
+                .then(({data})=>{
+                    console.log(data)
+                })
+              }
+              this.centrifugeTime = time/60 +'min'
+          },1000)
+        }
       })
     },
     exportPDF(){ // 导出PDF

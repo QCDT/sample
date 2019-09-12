@@ -1,23 +1,3 @@
-<<<<<<< HEAD
-<template>
-  <div>
-    <h6>自动</h6>
-  </div>
-</template>
-<script>
-export default {
-  props: {},
-  components: {},
-  data () {
-    return {}
-  },
-  methods: {},
-  computed: {}
-}
-</script>
-<style scoped lang='scss'>
-</style>
-=======
 <template>
   <div>
     <div class="automaticWrap">
@@ -320,4 +300,3 @@ export default {
   }
 }
 </style>
->>>>>>> a6994a54ee8e86d397c8410f1933627f6e9d8b14

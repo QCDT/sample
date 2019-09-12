@@ -12,7 +12,7 @@
         <span style="margin:0 0.3em">条数据</span>
       </div>
       <div class="item">
-        <tmpinput>
+        <!-- <tmpinput>
           打印样式设置
           <el-select
             slot="elUI"
@@ -30,7 +30,7 @@
               :value="item.value"
             ></el-option>
           </el-select>
-        </tmpinput>
+        </tmpinput> -->
       </div>
     </div>
     <div class="right" v-show="$route.params.id == 1">

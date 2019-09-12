@@ -23,11 +23,15 @@
               </div>
               <div class="right">
                   <table class="table">
-                      <tr v-for="(index) in rowValue" :key="index">
-                        <td
-                          v-for="(ind) in colValue"
-                          :key="ind"
-                        >{{showTable(index,ind)}}</td>
+                      <tr v-for="row in rowValue" :key="row">
+                        <!-- <template v-for="item in loanSampleArr"> -->
+                          <td
+                            v-for="col in colValue"
+                            :key="col"
+                            :class="showSampleStatus(row, col)"
+                          >{{showTable(row,col)}}
+                          </td>
+                        <!-- </template> -->
                       </tr>
                   </table>
                   <div class="map">
@@ -61,6 +65,8 @@ export default {
       rowValue:'',//样本盒行数
       colValue:'',//样本盒列数
       showModel:'',//样本盒显示模式
+      loanSampleArr:[],//样本盒中借出样本集合
+      normalSampleArr:[],//样本盒中正常样本集合
       scanStatus:true,
       sampleLoanNum:'',
       sampleBoxItem:'',
@@ -71,7 +77,7 @@ export default {
       mapData: [
         { text: '已使用', bgc: '#7D7C7F' },
         { text: '借用', bgc: '#FCFD01' },
-        { text: '未使用', bgc: '#EDF1F3' }
+        { text: '未使用', bgc: '#eee' }
       ]
   }
   },
@@ -147,10 +153,19 @@ export default {
           console.log(data);
           this.sampleLoanNum=data.data.canUserSampleCount//借出数量
           data.data.scanSampleBoxLoanVo.forEach((item)=>{
-            //console.log(item);
             this.sampleBoxName=item.sampleBoxName//样本盒名称
             this.sampleBoxItem=item.detailLocation//样本盒位置
+            this.rowValue = item.structureRow
+            this.colValue = item.structureCol
+            this.showModel = item.structureSpec
+            if(item.sampleStatus == 2){
+              this.loanSampleArr.push([item.sampleInRow,item.sampleInCol])
+            }
+            if(item.sampleStatus == 1){
+              this.normalSampleArr.push([item.sampleInRow,item.sampleInCol])
+            }
           })  
+          //console.log(this.normalSampleArr)
           this.scanStatus = false
         })
     },
@@ -170,7 +185,7 @@ export default {
         if(data.code == 500){
           this.$message({
             message: data.message,
-            type: 'success'
+            type: 'warning'
           });
         }else{
           this.$message({
@@ -181,6 +196,23 @@ export default {
         }
         }) 
     },
+    showSampleStatus(row,col){
+      // console.log(row,col)
+      let activeArr = [row, col]
+      // console.log(activeArr)
+      for(let i=0; i<this.loanSampleArr.length; i++){
+
+        if(JSON.stringify(this.loanSampleArr[i]) == JSON.stringify(activeArr)){
+          console.log(JSON.stringify(this.loanSampleArr[i]) == JSON.stringify(activeArr))
+          return 'loanColor'
+        }
+      }
+      for(let i=0; i<this.normalSampleArr.length; i++){
+        if(JSON.stringify(this.normalSampleArr[i]) == JSON.stringify(activeArr)){
+          return 'normalColor'
+        }
+      }
+    },  
     showTable (row,col) {
       let res = ''
       if(this.showModel == 1){
@@ -196,8 +228,7 @@ export default {
       }
       return res
     }
-  },
-  computed: {}
+  }
 }
 </script>
 <style scoped lang='less'>
@@ -206,6 +237,12 @@ export default {
   height: 100%;
   display: flex;
   align-items: center;
+}
+.normalColor{
+  background: #7D7C7F
+}
+.loanColor{
+  background: #FCFD01;
 }
 .content{
   width: 65%;
@@ -289,11 +326,10 @@ export default {
           border: 2px solid #ccc;
           border-collapse: collapse;
           td {
-            width: 20px;
-            height: 20px;
             border: 1px solid #ccc;
             text-align: center;
             font-size: 12px;
+            padding: 5px;
           }
         }
       }
