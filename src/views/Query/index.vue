@@ -1,6 +1,6 @@
 <template>
   <div class="searchWrap">
-    <Search  @changeTable = changeTable ></Search>
+    <Search  @changeTable = changeTable @changeBoxTable = changeBoxTable @sampleItemValue="sampleItemValueChange"></Search>
     <!-- 表单 ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓ -->
     <div class="bot-form">
       <div class="table-box">
@@ -14,6 +14,7 @@
           tooltip-effect="dark"
           style="width:100%"
           @selection-change="handleSelectionChange"
+          v-show="sampleBoxValue == 0"
         >
           <el-table-column type="selection" show-overflow-tooltip ></el-table-column>
           <el-table-column label="序号" type="index" width="70">
@@ -48,6 +49,25 @@
             </template>
           </el-table-column>
         </el-table>
+        <el-table
+          :row-style="{height:'32px',textAlign: 'center',padding:'0px',}"
+          :cell-style="{padding:0 , textAlign: 'center',}"
+          border
+          ref="multipleTable"
+          :data="tableBoxData"
+          tooltip-effect="dark"
+          style="width:100%"
+          @selection-change="handleSelectionChange"
+          v-show="sampleBoxValue == 1"
+        >
+          <el-table-column type="selection" show-overflow-tooltip ></el-table-column>
+          <el-table-column label="序号" type="index" width="70">
+          </el-table-column>
+          <el-table-column prop="name" label="样本盒名称" show-overflow-tooltip></el-table-column>
+          <!--  -->
+          <el-table-column prop="enterName" label="录入人" show-overflow-tooltip></el-table-column>
+          <el-table-column prop="location" label="位置信息" show-overflow-tooltip></el-table-column>
+        </el-table>
       </div>
     </div>
     <!-- 表单 ↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑ -->
@@ -67,6 +87,8 @@ export default {
       tableData: [
 
       ],
+      tableBoxData:[],
+      sampleBoxValue:'',
       multipleSelection: []
       //   ↑ 表单
     }
@@ -74,18 +96,29 @@ export default {
   created(){
   },
   methods: {
-  
+
     handleSelectionChange (val) {  //选中数据的集合
       this.multipleSelection = val
     },
+    sampleItemValueChange(data){
+      this.sampleBoxValue = data
+    },
     changeTable(tableData){ //根据查询条件改变table中内容
         this.tableData = tableData
+    },
+    changeBoxTable(tableData){
+      this.tableBoxData = tableData
     },
     sampleInfoClick(){//样本信息展示
       this.$router.push({name: 'sample'})
     },
     sampleLog(){//日志信息展示
-      this.$router.push({name:'log'})
+      this.$router.push({
+        name:'log',
+        params:{
+          id: this.$route.params.id
+        }
+      })
     },
     backLoanPage(){//返回借出表单详情页
       this.$router.push({

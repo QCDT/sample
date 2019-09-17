@@ -3,8 +3,9 @@
     <h1 class="title">{{title}}</h1>
     <div class="info">
       <div class="sum">
-        <span>扫描总数:</span>
+        <span>共有:</span>
         <span>{{count}}</span>
+        <span>数据</span>
       </div>
       <div class="right">
         <div class="item">
@@ -15,7 +16,6 @@
             class="export-excel-wrapper"
             :data="multipleSelection"
             :fields="json_fields"
-            name="Excle名称.xls"
           >
             <div @click="isEmpty">
               <i class="icon icon-excel" style="color:#217346"></i>

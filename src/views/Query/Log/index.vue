@@ -23,9 +23,10 @@
         >
           <el-table-column type="selection" show-overflow-tooltip></el-table-column>
           <el-table-column label="序号" show-overflow-tooltip>
+          </el-table-column>
+          <el-table-column prop="RFID" label="RFID编码	" show-overflow-tooltip>
             <template slot-scope="scope">{{ scope.row.coding }}</template>
           </el-table-column>
-          <el-table-column prop="RFID" label="RFID编码	" show-overflow-tooltip></el-table-column>
           <el-table-column prop="ope" label="操作" width="200"></el-table-column>
           <el-table-column prop="opePerson" label="操作人" show-overflow-tooltip></el-table-column>
           <el-table-column prop="opeTime" label="操作时间" show-overflow-tooltip></el-table-column>

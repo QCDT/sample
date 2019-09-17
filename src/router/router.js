@@ -410,7 +410,7 @@ export default new Router({
     },
     //  ↓ 查询 [日志信息] [样本信息]
     {
-      path: '/query/log',
+      path: '/query/log/:id',
       name: 'log',
       components: {
         default: () => import('@/views/Query/Log/index.vue'),
@@ -436,7 +436,7 @@ export default new Router({
     },
     // 转移
     {
-      path: '/query/transfer',
+      path: '/query/transfer/:id',
       name: 'transfer',
       components: {
         default: () => import('@/views/Query/Transfer/index.vue'),

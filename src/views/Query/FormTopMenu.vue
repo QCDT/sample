@@ -11,27 +11,27 @@
         <span>{{count}}</span>
         <span style="margin:0 0.3em">条数据</span>
       </div>
-      <div class="item">
-        <tmpinput>
-          打印样式设置
-          <el-select
-            slot="elUI"
-            size="small"
-            clearable
-            v-model="value"
-            filterable
-            placeholder="请选择"
-            style="width:60%"
-          >
-            <el-option
-              v-for="item in options"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            ></el-option>
-          </el-select>
-        </tmpinput>
-      </div>
+      <!--<div class="item">-->
+        <!--<tmpinput>-->
+          <!--打印样式设置-->
+          <!--<el-select-->
+            <!--slot="elUI"-->
+            <!--size="small"-->
+            <!--clearable-->
+            <!--v-model="value"-->
+            <!--filterable-->
+            <!--placeholder="请选择"-->
+            <!--style="width:60%"-->
+          <!--&gt;-->
+            <!--<el-option-->
+              <!--v-for="item in options"-->
+              <!--:key="item.value"-->
+              <!--:label="item.label"-->
+              <!--:value="item.value"-->
+            <!--&gt;</el-option>-->
+          <!--</el-select>-->
+        <!--</tmpinput>-->
+      <!--</div>-->
     </div>
     <div class="right" v-show="$route.params.id == 1">
       <div class="item" @click="delSample">
@@ -55,11 +55,11 @@
           <i class="icon icon-yemianxiugai"></i>
           <small>修改</small>
         </div>
-       <div class="item" @click="exportExcel">
+       <div class="item" @click="exportPdf">
         <i class="icon icon-pdf" style="color:#A33639"></i>
         <small>导出PDF</small>
       </div>
-      <div class="item" @click="exportPdf">
+      <div class="item" @click="exportExcel">
           <i class="icon icon-excel" style="color:#217346"></i>
           <small>导出Excel</small>
       </div>
@@ -214,7 +214,22 @@ export default {
           type: 'warning'
         });
       }else{
-         this.$router.push({name:'transfer'})
+        let sampleInfo = this.multipleSelection.every((item)=>{
+          return item.status == '正常'})
+        if(sampleInfo){
+          this.$router.push({
+            name:'transfer',
+            params:{
+              id:this.multipleSelection.map((item)=>{return item.id}).join()
+            }
+          })
+        }else{
+          this.$message({
+            message: '请选择样本状态为正常的样本',
+            type: 'warning'
+          });
+        }
+
       }
     },
     //打印位置信息
@@ -244,7 +259,7 @@ export default {
               })
             }).then(({data})=>{
                 console.log(data)
-             if(data.code == 200){             
+             if(data.code == 200){
                let LODOP = this.getLodop();
                LODOP.PRINT_INIT("打印位置信息");
                LODOP.SET_PRINTER_INDEXA("XP-58");
@@ -293,7 +308,39 @@ export default {
           type: 'warning'
         });
       }else{
-         console.log(this.multipleSelection)
+        let newExportArr = this.multipleSelection.map((item)=>{
+          return item.id
+        })
+        //导出归还订单Excel
+        this.$axios({
+          method:'post',
+          url:'sampleGuide/query/exportExcel',
+          responseType: 'blob',
+          headers: {
+            'Access-Control-Expose-Headers': 'filename'
+          },
+          data:({
+            idList: newExportArr
+          })
+
+        })
+          .then((data)=>{
+            console.log(data);
+            let fileName = data.headers.filename;
+            let blob = new Blob([data.data], {type: 'application/vnd.ms-excel;charset=UTF-8'});
+            if(window.navigator.msSaveBlob){
+              window.navigator.msSaveBlob(blob,fileName);
+            }else{
+              let a = document.createElement('a');
+              let href = window.URL.createObjectURL(blob); // 创建链接对象
+              a.href =  href;
+              a.download = fileName;   // 自定义文件名
+              document.body.appendChild(a);
+              a.click();
+              window.URL.revokeObjectURL(href);  //移除链接对象
+              document.body.removeChild(a);
+            }
+          })
       }
     },
     exportPdf(){
@@ -443,6 +490,7 @@ export default {
   .sum {
     display: flex;
     // background-color: #333;
+    margin-left: -54%;
     align-items: center;
     .item {
       margin-right: 30px;

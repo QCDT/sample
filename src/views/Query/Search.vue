@@ -7,7 +7,7 @@
           <div class="tmp-row-empty">
             <!-- XXX:输入框 | 选择框 -->
             <span class="tmp-row-empty-title">
-              样本名称:
+              {{sampleItem === 1 ? '样本盒' : '样本'}}名称:
             </span>
             <i class="tmp-row-empty-input">
               <el-input
@@ -45,6 +45,7 @@
                 v-model="lender"
                 clearable
                 placeholder="请选择"
+                :disabled="sampleItem == 1"
               >
                 <el-option
                   v-for="item in lenderOption"
@@ -85,6 +86,7 @@
                 clearable
                 v-model="testTubeCategory"
                 placeholder="请选择"
+                :disabled="sampleItem == 1"
               >
                 <el-option
                   v-for="item in testTubeCategoryOption"
@@ -105,6 +107,7 @@
                 clearable
                 v-model="source"
                 placeholder="请选择"
+                :disabled="sampleItem == 1"
               >
                 <el-option
                   v-for="item in sourceOption"
@@ -125,6 +128,7 @@
                 clearable
                 v-model="status"
                 placeholder="请选择"
+                :disabled="sampleItem == 1"
               >
                 <el-option
                   v-for="item in statusOption"
@@ -145,6 +149,7 @@
                 clearable
                 v-model="itemClass"
                 placeholder="请选择"
+                :disabled="sampleItem == 1"
               >
                 <el-option
                   v-for="item in itemClassOption"
@@ -178,6 +183,7 @@
                 range-separator="至"
                 start-placeholder="开始日期"
                 end-placeholder="结束日期"
+                :disabled="sampleItem == 1"
               ></el-date-picker>
             </i>
           </div>
@@ -195,6 +201,7 @@
                 range-separator="至"
                 start-placeholder="开始日期"
                 end-placeholder="结束日期"
+                :disabled="sampleItem == 1"
               ></el-date-picker>
             </i>
           </div>
@@ -214,6 +221,7 @@
                 range-separator="至"
                 start-placeholder="开始日期"
                 end-placeholder="结束日期"
+                :disabled="sampleItem == 1"
               ></el-date-picker>
             </i>
           </div>
@@ -231,6 +239,7 @@
                 range-separator="至"
                 start-placeholder="开始日期"
                 end-placeholder="结束日期"
+                :disabled="sampleItem == 1"
               ></el-date-picker>
             </i>
           </div>
@@ -350,6 +359,7 @@ export default {
       showAdvancedSearch: false,
       asHeight: 0,
       searchTableData:[],
+      searchTableBoxData:[],
       name: '', //样本名称
       sampleItem:0, //样本类别
       lender:'', // 借出人
@@ -518,6 +528,7 @@ export default {
 
     startSearch () {
       this.searchTableData=[]
+      this.searchTableBoxData=[]
       /* 开始搜索 */
       this.$axios({
             method:'post',
@@ -546,27 +557,40 @@ export default {
             })
           })
           .then(({data})=>{
-            console.log(data);
+            // console.log(data);
             data.data.forEach((item)=>{
                // console.log(item);
-            this.searchTableData.push({
-              id: item.id,
-              rfId:item.rfidCode,
-              color:item.capColor, // 管帽颜色
-              sampleInfo:item.name, // 样本信息
-              enterName:item.inputUserName, // 录入人
-              enterData:item.inputTime, // 录入日期
-              sampleBloodData:item.samplingDate, // 采样日期
-              source:item.sampleSource, // 样本来源
-              pastTime:item.expireDate, // 过期日期
-              location:item.sampleStru.detailLocation, // 位置信息
-              status:item.status == 1 ? '正常' : '借出' , // 状态
-              classify:item.sampleCategoryDict.name, // 类别
-              loanPerson:item.loanUserName, // 借出人
-              loanTime:item.loanTime// 借出日期
-            })
+            if(this.sampleItem == 1){
+              this.searchTableBoxData.push({
+                id: item.id,
+                name:item.name,
+                enterName:item.inputUserName, // 录入人
+                location:item.sampleBoxStru.detailLocation // 位置信息
+              })
+            }else{
+              this.searchTableData.push({
+                id: item.id,
+                rfId:item.rfidCode,
+                color:item.capColor, // 管帽颜色
+                sampleInfo:item.name, // 样本信息
+                enterName:item.inputUserName, // 录入人
+                enterData:item.inputTime, // 录入日期
+                sampleBloodData:item.samplingDate, // 采样日期
+                source:item.sampleSource, // 样本来源
+                pastTime:item.expireDate, // 过期日期
+                location:item.sampleStru.detailLocation, // 位置信息
+                status:item.status == 1 ? '正常' : '借出' , // 状态
+                classify:item.sampleCategoryDict.name, // 类别
+                loanPerson:item.loanUserName, // 借出人
+                loanTime:item.loanTime// 借出日期
+              })
+
+            }
+
         })
         this.$emit('changeTable', this.searchTableData)
+        this.$emit('changeBoxTable', this.searchTableBoxData)
+        this.$emit('sampleItemValue', this.sampleItem)
           })
     },
     selectIceBox(){ //切换冰箱加载该冰箱层数
