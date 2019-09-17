@@ -213,7 +213,7 @@ export default {
           label: 'r/min'
         }
       ],
-      unitValue: 'g',
+      unitValue: '',
       labValue: '',
       brandValue: '',
       typeValue:'',
@@ -323,6 +323,7 @@ export default {
       // this.typeOption = [{value: row.typeId, label:row.type}]
       // this.typeValue = row.typeId
       this.time = parseFloat(row.time)
+      this.unitValue = row.revSpeed.replace(/[\d]+/ig,"")
       this.revSpeed = parseFloat(row.revSpeed)
       this.temp = parseFloat(row.temp)
       this.eqName = row.eqName
@@ -358,6 +359,15 @@ export default {
       this.MASK_btn = '保存'
       this.MASK_event = true // true 为创建 false 为修改
       this.showMaskF = true
+      this.labValue = ''
+      this.eqNumber = ''
+      this.eqName = ''
+      this.brandValue = ''
+      this.typeValue = ''
+      this.time = ''
+      this.revSpeed = ''
+      this.unitValue = ''
+      this.temp = ''
     },
     // 蒙版里的事件
     maskProject () {

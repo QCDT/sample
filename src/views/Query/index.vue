@@ -10,13 +10,15 @@
           :cell-style="{padding:0 , textAlign: 'center',}"
           border
           ref="multipleTable"
-          :data="tableData"
+          max-height="400"
+          :data="tableData.slice((currentPage-1)*PageSize,currentPage*PageSize)"
           tooltip-effect="dark"
           style="width:100%"
           @selection-change="handleSelectionChange"
         >
-          <el-table-column type="selection" show-overflow-tooltip ></el-table-column>
-          <el-table-column label="序号" type="index" width="70">
+          <el-table-column type="selection" width="55" ></el-table-column>
+          <el-table-column  width="70" label="序号">
+            <template slot-scope="scope"><span>{{scope.$index+(currentPage - 1) * PageSize + 1}}</span></template>
           </el-table-column>
           <el-table-column prop="color" label="帽色" show-overflow-tooltip></el-table-column>
 
@@ -48,6 +50,15 @@
             </template>
           </el-table-column>
         </el-table>
+        <el-pagination
+          class="paging"
+          :hide-on-single-page="total <= 100"
+          layout="prev, pager, next"
+          :currentPage='currentPage'
+          @current-change='handleCurrentChange'
+          :page-size="PageSize"
+          :total="total">
+        </el-pagination>
       </div>
     </div>
     <!-- 表单 ↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑ -->
@@ -64,6 +75,9 @@ export default {
   data () {
     return {
       // ↓   表单
+      total: 0,//查询到样本总数
+      currentPage:1,//默认显示第几页
+      PageSize:40,//每页显示条数
       tableData: [
 
       ],
@@ -74,12 +88,18 @@ export default {
   created(){
   },
   methods: {
-  
+    handleCurrentChange(val) {
+        // 改变默认的页数
+        console.log(val)
+        this.currentPage=val
+    },
     handleSelectionChange (val) {  //选中数据的集合
       this.multipleSelection = val
     },
-    changeTable(tableData){ //根据查询条件改变table中内容
+    changeTable(tableData,tableTotal){
+        console.log(tableTotal) //根据查询条件改变table中内容
         this.tableData = tableData
+        this.total = tableTotal
     },
     sampleInfoClick(){//样本信息展示
       this.$router.push({name: 'sample'})
@@ -100,6 +120,10 @@ export default {
 }
 </script>
 <style scoped lang='less'>
+.paging{
+  margin-top: 20px;
+  text-align: center;
+}
 // 表单
 .searchWrap{
   padding:0 20px;

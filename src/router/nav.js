@@ -8,6 +8,9 @@ import analyze from '@/views/analyze.vue'
 export const navBar = [
   {
     path: '/home',
+    // meta: {
+    //   requireAuth: true // 判断是否需要登录
+    // },
     components: {
       default: Home,
       navbar: Header

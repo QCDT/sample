@@ -102,7 +102,7 @@ export default {
       })
     })
     .then(({data})=>{
-      // console.log(data);
+      console.log(data);
       data.data.forEach((item)=>{
             this.tableData.push({ //.............借出表格数据
                id: item.id,  // ...........序号
@@ -113,13 +113,13 @@ export default {
                returnTiem:item.expectedreturndate,//………………预计归还时间
                mark:item.loanremarks,//…………备注
                status:item.status==0?"未核验":"已借出", //…………订单状态
-               formNum:item.loanSampleCount+'/'+(item.returnSampleCount+item.loanSampleCount)
+               formNum:item.returnSampleCount+'/'+(item.returnSampleCount+item.loanSampleCount)
             })
         })
       })
      this.$axios.get("/sampleGuide/guest/selectProjectAll")
       .then(({data})=>{
-        console.log(data)
+        // console.log(data)
         data.data.forEach((item)=>{
           this.projectOption.push({
             value:item.id,

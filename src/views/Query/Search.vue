@@ -566,7 +566,7 @@ export default {
               loanTime:item.loanTime// 借出日期
             })
         })
-        this.$emit('changeTable', this.searchTableData)
+        this.$emit('changeTable', this.searchTableData,data.data.length)
           })
     },
     selectIceBox(){ //切换冰箱加载该冰箱层数

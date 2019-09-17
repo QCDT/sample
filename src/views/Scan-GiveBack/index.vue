@@ -415,6 +415,9 @@ export default {
 /deep/ .el-table .rowColor{
   background: #00c9ff;
 }
+/deep/.el-table__body tr:hover>td {
+		background-color:#00c9ff  !important;
+}
 .guihuan-wrap {
    width: 50%;
    margin: 0 auto;

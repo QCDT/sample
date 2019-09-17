@@ -37,10 +37,10 @@
         <img src="@/assets/img/centrifugalSet.png" @click="centrifugalSet" :disabled="disabledAmend" />
         <img src="@/assets/img/centrifugalAdd.png" @click="addSample" :disabled="disabledAmend" />
         <img v-show="!startCentrifuge" src="@/assets/img/centrifugalStart1.png" class="mainBtn" />
-        <img v-show="startCentrifuge && !finishCentrifuge" src="@/assets/img/centrifugalStart.png" class="mainBtn" @click="start"/>
-        <img v-show="startCentrifuge && finishCentrifuge" src="@/assets/img/centrifugeEnd.png" class="mainBtn" @click="start"/>
-        <img src="@/assets/img/orders.png" @click="exportOrders" />
-        <img src="@/assets/img/record.png" @click="Ordersdetail" />
+        <img v-show="startCentrifuge && !finishCentrifuge" src="@/assets/img/centrifugalStart.png" class="mainBtn" @click="start" :disabled="disabledAmend"/>
+        <img v-show="startCentrifuge && finishCentrifuge" src="@/assets/img/centrifugeEnd.png" class="mainBtn" @click="finish"/>
+        <img src="@/assets/img/orders.png" @click="exportOrders" :disabled="disabledAmend"/>
+        <img src="@/assets/img/record.png" @click="Ordersdetail" :disabled="disabledAmend"/>
       </div>
     </div>
     <el-dialog :visible.sync="dialogSet" width="50%">
@@ -169,7 +169,7 @@
     <el-dialog title="订单详情" :visible.sync="dialogOrder" width="50%" center>
       <div class="dialogOrder">
         <div class="orderNum">
-          <p>
+          <p v-show="!finishOrder">
             <span>样本容量:</span>
             <span>{{sampleNum}}</span>
           </p>
@@ -193,7 +193,7 @@
           <el-table-column prop="orderName" label="样本名称"></el-table-column>
           <el-table-column label="操作" width="80">
             <template slot-scope="scope">
-              <i class="el-icon-delete" @click="deleteRow(scope.$index,scope.row)"></i>
+              <i v-show="!finishOrder"  class="el-icon-delete del" @click="deleteRow(scope.$index,scope.row)"></i>
             </template>
           </el-table-column>
         </el-table>
@@ -245,6 +245,8 @@ export default {
       finishOrderName:'',//完成的离心订单名称
       finishOrder:false, //离心完成的订单详情
       orderId: '',//离心订单id
+      time: '',//离心机离心时间
+      timer:'',// 离心机定时器
       addData:[],
       bannerHeight: 260,
       multipleSelection:[],
@@ -294,6 +296,7 @@ export default {
       })
       this.centrifugeName = this.centrifugeList[0].centrifugeName
       this.centrifugeTime = this.centrifugeList[0].centrifugeTime
+      this.time = this.centrifugeList[0].centrifugeTime
       this.centrifugeSpeed = this.centrifugeList[0].centrifugeSpeed
       this.centrifugeTemperature = this.centrifugeList[0].centrifugeTemperature
       this.centrifugeId = this.centrifugeList[0].id
@@ -327,6 +330,7 @@ export default {
       console.log(v)
       this.centrifugeName = this.centrifugeList[v].centrifugeName //名称
       this.centrifugeTime = this.centrifugeList[v].centrifugeTime //时间
+      this.time = this.centrifugeList[v].centrifugeTime 
       this.centrifugeSpeed = this.centrifugeList[v].centrifugeSpeed //转速
       this.centrifugeTemperature = this.centrifugeList[v].centrifugeTemperature //温度
       this.setBrand = this.centrifugeList[v].brand //品牌
@@ -334,6 +338,7 @@ export default {
       this.centrifugeId = this.centrifugeList[v].id //离心机id
       this.carouselIndex = v /* 轮播图的索引 */
       this.querySample() //查询对应离心机中有无样本
+      clearInterval(this.timer)
     },
     queryTime(){
       // this.$axios({
@@ -383,7 +388,7 @@ export default {
       console.log(selection)
       this.multipleSelection = selection
     },
-    start(){
+    start(){ //.......开始离心
       console.log(this.centrifugeId)
       this.disabledAmend = true
       this.$axios({
@@ -391,18 +396,20 @@ export default {
         url:'sampleGuide/centrifuge/insertCenOrder',
         data:({
           centrifugeId: this.centrifugeId,
+          centrifugeTime: this.centrifugeSpeed
         })
       })
       .then(({data})=>{
         console.log(data)
         if(data.code== 200){
-          this.orderId = data.cenOrderId
-          let timer = setInterval(()=>{
+          this.orderId = data.data.cenOrderId
+          console.log(this.time)
+          this.timer = setInterval(()=>{
              let time =  parseFloat(this.centrifugeTime)*60
               time--
              if(time <= 0){
                 time = 0
-                clearInterval(timer)
+                clearInterval(this.timer)
                 this.disabledAmend = false
                 this.finishCentrifuge = true
                 this.$axios({
@@ -410,16 +417,41 @@ export default {
                   url: 'sampleGuide/centrifuge/cenEnd',
                   data:({
                      id: this.orderId,
-                     centrifugeTime:this.centrifugeTime
+                     centrifugeTime: this.time
                   })
                 })
                 .then(({data})=>{
+                  if(data.code == 200){
+                    this.centrifugeTime = this.time                  
+                  }
                     console.log(data)
                 })
               }
               this.centrifugeTime = time/60 +'min'
           },1000)
         }
+      })
+    },
+    finish(){//..........结束离心后查看详情
+      this.dialogOrder = true
+      this.finishOrder = true
+      this.dialogOrderData = []
+      this.$axios({
+        method:'post',
+        url:'sampleGuide/centrifuge/findCentrifugeDetail',
+        data:({
+          id: this.orderId
+        })
+      })
+      .then(({data})=>{
+        console.log(data)
+        this.finishOrderName = data.data[0].name
+        data.data.forEach((item)=>{
+          this.dialogOrderData.push({
+            orderName: item.rfidSampleName
+          })
+        })
+        console.log(data)
       })
     },
     exportPDF(){ // 导出PDF
@@ -578,9 +610,27 @@ export default {
       this.setTime = parseFloat(this.centrifugeTime)
       this.setSpeed = parseFloat(this.centrifugeSpeed)
       this.setTemperature = parseFloat(this.centrifugeTemperature)
-      this.unitValue = this.centrifugeSpeed.replace(/\(\d+\)/g,"")
+      this.unitValue = this.centrifugeSpeed.replace(/[\d]+/ig,"")
     },
     deleteRow(index, row){
+      this.$axios({
+        method:'post',
+        url:'sampleGuide/cenSample/deleteCenSampleById',
+        data:({
+          sampleId:row.id
+        })
+      })
+      .then(({data})=>{
+        if(data.code == 200){
+          this.$message({
+            message: '删除成功！',
+            type: 'success'
+          });
+          this.Ordersdetail()
+          this.querySample()
+        }
+        console.log(data)
+      })
       console.log(index,row)
     },
     updateSet(){ // 修改离心机信息
@@ -618,6 +668,7 @@ export default {
     },
     Ordersdetail () {
       this.dialogOrder = true
+      this.finishOrder = false
       this.dialogOrderData = []
        this.$axios({
           method:'post',
@@ -630,7 +681,7 @@ export default {
           console.log(data)
           data.data.forEach((item)=>{
             this.dialogOrderData.push({
-              id: item.id,
+              id: item.rfidSample.id,
               orderName: item.rfidSample.name
             })
           })
@@ -651,6 +702,9 @@ export default {
         this.findValue = ''
         this.total = 0
       }
+    },
+    centrifugeTime(){
+
     }
   },
   computed: {}
@@ -659,6 +713,9 @@ export default {
 <style  lang='less' scoped>
 .paging{
   margin-top: 20px;
+}
+.del{
+  cursor: pointer;
 }
 .centrifugeImg {
   width: 60%;
