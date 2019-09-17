@@ -92,7 +92,7 @@
         </div>
       </div>
       <div class="footer">
-        <el-button  class="enter-btn" type="primary" size="small"  v-show="status==0" @click="queRenHeYan">确认借出</el-button>
+        <el-button  class="enter-btn" type="primary" size="small" :disabled="checked"  v-show="status==0" @click="queRenHeYan">确认借出</el-button>
         <el-button  class="enter-btn" type="primary" size="small"  @click="$router.go(-1)">返回</el-button>
       </div>
     </div>
@@ -116,6 +116,7 @@ export default {
   data () {
     return {
       //ifAddBox: false,
+      checked: true,
       newTime:'', //创建时间
       orderName:'', //表单名称
       newUserName:'',//创建用户名
@@ -330,6 +331,13 @@ export default {
       })
       .then(({data})=>{
         console.log(data)
+        if(data.data.yes.length == this.tableData.length && data.data.new.length==0 && data.data.no.length == 0){
+          this.checked = false
+          this.$alert('核验成功!', '提示', {
+            confirmButtonText: '确定',
+            type: 'success'
+          })
+        }
         data.data.yes.forEach((item)=>{
           this.checkArr.push(item.rfidCode)
         })
@@ -378,11 +386,11 @@ export default {
   padding: 0 20px;
 }
 /deep/.el-table .bgColor{
-  background: #8bfb8b;
-  color:white
+  background: rgba(139, 251, 139, 0.7);
+  color:#333;
 }
 /deep/.el-table__body tr:hover>td {
-		background-color:#8bfb8b  !important;
+		background-color:rgba(139, 251, 139, 0.7)  !important;
 }
 .red{
   color: red;

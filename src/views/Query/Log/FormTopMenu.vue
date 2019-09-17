@@ -12,15 +12,9 @@
           <i class="icon icon-pdf" style="color:#A33639"></i>
         </div>
         <div class="item">
-          <download-excel
-            class="export-excel-wrapper"
-            :data="multipleSelection"
-            :fields="json_fields"
-          >
             <div @click="isEmpty">
               <i class="icon icon-excel" style="color:#217346"></i>
             </div>
-          </download-excel>
         </div>
       </div>
     </div>
@@ -55,21 +49,51 @@ export default {
 
         // 性别: "sex",
         // 电话: { field: "phone.mobile", callback: value => `${value}` }
-      },
-      json_data: [
-        { name: '张三', sex: '男', phone: { mobile: '13333333333' } },
-        { name: '张四', sex: '男', phone: { mobile: '15555555555' } }
-      ],
-      json_meta: [[{ ' key ': ' charset ', ' value ': ' utf- 8 ' }]]
-      //   ↑  导出
+      }
     }
   },
   methods: {
     isEmpty () {
-      console.log('999123: ')
-      this.multipleSelection.length == 0
-        ? this.$message('请选择要导出的数据')
-        : 0
+      if(this.multipleSelection.length == 0){
+        this.$message({
+          message: '请选择需要导出的样本日志信息',
+          type: 'warning'
+        });
+      }else{
+        let newExportArr = this.multipleSelection.map((item)=>{
+          return item.id
+        })
+        //导出归还订单Excel
+        this.$axios({
+          method:'post',
+          url:'sampleGuide/query/exportRfidSampleExcel',
+          responseType: 'blob',
+          headers: {
+            'Access-Control-Expose-Headers': 'filename'
+          },
+          data:({
+            idList: newExportArr
+          })
+
+        })
+          .then((data)=>{
+            console.log(data);
+            let fileName = data.headers.filename;
+            let blob = new Blob([data.data], {type: 'application/vnd.ms-excel;charset=UTF-8'});
+            if(window.navigator.msSaveBlob){
+              window.navigator.msSaveBlob(blob,fileName);
+            }else{
+              let a = document.createElement('a');
+              let href = window.URL.createObjectURL(blob); // 创建链接对象
+              a.href =  href;
+              a.download = fileName;   // 自定义文件名
+              document.body.appendChild(a);
+              a.click();
+              window.URL.revokeObjectURL(href);  //移除链接对象
+              document.body.removeChild(a);
+            }
+          })
+      }
     }
   },
   computed: {}

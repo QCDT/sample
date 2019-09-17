@@ -541,7 +541,7 @@ export default {
         /*width: 900px;*/
         position: relative;
         text-align: center;
-        width: 100%;
+        /*width: 100%;*/
         overflow: hidden;
         margin-top: 5px;
         height: 190px;

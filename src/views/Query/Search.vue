@@ -588,9 +588,9 @@ export default {
             }
 
         })
-        this.$emit('changeTable', this.searchTableData)
         this.$emit('changeBoxTable', this.searchTableBoxData)
         this.$emit('sampleItemValue', this.sampleItem)
+        this.$emit('changeTable', this.searchTableData,data.data.length)
           })
     },
     selectIceBox(){ //切换冰箱加载该冰箱层数
