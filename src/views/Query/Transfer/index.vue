@@ -23,11 +23,13 @@
           @selection-change="handleSelectionChange"
         >
           <el-table-column type="selection" width="55"></el-table-column>
-          <el-table-column label="序号编码" width="120">
+          <el-table-column type="index" width="70" label="序号" ></el-table-column>
+          <el-table-column label="RFID编号">
             <template slot-scope="scope">{{ scope.row.coding }}</template>
           </el-table-column>
-          <el-table-column prop="name" label="样本名称" width="120"></el-table-column>
-          <el-table-column prop="address" label="位置信息" show-overflow-tooltip></el-table-column>
+          <el-table-column prop="name" label="样本名称"></el-table-column>
+          <el-table-column prop="address" label="原位置" show-overflow-tooltip></el-table-column>
+          <el-table-column prop="" label="现位置" show-overflow-tooltip></el-table-column>
         </el-table>
       </div>
     </div>
@@ -35,7 +37,7 @@
     <div class="right-box">
       <h1>选择修改位置</h1>
       <div class="input-item">
-        <span>*样本类别</span>
+        <span>*冰箱名称</span>
         <el-select size="mini" v-model="value" placeholder="请选择">
           <el-option
             v-for="item in options"
@@ -93,14 +95,11 @@ export default {
   data () {
     return {
       tableData: [
-        {
-          coding: '123', // 序号编码
-          name: 'Mark', // 样本名称
-          address: '海尔冰箱3-1-101海尔冰箱', // 位置信息
-          status: '正常', // 状态
-          info: '详细信息', // 详细信息
-          caozuo: '操作' // 操作
-        }
+        // {
+        //   coding: '123', // 序号编码
+        //   name: 'Mark', // 样本名称
+        //   address: '海尔冰箱3-1-101海尔冰箱', // 位置信息
+        // }
       ],
       multipleSelection: [],
       options: [
@@ -111,6 +110,25 @@ export default {
       ],
       value: ''
     }
+  },
+  created(){
+    this.$axios({
+      method:'post',
+      url:'sampleGuide/query/selectSampleBack',
+      data:({
+        listId:this.$route.params.id.split(',')
+      })
+    })
+      .then(({data})=>{
+        console.log(data)
+        data.data.forEach((item)=>{
+          this.tableData.push({
+            coding:item.rfidCode,
+            name:item.name,
+            address:item.sampleStru.detailLocation
+          })
+        })
+      })
   },
   methods: {
     getRowClass ({ rowIndex }) {

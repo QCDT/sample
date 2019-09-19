@@ -31,7 +31,7 @@
         </div>
       </div>
       <!--数据分析-->
-      <div class="refrigeratorList" :class="{'analyze': labImgfangda }" v-show="refrigeratorInfo">
+      <div class="refrigeratorList" :class="{'analyze': labImgfangda }" v-show="refrigeratorInfo && refrigeratorList.length > 0">
         <div class="refInfoLeft">
             <p><span>冰箱名称：</span>
               <span>{{refName}}</span></p>
@@ -265,28 +265,29 @@ export default {
     // },
     refShow(index,labId){
       // console.log(labId)
-      this.labRefrigerator = true
-      this.labActive = index
-      this.refrigeratorList = []
-      this.$axios({
-        method: 'post',
-        url: 'sampleGuide/index/findAllRefrigeratorStruByLaboratoryDictId',
-        data: ({
-          id:labId
-        })
-      })
-        .then(({data})=>{  //冰箱展示
-          console.log(data)
-          data.data.forEach((item)=>{
-            // item.refrigeratorBrandTypeDict.pic:  require(`@/assets/img/${item.picture}`)
-            this.refrigeratorList.push({
-              id: item.id,
-              // name: item.name,
-              pic:  require(`@/assets/img/${item.refrigeratorBrandTypeDict.picture}`)
-          })
+        this.labRefrigerator = true
+        this.labActive = index
+        this.refrigeratorList = []
+        this.$axios({
+          method: 'post',
+          url: 'sampleGuide/index/findAllRefrigeratorStruByLaboratoryDictId',
+          data: ({
+            id:labId
           })
         })
-      // console.log(this.labActive);
+          .then(({data})=>{  //冰箱展示
+            console.log(data)
+            data.data.forEach((item)=>{
+              // item.refrigeratorBrandTypeDict.pic:  require(`@/assets/img/${item.picture}`)
+              this.refrigeratorList.push({
+                id: item.id,
+                // name: item.name,
+                pic:  require(`@/assets/img/${item.refrigeratorBrandTypeDict.picture}`)
+              })
+            })
+          })
+        // console.log(this.labActive);
+
     },
     warningShow(){
       this.sampleWarningShow = !this.sampleWarningShow
