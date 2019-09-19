@@ -27,7 +27,7 @@
           <el-table-column label="样本信息" show-overflow-tooltip>
             <template slot-scope="scope">
                 <!--           -->
-                  <span class="cellStyle" @click="sampleInfoClick">
+                  <span class="cellStyle" @click="sampleInfoClick(scope.$index,scope.row)">
                       {{tableData[scope.$index].sampleInfo}}
                   </span>
                 <!-- </router-link> -->
@@ -46,8 +46,8 @@
           <el-table-column prop="loanTime" label="借出日期" show-overflow-tooltip></el-table-column>
 
           <el-table-column label="日志信息"  fixed="right">
-            <template>
-                <span class="cellStyle" @click="sampleLog">查看</span>
+            <template slot-scope="scope">
+                <span class="cellStyle" @click="sampleLog(scope.$index,scope.row)">查看</span>
             </template>
           </el-table-column>
         </el-table>
@@ -138,14 +138,19 @@ export default {
     changeBoxTable(tableData){
       this.tableBoxData = tableData
     },
-    sampleInfoClick(){//样本信息展示
-      this.$router.push({name: 'sample'})
+    sampleInfoClick(index,row){//样本信息展示
+      this.$router.push({
+        name: 'sample',
+        params:{
+          id:row.id
+        }
+      })
     },
-    sampleLog(){//日志信息展示
+    sampleLog(index,row){//日志信息展示
       this.$router.push({
         name:'log',
         params:{
-          id: this.$route.params.id
+          id: row.id
         }
       })
     },

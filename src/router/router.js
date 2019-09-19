@@ -418,7 +418,7 @@ export default new Router({
       }
     },
     {
-      path: '/query/sample',
+      path: '/query/sample/:id',
       name: 'sample',
       components: {
         default: () => import('@/views/Query/Sample/index.vue'),

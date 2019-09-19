@@ -99,7 +99,7 @@ export default {
       let n = this.$store.state.OnOpen(this.elref,devicetypeValue,OpentypeValue,comPortValue,comBaudRateValue,comFrameStructureValue,netIpAddress,netPort)
       alert(n);
       if (n!=0) {
-          return 
+          return
       }
       let nret=0;
       //盘点标签初始化,申请盘点标签所需要的内存空间。返回，成功：0 ；失败：非0 （查看错误代码表）。
@@ -164,7 +164,7 @@ export default {
             if(item.sampleStatus == 1){
               this.normalSampleArr.push([item.sampleInRow,item.sampleInCol])
             }
-          })  
+          })
           //console.log(this.normalSampleArr)
           this.scanStatus = false
         })
@@ -194,12 +194,12 @@ export default {
           });
           this.reload()
         }
-        }) 
+        })
     },
     showSampleStatus(row,col){
       // console.log(row,col)
       let activeArr = [row, col]
-      // console.log(activeArr)
+      console.log(activeArr)
       for(let i=0; i<this.loanSampleArr.length; i++){
 
         if(JSON.stringify(this.loanSampleArr[i]) == JSON.stringify(activeArr)){
@@ -212,7 +212,7 @@ export default {
           return 'normalColor'
         }
       }
-    },  
+    },
     showTable (row,col) {
       let res = ''
       if(this.showModel == 1){
