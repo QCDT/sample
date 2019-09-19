@@ -37,6 +37,9 @@
         <img src="@/assets/img/centrifugalSet.png" @click="centrifugalSet" :disabled="disabledAmend" />
         <img src="@/assets/img/centrifugalAdd.png" @click="addSample" :disabled="disabledAmend" />
         <img v-show="!startCentrifuge" src="@/assets/img/centrifugalStart1.png" class="mainBtn" />
+        <!-- <img v-show="!startCentrifuge" src="@/assets/img/centrifugalStop.png" class="mainBtn" />
+        <img v-show="!startCentrifuge" src="@/assets/img/centrifugalStart1.png" class="mainBtn" />
+        <img v-show="!startCentrifuge" src="@/assets/img/centrifugalStart1.png" class="mainBtn" /> -->
         <img v-show="startCentrifuge && !finishCentrifuge" src="@/assets/img/centrifugalStart.png" class="mainBtn" @click="start" :disabled="disabledAmend"/>
         <img v-show="startCentrifuge && finishCentrifuge" src="@/assets/img/centrifugeEnd.png" class="mainBtn" @click="finish"/>
         <img src="@/assets/img/orders.png" @click="exportOrders" :disabled="disabledAmend"/>
@@ -246,7 +249,7 @@ export default {
       finishOrder:false, //离心完成的订单详情
       orderId: '',//离心订单id
       time: '',//离心机离心时间
-      timer:'',// 离心机定时器
+      timer:'',// 离心机倒计时
       addData:[],
       bannerHeight: 260,
       multipleSelection:[],

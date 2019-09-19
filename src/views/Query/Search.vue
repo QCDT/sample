@@ -352,7 +352,6 @@ import tmpinput from '@/components/tmp/zhanglan/tmp-empty-input'
 import blueSearch from '@/components/tmp/zhanglan/blueSearch'
 export default {
   components: { tmpinput, blueSearch },
-
   data () {
     return {
       /* 是否高级搜索 */
@@ -525,7 +524,6 @@ export default {
         this.asHeight = '170px'
       }
     },
-
     startSearch () {
       this.searchTableData=[]
       this.searchTableBoxData=[]
@@ -588,8 +586,8 @@ export default {
             }
 
         })
-        this.$emit('changeBoxTable', this.searchTableBoxData)
-        this.$emit('sampleItemValue', this.sampleItem)
+        this.$emit('changeBoxTable', this.searchTableBoxData,data.data.length)
+        // this.$emit('sampleItemValue', this.sampleItem)
         this.$emit('changeTable', this.searchTableData,data.data.length)
           })
     },
@@ -657,6 +655,12 @@ export default {
         })
       })
     },
+  },
+  watch:{
+    sampleItem(value){
+      console.log(value)
+      this.$emit('sampleItemValue', this.sampleItem)
+    }
   }
 }
 </script>
