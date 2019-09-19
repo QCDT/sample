@@ -31,7 +31,7 @@
                 <el-table-column prop="status" label="状态" width="120" show-overflow-tooltip ></el-table-column>
                 <el-table-column prop="info" label="详细信息" width="120" show-overflow-tooltip>
                   <template slot-scope="scope">
-                    <span class="infoStyle" @click="sampleInfo(scope.row,scope.$index)">详细信息</span>
+                    <span class="infoStyle" v-show="scope.row.address ? true : false"  @click="sampleInfo(scope.row,scope.$index)">详细信息</span>
                   </template>
                 </el-table-column>
                 <el-table-column label="操作" fixed="right" width="120">
@@ -179,19 +179,19 @@ export default {
       togegleZhuanYun: false, // 转运
       toggleSaoMiao: false,
       tableData: [
-        {
-          id:1,
-          coding: "123", // 序号编码
-          name: "Mark", // 样本名称
-          address: "海尔冰箱3-1-101海尔冰箱", // 位置信息
-          status: "正常", // 状态
-        },
-        {
-          coding: "123", // 序号编码
-          name: "Mark", // 样本名称
-          address: "", // 位置信息
-          status: "正常", // 状态
-        }
+        // {
+        //   id:1,
+        //   coding: "123", // 序号编码
+        //   name: "Mark", // 样本名称
+        //   address: "海尔冰箱3-1-101海尔冰箱", // 位置信息
+        //   status: "正常", // 状态
+        // },
+        // {
+        //   coding: "123", // 序号编码
+        //   name: "Mark", // 样本名称
+        //   address: "", // 位置信息
+        //   status: "正常", // 状态
+        // }
       ],
       boxData: [
         // {

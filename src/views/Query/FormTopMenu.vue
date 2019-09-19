@@ -1,77 +1,79 @@
 <template>
   <!-- 共有多少条数据...销毁..打印标签..转移..导出... -->
-  <div class="selection-box">
+  <div>
     <object id="LODOP_OB"
             classid="clsid:2105C259-1E0C-4534-8141-A753534CB4CA" width=0 height=0>
       <embed id="LODOP_EM" type="application/x-print-lodop" width=0 height=0/>
     </object>
-    <div class="sum">
-      <div class="item">
-        <span>共有:</span>
-        <span>{{count}}</span>
-        <span style="margin:0 0.3em">条数据</span>
-      </div>
-      <div class="item">
-        <!-- <tmpinput>
-          打印样式设置
-          <el-select
-            slot="elUI"
-            size="small"
-            clearable
-            v-model="value"
-            filterable
-            placeholder="请选择"
-            style="width:60%"
-          >
-            <el-option
-              v-for="item in options"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            ></el-option>
-          </el-select>
-        </tmpinput> -->
-      </div>
-    </div>
-    <div class="right" v-show="$route.params.id == 1">
-      <div class="item" @click="delSample">
-        <i class="icon icon-shanchu"></i>
-        <small>销毁</small>
-      </div>
-      <div class="item" @click="printTag">
-        <i class="icon icon-print"></i>
-        <small>打印标签</small>
-      </div>
-        <div class="item" @click="transfer">
-          <i class="icon icon-zhuanyi"></i>
-          <small>转移</small>
+    <div class="selection-box">
+      <div class="sum">
+        <div class="item">
+          <span>共有:</span>
+          <span>{{count}}</span>
+          <span style="margin:0 0.3em">条数据</span>
         </div>
-      <!-- </router-link> -->
-      <div class="item" @click="printLocation">
-        <i class="icon icon-weizhi"></i>
-        <small>打印位置信息</small>
-      </div>
-        <div class="item" @click="amendSample">
-          <i class="icon icon-yemianxiugai"></i>
-          <small>修改</small>
+        <div class="item">
+          <!-- <tmpinput>
+            打印样式设置
+            <el-select
+              slot="elUI"
+              size="small"
+              clearable
+              v-model="value"
+              filterable
+              placeholder="请选择"
+              style="width:60%"
+            >
+              <el-option
+                v-for="item in options"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              ></el-option>
+            </el-select>
+          </tmpinput> -->
         </div>
-       <div class="item" @click="exportExcel">
-        <i class="icon icon-pdf" style="color:#A33639"></i>
-        <small>导出PDF</small>
       </div>
-      <div class="item" @click="exportPdf">
-          <i class="icon icon-excel" style="color:#217346"></i>
-          <small>导出Excel</small>
+      <div class="right" v-show="$route.params.id == 1">
+        <div class="item" @click="delSample">
+          <i class="icon icon-shanchu"></i>
+          <small>销毁</small>
+        </div>
+        <div class="item" @click="printTag">
+          <i class="icon icon-print"></i>
+          <small>打印标签</small>
+        </div>
+          <div class="item" @click="transfer">
+            <i class="icon icon-zhuanyi"></i>
+            <small>转移</small>
+          </div>
+        <!-- </router-link> -->
+        <div class="item" @click="printLocation">
+          <i class="icon icon-weizhi"></i>
+          <small>打印位置信息</small>
+        </div>
+          <div class="item" @click="amendSample">
+            <i class="icon icon-yemianxiugai"></i>
+            <small>修改</small>
+          </div>
+        <div class="item" @click="exportExcel">
+          <i class="icon icon-pdf" style="color:#A33639"></i>
+          <small>导出PDF</small>
+        </div>
+        <div class="item" @click="exportPdf">
+            <i class="icon icon-excel" style="color:#217346"></i>
+            <small>导出Excel</small>
+        </div>
       </div>
-    </div>
 
-    <div class="right" v-show="$route.params.id != 1" >
-      <div class="item" @click="addLoanSample">
-          <img src="@/assets/img/scan_bot_out.png" alt="" width=30>
-          <small>添加借出</small>
+      <div class="right" v-show="$route.params.id != 1" >
+        <div class="item" @click="addLoanSample">
+            <img src="@/assets/img/scan_bot_out.png" alt="" width=30>
+            <small>添加借出</small>
+        </div>
       </div>
-    </div>
 
+    </div>
   </div>
 </template>
 <script>

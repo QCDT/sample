@@ -4,19 +4,19 @@
     <!-- 表单 ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓ -->
     <div class="bot-form">
       <div class="table-box">
-        <FormTopMenu :count="Number(tableData.length)" :multipleSelection="multipleSelection" ></FormTopMenu>
+        <FormTopMenu :count="Number(tableDataAll.length)" :multipleSelection="multipleSelection" ></FormTopMenu>
         <el-table
           :row-style="{height:'32px',textAlign: 'center',padding:'0px',}"
           :cell-style="{padding:0 , textAlign: 'center',}"
           border
           ref="multipleTable"
           max-height="400"
-          :data="tableData.slice((currentPage-1)*PageSize,currentPage*PageSize)"
+          :data="tableData"
           tooltip-effect="dark"
           style="width:100%"
           @selection-change="handleSelectionChange"
         >
-          <el-table-column type="selection" width="55" ></el-table-column>
+          <el-table-column type="selection"></el-table-column>
           <el-table-column  width="70" label="序号">
             <template slot-scope="scope"><span>{{scope.$index+(currentPage - 1) * PageSize + 1}}</span></template>
           </el-table-column>
@@ -44,7 +44,7 @@
           <el-table-column prop="loanPerson" label="借出人" show-overflow-tooltip></el-table-column>
           <el-table-column prop="loanTime" label="借出日期" show-overflow-tooltip></el-table-column>
 
-          <el-table-column label="日志信息"  fixed="right">
+          <el-table-column label="日志信息" fixed="right">
             <template>
                 <span class="cellStyle" @click="sampleLog">查看</span>
             </template>
@@ -78,9 +78,8 @@ export default {
       total: 0,//查询到样本总数
       currentPage:1,//默认显示第几页
       PageSize:40,//每页显示条数
-      tableData: [
-
-      ],
+      tableDataAll:[],
+      tableData: [],
       multipleSelection: []
       //   ↑ 表单
     }
@@ -92,13 +91,16 @@ export default {
         // 改变默认的页数
         console.log(val)
         this.currentPage=val
+        this.tableData = []
+        this.tableData = this.tableDataAll.slice((this.currentPage-1)*this.PageSize,this.currentPage*this.PageSize)
     },
     handleSelectionChange (val) {  //选中数据的集合
       this.multipleSelection = val
     },
     changeTable(tableData,tableTotal){
         console.log(tableTotal) //根据查询条件改变table中内容
-        this.tableData = tableData
+        this.tableDataAll = tableData
+        this.tableData = this.tableDataAll.slice((this.currentPage-1)*this.PageSize,this.currentPage*this.PageSize)
         this.total = tableTotal
     },
     sampleInfoClick(){//样本信息展示

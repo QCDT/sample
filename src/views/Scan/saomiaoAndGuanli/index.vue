@@ -141,15 +141,15 @@ export default {
                 status: "", // 状态
               })
             }),
-              data.data.old.forEach((item)=>{
-                this.tableData.push({
-                  id:'',
-                  coding: item.rfidCode, // 序号编码
-                  name: item.name, // 样本名称
-                  address: item.sampleStru.detailLocation, // 位置信息
-                  status: item.status==1?"正常":2?"借出":'预留' // 状态
-                })
+            data.data.old.forEach((item)=>{
+              this.tableData.push({
+                id:'',
+                coding: item.rfidCode, // 序号编码
+                name: item.name, // 样本名称
+                address: item.sampleStru.detailLocation, // 位置信息
+                status: item.status==1?"正常":2?"借出":'预留' // 状态
               })
+            })
             this.$emit('changeSample',this.tableData)
           })
 
