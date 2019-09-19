@@ -74,17 +74,16 @@
           <el-table-column prop="enterName" label="录入人" show-overflow-tooltip></el-table-column>
           <el-table-column prop="location" label="位置信息" show-overflow-tooltip></el-table-column>
         </el-table>
-
-        <el-pagination
-          class="paging"
-          :hide-on-single-page="total <= 40"
-          layout="prev, pager, next"
-          :currentPage='currentPage'
-          @current-change='handleCurrentChange'
-          :page-size="PageSize"
-          :total="total">
-        </el-pagination>
-
+        <div v-show="total>0">
+          <el-pagination
+            class="paging"
+            layout="prev, pager, next"
+            :currentPage='currentPage'
+            @current-change='handleCurrentChange'
+            :page-size="PageSize"
+            :total="total">
+          </el-pagination>
+        </div>
       </div>
     </div>
     <!-- 表单 ↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑ -->
@@ -138,6 +137,7 @@ export default {
       this.multipleSelection = val
     },
     changeTable(tableData,tableTotal){
+        this.total = 0
         console.log(tableTotal) //根据查询条件改变table中内容
         this.tableDataAll = tableData
         this.tableData = this.tableDataAll.slice((this.currentPage-1)*this.PageSize,this.currentPage*this.PageSize)
@@ -145,6 +145,7 @@ export default {
     },
     changeBoxTable(tableData,tableTotal){
       console.log(tableTotal)
+      this.total = 0
       this.tableBoxDataAll = tableData
       this.tableBoxData = this.tableBoxDataAll.slice((this.currentPage-1)*this.PageSize,this.currentPage*this.PageSize)
       this.total = tableTotal
@@ -172,6 +173,15 @@ export default {
           id: this.$route.params.id
         }
       })
+    }
+  },
+  watch:{
+    sampleBoxValue(){
+      this.total = 0
+      this.tableDataAll = []
+      this.tableData = []
+      this.tableBoxDataAll = []
+      this.tableBoxData = []
     }
   },
   computed: {}
