@@ -138,6 +138,7 @@ export default {
   },
   watch:{
     printListA:function(val,oldval){
+      console.log(this.printListA)
       this.printA = []
       this.printContentA.forEach((item)=>{
         this.printListA.forEach((option)=>{

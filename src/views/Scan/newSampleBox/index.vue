@@ -270,8 +270,8 @@ export default {
         this.rowValue = data.data[0].sampleBoxStru.structureRow,// 样本盒行数
         this.colValue = data.data[0].sampleBoxStru.structureCol,// 样本盒列数
         this.labValue = data.data[0].sampleBoxStru.refrigeratorStruId,// 冰箱id值
-        this.labRowValue = data.data[0].sampleBoxStru.tierStruId,//冰箱层数id值
-        this.labDrawerValue = data.data[0].sampleBoxStru.drawerStruId,// 冰箱抽屉id值
+        this.labRowValue = data.data[0].sampleBoxStru.tierStru.row,//冰箱层数id值
+        this.labDrawerValue = data.data[0].sampleBoxStru.drawerStru.number,// 冰箱抽屉id值
         this.sampleBox = data.data[0].sampleBoxStru.row,//样本盒位置id
         this.mark = data.data[0].remarks
         //sampleBoxStru

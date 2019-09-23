@@ -28,7 +28,7 @@
         </el-tooltip>
       </div>
       <div class="item">
-        <el-tooltip class="item" effect="dark" content="转运">
+        <el-tooltip class="item" effect="dark" content="转移">
           <img :src="botGroupPic[4].pic"   @click="zhuanyunClick">
         </el-tooltip>
       </div>
@@ -121,14 +121,26 @@ export default {
           message: '请选择要转移的样本',
           type: 'warning'
         });
-      }else if(this.checkedlist.length > 1){
-        this.$message({
-          message: '样本只能单个转移哟',
-          type: 'warning'
-        });
       }else{
-        this.$message('转运')
-        this.$emit('zhuanyun')
+        // this.$message('转运')
+        // this.$emit('zhuanyun')
+        let sampleInfo = this.checkedlist.every((item)=>{
+          return item.status == '正常'})
+        if(sampleInfo){
+          console.log(this.checkedlist)
+          this.$router.push({
+            name:'transfer',
+            params:{
+              id:this.checkedlist.map((item)=>{return item.id}).join()
+            }
+          })
+          // this.$router.push("/query/transfer/2230")
+        }else{
+          this.$message({
+            message: '请选择样本状态为正常的样本',
+            type: 'warning'
+          });
+        }
       }
     },
     returnBack(){
@@ -200,21 +212,50 @@ export default {
           type: 'warning'
         });
       }else{
-        this.$confirm('已选中'+this.checkedlist.length+'条数据，确定销毁样本吗?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          this.$message({
-            type: 'success',
-            message: '删除成功!'
-          });
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消删除'
-          });
-        });
+          let sampleInfo = this.checkedlist.every((item)=>{
+            return item.status == '正常'
+          })
+          if(sampleInfo){
+            this.$confirm('已选中'+this.checkedlist.length+'条数据，确定销毁样本吗?', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning'
+            }).then(() => {
+              this.$axios({
+                method:'post',
+                url:'sampleGuide/query/deleteListSampleById',
+                data:({
+                  list: this.checkedlist.map((item)=>{return item.id})
+                })
+              })
+                .then(({data})=>{
+                  console.log(data)
+                  if(data.code == 200){
+                    this.$message({
+                      type: 'success',
+                      message: '删除成功!'
+                    });
+                    this.reload()
+                  }else{
+                    this.$message({
+                      type: 'warning',
+                      message: data.data
+                    });
+                  }
+
+                })
+            }).catch(() => {
+              this.$message({
+                type: 'info',
+                message: '已取消删除'
+              });
+            });
+          }else{
+            this.$message({
+              message: '请选择样本状态为正常的样本',
+              type: 'warning'
+            });
+          }
       }
     },
     delitemBox(){
@@ -272,6 +313,7 @@ export default {
       }
     },
     printitem(){
+      console.log(this.checkedlist)
       if(this.checkedlist.length == 0){
          this.$message({
           message: '请先选择要打印的样本',
@@ -283,16 +325,77 @@ export default {
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.$message({
-            type: 'success',
-            message: '打印成功!'
-          });
+          this.$axios({
+            method: 'post',
+            url:'sampleGuide/query/printLabel',
+            data:({
+              sampleCategoryDict:0,
+              rfidCodeList: this.checkedlist.map((item)=>{return item.coding})
+            })
+          })
+          .then(({data})=>{
+            console.log(data)
+            data.data.forEach((item)=>{
+              try{
+                  var myobject = new ActiveXObject("GoDEXATL.Function");
+                  myobject.openport("6")
+                  myobject.setup(20, 19, 4, 0, 3,0)
+                  myobject.sendcommand("^L\r\n");
+                  myobject.ecTextOut(260, 20, 17, "Arial", item.firstLine);
+                  myobject.ecTextOut(260, 50, 17, "Arial", item.secondLine);
+                  myobject.ecTextOut(260, 50, 17, "Arial", item.thirdLine);
+                  myobject.sendcommand("E\r\n")
+              }catch(e){
+                  alert("打印故障，请检查打印机是否连接！")
+              }finally{
+                  myobject.closeport();
+              }
+            })
+          })
         }).catch(() => {
           this.$message({
             type: 'info',
-            message: '已取消打印'
-          });
+            message: '已取消删除'
+          });          
         });
+        // this.$confirm('已选中'+this.checkedlist.length+'条数据，确定打印样本吗?', '提示', {
+        //   confirmButtonText: '确定',
+        //   cancelButtonText: '取消',
+        //   type: 'warning'
+        // }).then(() => {
+        //   this.$axios({
+        //     method: 'post',
+        //     url:'sampleGuide/query/printLabel',
+        //     data:({
+        //       sampleCategoryDict:0,
+        //       rfidCodeList: this.multipleSelection.map((item)=>{return item.rfId})
+        //     })
+        //   })
+        //   .then(({data})=>{
+        //     console.log(data)
+        //     data.data.forEach((item)=>{
+        //       try{
+        //           var myobject = new ActiveXObject("GoDEXATL.Function");
+        //           myobject.openport("6")
+        //           myobject.setup(20, 19, 4, 0, 3,0)
+        //           myobject.sendcommand("^L\r\n");
+        //           myobject.ecTextOut(260, 20, 17, "Arial", item.firstLine);
+        //           myobject.ecTextOut(260, 50, 17, "Arial", item.secondLine);
+        //           myobject.ecTextOut(260, 50, 17, "Arial", item.thirdLine);
+        //           myobject.sendcommand("E\r\n")
+        //       }catch(e){
+        //           alert("打印故障，请检查打印机是否连接！")
+        //       }finally{
+        //           myobject.closeport();
+        //       }
+        //     })
+        //   })
+        // }).catch(() => {
+        //   this.$message({
+        //     type: 'info',
+        //     message: '已取消打印'
+        //   });
+        // });
       }
     },
     printitemBox(){

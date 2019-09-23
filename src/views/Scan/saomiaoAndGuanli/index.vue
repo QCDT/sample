@@ -143,7 +143,7 @@ export default {
             }),
             data.data.old.forEach((item)=>{
               this.tableData.push({
-                id:'',
+                id:item.id,
                 coding: item.rfidCode, // 序号编码
                 name: item.name, // 样本名称
                 address: item.sampleStru.detailLocation, // 位置信息

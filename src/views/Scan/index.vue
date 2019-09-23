@@ -238,7 +238,12 @@ export default {
       // this.$store.commit('changeReturnBack', selection)
     },
     sampleInfo(row,index){
-
+      this.$router.push({
+        name: 'sample',
+        params:{
+          id:row.id
+        }
+      })
     },
     sampleBoxInfo(row,index){
       this.sampleBoxId = row.id

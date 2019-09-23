@@ -443,6 +443,14 @@ export default new Router({
         navbar: Header
       }
     }
+    // {
+    //   path: '/scan/sampleTransfer/:id',
+    //   name: 'transferScan',
+    //   components: {
+    //     default: () => import('@/views/Query/Transfer/index.vue'),
+    //     navbar: Header
+    //   }
+    // }
     //  ↓ test.vue
     // {
     //   path: '/test',
