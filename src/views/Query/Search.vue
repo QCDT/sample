@@ -555,7 +555,7 @@ export default {
             })
           })
           .then(({data})=>{
-            // console.log(data);
+            console.log(data);
             data.data.forEach((item)=>{
                // console.log(item);
             if(this.sampleItem == 1){
