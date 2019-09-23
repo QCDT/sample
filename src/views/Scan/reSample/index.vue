@@ -65,7 +65,15 @@
           </li>
           <li class="item">
             <span>样本来源:</span>
-            <el-select size="small" v-model="source" placeholder="请选择" class="newSample">
+            <el-select
+              size="small"
+              v-model="source"
+              placeholder="请选择"
+              class="newSample"
+              filterable
+              allow-create
+              default-first-option
+            >
               <el-option
                 v-for="item in sourceOption"
                 :key="item.value"
@@ -76,7 +84,15 @@
           </li>
           <li class="item">
             <span>样本类别:</span>
-            <el-select size="small" v-model="testTubeCategory" placeholder="请选择" class="newSample">
+            <el-select
+              size="small"
+              v-model="testTubeCategory"
+              placeholder="请选择"
+              class="newSample"
+              filterable
+              allow-create
+              default-first-option
+            >
               <el-option
                 v-for="item in testTubeCategoryOption"
                 :key="item.value"
@@ -175,7 +191,8 @@
               <span>已使用</span>
               <span>借用</span>
               <span>原位置</span>
-              <span>未使用</span>
+              <span style="background-color: #15ff13;">已选中</span>
+              <span style="background-color: #eeeeee;">未使用</span>
             </div>
           </div>
           <div class="mark">
@@ -198,14 +215,14 @@
 </template>
 <script>
   import tmpButton from '@/components/tmp/zhanglan/tmpButton'
-  import matrix9x9 from '@/components/tmp/zhanglan/matrix-9x9'
+  // import matrix9x9 from '@/components/tmp/zhanglan/matrix-9x9'
 
   export default {
     props: {
       title: String,
       multipleSelection: {type: Array, default: () => []}
     },
-    components: {tmpButton, matrix9x9},
+    components: {tmpButton},
     data() {
       return {
         locationNow: [],//位置信息
@@ -280,7 +297,7 @@
         })
       })
         .then(({data}) => {
-          console.log(data)
+          // console.log(data)
 //当前信息
           this.sample[0].value = data.data.rfidSample.rfidCode
           this.sample[1].value = data.data.rfidSample.name
@@ -437,7 +454,7 @@
           })
         })
           .then(({data}) => {
-            console.log(data)
+            // console.log(data)
             data.data.forEach((item) => {
               this.chouTiOption.push({
                 value: item.id,
@@ -451,9 +468,9 @@
         this.styleBoxOption = []
         this.$axios({
           method: 'post',
-          url: 'sampleGuide/set/selectSampleBoxStru',
+          url: 'sampleGuide/scan/getSampleBoxRowList',
           data: ({
-            drawerStruId: this.chouTi
+            id: this.chouTi
           })
         })
           .then(({data}) => {
