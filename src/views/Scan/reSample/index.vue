@@ -4,134 +4,190 @@
     <h1 class="top-title" v-if="title">{{title}}</h1>
     <div class="sample-box">
       <div class="left">
-          <h1 class="sample-old">
-            <tmpButton>当前信息</tmpButton>
-          </h1>
-          <ul>
-            <li v-for="(item, index) in sample" :key="index" class="item">
-              <span>{{item.key}}:</span>
-              <i>{{item.value}}</i>
-            </li>
-          </ul>
-          <div class="bot">
+        <h1 class="sample-old">
+          <span>当前信息</span>
+        </h1>
+        <ul>
+          <li v-for="(item, index) in sample" :key="index" class="item">
+            <span>{{item.key}}:</span>
+            <i>{{item.value}}</i>
+          </li>
+        </ul>
+        <div class="bot">
+          <div class="matrix-box">
             <div class="matrix">
-                <matrix9x9 tdWidth="10px" tdHeight="10px"></matrix9x9>
+              <table class="table">
+                <tr v-for="row in rowValue" :key="row">
+                  <!-- <template v-for="item in loanSampleArr"> -->
+                  <td
+                    v-for="col in colValue"
+                    :key="col"
+                    :class="showSampleStatus(row, col)"
+                  >{{showTable(row,col)}}
+                  </td>
+                  <!-- </template> -->
+                </tr>
+              </table>
             </div>
-            <div class="mark">
-              <h1>备注</h1>
-              <el-input
-                type="textarea"
-                :rows="5"
-                placeholder="请输入内容"
-                v-model="textarea"
-              ></el-input>
+            <div class="map">
+              <span>已使用</span>
+              <span>借用</span>
+              <span>原位置</span>
+              <span>未使用</span>
             </div>
           </div>
+          <div class="mark">
+            <h1>备注</h1>
+            <el-input
+              type="textarea"
+              :rows="5"
+              v-model="textareaOld"
+              disabled="disabled"
+            ></el-input>
+          </div>
+        </div>
       </div>
       <div class="right">
-          <h1 class="sample-old">
-            <tmpButton>修改信息</tmpButton>
-          </h1>
-          <ul>
-            <li class="item">
-              <span>RFID编号:</span>
-              <el-input v-model="input" size="small" class="newSample"></el-input>
-              <i class="icon icon-kaiguan"></i>
-            </li>
-            <li class="item">
-              <span>样本名称:</span>
-              <el-input v-model="input" size="small" class="newSample"></el-input>
-            </li>
-            <li class="item">
-              <span>样本来源:</span>
-              <el-select size="small" v-model="value" placeholder="请选择" class="newSample">
-                <el-option
-                  v-for="item in options"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
-                ></el-option>
-              </el-select>
-            </li>
-            <li class="item">
-               <span>样本类别:</span>
-               <el-select size="small" v-model="value" placeholder="请选择" class="newSample">
-                  <el-option
-                    v-for="item in options"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value"
-                  ></el-option>
-                </el-select>
-            </li>
-            <li class="item">
-              <span>采样日期:</span>
-              <el-input v-model="input" size="small" class="newSample"></el-input>
-            </li>
-            <li class="item">
-              <span>有效日期:</span>
-              <el-input v-model="input" size="small" class="newSample"></el-input>
-            </li>
-            <li class="item">
-              <span>提前报警天数:</span>
-              <el-input v-model="input" size="small" class="newSample"></el-input>天
-            </li>
-            <li>
-              <span>位置信息:</span>
-            </li>
-            <li class="item location-info-change">
-              <i>冰箱:</i>
-              <el-select size="small" v-model="value" placeholder="请选择">
-                <el-option
-                  v-for="item in options"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
-                ></el-option>
-              </el-select>
-              <i>层数:</i>
-              <el-select size="small" v-model="value" placeholder="请选择">
-                <el-option
-                  v-for="item in options"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
-                ></el-option>
-              </el-select>
-              <i>抽屉:</i>
-              <el-select size="small" v-model="value" placeholder="请选择">
-                <el-option
-                  v-for="item in options"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
-                ></el-option>
-              </el-select>
-              <i>样本盒:</i>
-              <el-select size="small" v-model="value" placeholder="请选择">
-                <el-option
-                  v-for="item in options"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
-                ></el-option>
-              </el-select>
-            </li>
-          </ul>
-          <div class="bot">
+        <h1 class="sample-old">
+          <span>修改信息</span>
+        </h1>
+        <ul>
+          <li class="item">
+            <span>RFID编号:</span>
+            <el-input v-model="inputRfid" size="small" class="newSample"></el-input>
+            <el-tooltip effect="dark" content="切换芯片" placement="right">
+              <img src="@/assets/img/saomiao.gif" alt="" width="30" height="30">
+            </el-tooltip>
+          </li>
+          <li class="item">
+            <span>样本名称:</span>
+            <el-input v-model="inputName" size="small" class="newSample"></el-input>
+          </li>
+          <li class="item">
+            <span>样本来源:</span>
+            <el-select size="small" v-model="source" placeholder="请选择" class="newSample">
+              <el-option
+                v-for="item in sourceOption"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              ></el-option>
+            </el-select>
+          </li>
+          <li class="item">
+            <span>样本类别:</span>
+            <el-select size="small" v-model="testTubeCategory" placeholder="请选择" class="newSample">
+              <el-option
+                v-for="item in testTubeCategoryOption"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              ></el-option>
+            </el-select>
+          </li>
+          <li class="item">
+            <span>采样日期:</span>
+            <el-input v-model="inputCai" size="small" class="newSample"></el-input>
+          </li>
+          <li class="item">
+            <span>有效日期:</span>
+            <el-input v-model="inputYouXiao" size="small" class="newSample"></el-input>
+          </li>
+          <li class="item">
+            <span>提前报警天数:</span>
+            <el-input v-model="inputWarn" size="small" class="newSample"></el-input>
+            天
+          </li>
+          <li>
+            <span>位置信息:</span>
+          </li>
+          <li class="item location-info-change">
+            <i>冰箱:</i>
+            <el-select
+              size="small"
+              v-model="refrigerator"
+              placeholder="请选择"
+              @change="selectIceBox"
+            >
+              <el-option
+                v-for="item in refrigeratorOption"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              ></el-option>
+            </el-select>
+            <i>层数:</i>
+            <el-select
+              size="small"
+              v-model="layer"
+              placeholder="请选择"
+              @change="selectIcePlice"
+            >
+              <el-option
+                v-for="item in layerOption"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              ></el-option>
+            </el-select>
+            <i>抽屉:</i>
+            <el-select
+              size="small"
+              v-model="chouTi"
+              placeholder="请选择"
+              @change="selectDrawer"
+            >
+              <el-option
+                v-for="item in chouTiOption"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              ></el-option>
+            </el-select>
+            <i>样本盒:</i>
+            <el-select size="small" v-model="styleBox" placeholder="请选择">
+              <el-option
+                v-for="item in styleBoxOption"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              ></el-option>
+            </el-select>
+          </li>
+        </ul>
+        <div class="bot">
+          <div class="matrix-box">
             <div class="matrix">
-                <matrix9x9 tdWidth="10px" tdHeight="10px"></matrix9x9>
+              <table class="table">
+                <tr v-for="row in rowValue" :key="row">
+                  <!-- <template v-for="item in loanSampleArr"> -->
+                  <td
+                    v-for="col in colValue"
+                    :key="col"
+                    :class="showSampleStatus(row, col)"
+                  >{{showTable(row,col)}}
+                  </td>
+                  <!-- </template> -->
+                </tr>
+              </table>
             </div>
-            <div class="mark">
-              <h1>备注</h1>
-              <el-input
-                type="textarea"
-                :rows="5"
-                placeholder="请输入内容"
-                v-model="textarea"
-              ></el-input>
+            <div class="map">
+              <span>已使用</span>
+              <span>借用</span>
+              <span>原位置</span>
+              <span>未使用</span>
             </div>
           </div>
+          <div class="mark">
+            <h1>备注</h1>
+            <el-input
+              type="textarea"
+              :rows="5"
+              placeholder="请输入内容"
+              v-model="textareaNew"
+            ></el-input>
+          </div>
+        </div>
       </div>
     </div>
     <div class="bot-btn">
@@ -141,125 +197,439 @@
   </div>
 </template>
 <script>
-import tmpButton from '@/components/tmp/zhanglan/tmpButton'
-import matrix9x9 from '@/components/tmp/zhanglan/matrix-9x9'
-export default {
-  props: { title: String },
-  components: { tmpButton, matrix9x9 },
-  data () {
-    return {
-      options: [
-        {
-          value: '西瓜',
-          label: '西瓜'
+  import tmpButton from '@/components/tmp/zhanglan/tmpButton'
+  import matrix9x9 from '@/components/tmp/zhanglan/matrix-9x9'
+
+  export default {
+    props: {
+      title: String,
+      multipleSelection: {type: Array, default: () => []}
+    },
+    components: {tmpButton, matrix9x9},
+    data() {
+      return {
+        locationNow: [],//位置信息
+        rowValue: '',
+        colValue: '',
+        showModel: '',//样本盒显示模式
+        loanSampleArr: [],//样本盒中借出样本集合
+        normalSampleArr: [],//样本盒中正常样本集合
+        /* 来源 source */
+        sourceOption: [
+          /* { value: 'A来源', label: 'A来源' },
+          { value: 'B来源', label: 'B来源' } */
+        ],
+        testTubeCategoryOption: [
+          /* { value: 'A类别', label: 'A类别' },
+          { value: 'B类别', label: 'B类别' } */
+        ],
+        value: '',
+        inputRfid: '',//rfid
+        inputName: '',//样本名称
+        inputCai: '',//采样日期
+        inputYouXiao: '',//有效日期
+        inputWarn: '',//报警日期
+        textareaOld: '',
+        textareaNew: '',
+        source: '', //样本来源
+        testTubeCategory: '', //样本类别
+        refrigerator: '',//冰箱
+        layer: '',//层数
+        chouTi: '',//抽屉
+        styleBox: '', //样本盒
+        /* 冰箱 refrigerator */
+        refrigeratorOption: [
+          /* { value: 'refrigeratorA', label: 'refrigeratorA' },
+          { value: 'refrigeratorB', label: 'refrigeratorB' } */
+        ],
+        /* 层数 layer */
+        layerOption: [
+          /* { value: 'layer1', label: 'layer1' },
+          { value: 'layer2', label: 'layer2' } */
+        ],
+        /* 抽屉 chouTi */
+        chouTiOption: [
+          /*  { value: 'chouTi1', label: 'chouTi1' },
+           { value: 'chouTi2', label: 'chouTi2' } */
+        ],
+        /* 样式盒 styleBox */
+        styleBoxOption: [
+          /* { value: 'styleBox1', label: 'styleBox1' },
+          { value: 'styleBox2', label: 'styleBox2' } */
+        ],
+        sample: [
+          {key: 'RFID编号', value: ''},
+          {key: '样本名称', value: ''},
+          {key: '样本来源', value: ''},
+          {key: '样本类别', value: ''},
+          {key: '采样日期', value: ''},
+          {key: '有效日期', value: ''},
+          {key: '提前报警天数', value: ''},
+          {key: '位置信息', value: ''}
+        ]
+      }
+    },
+    //修改样本回显信息
+    created() {
+      // console.log(this.multipleSelection)
+      this.$axios({
+        method: 'post',
+        url: 'sampleGuide/scan/findSampleById',
+        data: ({
+          id: this.multipleSelection[0].id
+        })
+      })
+        .then(({data}) => {
+          console.log(data)
+//当前信息
+          this.sample[0].value = data.data.rfidSample.rfidCode
+          this.sample[1].value = data.data.rfidSample.name
+          this.sample[2].value = data.data.rfidSample.sampleSource
+          this.sample[3].value = data.data.rfidSample.sampleCategoryDict.name
+          this.sample[4].value = data.data.rfidSample.samplingDate == null ? '' : data.data.rfidSample.samplingDate
+          if (data.data.rfidSample.expireDate == null && data.data.rfidSample.samplingDate == null) {
+            this.sample[5].value = ''
+            this.inputYouXiao = ''
+          } else {
+            this.sample[5].value = data.data.rfidSample.expireDate - data.data.rfidSample.samplingDate
+            this.inputYouXiao = data.data.rfidSample.expireDate - data.data.rfidSample.samplingDate
+          }
+          this.sample[6].value = data.data.rfidSample.warningDays
+          this.sample[7].value = data.data.rfidSample.sampleStru.detailLocation
+//修改信息
+          this.inputRfid = data.data.rfidSample.rfidCode
+          this.inputName = data.data.rfidSample.name
+          this.inputCai = data.data.rfidSample.samplingDate == null ? '' : data.data.rfidSample.samplingDate
+          this.inputWarn = data.data.rfidSample.warningDays
+          //备注
+          this.textareaOld = data.data.rfidSample.remarks
+          this.textareaNew = data.data.rfidSample.remarks
+
+          this.rowValue = data.data.rfidSample.sampleStru.sampleBoxStru.structureRow
+          this.colValue = data.data.rfidSample.sampleStru.sampleBoxStru.structureCol
+          this.showModel = data.data.rfidSample.sampleStru.sampleBoxStru.structureSpec
+          this.locationNow.push([data.data.rfidSample.sampleStru.row,data.data.rfidSample.sampleStru.col])
+          data.data.sampleStruList.forEach((item)=>{
+            if(item.sampleStatus == 2){
+              this.loanSampleArr.push([item.row,item.col])
+            }
+            if(item.sampleStatus == 1){
+              this.normalSampleArr.push([item.row,item.col])
+            }
+          })
+
+        }),
+
+        //类别
+        this.$axios({
+          method: 'get',
+          url: 'sampleGuide/queryCategoryDict/selectSampleCategory',
+        })
+          .then(({data}) => {
+            // console.log(data);
+            data.data.forEach((item) => {
+              this.testTubeCategoryOption.push(
+                {
+                  label: item,
+                  value: item
+                }
+              )
+            })
+          }),
+        //来源
+        this.$axios({
+          method: 'get',
+          url: 'sampleGuide/querySampleSource/selectrfidSamplesource',
+        })
+          .then(({data}) => {
+            // console.log(data);
+            data.data.forEach((item) => {
+              this.sourceOption.push({
+                label: item,
+                value: item
+              });
+            })
+          }),
+        this.$axios({ // ........冰箱名称渲染
+          method: 'get',
+          url: '/sampleGuide/set/selectRefrigeratorName'
+        })
+          .then(({data}) => {
+            // console.log(data)
+            data.data.forEach((item) => {
+              this.refrigeratorOption.push({
+                value: item.id,
+                label: item.name
+              })
+            })
+          })
+    },
+    methods: {
+      changeSave() {
+        this.$emit('changeSave')
+      },
+      showSampleStatus(row,col){
+        // console.log(row,col)
+        let activeArr = [row, col]
+        // console.log(activeArr)
+        if(JSON.stringify(this.locationNow[0]) == JSON.stringify(activeArr)){
+          return 'nowColor'
         }
-      ],
-      value: '',
-      input: '',
-      textarea: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
-      sample: [
-        { key: 'RFID编号', value: 'obj105f47g1a4' },
-        { key: '样本名称', value: '样本1号' },
-        { key: '样本来源', value: '血样' },
-        { key: '样本类别', value: '血样' },
-        { key: '采样日期', value: '2018-10-22 10:10:10' },
-        { key: '有效日期', value: ' 2018-10-22 10:10:10' },
-        { key: '提前报警天数', value: '20天' },
-        { key: '位置信息', value: ['2号冰箱', '1-2-样本盒A'] }
-      ]
-    }
-  },
-  methods: {
-    changeSave () {
-      this.$emit('changeSave')
-    }
-  },
-  computed: {}
-}
+        for(let i=0; i<this.loanSampleArr.length; i++){
+
+          if(JSON.stringify(this.loanSampleArr[i]) == JSON.stringify(activeArr)){
+            return 'loanColor'
+          }
+        }
+        for(let i=0; i<this.normalSampleArr.length; i++){
+          if(JSON.stringify(this.normalSampleArr[i]) == JSON.stringify(activeArr)){
+            return 'normalColor'
+          }
+        }
+      },
+      showTable (row,col) {
+        let res = ''
+        if(this.showModel == 1){
+          res = row+'/'+col
+        }else if(this.showModel == 2){
+          res = row+'/'+String.fromCharCode(64 + col)
+        }else if(this.showModel == 3){
+          res = String.fromCharCode(64 + row)+'/'+col
+        }else if(this.showModel == 4){
+          res = String.fromCharCode(64 + row) +'/'+ String.fromCharCode(64 + col)
+        }else{
+          res = (row-1)*this.colValue+col
+        }
+        return res
+      },
+      selectIceBox() { //切换冰箱加载该冰箱层数
+        this.layerOption = []
+        this.layer = ''
+        this.chouTi = '',
+          this.chouTiOption = []
+        this.styleBox = ''
+        this.styleBoxOption = []
+        this.$axios({
+          method: 'post',
+          url: 'sampleGuide/set/selectTier',
+          data: ({
+            refrigeratorStruId: this.refrigerator
+          })
+        })
+          .then(({data}) => {
+            // console.log(data)
+            data.data.forEach((item) => {
+              this.layerOption.push({
+                value: item.id,
+                label: item.row
+              })
+            })
+          })
+      },
+      selectIcePlice() {//层数切换时加载相应的抽屉
+        this.$axios({
+          method: 'post',
+          url: '/sampleGuide/guest/selectDrawerStruByTierStru',
+          data: ({
+            tierStruId: {
+              id: this.layer
+            }
+          })
+        })
+          .then(({data}) => {
+            console.log(data)
+            data.data.forEach((item) => {
+              this.chouTiOption.push({
+                value: item.id,
+                label: item.number
+              })
+            })
+          })
+      },
+      selectDrawer() {   //抽屉切换加载相应样本盒
+        this.styleBox = ''
+        this.styleBoxOption = []
+        this.$axios({
+          method: 'post',
+          url: 'sampleGuide/set/selectSampleBoxStru',
+          data: ({
+            drawerStruId: this.chouTi
+          })
+        })
+          .then(({data}) => {
+            console.log(data)
+            data.data.forEach((item) => {
+              this.styleBoxOption.push({
+                value: item.row,
+                label: item.row
+              })
+            })
+          })
+      }
+    },
+    computed: {}
+  }
 </script>
 <style scoped lang='less'>
-.top-title {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 7px 0;
-  background-color: #e2e2e2;
-  margin-bottom: 10px;
-  font-size: 20px;
-  font-weight: 500;
-}
-.bot-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding-top: 30px;
-  &/deep/ {
+  .top-title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 7px 0;
+    background-color: #e2e2e2;
+    margin-bottom: 10px;
+    font-size: 20px;
+    font-weight: 500;
+  }
+
+  .bot-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 30px;
+
     button {
       margin: 0 20px;
     }
-  }
-}
-.sample-box {
-  width:100%;
-  display: flex;
-  justify-content: center;
-}
-.left {
-  border-right: 1px solid #999;
-  padding-right: 20px;
-  margin-left: 50px;
-  .item {
-    margin-bottom: 10px;
-    font-size: 15px;
-    span {
-      display: inline-block;
-      width: 120px;
-    }
-  }
-}
-.right {
-  margin-left: 20px;
-  .item {
-    margin-bottom: 10px;
-    font-size: 15px;
-    >span {
-      display: inline-block;
-      width: 120px;
-    }
-    .newSample{
-      width: 50%;
-    }
-  }
-}
-.sample-old {
-  margin-bottom: 10px;
-}
-.bot {
-  display: flex;
-  justify-content: space-between;
-  width: 500px;
-}
-.mark {
-  padding-top: 20px;
-  h1 {
-    margin-bottom: 5px;
-  }
-}
 
-.right {
-  .item {
+  }
+
+  .sample-box {
+    width: 100%;
     display: flex;
-    align-items: center;
+    justify-content: center;
+  }
+
+  .left {
+    border-right: 1px solid #999;
+    padding-right: 20px;
+    margin-left: 50px;
+    .item {
+      margin-bottom: 10px;
+      font-size: 15px;
+      span {
+        display: inline-block;
+        width: 120px;
+      }
+    }
+  }
+
+  .right {
+    margin-left: 20px;
+    .item {
+      margin-bottom: 10px;
+      font-size: 15px;
+      > span {
+        display: inline-block;
+        width: 120px;
+      }
+      .newSample {
+        width: 50%;
+      }
+    }
+  }
+
+  .sample-old {
     margin-bottom: 10px;
+    font-size: 20px;
+    color: #00c9ff;
   }
-}
-.location-info-change {
-  padding-top: 5px;
-  padding-left: 0.5rem;
-  i {
-    display: inline-block;
-    white-space: nowrap;
-    margin: 0 3px 0 7px;
+
+  .bot {
+    display: flex;
+    justify-content: space-between;
+    width: 500px;
+
+    .matrix-box {
+      display: flex;
+      justify-content: space-between;
+
+      /*.matrix{*/
+      /*border: 1px solid #333;*/
+      /*}*/
+
+      .table {
+        border-spacing: 0;
+        border: 2px solid #a4a4a4;
+        border-collapse: collapse;
+        background-color: #eeeeee;
+        td {
+          border: 1px solid #a4a4a4;
+          text-align: center;
+          font-size: 12px;
+          padding: 5px;
+        }
+      }
+
+      .map {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-evenly;
+
+        width: 60px;
+        height: 150px;
+
+        cursor: pointer;
+        white-space: nowrap;
+
+        font-size: 13px;
+        margin-left: 20px;
+        span {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 2px 3px;
+          font-size: 13px;
+          color: #333;
+          border-radius: 3px;
+          margin-bottom: 10px;
+        }
+        span:nth-child(1) {
+          background-color: #00c9ff;
+        }
+        span:nth-child(2) {
+          background-color: #fffd30;
+        }
+        span:nth-child(3) {
+          background-color: #ffa724;
+        }
+        span:nth-child(4) {
+          background-color: #eeeeee;
+        }
+      }
+    }
   }
-}
+  .normalColor{
+    background: #00c9ff;
+  }
+  .loanColor{
+    background: #fffd30;
+  }
+  .nowColor{
+    background: #ffa724;
+  }
+  .mark {
+    padding-top: 20px;
+    h1 {
+      margin-bottom: 5px;
+    }
+  }
+
+  .right {
+    .item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+  }
+
+  .location-info-change {
+    padding-top: 5px;
+    padding-left: 0.5rem;
+    i {
+      display: inline-block;
+      white-space: nowrap;
+      margin: 0 3px 0 7px;
+    }
+  }
 </style>
