@@ -1,10 +1,22 @@
 <template>
   <div class="searchWrap">
-    <Search  @changeTable = changeTable @changeBoxTable = changeBoxTable @sampleItemValue="sampleItemValueChange"></Search>
+    <Search v-show="!reMaskTran"  @changeTable = changeTable @changeBoxTable = changeBoxTable @sampleItemValue="sampleItemValueChange"></Search>
     <!-- 表单 ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓ -->
-    <div class="bot-form">
+
+    <!-- 修改样本 -->
+    <transition name="el-fade-in-linear">
+      <!-- rgba:透明度 -->
+      <reSample v-if="reMaskTran" :multipleSelection="multipleSelection" title="修改样本" @changeSave="changeSave" @goBack="reMaskTran=false"></reSample>
+    </transition>
+
+    <div class="bot-form" v-show="!reMaskTran">
       <div class="table-box">
-        <FormTopMenu :count="sampleBoxValue == 0?Number(tableDataAll.length):Number(tableBoxDataAll.length)" :multipleSelection="multipleSelection" ></FormTopMenu>
+        <FormTopMenu
+          :count="sampleBoxValue == 0?Number(tableDataAll.length):Number(tableBoxDataAll.length)"
+          :multipleSelection="multipleSelection"
+          @reSample="reSampleShow"
+          v-show="!reMaskTran"
+        ></FormTopMenu>
         <el-table
           :row-style="{height:'32px',textAlign: 'center',padding:'0px',}"
           :cell-style="{padding:0 , textAlign: 'center',}"
@@ -92,11 +104,12 @@
 
 </template>
 <script>
-import Search from './Search'
-import FormTopMenu from './FormTopMenu'
+import Search from './Search';
+import FormTopMenu from './FormTopMenu';
+import reSample from '@/views/Scan/reSample';
 export default {
   props: {},
-  components: { Search, FormTopMenu },
+  components: { Search, FormTopMenu, reSample },
   data () {
     return {
       // ↓   表单
@@ -108,13 +121,26 @@ export default {
       tableBoxDataAll:[],
       tableBoxData:[],//查询样本盒集合
       sampleBoxValue:'',
-      multipleSelection: []
+      multipleSelection: [],
+      reId:[],
+      reMaskTran: false, // 修改样本
       //   ↑ 表单
     }
   },
   created(){
   },
   methods: {
+    reSampleShow(){
+      this.reMaskTran = true
+    },
+    //   修改样本
+    changeSave() {
+      this.$message("确认保存-父组件");
+      this.reMaskTran = false;
+    },
+    reSampleShowId(val){
+      this.reId = val
+    },
     changeType(val){
       this.sampleItem = val
     },

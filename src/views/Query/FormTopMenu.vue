@@ -297,8 +297,13 @@ export default {
           message: '请选择需要修改的样本',
           type: 'warning'
         });
+      }else if(this.multipleSelection.length > 1){
+        this.$message({
+          message: '只能勾选一个样本进行修改',
+          type: 'warning'
+        });
       }else{
-         this.$router.push({name: 'changsample'})
+        this.$emit("reSample")
       }
     },
     exportExcel(){

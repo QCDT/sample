@@ -55,7 +55,6 @@
               <!-- </template> -->
             </tr>
           </table>
-
         </div>
         <div class="map">
           <span>已使用</span>
@@ -356,7 +355,7 @@
       margin-bottom: 10px;
     }
     span:nth-child(1) {
-      background-color: #787878;
+      background-color: #00c9ff;
     }
     span:nth-child(2) {
       background-color: #fffd30;
@@ -369,7 +368,7 @@
     }
   }
   .normalColor{
-    background: #787878;
+    background: #00c9ff;
   }
   .loanColor{
     background: #fffd30;
