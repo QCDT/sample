@@ -43,37 +43,35 @@
           <i class="icon icon-print"></i>
           <small>打印标签</small>
         </div>
-          <div class="item" @click="transfer">
-            <i class="icon icon-zhuanyi"></i>
-            <small>转移</small>
-          </div>
+        <div class="item" @click="transfer">
+          <i class="icon icon-zhuanyi"></i>
+          <small>转移</small>
+        </div>
         <!-- </router-link> -->
         <div class="item" @click="printLocation">
           <i class="icon icon-weizhi"></i>
           <small>打印位置信息</small>
         </div>
-          <div class="item" @click="amendSample">
-            <i class="icon icon-yemianxiugai"></i>
-            <small>修改</small>
-          </div>
-       <div class="item" @click="exportPdf">
-        <i class="icon icon-pdf" style="color:#A33639"></i>
-        <small>导出PDF</small>
-      </div>
-      <div class="item" @click="exportExcel">
+        <div class="item" @click="amendSample">
+          <i class="icon icon-yemianxiugai"></i>
+          <small>修改</small>
+        </div>
+        <div class="item" @click="exportPdf">
+          <i class="icon icon-pdf" style="color:#A33639"></i>
+          <small>导出PDF</small>
+        </div>
+        <div class="item" @click="exportExcel">
           <i class="icon icon-excel" style="color:#217346"></i>
           <small>导出Excel</small>
+        </div>
       </div>
-
       <div class="right" v-show="$route.params.id != 1" >
         <div class="item" @click="addLoanSample">
             <img src="@/assets/img/scan_bot_out.png" alt="" width=30>
             <small>添加借出</small>
         </div>
       </div>
-
     </div>
-  </div>
   </div>
 </template>
 <script>
@@ -153,7 +151,7 @@ export default {
            });
          }else{
            this.$message({
-             message: '请选择样本状态为正常的样本',
+             message: '借出样本不可删除',
              type: 'warning'
            });
          }
@@ -357,7 +355,7 @@ export default {
     },
     //添加借出
     addLoanSample(){
-        if(this.multipleSelection.length == 0){
+      if(this.multipleSelection.length == 0){
         this.$alert('请选择需要借出的样本', '提示', {
           confirmButtonText: '确定',
           type: 'warning'

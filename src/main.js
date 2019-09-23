@@ -11,6 +11,7 @@ import VueCookies from 'vue-cookies'
 import echarts from 'echarts'
 axios.defaults.baseURL = 'http://192.168.1.99:8071'
 axios.defaults.headers['Content-Type'] = 'application/json;charset=UTF-8'
+// axios.defaults.withCredentials = true
 Vue.config.productionTip = false
 Vue.use(ElementUI)
 Vue.use(VueCookies)

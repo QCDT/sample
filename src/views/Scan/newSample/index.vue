@@ -3,9 +3,8 @@
 
   <div class="change-wrap-1" v-loading.fullscreen.lock="fullscreenLoading">
     <h1 class="top-title" v-if="title">{{title}}</h1>
-      <!-- <div class="change-wrap"> -->
         <el-form class="change-wrap" :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" size="mini" :status-icon="true" >
-        <!-- 左边 -->
+            <!-- 左边 -->
             <div class="left-box">
                 <el-form-item label="RFID编号">
                   <el-input v-model="RFID" disabled></el-input>
@@ -23,7 +22,7 @@
                     ></el-option>
                   </el-select>
                 </el-form-item>
-                <el-form-item label="样本来源" prop="sampleSource">
+                <el-form-item label="样本来源" >
                   <el-select  filterable allow-create  v-model="ruleForm.sampleSource" placeholder="请选择" class="marg-l">
                     <el-option
                       v-for="item in sampleSourceOption"
@@ -38,7 +37,7 @@
                     v-model="ruleForm.samplingDate"
                     type="date"
                     placeholder="选择日期"
-                    value-format="timestamp"
+                    value-format="yyyy-MM-dd HH:mm:ss"
                     style="width:100%"
                   ></el-date-picker>
                 </el-form-item>
@@ -47,7 +46,7 @@
                     v-model="ruleForm.effective"
                     type="date"
                     placeholder="选择日期"
-                    value-format="timestamp"
+                    value-format="yyyy-MM-dd HH:mm:ss"
                     style="width:100%"
                   ></el-date-picker>
                 </el-form-item>
@@ -65,8 +64,15 @@
                 <el-form-item label="提前报警天数">
                   <el-input  v-model="ruleForm.earlyWarning" placeholder></el-input>
                 </el-form-item>
-                <el-form-item label="项目编号">
-                  <el-input  v-model="ruleForm.project" placeholder></el-input>
+                <el-form-item label="所属项目"  prop="project">
+                  <el-select  v-model="ruleForm.project" placeholder="请选择" class="marg-l">
+                    <el-option
+                      v-for="item in projectOption"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value"
+                    ></el-option>
+                  </el-select>
                 </el-form-item>
                 <el-form-item label="方案编号">
                   <el-input  v-model="ruleForm.fangan" placeholder></el-input>
@@ -104,8 +110,6 @@
                         :value="item.value"
                       ></el-option>
                     </el-select>
-                  <!-- </el-form-item> -->
-                  <!-- <el-form-item label="层数"> -->
                     <span>层数</span>
                     <el-select size="mini" v-model="labRow" @change="showDrawer" placeholder="请选择">
                       <el-option
@@ -115,8 +119,6 @@
                         :value="item.value"
                       ></el-option>
                     </el-select>
-                  <!-- </el-form-item> -->
-                  <!-- <el-form-item label="抽屉"> -->
                     <span>抽屉</span>
                     <el-select v-model="labDrawer" @change="showSampleBox" size="mini" placeholder="请选择">
                       <el-option
@@ -126,8 +128,6 @@
                         :value="item.value"
                       ></el-option>
                     </el-select>
-                  <!-- </el-form-item> -->
-                  <!-- <el-form-item label="样本盒"> -->
                     <span>样本盒</span>
                       <el-select  v-model="sampleBoxValue" @change="showSample"  size="mini" placeholder="请选择">
                         <el-option
@@ -137,9 +137,8 @@
                           :value="item.value"
                         ></el-option>
                     </el-select>
-                  <!-- </el-form-item> -->
               </div>
-              <div class="tableWrap">
+              <div class="tableWrap" v-loading="loading">
                 <table class="table">
                     <tr v-for="row in rowValue" :key="row">
                         <td
@@ -160,7 +159,6 @@
                   />
                 </div>
               </div>
-              <!-- <matrix9x9 class="mapflex"></matrix9x9> -->
               <div class="mark">
                 <h1>备注</h1>
                 <el-input
@@ -215,6 +213,7 @@ export default {
       mark: '',
       locationMsg:false,
       fullscreenLoading: true,
+      loading:false,
       ruleForm: {
         sampleName:'', // 样本名称
         sampleType:'',// 样本类别
@@ -223,7 +222,7 @@ export default {
         effective: '', // 有效日期
         pipeCap:'', // 管帽颜色
         earlyWarning:'', // 提前报警天数
-        project:'', //项目编号
+        project:'', //所属项目
         fangan: '', // 方案编号
         jiliang: '' ,//剂量组
         patient: '', // 受试者号
@@ -232,10 +231,13 @@ export default {
       },
       rules: {
         sampleName: [
-          { validator: validateName, trigger: 'blur' }
+          { validator: validateName, trigger: 'change' }
         ],
         sampleType:[
           { required: true, message: '请选择样本类别', trigger: 'change' }
+        ],
+        project:[
+          { required: true, message: '请选择所属项目', trigger: 'change' }
         ]
       },
       mapData: [
@@ -278,6 +280,7 @@ export default {
           value:'粉色'
         }
       ],
+      projectOption:[],
       sampleSourceOption:[],//.......样本来源集合
       sampleTypeOption:[],//.....样本类别集合
       labValue:'',//.......冰箱id
@@ -337,7 +340,20 @@ export default {
         })
       })
     })
-    this.$axios({
+    this.$axios.get("/sampleGuide/guest/selectProjectAll")//.....项目初始化
+    .then(({data})=>{
+        // console.log(data)
+        data.data.forEach((item)=>{
+          this.projectOption.push({
+            value:item.id,
+            label:item.name
+          })
+        })
+    })
+    .catch((error)=>{
+      console.log(error)
+    })
+    this.$axios({ //........新建样本初始化
       method:'get',
       url:'/sampleGuide/scan/findLastSample'
     })
@@ -370,6 +386,59 @@ export default {
             this.normalSampleArr.push([item.row,item.col])
           }
       })
+      this.$axios({ //.........初始化所有层数
+        method: 'post',
+        url:'sampleGuide/set/selectTier',
+        data:({
+          refrigeratorStruId: this.labValue
+        })
+      })
+      .then(({data})=>{
+        console.log(data)
+        data.data.forEach((item)=>{
+          this.labRowOption.push({
+            value: item.id,
+            label:item.row
+          })
+        })
+      })
+      this.$axios({// ...初始化所有抽屉
+        method: 'post',
+        url:'/sampleGuide/guest/selectDrawerStruByTierStru',
+        data:({
+          tierStruId:{
+            id:this.labRow
+	        }
+        })
+      })
+      .then(({data})=>{
+          console.log(data)
+          data.data.forEach((item)=>{
+            this.labDrawerOption.push({
+              value:item.id,
+              label:item.number
+            })
+          })
+      })
+      this.$axios({ //........初始化所有样本盒
+        method:'post',
+        url:'sampleGuide/scan/getSampleBoxRowList',
+        data:({
+          id:this.labDrawer
+        })
+      })
+      .then(({data})=>{
+        console.log(data)
+        data.data.forEach((item)=>{
+          this.sampleBoxOption.push({
+            label:item.row,
+            value: item.id
+          })
+        })
+      })
+      // this.showlabRow()
+      // this.showDrawer()
+      // this.showSampleBox()
       this.fullscreenLoading = false
     })
   },
@@ -443,7 +512,10 @@ export default {
         })
       })
     },
-    showSample(){
+    showSample(){ //.......根据样本盒查询样本信息
+      this.loading = true
+      this.activeRow = ''
+      this.activeCol = ''
       this.$axios({
         method:'post',
         url:'/sampleGuide/scan/findSampleStruBySampleBoxId',
@@ -453,7 +525,6 @@ export default {
       })
       .then(({data})=>{
         console.log(data)
-        this.showSample = true
         this.rowValue = data.data.sampleBoxRow
         this.colValue = data.data.sampleBoxCol
         this.showModel = data.data.sampleBoxSpec
@@ -465,6 +536,7 @@ export default {
               this.normalSampleArr.push([item.row,item.col])
             }
         })
+         this.loading = false
       })
     },
     chooseLocation(row,col){
@@ -472,12 +544,12 @@ export default {
       this.activeCol = col
     },
     showSampleStatus(row,col){
-      console.log(this.activeRow,this.activeCol)
+      // console.log(this.activeRow,this.activeCol)
       let activeArr = [row, col]
       // console.log(activeArr)
-      // if(JSON.stringify(activeArr) == JSON.stringify([this.activeRow, this.activeCol])){
-      //   return 'activeColor'
-      // }
+      if(JSON.stringify(activeArr) == JSON.stringify([this.activeRow, this.activeCol])){
+        return 'activeColor'
+      }
       // for(let i=0; i<this.normalSampleArr.length; i++){
       //   if( JSON.stringify([this.activeRow, this.activeCol] === JSON.stringify(activeArr) && JSON.stringify(this.loanSampleArr[i]) != JSON.stringify())){
       //     return 'activeColor'
@@ -494,6 +566,9 @@ export default {
       for(let i=0; i<this.normalSampleArr.length; i++){
         if(JSON.stringify(this.normalSampleArr[i]) == JSON.stringify(activeArr)){
           return 'normalColor'
+        }else if (JSON.stringify([this.activeRow, this.activeCol]) == JSON.stringify(activeArr) && JSON.stringify([this.activeRow, this.activeCol]) !== JSON.stringify(this.normalSampleArr[i])) {
+          console.log(111)
+          return 'activeColor'
         }
         // if( JSON.stringify([this.activeRow, this.activeCol]) == JSON.stringify(activeArr) && JSON.stringify([this.activeRow, this.activeCol]) !== JSON.stringify(this.normalSampleArr[i])){
         //   return 'activeColor'
@@ -517,14 +592,58 @@ export default {
     },
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
+        console.log(this.ruleForm.project)
         if (valid && this.labValue && this.labRow && this.labDrawer && this.sampleBoxValue) {
-          alert('submit!');
+           this.locationMsg = false
+          this.$axios({
+            method:'post',
+            url:'/sampleGuide/scan/createSample',
+            data:({
+              rfidCode: this.RFID,
+              name: this.ruleForm.sampleName,
+              sampleCategoryDictId:this.ruleForm.sampleType,
+              sampleSource:this.ruleForm.sampleSource ,
+              samplingDate:this.ruleForm.samplingDate, 
+              capColor:this.ruleForm.pipeCap,
+              warningDays:this.ruleForm.earlyWarning,
+              sampleCentralLaboratoryNumber:this.ruleForm.project,
+              sampleStudy:this.ruleForm.fangan,
+              sampleTreatment:this.ruleForm.jiliang,
+              sampleSubject:this.ruleForm.patient,
+              sampleTime:this.ruleForm.bloodDate,//
+              sampleMatrix:this.ruleForm.jizhi, //.....基质描述
+              refrigeratorStruId:this.labValue ,//....冰箱id
+              tierStruId:this.labRow, //...层id
+              drawerStruId:this.labDrawer,//....抽屉id
+              sampleBoxStruId:this.sampleBoxValue, //....样本盒id
+              row: this.activeRow, //....新样本位置--行
+              col: this.activeCol//....新样本位置--列
+            })
+          })
+          .then(({data})=>{
+            if(data.code == 200){
+              this.$message({
+                message: '请完善样本信息',
+                type: 'success'
+              });
+              this.$router.push('/scan')
+            }
+            console.log(data)
+          })
+
         } else {
-          console.log('error submit!!');
+          this.$message({
+            message: '请完善样本信息',
+            type: 'warning'
+          });
+          this.locationMsg = true
           return false;
         }
       });
     },
+  },
+  watch:{
+
   },
   computed: {}
 }
