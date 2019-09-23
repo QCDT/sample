@@ -90,6 +90,7 @@
           <el-pagination
             class="paging"
             layout="prev, pager, next"
+            :hide-on-single-page="total<=40"
             :currentPage='currentPage'
             @current-change='handleCurrentChange'
             :page-size="PageSize"

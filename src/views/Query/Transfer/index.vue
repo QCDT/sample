@@ -24,7 +24,7 @@
         >
           <el-table-column type="selection" width="55"></el-table-column>
           <el-table-column type="index" width="70" label="序号" ></el-table-column>
-          <el-table-column label="RFID编号" show-overflow-tooltip>>
+          <el-table-column label="RFID编号" show-overflow-tooltip>
             <template slot-scope="scope">{{ scope.row.coding }}</template>
           </el-table-column>
           <el-table-column prop="name" label="样本名称"></el-table-column>

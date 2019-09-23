@@ -516,6 +516,8 @@ export default {
       this.loading = true
       this.activeRow = ''
       this.activeCol = ''
+      this.loanSampleArr = []
+      this.normalSampleArr = []
       this.$axios({
         method:'post',
         url:'/sampleGuide/scan/findSampleStruBySampleBoxId',
@@ -566,9 +568,6 @@ export default {
       for(let i=0; i<this.normalSampleArr.length; i++){
         if(JSON.stringify(this.normalSampleArr[i]) == JSON.stringify(activeArr)){
           return 'normalColor'
-        }else if (JSON.stringify([this.activeRow, this.activeCol]) == JSON.stringify(activeArr) && JSON.stringify([this.activeRow, this.activeCol]) !== JSON.stringify(this.normalSampleArr[i])) {
-          console.log(111)
-          return 'activeColor'
         }
         // if( JSON.stringify([this.activeRow, this.activeCol]) == JSON.stringify(activeArr) && JSON.stringify([this.activeRow, this.activeCol]) !== JSON.stringify(this.normalSampleArr[i])){
         //   return 'activeColor'
