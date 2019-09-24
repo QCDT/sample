@@ -110,7 +110,7 @@
     </div>
       <!-- 新建样本 -->
       <transition name="el-fade-in-linear">
-          <newSample  v-if="newMaskTran" title="新建样本" :RFID="RFID" @goBack="newMaskTran=false" @save="save"></newSample>
+          <newSample  v-if="newMaskTran" title="新建样本" :RFID="RFID" @goBack="newMaskTran=false"></newSample>
       </transition>
       <!-- 修改样本 -->
       <transition name="el-fade-in-linear">
@@ -224,10 +224,6 @@ export default {
       console.log(row, index)
        this.newMaskTran=true
        this.RFID = row.coding
-    },
-    save() {
-      this.$message("确认保存-父组件");
-      this.newMaskTran = false;
     },
     changeBox (boxData) {
       console.log(boxData)

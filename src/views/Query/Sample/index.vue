@@ -6,7 +6,7 @@
       <el-tabs v-model="activeName" @tab-click="handleClick">
         <!--  -->
         <el-tab-pane label="详细日志" name="first">
-          <div class="sampleSign" v-for="(activity, index) in activities">
+          <div class="sampleSign" v-for="(activity, index) in activities" :key="index">
             <span>{{opeSign[activity.content]}}</span>
             <span class="admin">操作人：{{activity.person}}</span>
             <p>操作时间：{{activity.timestamp}}</p>
@@ -126,10 +126,10 @@
           '转出',
           '转入',
           '核验',
-          '验还原',
+          '核验还原',
           '采血',
-          '血还原',
-          '离心机',
+          '采血还原',
+          '放入离心机',
           '离心完成',
           '接收',
           '从离心机取出',

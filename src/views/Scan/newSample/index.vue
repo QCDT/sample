@@ -183,6 +183,7 @@
 import tmpButton from '@/components/tmp/zhanglan/tmpButton'
 // import matrix9x9 from '@/components/tmp/zhanglan/matrix-9x9'
 export default {
+  inject:['reload'],
   props: { title: String , RFID: String},
   components: { tmpButton },
   data () {
@@ -541,24 +542,28 @@ export default {
          this.loading = false
       })
     },
-    chooseLocation(row,col){
+    chooseLocation(row,col){ //......选择新建样本位置
+      console.log(this.normalSampleArr)
+      for(let i=0; i<this.normalSampleArr.length; i++){
+        if(JSON.stringify(this.normalSampleArr[i]) == JSON.stringify([row, col])){
+          return;
+
+        }
+      }
+      for(let i=0; i<this.loanSampleArr.length; i++){
+        if(JSON.stringify(this.loanSampleArr[i]) == JSON.stringify([row, col])){
+          return;
+        }
+      }
       this.activeRow = row
       this.activeCol = col
+      console.log(this.activeRow, this.activeCol)
     },
     showSampleStatus(row,col){
-      // console.log(this.activeRow,this.activeCol)
       let activeArr = [row, col]
-      // console.log(activeArr)
-      if(JSON.stringify(activeArr) == JSON.stringify([this.activeRow, this.activeCol])){
-        return 'activeColor'
+      if(JSON.stringify(activeArr) ==JSON.stringify([this.activeRow,this.activeCol])){
+         return 'activeColor'
       }
-      // for(let i=0; i<this.normalSampleArr.length; i++){
-      //   if( JSON.stringify([this.activeRow, this.activeCol] === JSON.stringify(activeArr) && JSON.stringify(this.loanSampleArr[i]) != JSON.stringify())){
-      //     return 'activeColor'
-      //   }else{
-      //     return ''
-      //   }
-      // }
       for(let i=0; i<this.loanSampleArr.length; i++){
         if(JSON.stringify(this.loanSampleArr[i]) == JSON.stringify(activeArr)){
           console.log(JSON.stringify(this.loanSampleArr[i]) == JSON.stringify(activeArr))
@@ -566,12 +571,14 @@ export default {
         }
       }
       for(let i=0; i<this.normalSampleArr.length; i++){
+        // let tdColor = ''
         if(JSON.stringify(this.normalSampleArr[i]) == JSON.stringify(activeArr)){
-          return 'normalColor'
+           return 'normalColor'
         }
-        // if( JSON.stringify([this.activeRow, this.activeCol]) == JSON.stringify(activeArr) && JSON.stringify([this.activeRow, this.activeCol]) !== JSON.stringify(this.normalSampleArr[i])){
+        // if(JSON.stringify(this.normalSampleArr[i]) != JSON.stringify([this.activeRow, this.activeCol]) && JSON.stringify(activeArr) ==JSON.stringify([this.activeRow,this.activeCol])){
         //   return 'activeColor'
         // }
+        // return tdColor
       }
     },  
     showTable (row,col) {
@@ -622,10 +629,10 @@ export default {
           .then(({data})=>{
             if(data.code == 200){
               this.$message({
-                message: '请完善样本信息',
+                message: '创建样本成功!',
                 type: 'success'
               });
-              this.$router.push('/scan')
+              this.reload()
             }
             console.log(data)
           })
