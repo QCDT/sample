@@ -17,12 +17,12 @@
           <div class="matrix-box">
             <div class="matrix">
               <table class="table">
-                <tr v-for="row in rowValue" :key="row">
+                <tr v-for="row in rowValueTwo" :key="row">
                   <!-- <template v-for="item in loanSampleArr"> -->
                   <td
-                    v-for="col in colValue"
+                    v-for="col in colValueTwo"
                     :key="col"
-                    :class="showSampleStatus(row, col)"
+                    :class="showSampleStatusTwo(row, col)"
                   >{{showTable(row,col)}}
                   </td>
                   <!-- </template> -->
@@ -161,7 +161,12 @@
               ></el-option>
             </el-select>
             <i>样本盒:</i>
-            <el-select size="small" v-model="styleBox" placeholder="请选择">
+            <el-select
+              size="small"
+              v-model="styleBox"
+              placeholder="请选择"
+              @change="showSample"
+            >
               <el-option
                 v-for="item in styleBoxOption"
                 :key="item.value"
@@ -181,6 +186,7 @@
                     v-for="col in colValue"
                     :key="col"
                     :class="showSampleStatus(row, col)"
+                    @click="chooseLocation(row,col)"
                   >{{showTable(row,col)}}
                   </td>
                   <!-- </template> -->
@@ -225,12 +231,19 @@
     components: {tmpButton},
     data() {
       return {
+        locationNowTwo: [],//位置信息
         locationNow: [],//位置信息
         rowValue: '',
         colValue: '',
+        rowValueTwo: '',
+        colValueTwo: '',
         showModel: '',//样本盒显示模式
         loanSampleArr: [],//样本盒中借出样本集合
+        loanSampleArrTwo: [],//样本盒中借出样本集合
         normalSampleArr: [],//样本盒中正常样本集合
+        normalSampleArrTwo: [],//样本盒中正常样本集合
+        activeRow:'',
+        activeCol:'',
         /* 来源 source */
         sourceOption: [
           /* { value: 'A来源', label: 'A来源' },
@@ -271,8 +284,8 @@
         ],
         /* 样式盒 styleBox */
         styleBoxOption: [
-          /* { value: 'styleBox1', label: 'styleBox1' },
-          { value: 'styleBox2', label: 'styleBox2' } */
+          /* { value: 'styleBox1', label: 'styleBox1',id:'1' },
+          { value: 'styleBox2', label: 'styleBox2',id:'2' } */
         ],
         sample: [
           {key: 'RFID编号', value: ''},
@@ -297,7 +310,7 @@
         })
       })
         .then(({data}) => {
-          // console.log(data)
+          console.log(data)
 //当前信息
           this.sample[0].value = data.data.rfidSample.rfidCode
           this.sample[1].value = data.data.rfidSample.name
@@ -322,15 +335,20 @@
           this.textareaOld = data.data.rfidSample.remarks
           this.textareaNew = data.data.rfidSample.remarks
 
+          this.rowValueTwo = data.data.rfidSample.sampleStru.sampleBoxStru.structureRow
           this.rowValue = data.data.rfidSample.sampleStru.sampleBoxStru.structureRow
+          this.colValueTwo = data.data.rfidSample.sampleStru.sampleBoxStru.structureCol
           this.colValue = data.data.rfidSample.sampleStru.sampleBoxStru.structureCol
           this.showModel = data.data.rfidSample.sampleStru.sampleBoxStru.structureSpec
+          this.locationNowTwo.push([data.data.rfidSample.sampleStru.row,data.data.rfidSample.sampleStru.col])
           this.locationNow.push([data.data.rfidSample.sampleStru.row,data.data.rfidSample.sampleStru.col])
           data.data.sampleStruList.forEach((item)=>{
             if(item.sampleStatus == 2){
+              this.loanSampleArrTwo.push([item.row,item.col])
               this.loanSampleArr.push([item.row,item.col])
             }
             if(item.sampleStatus == 1){
+              this.normalSampleArrTwo.push([item.row,item.col])
               this.normalSampleArr.push([item.row,item.col])
             }
           })
@@ -385,12 +403,34 @@
       changeSave() {
         this.$emit('changeSave')
       },
+      showSampleStatusTwo(row,col){
+        // console.log(row,col)
+        let activeArr = [row, col]
+        // console.log(activeArr)
+        if(JSON.stringify(this.locationNowTwo[0]) == JSON.stringify(activeArr)){
+          return 'nowColor'
+        }
+        for(let i=0; i<this.loanSampleArrTwo.length; i++){
+
+          if(JSON.stringify(this.loanSampleArrTwo[i]) == JSON.stringify(activeArr)){
+            return 'loanColor'
+          }
+        }
+        for(let i=0; i<this.normalSampleArrTwo.length; i++){
+          if(JSON.stringify(this.normalSampleArrTwo[i]) == JSON.stringify(activeArr)){
+            return 'normalColor'
+          }
+        }
+      },
       showSampleStatus(row,col){
         // console.log(row,col)
         let activeArr = [row, col]
         // console.log(activeArr)
         if(JSON.stringify(this.locationNow[0]) == JSON.stringify(activeArr)){
           return 'nowColor'
+        }
+        if(JSON.stringify(activeArr) == JSON.stringify([this.activeRow, this.activeCol])){
+          return 'activeColor'
         }
         for(let i=0; i<this.loanSampleArr.length; i++){
 
@@ -444,6 +484,10 @@
           })
       },
       selectIcePlice() {//层数切换时加载相应的抽屉
+        this.chouTi = '',
+          this.chouTiOption = []
+        this.styleBox = ''
+        this.styleBoxOption = []
         this.$axios({
           method: 'post',
           url: '/sampleGuide/guest/selectDrawerStruByTierStru',
@@ -475,14 +519,56 @@
         })
           .then(({data}) => {
             console.log(data)
+            // this.sampleBoxValue = data.data.id
             data.data.forEach((item) => {
               this.styleBoxOption.push({
-                value: item.row,
-                label: item.row
+                value: item.id,
+                label: item.row,
               })
             })
           })
-      }
+      },
+      showSample(){//........根据样本盒查询样本信息
+        this.activeRow = ''
+        this.activeCol = ''
+        this.locationNow = []
+        this.loanSampleArr = []
+        this.normalSampleArr = []
+        this.$axios({
+          method:'post',
+          url:'/sampleGuide/scan/findSampleStruBySampleBoxId',
+          data:({
+            sampleBoxStruId: this.styleBox
+          })
+        }).then(({data})=>{
+          console.log(data)
+          this.rowValue = data.data.sampleBoxRow
+          this.colValue = data.data.sampleBoxCol
+          this.showModel = data.data.sampleBoxSpec
+          data.data.sampleStruList.forEach((item)=>{
+            if(item.sampleStatus == 2){
+              this.loanSampleArr.push([item.row,item.col])
+            }
+            if(item.sampleStatus == 1){
+              this.normalSampleArr.push([item.row,item.col])
+            }
+          })
+        })
+      },
+      chooseLocation(row,col){
+        for(let i=0; i<this.normalSampleArr.length; i++){
+          if(JSON.stringify(this.normalSampleArr[i]) == JSON.stringify([row, col])){
+           return
+          }
+        }
+        for(let i=0; i<this.loanSampleArr.length; i++){
+          if(JSON.stringify(this.loanSampleArr[i]) == JSON.stringify([row, col])){
+            return
+          }
+        }
+        this.activeRow = row
+        this.activeCol = col
+      },
     },
     computed: {}
   }
@@ -624,6 +710,9 @@
   }
   .nowColor{
     background: #ffa724;
+  }
+  .activeColor{
+    background: #86D647
   }
   .mark {
     padding-top: 20px;
