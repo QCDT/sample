@@ -137,7 +137,7 @@ export default {
           // this.$router.push("/query/transfer/2230")
         }else{
           this.$message({
-            message: '请选择样本状态为正常的样本',
+            message: '借出样本不可转移',
             type: 'warning'
           });
         }
@@ -198,7 +198,7 @@ export default {
             }
           })
         }else{
-          this.$alert('存在空样本，请移除后重试', '提示', {
+          this.$alert('存在空样本盒，请移除后重试', '提示', {
             confirmButtonText: '确定',
             type:'warning'
           })
@@ -252,7 +252,7 @@ export default {
             });
           }else{
             this.$message({
-              message: '请选择样本状态为正常的样本',
+              message: '借出样本不可销毁！',
               type: 'warning'
             });
           }
@@ -305,7 +305,7 @@ export default {
             });
           });
         }else{
-          this.$alert('存在空样本，请移除后重试', '提示', {
+          this.$alert('存在空样本盒，请移除后重试', '提示', {
             confirmButtonText: '确定',
             type:'warning'
           })

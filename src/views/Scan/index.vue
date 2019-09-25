@@ -115,7 +115,7 @@
       <!-- 修改样本 -->
       <transition name="el-fade-in-linear">
           <!-- rgba:透明度 -->
-          <reSample v-if="reMaskTran" title="修改样本" @changeSave="changeSave" @goBack="reMaskTran=false"></reSample>
+          <reSample v-if="reMaskTran" title="修改样本" :selectedId='selectedId' @changeSave="changeSave" @goBack="reMaskTran=false"></reSample>
       </transition>
       <!-- 新建样本盒/修改样本盒 -->
       <transition name="el-fade-in-linear">
@@ -169,6 +169,7 @@ export default {
       newMaskTran: false, // 新建样本
       newBoxMaskTran: false, // 新建样本盒
       showSampleBoxInfo: false, //样本盒详细信息
+      selectedId:'', //修改样本时所需要的id
       sampleBoxTitle: '',
       RFID: '',
       boxRfid: '',
@@ -258,7 +259,8 @@ export default {
     reMask(rowData, index) {
       this.reMaskTran = true;
       // this.RFID = row.coding
-      console.log("index: ", index);
+      this.selectedId = rowData.id
+      console.log(rowData.id);
     },
     reBoxMask(row){
       this.$axios({

@@ -139,9 +139,9 @@ export default {
       this.$message("确认保存-父组件");
       this.reMaskTran = false;
     },
-    reSampleShowId(val){
-      this.reId = val
-    },
+    // reSampleShowId(val){
+    //   this.reId = val
+    // },
     changeType(val){
       this.sampleItem = val
     },

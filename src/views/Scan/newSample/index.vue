@@ -599,7 +599,7 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         console.log(this.ruleForm.project)
-        if (valid && this.labValue && this.labRow && this.labDrawer && this.sampleBoxValue) {
+        if (valid && this.labValue && this.labRow && this.labDrawer && this.sampleBoxValue && this.activeRow && this.activeCol) {
            this.locationMsg = false
           this.$axios({
             method:'post',
@@ -673,7 +673,7 @@ export default {
   display: inline-block;
 }
 .normalColor{
-  background: #7D7C7F
+  background: #00c9ff;
 }
 .loanColor{
   background: #FCFD01;

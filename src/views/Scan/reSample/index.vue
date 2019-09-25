@@ -1,6 +1,7 @@
 <template>
   <!-- 修改样本 -->
   <div>
+    <cardfile  @reception= 'refData'></cardfile>
     <h1 class="top-title" v-if="title">{{title}}</h1>
     <div class="sample-box">
       <div class="left">
@@ -55,8 +56,8 @@
           <li class="item">
             <span>RFID编号:</span>
             <el-input v-model="inputRfid" size="small" class="newSample"></el-input>
-            <el-tooltip effect="dark" content="切换芯片" placement="right">
-              <img src="@/assets/img/saomiao.gif" alt="" width="30" height="30">
+            <el-tooltip effect="dark" content="替换RFID" placement="right">
+              <img src="@/assets/img/saomiao.gif"  @click="bindingCard">
             </el-tooltip>
           </li>
           <li class="item">
@@ -221,16 +222,18 @@
 </template>
 <script>
   import tmpButton from '@/components/tmp/zhanglan/tmpButton'
+  import cardfile from "@/components/cardfile";
   // import matrix9x9 from '@/components/tmp/zhanglan/matrix-9x9'
-
   export default {
     props: {
       title: String,
-      multipleSelection: {type: Array, default: () => []}
+      multipleSelection: {type: Array, default: () =>{return []} },
+      selectedId:{type: Number, default:0}
     },
-    components: {tmpButton},
+    components: {tmpButton, cardfile},
     data() {
       return {
+        elref:'',
         locationNowTwo: [],//位置信息
         locationNow: [],//位置信息
         rowValue: '',
@@ -301,12 +304,12 @@
     },
     //修改样本回显信息
     created() {
-      // console.log(this.multipleSelection)
+      console.log(this.selectedId)
       this.$axios({
         method: 'post',
         url: 'sampleGuide/scan/findSampleById',
         data: ({
-          id: this.multipleSelection[0].id
+          id: this.selectedId ==0?this.multipleSelection[0].id:this.selectedId
         })
       })
         .then(({data}) => {
@@ -361,7 +364,7 @@
           url: 'sampleGuide/queryCategoryDict/selectSampleCategory',
         })
           .then(({data}) => {
-            // console.log(data);
+            console.log(data);
             data.data.forEach((item) => {
               this.testTubeCategoryOption.push(
                 {
@@ -377,7 +380,7 @@
           url: 'sampleGuide/querySampleSource/selectrfidSamplesource',
         })
           .then(({data}) => {
-            // console.log(data);
+            console.log(data);
             data.data.forEach((item) => {
               this.sourceOption.push({
                 label: item,
@@ -402,6 +405,9 @@
     methods: {
       changeSave() {
         this.$emit('changeSave')
+      },
+      refData(value){
+        this.elref = value
       },
       showSampleStatusTwo(row,col){
         // console.log(row,col)
@@ -569,6 +575,69 @@
         this.activeRow = row
         this.activeCol = col
       },
+      bindingCard(){
+        console.log(this.elref)
+        //console.log(this.$refs.MyActive)
+        this.elref.RDR_Close()
+        let devicetypeValue = this.$cookies.get('readerType')
+        let OpentypeValue = this.$cookies.get('portType')
+        let comPortValue = this.$cookies.get('comPortNo')
+        let comBaudRateValue = this.$cookies.get('comBaudRate')
+        let comFrameStructureValue = this.$cookies.get('comFrameStructure')
+        let netIpAddress = this.$cookies.get('netIpAddress')
+        let netPort = this.$cookies.get('netPortNo')
+        //console.log(devicetypeValue,OpentypeValue,comPortValue,comBaudRateValue,comFrameStructureValue,netIpAddress,netPort)
+        let n = this.$store.state.OnOpen(this.elref,devicetypeValue,OpentypeValue,comPortValue,comBaudRateValue,comFrameStructureValue,netIpAddress,netPort)
+        alert(n);
+        if (n!=0) {
+            return
+        }
+        let nret=0;
+        //盘点标签初始化,申请盘点标签所需要的内存空间。返回，成功：0 ；失败：非0 （查看错误代码表）。
+        nret = this.elref.RDR_InitInventory();
+        if (nret!=0) {
+          alert("盘点标签初始化失败！")
+          return;
+        }
+        //盘点标签时，使能15693协议。返回，成功：0 ；失败：非0 （查看错误代码表）。
+        nret = this.elref.RDR_Enable15693(0,0x00,0)
+        nret = this.elref.RDR_Enable14443A()
+        if (nret!=0) {
+          //结束标签盘点操作，释放内存空间。
+            this.elref.RDR_FinishInventory()
+          return;
+        }
+      this.readRfid()
+      this.elref.RDR_Close()
+    },
+    readRfid(){
+      let nret = 0
+      let recordCnt = ''
+      let j =0
+      nret = this.elref.RDR_Inventory(0,"")
+      // alert(nret)
+      if (nret !== 0) {
+        this.$alert('读取标签失败，请检查设备连接以及参数设置！', '提示', {
+          confirmButtonText: '确定',
+          type: 'error'
+        })
+        this.elref.RDR_FinishInventory()
+        return
+      }
+      recordCnt = this.elref.RDR_GetRecordCnt()
+      // console.log(recordCnt)
+      let sTagInfo = this.elref.GetRecord(j).split("-");
+      let sTagID = sTagInfo[sTagInfo.length-1];
+      alert(recordCnt)
+      if(recordCnt == 1){
+        this.inputRfid = sTagID
+      }else{
+        this.$alert('只能扫描一个RFID！', '提示', {
+          confirmButtonText: '确定',
+          type: 'error'
+        })
+      }
+    },
     },
     computed: {}
   }
@@ -625,6 +694,11 @@
       > span {
         display: inline-block;
         width: 120px;
+      }
+      img{
+        width: 30px;
+        height: 30px;
+        cursor: pointer;
       }
       .newSample {
         width: 50%;
