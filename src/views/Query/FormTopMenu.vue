@@ -81,7 +81,10 @@ export default {
   props: {
     count: Number,
     showBtn: Boolean,
-    multipleSelection: { type: Array, default: () => [] }
+    sampleBoxValue: Number,
+    multipleSelection: { type: Array, default: () => [] },
+    checkedlist: { type: Array, default: [] },
+    checkedBoxlist:{type:Array,default:[]}
   },
   components: { tmpinput },
   data () {
@@ -104,68 +107,108 @@ export default {
   methods: {
     // 销毁样本
     delSample(){
-       if(this.multipleSelection.length == 0){
+      if(this.sampleBoxValue == 0){
+        if(this.multipleSelection.length == 0){
           this.$message({
             message: '请选择需要销毁的样本',
             type: 'warning'
           });
-       }else{
+        }else{
           // console.log(this.multipleSelection)
-         let sampleInfo = this.multipleSelection.every((item)=>{
-           return item.status == '正常'
-         })
-         if(sampleInfo){
-           this.$confirm('已选中'+this.multipleSelection.length+'条数据，确定销毁样本吗?', '提示', {
-             confirmButtonText: '确定',
-             cancelButtonText: '取消',
-             type: 'warning'
-           }).then(() => {
-             this.$axios({
-               method:'post',
-               url:'sampleGuide/query/deleteListSampleById',
-               data:({
-                 list: this.multipleSelection.map((item)=>{return item.id})
-               })
-             })
-               .then(({data})=>{
-                 console.log(data)
-                 if(data.code == 200){
-                   this.$message({
-                     type: 'success',
-                     message: '删除成功!'
-                   });
-                   this.reload()
-                 }else{
-                   this.$message({
-                     type: 'warning',
-                     message: data.data
-                   });
-                 }
+          let sampleInfo = this.multipleSelection.every((item)=>{
+            return item.status == '正常'
+          })
+          if(sampleInfo){
+            this.$confirm('已选中'+this.multipleSelection.length+'条数据，确定销毁样本吗?', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning'
+            }).then(() => {
+              this.$axios({
+                method:'post',
+                url:'sampleGuide/query/deleteListSampleById',
+                data:({
+                  list: this.multipleSelection.map((item)=>{return item.id})
+                })
+              })
+                .then(({data})=>{
+                  console.log(data)
+                  if(data.code == 200){
+                    this.$message({
+                      type: 'success',
+                      message: '删除成功!'
+                    });
+                    this.reload()
+                  }else{
+                    this.$message({
+                      type: 'warning',
+                      message: data.data
+                    });
+                  }
 
-               })
-           }).catch(() => {
-             this.$message({
-               type: 'info',
-               message: '已取消删除'
-             });
-           });
-         }else{
-           this.$message({
-             message: '借出样本不可删除',
-             type: 'warning'
-           });
-         }
+                })
+            }).catch(() => {
+              this.$message({
+                type: 'info',
+                message: '已取消删除'
+              });
+            });
+          }
+        }
+      }else{
+        if(this.checkedBoxlist.length == 0){
+          this.$message({
+            message: '请先选择要销毁的样本盒',
+            type: 'warning'
+          });
+        }else{
+            this.$confirm('已选中'+this.checkedBoxlist.length+'条数据，确定销毁样本盒吗?', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning'
+            }).then(() => {
+              this.$axios({
+                method:'post',
+                url:'/sampleGuide/set/destroySampleBox',
+                data:({
+                  list: this.checkedBoxlist.map((item)=>{return item.id})
+                })
+              })
+                .then(({data})=>{
+                  console.log(data)
+                  if(data.data == 0){
+                    this.$message({
+                      type: 'success',
+                      message: '删除成功!'
+                    });
+                    this.reload()
+                  }else{
+                    this.$message({
+                      type: 'warning',
+                      message: data.data
+                    });
+                  }
 
-       }
+                })
+            }).catch(() => {
+              this.$message({
+                type: 'info',
+                message: '已取消删除'
+              });
+            });
+        }
+      }
+
     },
     // 打印标签
     printTag(){
-      if(this.multipleSelection.length == 0){
-        this.$message({
-          message: '请先选择要打印标签的样本',
-          type: 'warning'
-        });
-      }else{
+      if(this.sampleBoxValue == 0){
+        if(this.multipleSelection.length == 0){
+          this.$message({
+            message: '请先选择要打印标签的样本',
+            type: 'warning'
+          });
+        }else{
           this.$confirm('已选中'+this.multipleSelection.length+'条数据，确定打印该标签吗?', '提示', {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
@@ -183,18 +226,18 @@ export default {
                 console.log(data)
                 data.data.forEach((item)=>{
                   try{
-                      var myobject = new ActiveXObject("GoDEXATL.Function");
-                      myobject.openport("6")
-                      myobject.setup(20, 19, 4, 0, 3,0)
-                      myobject.sendcommand("^L\r\n");
-                      myobject.ecTextOut(260, 20, 17, "Arial", item.firstLine);
-                      myobject.ecTextOut(260, 50, 17, "Arial", item.secondLine);
-                      myobject.ecTextOut(260, 50, 17, "Arial", item.thirdLine);
-                      myobject.sendcommand("E\r\n")
+                    var myobject = new ActiveXObject("GoDEXATL.Function");
+                    myobject.openport("6")
+                    myobject.setup(20, 19, 4, 0, 3,0)
+                    myobject.sendcommand("^L\r\n");
+                    myobject.ecTextOut(260, 20, 17, "Arial", item.firstLine);
+                    myobject.ecTextOut(260, 50, 17, "Arial", item.secondLine);
+                    myobject.ecTextOut(260, 50, 17, "Arial", item.thirdLine);
+                    myobject.sendcommand("E\r\n")
                   }catch(e){
-                      alert("打印故障，请检查打印机是否连接！")
+                    alert("打印故障，请检查打印机是否连接！")
                   }finally{
-                      myobject.closeport();
+                    myobject.closeport();
                   }
                 })
               })
@@ -204,33 +247,115 @@ export default {
               message: '已取消打印'
             });
           });
-  }
+        }
+      }else{
+        if(this.checkedBoxlist.length == 0){
+          this.$message({
+            message: '请先选择要打印的样本盒',
+            type: 'warning'
+          });
+        }else{
+          let boxInfo = this.checkedBoxlist.every((item)=>{
+            return item.address
+          })
+          if(boxInfo){
+            this.$confirm('已选中'+this.checkedBoxlist.length+'条数据，确定打印该标签吗?', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning'
+            }).then(() => {
+              this.$axios({
+                method: 'post',
+                url:'/sampleGuide/set/selectSampleBoxDetailInfo',
+                data:({
+                  id: this.checkedBoxlist[0].id
+                })
+              })
+                .then(({data})=>{
+                  console.log(data)
+                  try{
+                    var myobject = new ActiveXObject("GoDEXATL.Function");
+                    myobject.openport("6");
+                    myobject.setup(20, 19, 4, 0, 3,0);
+                    myobject.sendcommand("^L\r\n");
+                    myobject.ecTextOut(260, 20, 17, "Arial", "SampleName: "+data.data[0].name+"");
+                    myobject.ecTextOut(260, 50, 17, "Arial", "Period: "+data.data[0].sampleBoxStru.detailLocation+"");
+                    myobject.sendcommand("E\r\n");
+                  }catch(e){
+                    alert("打印故障，请检查打印机是否连接！");
+                  }finally{
+                    myobject.closeport();
+                  }
+                })
+            }).catch(() => {
+              this.$message({
+                type: 'info',
+                message: '已取消打印'
+              });
+            });
+          }
+        }
+      }
     },
     // 转移样本
     transfer(){
-      if(this.multipleSelection.length == 0){
-        this.$message({
-          message: '请选择需要转移的样本',
-          type: 'warning'
-        });
-      }else{
-        let sampleInfo = this.multipleSelection.every((item)=>{
-          return item.status == '正常'})
-        if(sampleInfo){
-          this.$router.push({
-            name:'transfer',
-            params:{
-              id:this.multipleSelection.map((item)=>{return item.id}).join()
+        // console.log(this.sampleBoxValue)
+        if(this.sampleBoxValue == 0){
+          if(this.multipleSelection.length == 0){
+            this.$message({
+              message: '请选择需要转移的样本',
+              type: 'warning'
+            });
+          }else{
+            let sampleInfo = this.multipleSelection.every((item)=>{
+              return item.status == '正常'})
+            if(sampleInfo){
+              this.$router.push({
+                name:'transfer',
+                params:{
+                  id:this.multipleSelection.map((item)=>{return item.id}).join()
+                }
+              })
+            }else{
+              this.$message({
+                message: '请选择样本状态为正常的样本',
+                type: 'warning'
+              });
             }
-          })
+          }
         }else{
-          this.$message({
-            message: '请选择样本状态为正常的样本',
-            type: 'warning'
-          });
+          if(this.checkedBoxlist.length == 0){
+            this.$message({
+              message: '请选择需要转移的样本盒',
+              type: 'warning'
+            });
+          }else if(this.checkedBoxlist.length > 1){
+            this.$message({
+              message: '只能对一个样本盒进行转移操作',
+              type: 'warning'
+            });
+          }else{
+              this.$axios({
+                method:'post',
+                url:'/sampleGuide/set/isCanBeUpdateSampleBox',
+                data:({
+                  id: this.checkedBoxlist[0].id
+                })
+              })
+                .then(({data})=>{
+                  console.log(data)
+                  if(data.data==0){
+                    this.$message({
+                      message: '该样本盒中存在非正常状态样本，不可转移！',
+                      type: 'warning'
+                    });
+                  }else{
+                    this.$emit('zhuanyun')
+                    console.log(this.checkedBoxlist[0].address)
+                  }
+                })
+          }
         }
-
-      }
     },
     //打印位置信息
     printLocation(){

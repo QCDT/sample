@@ -1,6 +1,7 @@
 <template>
   <!-- 修改样本 -->
   <div>
+    <cardfile  @reception= 'refData'></cardfile>
     <h1 class="top-title" v-if="title">{{title}}</h1>
     <div class="sample-box">
       <div class="left">
@@ -53,15 +54,35 @@
         </h1>
         <ul>
           <li class="item">
+            <span>项目名称:</span>
+            <el-select
+              size="small"
+              v-model="project"
+              placeholder="请选择"
+              class="newSample"
+              filterable
+              allow-create
+              default-first-option
+            >
+              <el-option
+                v-for="item in projectOption"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              ></el-option>
+            </el-select>
+          </li>
+          <li class="item">
             <span>RFID编号:</span>
             <el-input v-model="inputRfid" size="small" class="newSample"></el-input>
             <el-tooltip effect="dark" content="切换芯片" placement="right">
-              <img src="@/assets/img/saomiao.gif" alt="" width="30" height="30">
+              <img src="@/assets/img/saomiao.gif" alt="" width="30" height="30" @click="bindingCard">
             </el-tooltip>
           </li>
           <li class="item">
             <span>样本名称:</span>
-            <el-input v-model="inputName" size="small" class="newSample"></el-input>
+            <el-input v-model="inputName" size="small" class="newSample" @blur="sampleName"></el-input>
+            <span class="verifyMsg">{{inputNamemsg}}</span>
           </li>
           <li class="item">
             <span>样本来源:</span>
@@ -103,11 +124,27 @@
           </li>
           <li class="item">
             <span>采样日期:</span>
-            <el-input v-model="inputCai" size="small" class="newSample"></el-input>
+            <!--<el-input v-model="inputCai" size="small" class="newSample"></el-input>-->
+            <el-date-picker
+              v-model="inputCai"
+              type="datetime"
+              class="newSample"
+              size="small"
+              value-format="yyyy-MM-dd HH:mm:ss"
+              placeholder="选择日期">
+            </el-date-picker>
           </li>
           <li class="item">
             <span>有效日期:</span>
-            <el-input v-model="inputYouXiao" size="small" class="newSample"></el-input>
+            <!--<el-input v-model="inputYouXiao" size="small" class="newSample"></el-input>-->
+            <el-date-picker
+              v-model="inputYouXiao"
+              type="datetime"
+              class="newSample"
+              size="small"
+              value-format="yyyy-MM-dd HH:mm:ss"
+              placeholder="选择日期">
+            </el-date-picker>
           </li>
           <li class="item">
             <span>提前报警天数:</span>
@@ -146,6 +183,8 @@
                 :value="item.value"
               ></el-option>
             </el-select>
+          </li>
+          <li class="item location-info-change">
             <i>抽屉:</i>
             <el-select
               size="small"
@@ -222,15 +261,18 @@
 <script>
   import tmpButton from '@/components/tmp/zhanglan/tmpButton'
   // import matrix9x9 from '@/components/tmp/zhanglan/matrix-9x9'
+  import cardfile from "@/components/cardfile";
 
   export default {
+    inject:['reload'],
     props: {
       title: String,
       multipleSelection: {type: Array, default: () => []}
     },
-    components: {tmpButton},
+    components: {tmpButton, cardfile },
     data() {
       return {
+        // cardNub: '', // 绑定IC卡值
         locationNowTwo: [],//位置信息
         locationNow: [],//位置信息
         rowValue: '',
@@ -249,19 +291,23 @@
           /* { value: 'A来源', label: 'A来源' },
           { value: 'B来源', label: 'B来源' } */
         ],
+        projectOption:[],
         testTubeCategoryOption: [
           /* { value: 'A类别', label: 'A类别' },
           { value: 'B类别', label: 'B类别' } */
         ],
         value: '',
+        elref: '',
         inputRfid: '',//rfid
         inputName: '',//样本名称
+        inputNamemsg:'',
         inputCai: '',//采样日期
         inputYouXiao: '',//有效日期
         inputWarn: '',//报警日期
         textareaOld: '',
         textareaNew: '',
         source: '', //样本来源
+        project:'',//项目名称
         testTubeCategory: '', //样本类别
         refrigerator: '',//冰箱
         layer: '',//层数
@@ -288,6 +334,7 @@
           { value: 'styleBox2', label: 'styleBox2',id:'2' } */
         ],
         sample: [
+          {key: '项目名称', value: ''},
           {key: 'RFID编号', value: ''},
           {key: '样本名称', value: ''},
           {key: '样本来源', value: ''},
@@ -302,6 +349,16 @@
     //修改样本回显信息
     created() {
       // console.log(this.multipleSelection)
+      this.$axios.get("/sampleGuide/guest/selectProjectAll")//.....项目初始化
+        .then(({data})=>{
+          // console.log(data)
+          data.data.forEach((item)=>{
+            this.projectOption.push({
+              value:item.id,
+              label:item.name
+            })
+          })
+        })
       this.$axios({
         method: 'post',
         url: 'sampleGuide/scan/findSampleById',
@@ -312,25 +369,28 @@
         .then(({data}) => {
           console.log(data)
 //当前信息
-          this.sample[0].value = data.data.rfidSample.rfidCode
-          this.sample[1].value = data.data.rfidSample.name
-          this.sample[2].value = data.data.rfidSample.sampleSource
-          this.sample[3].value = data.data.rfidSample.sampleCategoryDict.name
-          this.sample[4].value = data.data.rfidSample.samplingDate == null ? '' : data.data.rfidSample.samplingDate
-          if (data.data.rfidSample.expireDate == null && data.data.rfidSample.samplingDate == null) {
-            this.sample[5].value = ''
-            this.inputYouXiao = ''
-          } else {
-            this.sample[5].value = data.data.rfidSample.expireDate - data.data.rfidSample.samplingDate
-            this.inputYouXiao = data.data.rfidSample.expireDate - data.data.rfidSample.samplingDate
-          }
-          this.sample[6].value = data.data.rfidSample.warningDays
-          this.sample[7].value = data.data.rfidSample.sampleStru.detailLocation
+          this.sample[0].value = data.data.rfidSample.project == null ? '' : data.data.rfidSample.project.name
+          this.sample[1].value = data.data.rfidSample.rfidCode
+          this.sample[2].value = data.data.rfidSample.name
+          this.sample[3].value = data.data.rfidSample.sampleSource
+          this.sample[4].value = data.data.rfidSample.sampleCategoryDict.name
+          this.sample[5].value = data.data.rfidSample.samplingDate == null ? '' : data.data.rfidSample.samplingDate
+          this.sample[6].value = data.data.rfidSample.expireDate == null ? '' : data.data.rfidSample.expireDate
+          this.sample[7].value = data.data.rfidSample.warningDays
+          this.sample[8].value = data.data.rfidSample.sampleStru.detailLocation
 //修改信息
+          this.project = data.data.rfidSample.project == null ? '' : data.data.rfidSample.project.id
           this.inputRfid = data.data.rfidSample.rfidCode
           this.inputName = data.data.rfidSample.name
+          this.source = data.data.rfidSample.sampleSource
+          this.testTubeCategory = data.data.rfidSample.sampleCategoryDict.name
           this.inputCai = data.data.rfidSample.samplingDate == null ? '' : data.data.rfidSample.samplingDate
+          this.inputYouXiao = data.data.rfidSample.expireDate == null ? '' : data.data.rfidSample.expireDate
           this.inputWarn = data.data.rfidSample.warningDays
+          this.refrigerator = data.data.rfidSample.sampleStru.refrigeratorStruId
+          this.layer = data.data.rfidSample.sampleStru.tierStruId
+          this.chouTi = data.data.rfidSample.sampleStru.drawerStruId
+          this.styleBox = data.data.rfidSample.sampleStru.sampleBoxStruId
           //备注
           this.textareaOld = data.data.rfidSample.remarks
           this.textareaNew = data.data.rfidSample.remarks
@@ -361,7 +421,7 @@
           url: 'sampleGuide/queryCategoryDict/selectSampleCategory',
         })
           .then(({data}) => {
-            // console.log(data);
+            console.log(data);
             data.data.forEach((item) => {
               this.testTubeCategoryOption.push(
                 {
@@ -377,7 +437,7 @@
           url: 'sampleGuide/querySampleSource/selectrfidSamplesource',
         })
           .then(({data}) => {
-            // console.log(data);
+            console.log(data);
             data.data.forEach((item) => {
               this.sourceOption.push({
                 label: item,
@@ -400,8 +460,101 @@
           })
     },
     methods: {
-      changeSave() {
-        this.$emit('changeSave')
+      refData(value){
+        this.elref = value
+      },
+      bindingCard(){
+        console.log(this.elref)
+        //console.log(this.$refs.MyActive)
+        this.elref.RDR_Close()
+        let devicetypeValue = this.$cookies.get('readerType')
+        let OpentypeValue = this.$cookies.get('portType')
+        let comPortValue = this.$cookies.get('comPortNo')
+        let comBaudRateValue = this.$cookies.get('comBaudRate')
+        let comFrameStructureValue = this.$cookies.get('comFrameStructure')
+        let netIpAddress = this.$cookies.get('netIpAddress')
+        let netPort = this.$cookies.get('netPortNo')
+        //console.log(devicetypeValue,OpentypeValue,comPortValue,comBaudRateValue,comFrameStructureValue,netIpAddress,netPort)
+        let n = this.$store.state.OnOpen(this.elref,devicetypeValue,OpentypeValue,comPortValue,comBaudRateValue,comFrameStructureValue,netIpAddress,netPort)
+        alert(n);
+        if (n!=0) {
+          return
+        }
+        let nret=0;
+        //盘点标签初始化,申请盘点标签所需要的内存空间。返回，成功：0 ；失败：非0 （查看错误代码表）。
+        nret = this.elref.RDR_InitInventory();
+        if (nret!=0) {
+          alert("盘点标签初始化失败！")
+          return;
+        }
+        //盘点标签时，使能15693协议。返回，成功：0 ；失败：非0 （查看错误代码表）。
+        nret = this.elref.RDR_Enable15693(0,0x00,0)
+        nret = this.elref.RDR_Enable14443A()
+        if (nret!=0) {
+          //结束标签盘点操作，释放内存空间。
+          this.elref.RDR_FinishInventory()
+          return;
+        }
+        this.readRfid()
+        this.elref.RDR_Close()
+      },
+      readRfid(){
+        let nret = 0
+        let recordCnt = ''
+        let j =0
+        nret = this.elref.RDR_Inventory(0,"")
+        // alert(nret)
+        if (nret !== 0) {
+          this.$alert('读取标签失败，请检查设备连接以及参数设置！', '提示', {
+            confirmButtonText: '确定',
+            type: 'error'
+          })
+          this.elref.RDR_FinishInventory()
+          return
+        }
+        recordCnt = this.elref.RDR_GetRecordCnt()
+        // console.log(recordCnt)
+        let sTagInfo = this.elref.GetRecord(j).split("-");
+        let sTagID = sTagInfo[sTagInfo.length-1];
+        alert(recordCnt)
+        if(recordCnt == 1){
+          this.inputRfid = sTagID
+          this.$axios({
+            method:'post',
+            url:'sampleGuide/scan/updateRfidCodeById',
+            data:({
+              rfidCode:this.inputRfid
+            })
+          }).then(({data})=>{
+            console.log(data)
+          })
+        }else{
+          this.$alert('IC卡只能绑定一个！', '提示', {
+            confirmButtonText: '确定',
+            type: 'error'
+          })
+        }
+      },
+      sampleName () { //...........样本名称验证
+        if(this.inputName == ''){
+          this.inputNamemsg = "样本名称不能为空"
+        }else{
+            this.$axios({
+              method: 'post',
+              url: 'sampleGuide/scan/existSampleName',
+              data:({
+                name: this.inputName
+              })
+            })
+              .then(({data})=>{
+                console.log(data)
+                if(data.data == false){
+                  this.inputNamemsg = "样本名称已存在"
+                }else{
+                  this.inputNamemsg = ''
+                }
+              })
+        }
       },
       showSampleStatusTwo(row,col){
         // console.log(row,col)
@@ -569,6 +722,45 @@
         this.activeRow = row
         this.activeCol = col
       },
+      changeSave() {
+        this.$axios({
+          method:'post',
+          url:'sampleGuide/scan/updateSample',
+          data:({
+            id: this.multipleSelection[0].id,
+            projectId:this.project,
+            rfidCode:this.inputRfid,
+            name:this.inputName,
+            sampleSource:this.source,
+            sampleCategoryDictName:this.testTubeCategory,
+            samplingDate:this.inputCai,
+            expireDate:this.inputYouXiao,
+            warningDays:this.inputWarn,
+            refrigeratorStruId:this.refrigerator,
+            tierStruId:this.layer,
+            drawerStruId:this.chouTi,
+            sampleBoxStruId:this.styleBox,
+            row:this.activeRow,
+            col:this.activeCol
+          })
+        }).then(({data})=>{
+          if(data.code == 200){
+            this.$message({
+              message: '修改样本成功',
+              type: 'success'
+            });
+            this.reload()
+            // this.$emit('changeSave')
+          }else{
+            this.$message({
+              message: '修改样本失败',
+              type: 'warning'
+            });
+          }
+        })
+        // console.log(this.inputCai)
+
+      }
     },
     computed: {}
   }
@@ -627,8 +819,14 @@
         width: 120px;
       }
       .newSample {
-        width: 50%;
+        width: 30%;
       }
+    }
+    .verifyMsg{
+      font-size: 12px;
+      width:7vw;
+      color: red;
+      margin-left: 3px
     }
   }
 

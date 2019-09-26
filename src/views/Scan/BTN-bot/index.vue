@@ -356,7 +356,7 @@ export default {
           this.$message({
             type: 'info',
             message: '已取消删除'
-          });          
+          });
         });
         // this.$confirm('已选中'+this.checkedlist.length+'条数据，确定打印样本吗?', '提示', {
         //   confirmButtonText: '确定',
@@ -401,7 +401,7 @@ export default {
     printitemBox(){
       if(this.checkedBoxlist.length == 0){
          this.$message({
-          message: '请先选择要打印的样本',
+          message: '请先选择要打印的样本盒',
           type: 'warning'
         });
       }else{
