@@ -563,7 +563,7 @@ export default {
                 id: item.id,
                 name:item.name,
                 enterName:item.inputUserName, // 录入人
-                location:item.sampleBoxStru.detailLocation // 位置信息
+                address:item.sampleBoxStru.detailLocation // 位置信息
               })
             }else{
               this.searchTableData.push({
@@ -640,7 +640,7 @@ export default {
       this.styleBoxOption =[]
       this.$axios({
         method:'post',
-        url: 'sampleGuide/set/selectSampleBoxStru',
+        url: 'sampleGuide/scan/getSampleBoxRowList',
         data:({
           drawerStruId:this.chouTi
         })
@@ -658,7 +658,7 @@ export default {
   },
   watch:{
     sampleItem(value){
-      console.log(value)
+      // console.log(value)
       this.$emit('sampleItemValue', this.sampleItem)
     }
   }

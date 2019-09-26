@@ -633,7 +633,7 @@ export default {
       // console.log(recordCnt)
       let sTagInfo = this.elref.GetRecord(j).split("-");
       let sTagID = sTagInfo[sTagInfo.length-1];
-      alert(recordCnt)
+      // alert(recordCnt)
       if(recordCnt == 1){
         this.cardNub = sTagID
       }else{

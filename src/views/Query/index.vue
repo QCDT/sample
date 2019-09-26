@@ -1,6 +1,6 @@
 <template>
   <div class="searchWrap">
-    <Search v-show="!reMaskTran"  @changeTable = changeTable @changeBoxTable = changeBoxTable @sampleItemValue="sampleItemValueChange"></Search>
+    <Search v-show="!reMaskTran && !togegleZhuanYun"  @changeTable = changeTable @changeBoxTable = changeBoxTable @sampleItemValue="sampleItemValueChange"></Search>
     <!-- 表单 ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓ -->
 
     <!-- 修改样本 -->
@@ -9,12 +9,23 @@
       <reSample v-if="reMaskTran" :multipleSelection="multipleSelection" title="修改样本" @changeSave="changeSave" @goBack="reMaskTran=false"></reSample>
     </transition>
 
-    <div class="bot-form" v-show="!reMaskTran">
+    <transition name="el-fade-in-linear">
+      <!-- <maskTran :rgba="0"> -->
+      <!-- rgba:透明度 -->
+      <alertZhuanYun :checkedBoxlist='checkedBoxlist' :checkedlist='checkedlist' v-if="togegleZhuanYun" @save="saveZhuanYun" @goBack="togegleZhuanYun=false"></alertZhuanYun>
+      <!-- </maskTran> -->
+    </transition>
+
+    <div class="bot-form" v-show="!reMaskTran  && !togegleZhuanYun">
       <div class="table-box">
         <FormTopMenu
           :count="sampleBoxValue == 0?Number(tableDataAll.length):Number(tableBoxDataAll.length)"
           :multipleSelection="multipleSelection"
+          :sampleBoxValue = "sampleBoxValue"
+          :checkedBoxlist='checkedBoxlist'
+          :checkedlist='checkedlist'
           @reSample="reSampleShow"
+          @zhuanyun="zhuanyun"
           v-show="!reMaskTran"
         ></FormTopMenu>
         <el-table
@@ -74,7 +85,7 @@
           :data="tableBoxData"
           tooltip-effect="dark"
           style="width:100%"
-          @selection-change="handleSelectionChange"
+          @selection-change="handleSelectionChangeTwo"
           v-show="sampleBoxValue == 1"
         >
           <el-table-column type="selection" show-overflow-tooltip ></el-table-column>
@@ -84,7 +95,7 @@
           <el-table-column prop="name" label="样本盒名称" show-overflow-tooltip></el-table-column>
           <!--  -->
           <el-table-column prop="enterName" label="录入人" show-overflow-tooltip></el-table-column>
-          <el-table-column prop="location" label="位置信息" show-overflow-tooltip></el-table-column>
+          <el-table-column prop="address" label="位置信息" show-overflow-tooltip></el-table-column>
         </el-table>
         <div>
           <el-pagination
@@ -108,9 +119,10 @@
 import Search from './Search';
 import FormTopMenu from './FormTopMenu';
 import reSample from '@/views/Scan/reSample';
+import alertZhuanYun from "@/views/Scan/alert-ZhuanYun";
 export default {
   props: {},
-  components: { Search, FormTopMenu, reSample },
+  components: { Search, FormTopMenu, reSample, alertZhuanYun },
   data () {
     return {
       // ↓   表单
@@ -121,27 +133,37 @@ export default {
       tableData: [],
       tableBoxDataAll:[],
       tableBoxData:[],//查询样本盒集合
-      sampleBoxValue:'',
+      sampleBoxValue:0,
       multipleSelection: [],
       reId:[],
       reMaskTran: false, // 修改样本
+      togegleZhuanYun: false, // 转运
+      checkedlist:[],  //选中项的数组
+      checkedBoxlist: [], //样本盒选中数组
       //   ↑ 表单
     }
   },
-  created(){
-  },
+
   methods: {
     reSampleShow(){
       this.reMaskTran = true
     },
+    zhuanyun() {
+      this.togegleZhuanYun = true;
+    },
     //   修改样本
     changeSave() {
-      this.$message("确认保存-父组件");
+      this.$message("修改样本成功");
       this.reMaskTran = false;
     },
-    // reSampleShowId(val){
-    //   this.reId = val
-    // },
+    /* 保存 */
+    saveZhuanYun() {
+      // this.$message("转运->保存");
+      this.togegleZhuanYun = false;
+    },
+    reSampleShowId(val){
+      this.reId = val
+    },
     changeType(val){
       this.sampleItem = val
     },
@@ -160,8 +182,12 @@ export default {
         this.tableData = this.tableDataAll.slice((this.currentPage-1)*this.PageSize,this.currentPage*this.PageSize)
         this.tableBoxData = this.tableBoxDataAll.slice((this.currentPage-1)*this.PageSize,this.currentPage*this.PageSize)
     },
-    handleSelectionChange (val) {  //选中数据的集合
-      this.multipleSelection = val
+    // handleSelectionChange (val) {  //选中数据的集合
+    //   this.multipleSelection = val
+    // },
+    handleSelectionChangeTwo(selection) {
+      this.checkedBoxlist = selection
+      console.log(this.checkedBoxlist)
     },
     changeTable(tableData,tableTotal){
         this.total = 0

@@ -356,14 +356,14 @@ export default {
           this.$message({
             type: 'info',
             message: '已取消删除'
-          });          
+          });
         });
       }
     },
     printitemBox(){
       if(this.checkedBoxlist.length == 0){
          this.$message({
-          message: '请先选择要打印的样本',
+          message: '请先选择要打印的样本盒',
           type: 'warning'
         });
       }else{
