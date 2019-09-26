@@ -286,7 +286,7 @@ export default {
       url: 'sampleGuide/centrifuge/findAllCentrifuge'
     })
     .then(({data})=>{
-      console.log(data)
+      // console.log(data)
       data.data.centrifugeList.forEach((item)=>{
         this.centrifugeList.push({
           id: item.id,
@@ -305,6 +305,7 @@ export default {
       this.centrifugeTemperature = this.centrifugeList[0].centrifugeTemperature
       this.centrifugeId = this.centrifugeList[0].id
       this.querySample()
+      this.queryTime()
     })
   },
   updated () {
@@ -313,7 +314,6 @@ export default {
     window.addEventListener("resize", () => {
       this.$nextTick(function() {
         this.bannerHeight = this.$refs.image[0].height;
-        // console.log(this.bannerHeight);
       });
     });
   },
@@ -341,8 +341,13 @@ export default {
       clearInterval(this.timer)
     },
     queryTime(){
-      // this.$axios({
-      // })
+      this.$axios({
+        method:'get',
+        url:'sampleGuide/centrifuge/findResidueCentrifugeTime',
+      })
+      .then(({data})=>{
+        console.log(data)
+      })
     },
     querySample(){   //查询对应离心机中有无样本
       this.$axios({
@@ -353,7 +358,7 @@ export default {
         })
       })
       .then(({data})=>{
-        console.log(data)
+        // console.log(data)
         if(data.data == true){
           this.startCentrifuge = true
         }else{
@@ -463,6 +468,13 @@ export default {
     },
     againCentrifuge(){ //.........重新开始离心
       this.centrifugeStop = false
+      this.$axios({
+        method:'post',
+        url:'sampleGuide/centrifuge/restartCen',
+        data:({
+
+        })
+      })
     },
     finish(){//..........结束离心后查看详情
       this.dialogOrder = true
@@ -722,7 +734,7 @@ export default {
     },
     imgLoad () {
       this.$nextTick(function () {
-        console.log(this.$refs.image[0])
+        // console.log(this.$refs.image[0])
         this.bannerHeight = this.$refs.image[0].height
         // console.log(this.$refs.image[0].height)
       })
