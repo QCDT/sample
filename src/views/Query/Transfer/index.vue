@@ -350,12 +350,14 @@ export default {
         let index = this.optionalLocation.findIndex((item)=>{
             return JSON.stringify(item) == JSON.stringify([row,col])
          })
-         for(let i=0; i<this.multipleSelection.length; i++){
-          // console.log(index+i)
-            let num = index+i
+         let n = -1
+         for(let i=0; i<this.multipleSelection.length; i++){         
+           let num = index+i
            if( num > this.optionalLocation.length-1){
-              num = 0
+             n++
+             num = n
            }
+           console.log(num)
            this.activeList.push(this.optionalLocation[num])
          }
       }
@@ -396,7 +398,7 @@ export default {
       let activeArr = [row, col]
       for(let i=0; i<this.activeList.length; i++){
         if(JSON.stringify(this.activeList[i]) == JSON.stringify(activeArr)){
-          console.log(JSON.stringify(this.activeList[i]) == JSON.stringify(activeArr))
+          //console.log(JSON.stringify(this.activeList[i]) == JSON.stringify(activeArr))
           return 'activeColor'
         }
       }
