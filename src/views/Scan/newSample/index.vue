@@ -199,7 +199,7 @@ export default {
           })
         })
         .then(({data})=>{
-          console.log(data)
+         // console.log(data)
           if(data.data == true){
             callback();
           }else{
@@ -359,7 +359,7 @@ export default {
       url:'/sampleGuide/scan/findLastSample'
     })
     .then(({data})=>{
-      console.log(data)
+      //console.log(data)
       this.ruleForm.sampleName = data.data.rfidSample.name
       this.ruleForm.sampleType = data.data.rfidSample.sampleCategoryDict.id
       this.ruleForm.sampleSource = data.data.rfidSample.sampleSource
@@ -395,7 +395,7 @@ export default {
         })
       })
       .then(({data})=>{
-        console.log(data)
+       // console.log(data)
         data.data.forEach((item)=>{
           this.labRowOption.push({
             value: item.id,
@@ -413,7 +413,7 @@ export default {
         })
       })
       .then(({data})=>{
-          console.log(data)
+          //console.log(data)
           data.data.forEach((item)=>{
             this.labDrawerOption.push({
               value:item.id,
@@ -429,7 +429,7 @@ export default {
         })
       })
       .then(({data})=>{
-        console.log(data)
+       // console.log(data)
         data.data.forEach((item)=>{
           this.sampleBoxOption.push({
             label:item.row,
@@ -437,9 +437,6 @@ export default {
           })
         })
       })
-      // this.showlabRow()
-      // this.showDrawer()
-      // this.showSampleBox()
       this.fullscreenLoading = false
     })
   },
@@ -459,7 +456,7 @@ export default {
         })
       })
       .then(({data})=>{
-        console.log(data)
+        //console.log(data)
         data.data.forEach((item)=>{
           this.labRowOption.push({
             value: item.id,
@@ -483,7 +480,7 @@ export default {
         })
       })
       .then(({data})=>{
-          console.log(data)
+          //console.log(data)
           data.data.forEach((item)=>{
             this.labDrawerOption.push({
               value:item.id,
@@ -495,7 +492,7 @@ export default {
     showSampleBox(){//.....根据选择的抽屉加载对应的样本盒
       this.sampleBoxValue = ''
       this.sampleBoxOption = []
-      console.log(this.labDrawer)
+     // console.log(this.labDrawer)
       this.$axios({
         method:'post',
         url:'sampleGuide/scan/getSampleBoxRowList',
@@ -504,7 +501,7 @@ export default {
         })
       })
       .then(({data})=>{
-        console.log(data)
+       // console.log(data)
         data.data.forEach((item)=>{
           this.sampleBoxOption.push({
             label:item.row,
@@ -527,7 +524,7 @@ export default {
         })
       })
       .then(({data})=>{
-        console.log(data)
+        //console.log(data)
         this.rowValue = data.data.sampleBoxRow
         this.colValue = data.data.sampleBoxCol
         this.showModel = data.data.sampleBoxSpec
@@ -543,7 +540,7 @@ export default {
       })
     },
     chooseLocation(row,col){ //......选择新建样本位置
-      console.log(this.normalSampleArr)
+      // console.log(this.normalSampleArr)
       for(let i=0; i<this.normalSampleArr.length; i++){
         if(JSON.stringify(this.normalSampleArr[i]) == JSON.stringify([row, col])){
           return;
@@ -557,7 +554,7 @@ export default {
       }
       this.activeRow = row
       this.activeCol = col
-      console.log(this.activeRow, this.activeCol)
+      // console.log(this.activeRow, this.activeCol)
     },
     showSampleStatus(row,col){
       let activeArr = [row, col]
@@ -566,19 +563,14 @@ export default {
       }
       for(let i=0; i<this.loanSampleArr.length; i++){
         if(JSON.stringify(this.loanSampleArr[i]) == JSON.stringify(activeArr)){
-          console.log(JSON.stringify(this.loanSampleArr[i]) == JSON.stringify(activeArr))
+         // console.log(JSON.stringify(this.loanSampleArr[i]) == JSON.stringify(activeArr))
           return 'loanColor'
         }
       }
       for(let i=0; i<this.normalSampleArr.length; i++){
-        // let tdColor = ''
         if(JSON.stringify(this.normalSampleArr[i]) == JSON.stringify(activeArr)){
            return 'normalColor'
         }
-        // if(JSON.stringify(this.normalSampleArr[i]) != JSON.stringify([this.activeRow, this.activeCol]) && JSON.stringify(activeArr) ==JSON.stringify([this.activeRow,this.activeCol])){
-        //   return 'activeColor'
-        // }
-        // return tdColor
       }
     },  
     showTable (row,col) {
@@ -598,7 +590,7 @@ export default {
     },
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
-        console.log(this.ruleForm.project)
+        //console.log(this.ruleForm.project)
         if (valid && this.labValue && this.labRow && this.labDrawer && this.sampleBoxValue && this.activeRow && this.activeCol) {
            this.locationMsg = false
           this.$axios({
@@ -634,7 +626,7 @@ export default {
               });
               this.reload()
             }
-            console.log(data)
+           // console.log(data)
           })
 
         } else {
@@ -647,11 +639,7 @@ export default {
         }
       });
     },
-  },
-  watch:{
-
-  },
-  computed: {}
+  }
 }
 </script>
 <style scoped lang='less'>

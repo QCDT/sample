@@ -358,44 +358,6 @@ export default {
             message: '已取消删除'
           });          
         });
-        // this.$confirm('已选中'+this.checkedlist.length+'条数据，确定打印样本吗?', '提示', {
-        //   confirmButtonText: '确定',
-        //   cancelButtonText: '取消',
-        //   type: 'warning'
-        // }).then(() => {
-        //   this.$axios({
-        //     method: 'post',
-        //     url:'sampleGuide/query/printLabel',
-        //     data:({
-        //       sampleCategoryDict:0,
-        //       rfidCodeList: this.multipleSelection.map((item)=>{return item.rfId})
-        //     })
-        //   })
-        //   .then(({data})=>{
-        //     console.log(data)
-        //     data.data.forEach((item)=>{
-        //       try{
-        //           var myobject = new ActiveXObject("GoDEXATL.Function");
-        //           myobject.openport("6")
-        //           myobject.setup(20, 19, 4, 0, 3,0)
-        //           myobject.sendcommand("^L\r\n");
-        //           myobject.ecTextOut(260, 20, 17, "Arial", item.firstLine);
-        //           myobject.ecTextOut(260, 50, 17, "Arial", item.secondLine);
-        //           myobject.ecTextOut(260, 50, 17, "Arial", item.thirdLine);
-        //           myobject.sendcommand("E\r\n")
-        //       }catch(e){
-        //           alert("打印故障，请检查打印机是否连接！")
-        //       }finally{
-        //           myobject.closeport();
-        //       }
-        //     })
-        //   })
-        // }).catch(() => {
-        //   this.$message({
-        //     type: 'info',
-        //     message: '已取消打印'
-        //   });
-        // });
       }
     },
     printitemBox(){

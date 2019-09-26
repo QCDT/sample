@@ -281,7 +281,6 @@ export default {
     }
   },
   created () {
-    console.log(111)
     this.$axios({
       method: 'get',
       url: 'sampleGuide/centrifuge/findAllCentrifuge'
@@ -308,17 +307,13 @@ export default {
       this.querySample()
     })
   },
-  mounted () {
+  updated () {
     // element banner 高度自适应
     this.imgLoad();
-    // this.$nextTick(function() {
-    //   this.bannerHeight = this.$refs.image[0].height;
-    //   console.log(this.bannerHeight);
-    // });
     window.addEventListener("resize", () => {
       this.$nextTick(function() {
         this.bannerHeight = this.$refs.image[0].height;
-        console.log(this.bannerHeight);
+        // console.log(this.bannerHeight);
       });
     });
   },
@@ -727,8 +722,9 @@ export default {
     },
     imgLoad () {
       this.$nextTick(function () {
-        this.bannerHeight = this.$refs.image.height
-        console.log(this.$refs.image[0].height)
+        console.log(this.$refs.image[0])
+        this.bannerHeight = this.$refs.image[0].height
+        // console.log(this.$refs.image[0].height)
       })
     },
   },
