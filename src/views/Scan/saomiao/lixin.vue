@@ -37,10 +37,10 @@
         <img src="@/assets/img/centrifugalSet.png" @click="centrifugalSet" :disabled="disabledAmend" />
         <img src="@/assets/img/centrifugalAdd.png" @click="addSample" :disabled="disabledAmend" />
         <img v-show="!startCentrifuge" src="@/assets/img/centrifugalStart1.png" class="mainBtn" />
-        <!-- <img v-show="!startCentrifuge" src="@/assets/img/centrifugalStop.png" class="mainBtn" />
-        <img v-show="!startCentrifuge" src="@/assets/img/centrifugalStart1.png" class="mainBtn" />
-        <img v-show="!startCentrifuge" src="@/assets/img/centrifugalStart1.png" class="mainBtn" /> -->
-        <img v-show="startCentrifuge && !finishCentrifuge" src="@/assets/img/centrifugalStart.png" class="mainBtn" @click="start" :disabled="disabledAmend"/>
+        <img v-show=" centrifugeStop" src="@/assets/img/continueCentrifugal.png" class="mainBtn" @click="continueCentrifuge"/>
+        <img v-show=" centrifugeStop" src="@/assets/img/againCentrifugal.png" class="mainBtn" />
+        <img v-show="startCentrifuge && !finishCentrifuge && !centrifugeRun" src="@/assets/img/centrifugalStart.png" class="mainBtn" @click="start"/>
+        <img v-show="startCentrifuge && !finishCentrifuge && centrifugeRun && !centrifugeStop" src="@/assets/img/centrifugalStop.png" class="mainBtn" @click="stop"/>
         <img v-show="startCentrifuge && finishCentrifuge" src="@/assets/img/centrifugeEnd.png" class="mainBtn" @click="finish"/>
         <img src="@/assets/img/orders.png" @click="exportOrders" :disabled="disabledAmend"/>
         <img src="@/assets/img/record.png" @click="Ordersdetail" :disabled="disabledAmend"/>
@@ -244,7 +244,9 @@ export default {
       addSampleList:[], //添加时样本集合
       disabledAmend:false,//是否可以修改
       startCentrifuge: false, //是否可以开始离心
+      centrifugeRun: false, //是否正在离心
       finishCentrifuge: false,// 是否离心完成
+      centrifugeStop: false, //是否停止离心
       finishOrderName:'',//完成的离心订单名称
       finishOrder:false, //离心完成的订单详情
       orderId: '',//离心订单id
@@ -279,7 +281,6 @@ export default {
     }
   },
   created () {
-    console.log(111)
     this.$axios({
       method: 'get',
       url: 'sampleGuide/centrifuge/findAllCentrifuge'
@@ -306,17 +307,13 @@ export default {
       this.querySample()
     })
   },
-  mounted () {
+  updated () {
     // element banner 高度自适应
     this.imgLoad();
-    // this.$nextTick(function() {
-    //   this.bannerHeight = this.$refs.image[0].height;
-    //   console.log(this.bannerHeight);
-    // });
     window.addEventListener("resize", () => {
       this.$nextTick(function() {
         this.bannerHeight = this.$refs.image[0].height;
-        console.log(this.bannerHeight);
+        // console.log(this.bannerHeight);
       });
     });
   },
@@ -394,6 +391,7 @@ export default {
     start(){ //.......开始离心
       console.log(this.centrifugeId)
       this.disabledAmend = true
+      
       this.$axios({
         method:'post',
         url:'sampleGuide/centrifuge/insertCenOrder',
@@ -406,7 +404,7 @@ export default {
         console.log(data)
         if(data.code== 200){
           this.orderId = data.data.cenOrderId
-          console.log(this.time)
+          this.centrifugeRun = true
           this.timer = setInterval(()=>{
              let time =  parseFloat(this.centrifugeTime)*60
               time--
@@ -434,6 +432,37 @@ export default {
           },1000)
         }
       })
+    },
+    stop(){// .......停止离心
+        this.$confirm('确定要停止该离心机吗?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+         clearInterval(this.timer)
+          this.centrifugeStop = true
+          this.$axios({
+            method:'post',
+            url:'sampleGuide/centrifuge/stopCen',
+            data:({
+              StringremainderSecond:parseFloat(this.centrifugeTime)*60,
+              Integerid:this.orderId
+            })
+          })
+        })
+    },
+    continueCentrifuge(){ //........继续离心
+      this.centrifugeStop = false
+      this.$axios({
+        method:'post',
+        url:'sampleGuide/centrifuge/continueCen',
+        data:({
+
+        })
+      })
+    },
+    againCentrifuge(){ //.........重新开始离心
+      this.centrifugeStop = false
     },
     finish(){//..........结束离心后查看详情
       this.dialogOrder = true
@@ -588,7 +617,6 @@ export default {
            centrifugeId: item.centrifugeId
          })
       })
-      console.log(this.addData)
       this.$axios({
         method: 'post',
         url:'sampleGuide/cenSample/insertCenSample',
@@ -603,6 +631,7 @@ export default {
           type: 'success'
         });
         this.startCentrifuge = true
+        this.centrifugeRun = false
         this.finishCentrifuge = false
         this.dialogSample = false
       })
@@ -693,8 +722,9 @@ export default {
     },
     imgLoad () {
       this.$nextTick(function () {
-        this.bannerHeight = this.$refs.image.height
-        console.log(this.$refs.image[0].height)
+        console.log(this.$refs.image[0])
+        this.bannerHeight = this.$refs.image[0].height
+        // console.log(this.$refs.image[0].height)
       })
     },
   },

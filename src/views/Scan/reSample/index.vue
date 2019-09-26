@@ -75,8 +75,9 @@
           <li class="item">
             <span>RFID编号:</span>
             <el-input v-model="inputRfid" size="small" class="newSample"></el-input>
-            <el-tooltip effect="dark" content="切换芯片" placement="right">
-              <img src="@/assets/img/saomiao.gif" alt="" width="30" height="30" @click="bindingCard">
+
+            <el-tooltip effect="dark" content="替换RFID" placement="right">
+              <img src="@/assets/img/saomiao.gif"  @click="bindingCard">
             </el-tooltip>
           </li>
           <li class="item">
@@ -260,19 +261,18 @@
 </template>
 <script>
   import tmpButton from '@/components/tmp/zhanglan/tmpButton'
-  // import matrix9x9 from '@/components/tmp/zhanglan/matrix-9x9'
   import cardfile from "@/components/cardfile";
-
+  // import matrix9x9 from '@/components/tmp/zhanglan/matrix-9x9'
   export default {
     inject:['reload'],
     props: {
       title: String,
-      multipleSelection: {type: Array, default: () => []}
+      multipleSelection: {type: Array, default: () =>{return []} },
+      selectedId:{type: Number, default:0}
     },
-    components: {tmpButton, cardfile },
+    components: {tmpButton, cardfile},
     data() {
       return {
-        // cardNub: '', // 绑定IC卡值
         locationNowTwo: [],//位置信息
         locationNow: [],//位置信息
         rowValue: '',
@@ -363,7 +363,7 @@
         method: 'post',
         url: 'sampleGuide/scan/findSampleById',
         data: ({
-          id: this.multipleSelection[0].id
+          id: this.selectedId ==0?this.multipleSelection[0].id:this.selectedId
         })
       })
         .then(({data}) => {
@@ -744,6 +744,7 @@
             col:this.activeCol
           })
         }).then(({data})=>{
+          console.log(data)
           if(data.code == 200){
             this.$message({
               message: '修改样本成功',
@@ -760,7 +761,7 @@
         })
         // console.log(this.inputCai)
 
-      }
+      },
     },
     computed: {}
   }
@@ -817,6 +818,11 @@
       > span {
         display: inline-block;
         width: 120px;
+      }
+      img{
+        width: 30px;
+        height: 30px;
+        cursor: pointer;
       }
       .newSample {
         width: 30%;

@@ -97,7 +97,7 @@
           <el-table-column prop="enterName" label="录入人" show-overflow-tooltip></el-table-column>
           <el-table-column prop="address" label="位置信息" show-overflow-tooltip></el-table-column>
         </el-table>
-        <div v-show="total>0">
+        <div>
           <el-pagination
             class="paging"
             layout="prev, pager, next"

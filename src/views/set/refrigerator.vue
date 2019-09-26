@@ -151,6 +151,7 @@ export default {
       this.equipmentName = row.equipmentName
       this.temperature = row.temperature
       this.DialogVisible = true
+      
     },
     handleDelete(index,row){
         this.$confirm(`确认删除该冰箱吗？`, '提示', {

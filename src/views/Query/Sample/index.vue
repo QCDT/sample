@@ -6,7 +6,7 @@
       <el-tabs v-model="activeName" @tab-click="handleClick">
         <!--  -->
         <el-tab-pane label="详细日志" name="first">
-          <div class="sampleSign" v-for="(activity, index) in activities">
+          <div class="sampleSign" v-for="(activity, index) in activities" :key="index">
             <span>{{opeSign[activity.content]}}</span>
             <span class="admin">操作人：{{activity.person}}</span>
             <p>操作时间：{{activity.timestamp}}</p>

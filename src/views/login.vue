@@ -83,11 +83,7 @@ export default {
   },
   mounted() {
     // element banner 高度自适应
-    // this.imgLoad();
-    this.$nextTick(function() {
-      this.bannerHeight = this.$refs.image[0].height;
-      console.log(this.$refs.image[0].height);
-    });
+    this.imgLoad();
     window.addEventListener("resize", () => {
       this.$nextTick(function() {
         this.bannerHeight = this.$refs.image[0].height;
@@ -104,8 +100,7 @@ export default {
     },
     imgLoad () {
       this.$nextTick(function () {
-        this.bannerHeight = this.$refs.image.height
-        console.log(this.$refs.image[0].height)
+        this.bannerHeight = this.$refs.image[0].height
       })
     },
     loginIng() {
@@ -119,7 +114,6 @@ export default {
         headers: {
               'Content-Type': 'application/x-www-form-urlencoded'
         },
-        // withCredentials: true,
         data: this.qs.stringify({
           username: this.userName,
           password: this.userPassword
