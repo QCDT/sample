@@ -407,7 +407,57 @@
               this.normalSampleArr.push([item.row,item.col])
             }
           })
-
+            this.$axios({ //根据冰箱查询相应层数
+              method: 'post',
+              url: 'sampleGuide/set/selectTier',
+              data: ({
+                refrigeratorStruId: this.refrigerator
+              })
+            })
+            .then(({data}) => {
+              // console.log(data)
+              data.data.forEach((item) => {
+                this.layerOption.push({
+                  value: item.id,
+                  label: item.row
+                })
+              })
+            })
+          this.$axios({ //根据层数加载相应的抽屉
+            method: 'post',
+            url: '/sampleGuide/guest/selectDrawerStruByTierStru',
+            data: ({
+              tierStruId: {
+                id: this.layer
+              }
+            })
+          })
+          .then(({data}) => {
+            // console.log(data)
+            data.data.forEach((item) => {
+              this.chouTiOption.push({
+                value: item.id,
+                label: item.number
+              })
+            })
+          })
+          this.$axios({ // 根据抽屉加载相应的样本盒
+            method: 'post',
+            url: 'sampleGuide/scan/getSampleBoxRowList',
+            data: ({
+              id: this.chouTi
+            })
+          })
+          .then(({data}) => {
+            console.log(data)
+            // this.sampleBoxValue = data.data.id
+            data.data.forEach((item) => {
+              this.styleBoxOption.push({
+                value: item.id,
+                label: item.row,
+              })
+            })
+          })
         }),
 
         //类别
@@ -612,7 +662,7 @@
         this.layerOption = []
         this.layer = ''
         this.chouTi = '',
-          this.chouTiOption = []
+        this.chouTiOption = []
         this.styleBox = ''
         this.styleBoxOption = []
         this.$axios({
@@ -622,15 +672,15 @@
             refrigeratorStruId: this.refrigerator
           })
         })
-          .then(({data}) => {
-            // console.log(data)
-            data.data.forEach((item) => {
-              this.layerOption.push({
-                value: item.id,
-                label: item.row
-              })
+        .then(({data}) => {
+          // console.log(data)
+          data.data.forEach((item) => {
+            this.layerOption.push({
+              value: item.id,
+              label: item.row
             })
           })
+        })
       },
       selectIcePlice() {//层数切换时加载相应的抽屉
         this.chouTi = '',
@@ -666,16 +716,16 @@
             id: this.chouTi
           })
         })
-          .then(({data}) => {
-            console.log(data)
-            // this.sampleBoxValue = data.data.id
-            data.data.forEach((item) => {
-              this.styleBoxOption.push({
-                value: item.id,
-                label: item.row,
-              })
+        .then(({data}) => {
+          console.log(data)
+          // this.sampleBoxValue = data.data.id
+          data.data.forEach((item) => {
+            this.styleBoxOption.push({
+              value: item.id,
+              label: item.row,
             })
           })
+        })
       },
       showSample(){//........根据样本盒查询样本信息
         this.activeRow = ''
