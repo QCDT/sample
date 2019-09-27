@@ -130,7 +130,7 @@
               </tmpinput>
             </div>
             <div class="bot-btn">             
-              <button @click="maskProject()">{{MASK_btn}}</button>
+              <button @click="maskProject">{{MASK_btn}}</button>
               <button  @click="showMaskF = false">返回</button>
             </div>
           </div>
@@ -407,7 +407,7 @@ export default {
     },
     // 修改离心机信息
     putProject () {
-      console.log(this.typeValue)
+      console.log(this.eqNumber)
       this.$axios({
         method: 'post',
         url:'sampleGuide/centrifuge/updateCentrifuge',
@@ -418,7 +418,7 @@ export default {
           rotationRate:this.revSpeed + this.unitValue, //转速
           temperate:this.temp+'℃',//温度
           laboratoryDictId: this.labValue, // 实验室id
-          centrifugeNumber: this.MASK_value.eqNumber, //离心机编号
+          centrifugeNumber: this.eqNumber, //离心机编号
           modelNumberId: this.typeValue  
         })
       })
