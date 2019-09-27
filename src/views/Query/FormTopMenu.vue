@@ -236,7 +236,7 @@ export default {
                     myobject.sendcommand("^L\r\n");
                     myobject.ecTextOut(260, 20, 17, "Arial", item.firstLine);
                     myobject.ecTextOut(260, 50, 17, "Arial", item.secondLine);
-                    myobject.ecTextOut(260, 50, 17, "Arial", item.thirdLine);
+                    myobject.ecTextOut(260, 80, 17, "Arial", item.thirdLine);
                     myobject.sendcommand("E\r\n")
                   }catch(e){
                     alert("打印故障，请检查打印机是否连接！")
@@ -266,9 +266,10 @@ export default {
             }).then(() => {
               this.$axios({
                 method: 'post',
-                url:'/sampleGuide/query/queryPrintRfidSampleBox',
+                url:'/sampleGuide/query/printLabel',
                 data:({
-                  rfidCodeList: this.checkedBoxlist.map(item=>{ return item.coding})
+                  rfidCodeList: this.checkedBoxlist.map(item=>{ return item.coding}),
+                  sampleCategoryDict:1
                 })
               })
                 .then(({data})=>{
@@ -279,8 +280,9 @@ export default {
                       myobject.openport("6");
                       myobject.setup(20, 19, 4, 0, 3,0);
                       myobject.sendcommand("^L\r\n");
-                      myobject.ecTextOut(260, 20, 17, "Arial", "SampleName: "+item.name+"");
-                      myobject.ecTextOut(260, 50, 17, "Arial", "Period: "+item.sampleBoxLocation+"");
+                      myobject.ecTextOut(260, 20, 17, "Arial", item.firstLine);
+                      myobject.ecTextOut(260, 50, 17, "Arial", item.secondLine);
+                      myobject.ecTextOut(260, 80, 17, "Arial", item.thirdLine);
                       myobject.sendcommand("E\r\n");
                     }catch(e){
                       alert("打印故障，请检查打印机是否连接！");

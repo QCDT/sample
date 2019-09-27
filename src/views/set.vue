@@ -59,8 +59,8 @@ export default {
         },
         {
           imgUrl: require("@/assets/img/storage.png"),
-          setTitle: "贮藏设备设置",
-          setTitleE: "Storage device setting",
+          setTitle: "冰箱设置",
+          setTitleE: "refrigerator setting",
           link: ""
         },
         {
@@ -103,21 +103,21 @@ export default {
           link: "set/Centrifuge"
         }
       ],
-      setListItemB: [
+      // setListItemB: [
         // 贮藏设置的数据
-        {
-          imgUrl: require("@/assets/img/card_setting.png"),
-          setTitle: "冰箱设置",
-          setTitleE: "refrigerator setting",
-          link: "set/refrigerator"
-        },
-        {
-          imgUrl: require("@/assets/img/card_setting.png"),
-          setTitle: "样本盒设置",
-          setTitleE: "sampleBox setting",
-          link: "set/sampleBox"
-        }
-      ]
+        // {
+        //   imgUrl: require("@/assets/img/card_setting.png"),
+        //   setTitle: "冰箱设置",
+        //   setTitleE: "refrigerator setting",
+        //   link: "set/refrigerator"
+        // }
+        // {
+        //   imgUrl: require("@/assets/img/card_setting.png"),
+        //   setTitle: "样本盒设置",
+        //   setTitleE: "sampleBox setting",
+        //   link: "set/sampleBox"
+        // }
+      // ]
     };
   },
   methods: {
