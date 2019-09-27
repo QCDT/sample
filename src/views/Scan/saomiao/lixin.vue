@@ -670,7 +670,7 @@ export default {
       })
     },
     scanSample(){ // 通过扫描样本rfid查询样本
-      this.elref.RDR_Close();
+      this.elref.RDR_Close()
       this.dialogSampleData = []
       let devicetypeValue = this.$cookies.get('readerType')
       let OpentypeValue = this.$cookies.get('portType')
@@ -718,7 +718,7 @@ export default {
       // console.log(recordCnt)
       let sTagInfo = this.elref.GetRecord(j).split("-");
       let sTagID = sTagInfo[sTagInfo.length-1];
-      alert(recordCnt)
+      // alert(recordCnt)
       for(let j=0;j<recordCnt;j++){
         	let sTagInfo = this.elref.GetRecord(j).split("-")
           let sTagID = sTagInfo[sTagInfo.length-1]
@@ -734,7 +734,7 @@ export default {
         })
       })
       .then(({data})=>{
-        console.log(data.data)
+        console.log(data)
         data.data.forEach((item)=>{
           // console.log(item.id)
           this.dialogSampleData.push({

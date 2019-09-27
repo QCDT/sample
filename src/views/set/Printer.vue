@@ -173,8 +173,8 @@ export default {
       console.log(data)
       this.setSampleId =data.data[0].id ? data.data[0].id : ''
       this.setSampleBoxId =data.data[1].id ? data.data[1].id : ''
-      this.printListA = [data.data[0].firstLine, data.data[0].secondLine, data.data[0].thirdLine]
-      this.printListB = [data.data[1].firstLine, data.data[1].secondLine, data.data[1].thirdLine]
+      this.printListA = [data.data[0].firstLine, data.data[0].secondLine, data.data[0].thirdLine].filter((item)=>{return item !='' && item != null})
+      this.printListB = [data.data[1].firstLine, data.data[1].secondLine, data.data[1].thirdLine].filter((item)=>{return item !='' && item != null})
     })
     .catch((error)=>{
         console.log(error)
