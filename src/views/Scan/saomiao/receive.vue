@@ -522,6 +522,12 @@ export default {
                 })
                 .then(({data})=>{
                     console.log(data)
+                    if(data.code == 200){
+                        this.$message({
+                            message: '接收成功!',
+                            type: 'success'
+                        });
+                    }
                 })
                 .catch((error)=>{
                     console.log(error)
