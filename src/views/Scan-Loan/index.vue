@@ -112,8 +112,8 @@ export default {
                takeOutName:item.takeleave,//………………取走人
                returnTiem:item.expectedreturndate,//………………预计归还时间
                mark:item.loanremarks,//…………备注
-               status:item.status==0?"未核验":1?'已归还':'已借出', //…………订单状态
-               formNum:item.returnSampleCount+'/'+(item.returnSampleCount+item.loanSampleCount)
+               status:item.status==0?"未核验":item.status==1?'已归还':'已借出', //…………订单状态
+               formNum:item.status==0?"":item.returnSampleCount+'/'+(item.returnSampleCount+item.loanSampleCount)
             })
         })
       })
