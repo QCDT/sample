@@ -49,12 +49,6 @@
         </el-select>
       </div>
     </div>
-<<<<<<< HEAD
-=======
-    <!-- <div class="x" v-show="switchSaomiao == false">
-      <matrix9x9 border-color="#000" tdWidth="20px" tdHeight="23px" :tableData="matrixData"></matrix9x9>
-    </div> -->
->>>>>>> 520dadd62f3f2118b07689c63c61ee8fd6a3ce5a
     <div class="bot-btn">
       <tmpButton @click="save">保存</tmpButton>
       <tmpButton @click="$emit('goBack')">返回</tmpButton>

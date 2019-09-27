@@ -45,7 +45,7 @@
               <input type="password" placeholder="请输入密码" v-model="userPassword" />
             </label>
             <div v-show="!LoginTab" class="loginScan">
-              <img src="@/assets/img/saomiao.gif" />
+              <img src="@/assets/img/saomiao.gif" @click="bindingCard"/>
             </div>
           </div>
           <button class="loginBtn" @click="loginIng">登录</button>

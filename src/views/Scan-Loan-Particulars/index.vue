@@ -192,7 +192,7 @@ export default {
           this.takeOutName = data.data.loanOrder.takeleave
           this.returnTime = data.data.loanOrder.expectedreturndate
           this.make = data.data.loanOrder.loanRemarks
-          this.formStatus = data.data.loanOrder==0?"未核验":1?'已归还':'已借出'
+          this.formStatus = data.data.loanOrder.status==0?"未核验":1?'已归还':'已借出'
           this.status = data.data.loanOrder.status
           this.LoanOrderStatus=data.data.loanOrder.status,
           //借出样本信息展示

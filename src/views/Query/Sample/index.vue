@@ -42,20 +42,18 @@
       <h1>位置信息</h1>
       <h1>{{location}}</h1>
       <div class="matrix-box">
-        <div class="matrix">
-          <table class="table">
-            <tr v-for="row in rowValue" :key="row">
-              <!-- <template v-for="item in loanSampleArr"> -->
-              <td
-                v-for="col in colValue"
-                :key="col"
-                :class="showSampleStatus(row, col)"
-              >{{showTable(row,col)}}
-              </td>
-              <!-- </template> -->
-            </tr>
-          </table>
-        </div>
+        <table class="table">
+          <tr v-for="row in rowValue" :key="row">
+            <!-- <template v-for="item in loanSampleArr"> -->
+            <td
+              v-for="col in colValue"
+              :key="col"
+              :class="showSampleStatus(row, col)"
+            >{{showTable(row,col)}}
+            </td>
+            <!-- </template> -->
+          </tr>
+        </table>
         <div class="map">
           <span>已使用</span>
           <span>借用</span>
@@ -304,7 +302,7 @@
   .matrix-box {
     display: flex;
     justify-content: space-between;
-
+    align-items: center;
     /*.matrix{*/
         /*border: 1px solid #333;*/
       /*}*/
@@ -335,15 +333,10 @@
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
-
-    width: 60px;
-    height: 150px;
-
     cursor: pointer;
     white-space: nowrap;
-
     font-size: 13px;
-
+    margin-left:15px;
     span {
       display: flex;
       align-items: center;

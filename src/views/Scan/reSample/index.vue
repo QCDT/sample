@@ -16,20 +16,18 @@
         </ul>
         <div class="bot">
           <div class="matrix-box">
-            <div class="matrix">
-              <table class="table">
-                <tr v-for="row in rowValueTwo" :key="row">
-                  <!-- <template v-for="item in loanSampleArr"> -->
-                  <td
-                    v-for="col in colValueTwo"
-                    :key="col"
-                    :class="showSampleStatusTwo(row, col)"
-                  >{{showTable(row,col)}}
-                  </td>
-                  <!-- </template> -->
-                </tr>
-              </table>
-            </div>
+            <table class="table">
+              <tr v-for="row in rowValueTwo" :key="row">
+                <!-- <template v-for="item in loanSampleArr"> -->
+                <td
+                  v-for="col in colValueTwo"
+                  :key="col"
+                  :class="showSampleStatusTwo(row, col)"
+                >{{showTable(row,col)}}
+                </td>
+                <!-- </template> -->
+              </tr>
+            </table>
             <div class="map">
               <span>已使用</span>
               <span>借用</span>
@@ -74,7 +72,11 @@
           </li>
           <li class="item">
             <span>RFID编号:</span>
+<<<<<<< HEAD
+            <el-input v-model="inputRfid" disabled size="small" class="newSample"></el-input>
+=======
             <el-input v-model="inputRfid" readonly="readonly" size="small" class="newSample"></el-input>
+>>>>>>> aa9416939be4fda51228461228789f6a0efae15c
 
             <el-tooltip effect="dark" content="替换RFID" placement="right">
               <img src="@/assets/img/saomiao.gif"  @click="bindingCard">
@@ -218,21 +220,19 @@
         </ul>
         <div class="bot">
           <div class="matrix-box">
-            <div class="matrix">
-              <table class="table">
-                <tr v-for="row in rowValue" :key="row">
-                  <!-- <template v-for="item in loanSampleArr"> -->
-                  <td
-                    v-for="col in colValue"
-                    :key="col"
-                    :class="showSampleStatus(row, col)"
-                    @click="chooseLocation(row,col)"
-                  >{{showTable(row,col)}}
-                  </td>
-                  <!-- </template> -->
-                </tr>
-              </table>
-            </div>
+            <table class="table">
+              <tr v-for="row in rowValue" :key="row">
+                <!-- <template v-for="item in loanSampleArr"> -->
+                <td
+                  v-for="col in colValue"
+                  :key="col"
+                  :class="showSampleStatus(row, col)"
+                  @click="chooseLocation(row,col)"
+                >{{showTable(row,col)}}
+                </td>
+                <!-- </template> -->
+              </tr>
+            </table>
             <div class="map">
               <span>已使用</span>
               <span>借用</span>
@@ -529,7 +529,7 @@
             console.log(data)
           })
         }else{
-          this.$alert('IC卡只能绑定一个！', '提示', {
+          this.$alert('不能扫描多个芯片！', '提示', {
             confirmButtonText: '确定',
             type: 'error'
           })
@@ -846,8 +846,8 @@
   .bot {
     display: flex;
     justify-content: space-between;
-    width: 500px;
-
+    width: 600px;
+    margin-top: 20px;
     .matrix-box {
       display: flex;
       justify-content: space-between;

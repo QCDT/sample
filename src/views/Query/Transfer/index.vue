@@ -104,11 +104,9 @@
 </template>
 <script>
 import goBack from '@/components/tmp/zhanglan/go-1'
-import htTbody from './tbody'
-import matrix9x9 from '@/components/tmp/zhanglan/matrix-9x9'
 export default {
   props: {},
-  components: { goBack, htTbody, matrix9x9 },
+  components: { goBack},
   data () {
     return {
       tableData: [
@@ -205,8 +203,18 @@ export default {
         .then(({data})=>{
           console.log(data)
           if(data.code = 200){
+            this.$message({
+              message: '转移成功！',
+              type: 'success'
+            });
             this.$router.push('/scan')
           }
+        })
+        .catch((error)=>{
+            this.$message({
+              message: '转移失败！',
+              type: 'error'
+            });
         })
       }else{
         this.$message({
