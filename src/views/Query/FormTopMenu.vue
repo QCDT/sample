@@ -83,7 +83,6 @@ export default {
     showBtn: Boolean,
     sampleBoxValue: Number,
     multipleSelection: { type: Array, default: () => [] },
-    checkedlist: { type: Array, default: [] },
     checkedBoxlist:{type:Array,default:[]}
   },
   components: { tmpinput },
@@ -102,6 +101,11 @@ export default {
       ],
       value: ''
       //   ↑
+    }
+  },
+  watch:{
+    sampleBoxValue:function(){
+      console.log(this.sampleBoxValue)
     }
   },
   methods: {
@@ -255,11 +259,7 @@ export default {
             type: 'warning'
           });
         }else{
-          let boxInfo = this.checkedBoxlist.every((item)=>{
-            return item.address
-          })
-          if(boxInfo){
-            this.$confirm('已选中'+this.checkedBoxlist.length+'条数据，确定打印该标签吗?', '提示', {
+            this.$confirm('已选中'+this.checkedBoxlist.length+'条数据，确定打印该样本盒标签吗?', '提示', {
               confirmButtonText: '确定',
               cancelButtonText: '取消',
               type: 'warning'
@@ -268,26 +268,26 @@ export default {
                 method: 'post',
                 url:'/sampleGuide/query/queryPrintRfidSampleBox',
                 data:({
-                  // sampleCategoryDict:1,
-                  rfidCodeList: this.checkedBoxlist.map((item)=>{return item.rfId})
+                  rfidCodeList: this.checkedBoxlist.map(item=>{ return item.coding})
                 })
               })
                 .then(({data})=>{
                   console.log(data)
-                  console.log(this.checkedBoxlist)
-                  try{
-                    var myobject = new ActiveXObject("GoDEXATL.Function");
-                    myobject.openport("6");
-                    myobject.setup(20, 19, 4, 0, 3,0);
-                    myobject.sendcommand("^L\r\n");
-                    myobject.ecTextOut(260, 20, 17, "Arial", "SampleName: "+data.data[0].name+"");
-                    myobject.ecTextOut(260, 50, 17, "Arial", "Period: "+data.data[0].sampleBoxStru.detailLocation+"");
-                    myobject.sendcommand("E\r\n");
-                  }catch(e){
-                    alert("打印故障，请检查打印机是否连接！");
-                  }finally{
-                    myobject.closeport();
-                  }
+                  data.data.forEach((item)=>{
+                    try{
+                      var myobject = new ActiveXObject("GoDEXATL.Function");
+                      myobject.openport("6");
+                      myobject.setup(20, 19, 4, 0, 3,0);
+                      myobject.sendcommand("^L\r\n");
+                      myobject.ecTextOut(260, 20, 17, "Arial", "SampleName: "+item.name+"");
+                      myobject.ecTextOut(260, 50, 17, "Arial", "Period: "+item.sampleBoxLocation+"");
+                      myobject.sendcommand("E\r\n");
+                    }catch(e){
+                      alert("打印故障，请检查打印机是否连接！");
+                    }finally{
+                      myobject.closeport();
+                    }
+                  })
                 })
             }).catch(() => {
               this.$message({
@@ -295,7 +295,6 @@ export default {
                 message: '已取消打印'
               });
             });
-          }
         }
       }
     },

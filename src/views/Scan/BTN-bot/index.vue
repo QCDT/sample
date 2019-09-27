@@ -367,6 +367,7 @@ export default {
           type: 'warning'
         });
       }else{
+        console.log(this.checkedBoxlist)
         let boxInfo = this.checkedBoxlist.every((item)=>{
             return item.address
         })
@@ -378,26 +379,28 @@ export default {
           }).then(() => {
             this.$axios({
               method: 'post',
-              url:'/sampleGuide/set/selectSampleBoxDetailInfo',
+              url:'/sampleGuide/query/queryPrintRfidSampleBox',
               data:({
-                id: this.checkedBoxlist[0].id
+                rfidCodeList:this.checkedBoxlist.map((item)=>{return item.coding}),
               })
             })
             .then(({data})=>{
               console.log(data)
-              try{
-                var myobject = new ActiveXObject("GoDEXATL.Function");
-                myobject.openport("6");
-                myobject.setup(20, 19, 4, 0, 3,0);
-                myobject.sendcommand("^L\r\n");
-								myobject.ecTextOut(260, 20, 17, "Arial", "SampleName: "+data.data[0].name+"");
-								myobject.ecTextOut(260, 50, 17, "Arial", "Period: "+data.data[0].sampleBoxStru.detailLocation+"");
-								myobject.sendcommand("E\r\n");
-              }catch(e){
-                alert("打印故障，请检查打印机是否连接！");
-              }finally{
-                myobject.closeport();
-              }
+              data.data.forEach((item)=>{
+                try{
+                  var myobject = new ActiveXObject("GoDEXATL.Function");
+                  myobject.openport("6");
+                  myobject.setup(20, 19, 4, 0, 3,0);
+                  myobject.sendcommand("^L\r\n");
+                  myobject.ecTextOut(260, 20, 17, "Arial", "SampleName: "+item.name+"");
+                  myobject.ecTextOut(260, 50, 17, "Arial", "Period: "+item.sampleBoxLocation+"");
+                  myobject.sendcommand("E\r\n");
+                }catch(e){
+                  alert("打印故障，请检查打印机是否连接！");
+                }finally{
+                  myobject.closeport();
+                }
+              })
             })
           }).catch(() => {
             this.$message({

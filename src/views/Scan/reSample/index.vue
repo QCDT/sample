@@ -72,12 +72,7 @@
           </li>
           <li class="item">
             <span>RFID编号:</span>
-<<<<<<< HEAD
-            <el-input v-model="inputRfid" disabled size="small" class="newSample"></el-input>
-=======
             <el-input v-model="inputRfid" readonly="readonly" size="small" class="newSample"></el-input>
->>>>>>> aa9416939be4fda51228461228789f6a0efae15c
-
             <el-tooltip effect="dark" content="替换RFID" placement="right">
               <img src="@/assets/img/saomiao.gif"  @click="bindingCard">
             </el-tooltip>
