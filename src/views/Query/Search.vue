@@ -561,6 +561,7 @@ export default {
             if(this.sampleItem == 1){
               this.searchTableBoxData.push({
                 id: item.id,
+                coding:item.rfidCode,
                 name:item.name,
                 enterName:item.inputUserName, // 录入人
                 address:item.sampleBoxStru.detailLocation // 位置信息
@@ -616,6 +617,10 @@ export default {
       })
     },
     selectIcePlice(){//层数切换时加载相应的抽屉
+      this.chouTi = '',
+      this.chouTiOption = []
+      this.styleBox = ''
+      this.styleBoxOption =[]
       this.$axios({
         method: 'post',
         url:'/sampleGuide/guest/selectDrawerStruByTierStru',
@@ -642,7 +647,7 @@ export default {
         method:'post',
         url: 'sampleGuide/scan/getSampleBoxRowList',
         data:({
-          drawerStruId:this.chouTi
+          id:this.chouTi
         })
       })
       .then(({data})=>{

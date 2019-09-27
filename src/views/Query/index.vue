@@ -8,11 +8,11 @@
       <!-- rgba:透明度 -->
       <reSample v-if="reMaskTran" :multipleSelection="multipleSelection" title="修改样本" @changeSave="changeSave" @goBack="reMaskTran=false"></reSample>
     </transition>
-
+    <!-- -->
     <transition name="el-fade-in-linear">
       <!-- <maskTran :rgba="0"> -->
       <!-- rgba:透明度 -->
-      <alertZhuanYun :checkedBoxlist='checkedBoxlist' :checkedlist='checkedlist' v-if="togegleZhuanYun" @save="saveZhuanYun" @goBack="togegleZhuanYun=false"></alertZhuanYun>
+      <alertZhuanYun :checkedBoxlist='checkedBoxlist' v-if="togegleZhuanYun"  @goBack="togegleZhuanYun=false"></alertZhuanYun>
       <!-- </maskTran> -->
     </transition>
 
@@ -23,7 +23,6 @@
           :multipleSelection="multipleSelection"
           :sampleBoxValue = "sampleBoxValue"
           :checkedBoxlist='checkedBoxlist'
-          :checkedlist='checkedlist'
           @reSample="reSampleShow"
           @zhuanyun="zhuanyun"
           v-show="!reMaskTran"
@@ -155,11 +154,6 @@ export default {
     changeSave() {
       this.$message("修改样本成功");
       this.reMaskTran = false;
-    },
-    /* 保存 */
-    saveZhuanYun() {
-      // this.$message("转运->保存");
-      this.togegleZhuanYun = false;
     },
     reSampleShowId(val){
       this.reId = val
