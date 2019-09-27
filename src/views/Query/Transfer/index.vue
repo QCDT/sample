@@ -122,7 +122,7 @@ export default {
         { text: '已选中',bgc:'#86D647'},
         { text: '未使用', bgc: '#eee' }
       ],
-      sampleStruList:[],      
+      sampleStruList:[],
       locationList:[],
       loading:false,
       hideTable:true,
@@ -328,7 +328,6 @@ export default {
     },
     chooseLocation(row,col){ //......选择新建样本位置
       this.activeList = []
-      this.locationList = []
       if(this.multipleSelection.length == 0){
         this.$message({
           message: '请先勾选需要转移的样本！',
@@ -354,7 +353,7 @@ export default {
       }else if(this.optionalLocation.length == this.multipleSelection.length){
           this.activeList = this.optionalLocation
       }else{
-        // console.log(this.optionalLocation.length)
+        console.log(this.optionalLocation)
         let index = this.optionalLocation.findIndex((item)=>{
             return JSON.stringify(item) == JSON.stringify([row,col])
          })
@@ -421,7 +420,7 @@ export default {
            return 'normalColor'
         }
       }
-    },  
+    },
     showTable (row,col) {
       let res = ''
       if(this.showModel == 1){
