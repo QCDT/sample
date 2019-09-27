@@ -561,6 +561,7 @@ export default {
             if(this.sampleItem == 1){
               this.searchTableBoxData.push({
                 id: item.id,
+                rfId:item.rfidCode,
                 name:item.name,
                 enterName:item.inputUserName, // 录入人
                 address:item.sampleBoxStru.detailLocation // 位置信息

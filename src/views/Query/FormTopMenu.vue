@@ -266,13 +266,15 @@ export default {
             }).then(() => {
               this.$axios({
                 method: 'post',
-                url:'/sampleGuide/set/selectSampleBoxDetailInfo',
+                url:'/sampleGuide/query/queryPrintRfidSampleBox',
                 data:({
-                  id: this.checkedBoxlist[0].id
+                  // sampleCategoryDict:1,
+                  rfidCodeList: this.checkedBoxlist.map((item)=>{return item.rfId})
                 })
               })
                 .then(({data})=>{
                   console.log(data)
+                  console.log(this.checkedBoxlist)
                   try{
                     var myobject = new ActiveXObject("GoDEXATL.Function");
                     myobject.openport("6");
