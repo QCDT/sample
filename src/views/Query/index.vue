@@ -8,7 +8,7 @@
       <!-- rgba:透明度 -->
       <reSample v-if="reMaskTran" :multipleSelection="multipleSelection" title="修改样本" @changeSave="changeSave" @goBack="reMaskTran=false"></reSample>
     </transition>
-    <!-- -->
+    <!-- 转移样本盒 -->
     <transition name="el-fade-in-linear">
       <!-- <maskTran :rgba="0"> -->
       <!-- rgba:透明度 -->
