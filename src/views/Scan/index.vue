@@ -119,13 +119,13 @@
       </transition>
       <!-- 新建样本盒/修改样本盒 -->
       <transition name="el-fade-in-linear">
-          <newSampleBox v-if="newBoxMaskTran" :sampleBoxId='sampleBoxId' :boxRfid='boxRfid'  :title="sampleBoxTitle" @changeBoxRfid="changeBoxRfid" @goBack="newBoxMaskTran=false" @save="save"></newSampleBox>
+          <newSampleBox v-if="newBoxMaskTran" :sampleBoxId='sampleBoxId' :boxRfid='boxRfid'  :title="sampleBoxTitle" @changeBoxRfid="changeBoxRfid" @goBack="newBoxMaskTran=false"></newSampleBox>
       </transition>
       <!-- 样本盒详情-->
       <transition name="el-fade-in-linear">
           <showInfo v-if="showSampleBoxInfo" :sampleBoxId='sampleBoxId' @goBack="showSampleBoxInfo=false"></showInfo>
       </transition>
-      <!-- 转运 -->
+      <!-- 转移 -->
       <transition name="el-fade-in-linear">
         <!-- <maskTran :rgba="0"> -->
           <!-- rgba:透明度 -->

@@ -127,7 +127,7 @@ import cardfile from "@/components/cardfile";
 import tmpButton from '@/components/tmp/zhanglan/tmpButton'
 export default { 
   props: { title: String, boxRfid:String , sampleBoxId:{type:Number,default:-1}},
-  components: {tmpButton},
+  components: {tmpButton,cardfile},
   inject:['reload'],
   data () {
     let sampleBoxName = (rule,value,callback)=>{

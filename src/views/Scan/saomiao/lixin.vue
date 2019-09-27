@@ -36,12 +36,12 @@
       <div class="centrifugeOperation">
         <img src="@/assets/img/centrifugalSet.png" @click="centrifugalSet" :disabled="disabledAmend" />
         <img src="@/assets/img/centrifugalAdd.png" @click="addSample" :disabled="disabledAmend" />
-        <img v-show="!startCentrifuge" src="@/assets/img/centrifugalStart1.png" class="mainBtn" />
+        <img v-show="unableCentrifuge" src="@/assets/img/centrifugalStart1.png" class="mainBtn" />
         <img v-show=" centrifugeStop" src="@/assets/img/continueCentrifugal.png" class="mainBtn" @click="continueCentrifuge"/>
-        <img v-show=" centrifugeStop" src="@/assets/img/againCentrifugal.png" class="mainBtn" />
-        <img v-show="startCentrifuge && !finishCentrifuge && !centrifugeRun" src="@/assets/img/centrifugalStart.png" class="mainBtn" @click="start"/>
-        <img v-show="startCentrifuge && !finishCentrifuge && centrifugeRun && !centrifugeStop" src="@/assets/img/centrifugalStop.png" class="mainBtn" @click="stop"/>
-        <img v-show="startCentrifuge && finishCentrifuge" src="@/assets/img/centrifugeEnd.png" class="mainBtn" @click="finish"/>
+        <img v-show=" centrifugeStop" src="@/assets/img/againCentrifugal.png" class="mainBtn" @click="againCentrifuge" />
+        <img v-show="startCentrifuge" src="@/assets/img/centrifugalStart.png" class="mainBtn" @click="start"/>
+        <img v-show="centrifugeRun" src="@/assets/img/centrifugalStop.png" class="mainBtn" @click="stop"/>
+        <img v-show="finishCentrifuge" src="@/assets/img/centrifugeEnd.png" class="mainBtn" @click="finish"/>
         <img src="@/assets/img/orders.png" @click="exportOrders" :disabled="disabledAmend"/>
         <img src="@/assets/img/record.png" @click="Ordersdetail" :disabled="disabledAmend"/>
       </div>
@@ -243,6 +243,7 @@ export default {
       findValue: '',// 查询样本添加时的条件
       addSampleList:[], //添加时样本集合
       disabledAmend:false,//是否可以修改
+      unableCentrifuge:true,
       startCentrifuge: false, //是否可以开始离心
       centrifugeRun: false, //是否正在离心
       finishCentrifuge: false,// 是否离心完成
@@ -252,6 +253,7 @@ export default {
       orderId: '',//离心订单id
       time: '',//离心机离心时间
       timer:'',// 离心机倒计时
+      residueTime: 0,// 剩余时间
       addData:[],
       bannerHeight: 260,
       multipleSelection:[],
@@ -298,12 +300,6 @@ export default {
           type: item.brandModel.modelNumber
         })
       })
-      this.centrifugeName = this.centrifugeList[0].centrifugeName
-      this.centrifugeTime = this.centrifugeList[0].centrifugeTime
-      this.time = this.centrifugeList[0].centrifugeTime
-      this.centrifugeSpeed = this.centrifugeList[0].centrifugeSpeed
-      this.centrifugeTemperature = this.centrifugeList[0].centrifugeTemperature
-      this.centrifugeId = this.centrifugeList[0].id
       this.querySample()
       this.queryTime()
     })
@@ -337,8 +333,14 @@ export default {
       this.setType = this.centrifugeList[v].type //型号
       this.centrifugeId = this.centrifugeList[v].id //离心机id
       this.carouselIndex = v /* 轮播图的索引 */
-      this.querySample() //查询对应离心机中有无样本
+      this.unableCentrifuge = true
+      this.startCentrifuge = false
+      this.centrifugeRun = false
+      this.centrifugeStop = false
+      this.finishCentrifuge = false
       clearInterval(this.timer)
+      this.querySample() //查询对应离心机中有无样本
+      // this.queryTime()
     },
     queryTime(){
       this.$axios({
@@ -347,6 +349,66 @@ export default {
       })
       .then(({data})=>{
         console.log(data)
+        data.data.forEach((item)=>{
+           if(item.centrifugeSurplusTime !=0 ){
+            //  this.startCentrifuge = true
+            //  console.log(this.centrifugeList)
+            this.centrifugeList.forEach((option,index)=>{
+              if(item.centrifugeId == option.id){
+                console.log(this.centrifugeList[index])
+                this.centrifugeName = this.centrifugeList[index].centrifugeName
+                this.centrifugeTime = this.centrifugeList[index].centrifugeTime
+                this.time = this.centrifugeList[index].centrifugeTime
+                this.centrifugeSpeed = this.centrifugeList[index].centrifugeSpeed
+                this.centrifugeTemperature = this.centrifugeList[index].centrifugeTemperature
+                this.centrifugeId = this.centrifugeList[index].id
+              }
+            })
+              this.orderId = item.cnetrifugeOrderId
+              this.residueTime = item.centrifugeSurplusTime
+           }else{
+            this.centrifugeName = this.centrifugeList[0].centrifugeName
+            this.centrifugeTime = this.centrifugeList[0].centrifugeTime
+            this.time = this.centrifugeList[0].centrifugeTime
+            this.centrifugeSpeed = this.centrifugeList[0].centrifugeSpeed
+            this.centrifugeTemperature = this.centrifugeList[0].centrifugeTemperature
+            this.centrifugeId = this.centrifugeList[0].id
+           }
+        })
+        clearInterval(this.timer)
+        if(this.residueTime != 0){
+          this.disabledAmend = true
+          this.startCentrifuge = false   
+          this.centrifugeRun = true
+          this.unableCentrifuge = false
+          var t = Number(this.residueTime)
+          this.timer = setInterval(()=>{
+              t--
+              console.log(t)
+              if(t <= 0){
+                // t = 0
+                clearInterval(this.timer)
+                this.disabledAmend = false
+                this.finishCentrifuge = true
+                this.centrifugeRun = false
+                this.$axios({
+                  method: 'post',
+                  url: 'sampleGuide/centrifuge/cenEnd',
+                  data:({
+                      id: this.orderId,
+                      centrifugeTime: this.time
+                  })
+                })
+                .then(({data})=>{
+                  if(data.code == 200){
+                    this.centrifugeTime = this.time                  
+                  }
+                    console.log(data)
+                })
+              }
+              this.centrifugeTime = t/60 +'min'
+          },1000)
+        }
       })
     },
     querySample(){   //查询对应离心机中有无样本
@@ -361,6 +423,7 @@ export default {
         // console.log(data)
         if(data.data == true){
           this.startCentrifuge = true
+          this.unableCentrifuge = false
         }else{
           this.startCentrifuge = false
         }
@@ -396,7 +459,8 @@ export default {
     start(){ //.......开始离心
       console.log(this.centrifugeId)
       this.disabledAmend = true
-      
+      this.startCentrifuge = false   
+      this.centrifugeRun = true
       this.$axios({
         method:'post',
         url:'sampleGuide/centrifuge/insertCenOrder',
@@ -409,7 +473,6 @@ export default {
         console.log(data)
         if(data.code== 200){
           this.orderId = data.data.cenOrderId
-          this.centrifugeRun = true
           this.timer = setInterval(()=>{
              let time =  parseFloat(this.centrifugeTime)*60
               time--
@@ -417,6 +480,7 @@ export default {
                 time = 0
                 clearInterval(this.timer)
                 this.disabledAmend = false
+                this.centrifugeRun = false
                 this.finishCentrifuge = true
                 this.$axios({
                   method: 'post',
@@ -446,6 +510,7 @@ export default {
         }).then(() => {
          clearInterval(this.timer)
           this.centrifugeStop = true
+          this.centrifugeRun = false
           this.$axios({
             method:'post',
             url:'sampleGuide/centrifuge/stopCen',
@@ -454,26 +519,95 @@ export default {
               Integerid:this.orderId
             })
           })
+          .then(({data})=>{
+              console.log(data)
+          })
         })
     },
     continueCentrifuge(){ //........继续离心
       this.centrifugeStop = false
+      this.centrifugeRun = true
       this.$axios({
         method:'post',
         url:'sampleGuide/centrifuge/continueCen',
         data:({
-
+          id:this.orderId
         })
+      })
+      .then(({data})=>{
+        console.log(data)
+        if(data.code == 200){
+            clearInterval(this.timer)
+            this.timer = setInterval(()=>{
+             let time =  parseFloat(this.centrifugeTime)*60
+              time--
+             if(time <= 0){
+                time = 0
+                clearInterval(this.timer)
+                this.disabledAmend = false
+                this.finishCentrifuge = true
+                this.centrifugeRun = false
+                this.$axios({
+                  method: 'post',
+                  url: 'sampleGuide/centrifuge/cenEnd',
+                  data:({
+                     id: this.orderId,
+                     centrifugeTime: this.time
+                  })
+                })
+                .then(({data})=>{
+                  if(data.code == 200){
+                    this.centrifugeTime = this.time                  
+                  }
+                    console.log(data)
+                })
+              }
+              this.centrifugeTime = time/60 +'min'
+          },1000)
+        }
       })
     },
     againCentrifuge(){ //.........重新开始离心
       this.centrifugeStop = false
+      this.centrifugeRun = true
+      let residue = parseFloat(this.time)*60-parseFloat(this.centrifugeTime)*60
       this.$axios({
         method:'post',
         url:'sampleGuide/centrifuge/restartCen',
         data:({
-
+          remainderSecond: residue,
+          id:this.orderId
         })
+      })
+      .then(({data})=>{
+        console.log(data)
+            this.centrifugeTime = this.time
+             this.timer = setInterval(()=>{   
+             let time =  parseFloat(this.centrifugeTime)*60
+              time--
+             if(time <= 0){
+                time = 0
+                clearInterval(this.timer)
+                this.disabledAmend = false
+                this.centrifugeRun = false
+                this.finishCentrifuge = true
+                this.$axios({
+                  method: 'post',
+                  url: 'sampleGuide/centrifuge/cenEnd',
+                  data:({
+                     id: this.orderId,
+                     centrifugeTime: this.time
+                  })
+                })
+                .then(({data})=>{
+                  if(data.code == 200){
+                    this.centrifugeTime = this.time                  
+                  }
+                    console.log(data)
+                })
+              }
+              this.centrifugeTime = time/60 +'min'
+          },1000)
       })
     },
     finish(){//..........结束离心后查看详情
@@ -643,6 +777,7 @@ export default {
           type: 'success'
         });
         this.startCentrifuge = true
+        this.unableCentrifuge = false
         this.centrifugeRun = false
         this.finishCentrifuge = false
         this.dialogSample = false
