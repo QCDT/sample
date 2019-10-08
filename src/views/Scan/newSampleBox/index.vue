@@ -318,28 +318,45 @@ export default {
         }else{
           this.$axios({
             method:'post',
-            url: '/sampleGuide/set/updateRfidSampleBoxAndStru',
+            url:'sampleGuide/set/checkCanBeUpdateSampleBox',
             data:({
-                id: this.sampleBoxId,
-                name: this.ruleForm.name,
-                rfidCode:this.boxRfid,
-                refrigeratorStruId :this.labValue,
-                tierStruId: this.labRowValue,
-                drawerStruId: this.labDrawerValue,
-                row: this.sampleBox,
-                structureRow:this.rowValue,
-                structureCol: this.colValue,
-                structureSpec:this.showModel,
-                remarks: this.mark
+              id: this.sampleBoxId
             })
           })
           .then(({data})=>{
             console.log(data)
-            this.$message({
-              message: '修改样本盒成功！',
-              type: 'success'
-            });
-            this.reload()
+            if(data.data == 1){
+              this.$axios({
+                method:'post',
+                url: '/sampleGuide/set/updateRfidSampleBoxAndStru',
+                data:({
+                    id: this.sampleBoxId,
+                    name: this.ruleForm.name,
+                    rfidCode:this.boxRfid,
+                    // refrigeratorStruId :this.labValue,
+                    // tierStruId: this.labRowValue,
+                    // drawerStruId: this.labDrawerValue,
+                    // row: this.sampleBox,
+                    structureRow:this.rowValue,
+                    structureCol: this.colValue,
+                    structureSpec:this.showModel,
+                    remarks: this.mark
+                })
+              })
+              .then(({data})=>{
+                console.log(data)
+                this.$message({
+                  message: '修改样本盒成功！',
+                  type: 'success'
+                });
+                this.reload()
+              })
+            }else{
+                this.$message({
+                  message: '样本盒中存在样本，不可修改！',
+                  type: 'warning'
+                });
+            }
           })
         }
       }

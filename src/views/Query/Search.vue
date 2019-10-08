@@ -356,6 +356,40 @@ export default {
     return {
       /* 是否高级搜索 */
       showAdvancedSearch: false,
+      pipeCapOption:[
+        {
+          label:'白色',
+          value:0
+        },
+        {
+          label:'黑色',
+          value:1
+        },
+        {
+          label:'橙色',
+          value:2
+        },
+        {
+          label:'黄色',
+          value:3
+        },
+        {
+          label:'绿色',
+          value:4
+        },
+        {
+          label:'蓝色',
+          value:5
+        },
+        {
+          label:'紫色',
+          value:6
+        },
+        {
+          label:'粉色',
+          value:7
+        }
+      ],
       asHeight: 0,
       searchTableData:[],
       searchTableBoxData:[],
@@ -571,6 +605,7 @@ export default {
                 id: item.id,
                 rfId:item.rfidCode,
                 color:item.capColor, // 管帽颜色
+                // color:this.pipeCapOption[item.capColor].label, // 管帽颜色
                 sampleInfo:item.name, // 样本信息
                 enterName:item.inputUserName, // 录入人
                 enterData:item.inputTime, // 录入日期
