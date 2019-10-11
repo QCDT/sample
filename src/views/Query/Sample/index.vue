@@ -7,8 +7,10 @@
         <!--  -->
         <el-tab-pane label="详细日志" name="first">
           <div class="sampleSign" v-for="(activity, index) in activities" :key="index">
-            <span>{{opeSign[activity.content]}}</span>
-            <span class="admin">操作人：{{activity.person}}</span>
+            <div class="operationTitle">
+              <span class="operation">{{opeSign[activity.content]}}</span>
+              <span class="admin">操作人：{{activity.person}}</span>
+            </div>
             <p>操作时间：{{activity.timestamp}}</p>
           </div>
         </el-tab-pane>
@@ -73,7 +75,10 @@
         ></el-input>
       </div>
     </div>
-    <goBack></goBack>
+    <div class="bottom">
+    <!-- 这是一个返回按钮 它在页面的最底部 -->
+      <button @click="$router.go(-1)">返回</button>
+    </div>
   </div>
 </template>
 <script>
@@ -114,6 +119,40 @@
         ],
         activities: [
         ],
+        pipeCapOption:[
+          {
+            label:'白色',
+            value:0
+          },
+          {
+            label:'黑色',
+            value:1
+          },
+          {
+            label:'橙色',
+            value:2
+          },        
+          {
+            label:'黄色',
+            value:3
+          },        
+          {
+            label:'绿色',
+            value:4
+          },        
+          {
+            label:'蓝色',
+            value:5
+          },        
+          {
+            label:'紫色',
+            value:6
+          },
+          {
+            label:'粉色',
+            value:7
+          }
+        ],
         opeSign:[
           '销毁',
           '借出',
@@ -153,8 +192,8 @@
         this.centerData[5].value = data.data.rfidSample.inputTime
         this.centerData[6].value = data.data.rfidSample.expireDate
         this.centerData[7].value = data.data.rfidSample.warningDays
-        this.centerData[8].value = data.data.rfidSample.capColor
-        this.centerData[9].value = data.data.rfidSample.project == null ? '' : data.data.rfidSample.project.id
+        this.centerData[8].value = this.pipeCapOption[data.data.rfidSample.capColor].label 
+        this.centerData[9].value = data.data.rfidSample.project == null ? '' : data.data.rfidSample.project.name
         this.centerData[10].value = data.data.rfidSample.sampleStudy
         this.centerData[11].value = data.data.rfidSample.sampleTreatment
         this.centerData[12].value = data.data.rfidSample.sampleSubject
@@ -240,17 +279,20 @@
     .left {
       overflow: auto;
       flex: 1;
-
       padding: 0 20px;
 
       border-right: 1px solid #bbb;
       background-color: #fff;
-
-      .admin{
-        display: inline-block;
-        /*margin-right: -100px;*/
-        width: 120px;
-        float: right;
+      .operationTitle{
+        height:25px;
+        .operation{
+          float: left;
+        }
+        .admin{
+          /*margin-right: -100px;*/
+          width: 120px;
+          float: right;
+        }
       }
       .sampleSign{
         width: 100%;
@@ -328,7 +370,6 @@
       margin-bottom: 12px;
     }
   }
-
   .map {
     display: flex;
     flex-direction: column;
@@ -369,5 +410,39 @@
   .nowColor{
     background: #15ff13;
   }
+  .bottom {
+    position: absolute;
+    bottom: 0;
 
+    display: flex;
+    overflow: hidden;
+    align-items: center;
+    justify-content: center;
+    left: 0;
+    right: 0;
+
+    height: 60px;
+
+    button {
+      width: 6.25rem;
+      height: 1.875rem;
+
+      cursor: pointer;
+      transition: all 0.1s;
+
+      color: #01c8ff;
+      border: 0;
+      border: 1px #01c8ff solid;
+      border-radius: 5px;
+      outline: none;
+      background-color: #fff;
+
+      font-size: 14px;
+
+      &:hover {
+        color: #fff;
+        background-color: #01c8ff;
+      }
+    }
+  }
 </style>

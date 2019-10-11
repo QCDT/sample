@@ -13,6 +13,10 @@
           <span>创建时间:</span>
           <span>{{newTime}}</span>
         </div>
+        <div v-show="status!= 0">
+          <span>借出时间:</span>
+          <span>{{loanTime}}</span>
+        </div>
         <div>
           <span>创建用户名:</span>
           <span>{{newUserName}}</span>
@@ -118,6 +122,7 @@ export default {
       //ifAddBox: false,
       checked: true,
       newTime:'', //创建时间
+      loanTime:'', // 借出时间
       orderName:'', //表单名称
       newUserName:'',//创建用户名
       takeOutName:'', //取走人
@@ -187,6 +192,7 @@ export default {
     .then(({data})=>{
           console.log(data)
           this.newTime = data.data.loanOrder.createTime
+          this.loanTime = data.data.loanOrder.checkTime
           this.orderName = data.data.loanOrder.name
           this.newUserName = data.data.loanOrder.createUserName
           this.takeOutName = data.data.loanOrder.takeleave
@@ -391,7 +397,7 @@ export default {
   color:#333;
 }
 /deep/.el-table__body tr:hover>td {
-		background-color:rgba(139, 251, 139, 0.7)  !important;
+		background-color:#fff !important;
 }
 .red{
   color: red;
@@ -404,7 +410,7 @@ export default {
     justify-content:flex-start;
     margin-top: 20px;
     div{
-      width: 50%;
+      width: 25%;
     }
     span:first-child{
       display: inline-block;

@@ -123,20 +123,20 @@ export default {
           cancelButtonText: "取消",
           type: "warning"
         })
-          .then(() => {
-            this.list.splice(this.delIndex, 1);
-            this.delIndex = -1;
-            this.$message({
-              type: "success",
-              message: "删除成功!"
-            });
-          })
-          .catch(() => {
-            this.$message({
-              type: "info",
-              message: "已取消删除"
-            });
+        .then(() => {
+          this.list.splice(this.delIndex, 1);
+          this.delIndex = -1;
+          this.$message({
+            type: "success",
+            message: "删除成功!"
           });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消删除"
+          });
+        });
       }
       console.log(this.delIndex);
     },

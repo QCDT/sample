@@ -323,7 +323,7 @@ export default {
         this.currentPage=val
     },
     change (v) { // 切换离心机时显示相应离心机信息
-      console.log(v)
+      this.disabledAmend = false
       this.centrifugeName = this.centrifugeList[v].centrifugeName //名称
       this.centrifugeTime = this.centrifugeList[v].centrifugeTime //时间
       this.time = this.centrifugeList[v].centrifugeTime 
@@ -340,9 +340,51 @@ export default {
       this.finishCentrifuge = false
       clearInterval(this.timer)
       this.querySample() //查询对应离心机中有无样本
+      this.$axios({
+        method:'post',
+        url:'sampleGuide/centrifuge/findCentrifugeTimeByCentrifugeId',
+        data:({
+            centrifugeId:this.centrifugeList[v].id 
+        })
+      })
+      .then(({data})=>{
+        if(data.data != 0){
+          this.disabledAmend = true
+          this.startCentrifuge = false   
+          this.centrifugeRun = true
+          this.unableCentrifuge = false
+          var t = Number(data.data)
+          this.timer = setInterval(()=>{
+              t--
+              if(t <= 0){
+                // t = 0
+                clearInterval(this.timer)
+                this.disabledAmend = false
+                this.finishCentrifuge = true
+                this.centrifugeRun = false
+                this.$axios({
+                  method: 'post',
+                  url: 'sampleGuide/centrifuge/cenEnd',
+                  data:({
+                      id: this.orderId,
+                      centrifugeTime: this.time
+                  })
+                })
+                .then(({data})=>{
+                  if(data.code == 200){
+                    this.centrifugeTime = this.time                  
+                  }
+                    console.log(data)
+                })
+              }
+              this.centrifugeTime = t/60 +'min'
+          },1000)
+        }
+        console.log(data)
+      })
       // this.queryTime()
     },
-    queryTime(){
+    queryTime(){//初始化查询离心机是否正在离心
       this.$axios({
         method:'get',
         url:'sampleGuide/centrifuge/findResidueCentrifugeTime',

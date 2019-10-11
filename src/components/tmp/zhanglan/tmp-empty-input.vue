@@ -2,7 +2,7 @@
   <div class="tmp-row-empty">
     <!-- XXX:输入框 | 选择框 -->
     <span class="tmp-row-empty-title">
-      <slot></slot>:
+      <slot></slot>
     </span>
     <i class="tmp-row-empty-input">
       <slot name="elUI"></slot>

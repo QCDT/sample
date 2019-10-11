@@ -110,22 +110,35 @@
                             </el-select>
                         </div>
                         <div class="setEach" v-show="sampleBoxWayValue == 2 && TierNum">
-                            <span>设置每一层的行数和列数</span>
-                            <div>
-                                <p v-for="item in Number(row*col*TierNum)" :key="item">
+                            <span>设置每个抽屉可摆放样本盒数量</span>
+                            <div v-if ="row">
+                                <p  v-for="item in Number(row*col*TierNum)" :key="item">
                                     <span>第{{item}}抽屉:</span>
                                     <el-select v-model="drawerNub[item-1]" placeholder="请选择" size="mini">
                                         <el-option
                                             v-for="item in sampleBoxNumOption"
-                                            :key="item"
-                                            :label="item"
-                                            :value="item">
+                                            :key="item.value"
+                                            :label="item.label"
+                                            :value="item.value">
+                                        </el-option>
+                                    </el-select>
+                                </p>
+                            </div>
+                            <div v-if ="rowNub.length">
+                                <p  v-for="item in sum" :key="item">
+                                    <span>第{{item}}抽屉:</span>
+                                    <el-select v-model="drawerNub[item-1]" placeholder="请选择" size="mini">
+                                        <el-option
+                                            v-for="item in sampleBoxNumOption"
+                                            :key="item.value"
+                                            :label="item.label"
+                                            :value="item.value">
                                         </el-option>
                                     </el-select>
                                 </p>
                             </div>
                         </div>
-                        <div>
+                        <div v-show="sampleBoxWayValue == 1">
                             <span>每个抽屉样本盒数量均为:</span>
                             <el-select v-model="sampleBoxNum" placeholder="请选择" size="mini">
                                 <el-option
@@ -138,8 +151,21 @@
                         </div>
                     </div>
                 </div>
-                <div class="showEquipment">
-                    
+                <div class="showEquipment" >
+                    <div>
+                        <div class="showTierTitle" v-for="item in Number(TierNum)" :key="item" v-show="TierNum">
+                            <span>第{{item}}层</span>
+                        </div>
+                    </div>
+                    <div class="tier" v-show="TierNum">
+                        <div v-for="item in Number(TierNum)" :key="item" :style="'height:'+TierEach[item]+'%'">
+                            <table  class="table">
+                                <tr v-for="(item,index) in row" :key="index">
+                                    <td v-for="(item,ind) in col" :key="ind">{{(index)*col+ind+1}}</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="footerBtn">
@@ -249,6 +275,23 @@ export default {
       this.$router.push('/set/refrigerator/equipmentInfo')
     }
   },
+  watch:{
+      TierNum(){
+          if(this.TierNum == ''){
+              this.rowNub = []
+              this.colNub = []
+          }
+      },
+      hierarchy(){
+          if(this.hierarchy == 1){
+              this.rowNub = []
+              this.colNub = []
+          }else{
+              this.row = ''
+              this.col = ''
+          }
+      }
+  },
   computed:{
     residue(){
         let newTierEach =this.TierEach.filter((item,index)=>{
@@ -261,6 +304,19 @@ export default {
             return parseFloat(n1)+parseFloat(n2)
         })
         return residuceNum
+    },
+    sum(){
+        let nub = 0
+        console.log(this.rowNub, this.colNub)
+        for(let i=0; i<this.rowNub.length; i++){
+            for(let j=0; j<this.colNub.length; j++){
+                if(i==j){
+                    nub+= this.rowNub[i]*this.colNub[j]
+                }
+            }
+        }
+        console.log(nub)
+        return nub
     }
   }
 }
@@ -303,9 +359,52 @@ export default {
             }
         }
         .showEquipment{
-            width:50%;
-            height: 20vw;
-            border: 1px solid #00c9ff;
+            width:30%;
+            // height: 25vw;
+            // margin-top: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            .showTierTitle{
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: space-around;
+                height: 100%;
+                // width:20%;
+            }
+            .tier{
+                border: 1px solid #00c9ff;
+                margin-left: 30px;
+                width:50%;
+                height: 100%;
+            //     width: 100%;
+            //     display: flex;
+            //     justify-content:left;
+            //     align-items: center;
+            //     span{
+            //         // margin-left: 30px;
+            //     }
+                >div{
+                    margin-top: 0;
+                }
+                .table {
+                    border-spacing: 0;
+                    border: 2px solid #ccc;
+                    border-collapse: collapse;
+                    background-color: #fff;
+                    width: 100%;
+                    height: 100%;
+                    td {
+                        border: 1px solid #ccc;
+                        text-align: center;
+                        font-size: 12px;
+                        // width: 20px;
+                        // height: 20px;
+                        padding: 5px;
+                    }
+                }
+            }
         }
         .el-input{
             width: 25%;

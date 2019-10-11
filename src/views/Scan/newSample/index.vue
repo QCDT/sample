@@ -226,7 +226,7 @@ export default {
         project:'', //所属项目
         fangan: '', // 方案编号
         jiliang: '' ,//剂量组
-        patient: '', // 受试者号
+        patient: '', // 受试者编号
         bloodDate: '', //实验采血日期
         jizhi:'',// 基质描述
       },
@@ -250,35 +250,35 @@ export default {
       pipeCapOption:[
         {
           label:'白色',
-          value:'白色'
+          value:0
         },
         {
           label:'黑色',
-          value:'黑色'
+          value:1
         },
         {
           label:'橙色',
-          value:'橙色'
+          value:2
         },        
         {
           label:'黄色',
-          value:'黄色'
+          value:3
         },        
         {
           label:'绿色',
-          value:'绿色'
+          value:4
         },        
         {
           label:'蓝色',
-          value:'蓝色'
+          value:5
         },        
         {
           label:'紫色',
-          value:'紫色'
+          value:6
         },
         {
           label:'粉色',
-          value:'粉色'
+          value:7
         }
       ],
       projectOption:[],
@@ -324,7 +324,7 @@ export default {
       data.data.forEach((item)=>{
         this.sampleTypeOption.push({
           label:item.name,
-          value:item.id
+          value:item.name
         })
       })
     })
@@ -589,17 +589,18 @@ export default {
       return res
     },
     submitForm(formName) {
+      console.log(this.ruleForm.pipeCap)
       this.$refs[formName].validate((valid) => {
         //console.log(this.ruleForm.project)
         if (valid && this.labValue && this.labRow && this.labDrawer && this.sampleBoxValue && this.activeRow && this.activeCol) {
-           this.locationMsg = false
+          this.locationMsg = false
           this.$axios({
             method:'post',
             url:'/sampleGuide/scan/createSample',
             data:({
               rfidCode: this.RFID,
               name: this.ruleForm.sampleName,
-              sampleCategoryDictId:this.ruleForm.sampleType,
+              sampleCategoryDictName:this.ruleForm.sampleType,
               sampleSource:this.ruleForm.sampleSource ,
               samplingDate:this.ruleForm.samplingDate, 
               capColor:this.ruleForm.pipeCap,

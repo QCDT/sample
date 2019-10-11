@@ -7,7 +7,7 @@
           <div class="tmp-row-empty">
             <!-- XXX:输入框 | 选择框 -->
             <span class="tmp-row-empty-title">
-              {{sampleItem === 1 ? '样本盒' : '样本'}}名称:
+              {{sampleItem === 1 ? '样本盒' : '样本'}}名称
             </span>
             <i class="tmp-row-empty-input">
               <el-input
