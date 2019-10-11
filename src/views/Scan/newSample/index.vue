@@ -226,7 +226,7 @@ export default {
         project:'', //所属项目
         fangan: '', // 方案编号
         jiliang: '' ,//剂量组
-        patient: '', // 受试者号
+        patient: '', // 受试者编号
         bloodDate: '', //实验采血日期
         jizhi:'',// 基质描述
       },
@@ -324,7 +324,7 @@ export default {
       data.data.forEach((item)=>{
         this.sampleTypeOption.push({
           label:item.name,
-          value:item.id
+          value:item.name
         })
       })
     })
@@ -589,17 +589,18 @@ export default {
       return res
     },
     submitForm(formName) {
+      console.log(this.ruleForm.pipeCap)
       this.$refs[formName].validate((valid) => {
         //console.log(this.ruleForm.project)
         if (valid && this.labValue && this.labRow && this.labDrawer && this.sampleBoxValue && this.activeRow && this.activeCol) {
-           this.locationMsg = false
+          this.locationMsg = false
           this.$axios({
             method:'post',
             url:'/sampleGuide/scan/createSample',
             data:({
               rfidCode: this.RFID,
               name: this.ruleForm.sampleName,
-              sampleCategoryDictId:this.ruleForm.sampleType,
+              sampleCategoryDictName:this.ruleForm.sampleType,
               sampleSource:this.ruleForm.sampleSource ,
               samplingDate:this.ruleForm.samplingDate,
               capColor:this.ruleForm.pipeCap,

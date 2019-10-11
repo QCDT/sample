@@ -112,7 +112,7 @@
                 <el-input v-model="recordsSampleName" placeholder="请输入内容" size="mini"></el-input>
                 </div>
                 <div>
-                <span class="recordTime">盘点时间</span>
+                <span class="recordTime">接收时间</span>
                 <el-date-picker
                     v-model="choiceTime"
                     value-format="yyyy-MM-dd HH:mm:ss"
@@ -420,7 +420,7 @@ export default {
                 let sTagID = sTagInfo[sTagInfo.length-1]
                     this.rfidCodeList[j] = sTagID
             }
-            console.log(this.rfidCodeList)
+            // console.log(this.rfidCodeList)
             this.$axios({
                 method: 'post',
                 url: 'sampleGuide/sampleReceive/findRfidSampleByRfidCode',
@@ -433,6 +433,7 @@ export default {
                 if(data.data.checknull == 0 && data.data.existing == null){
                     this.scanNum = data.data.rfidSampleList.length
                     this.formName = data.data.newReceiveTable.tableName
+                    this.dataValue = this.formatDateTime(new Date())
                     data.data.rfidSampleList.forEach((item)=>{
                         this.sampleDataIdList.push(item.id)
                         this.sampleData.push({
@@ -621,17 +622,21 @@ export default {
             })
             .then((res)=>{
                 console.log(res)
-
-    //             var blob = new Blob([res.data], {type: 'application/excel ;charset=utf-8'})
-    //             var a = document.createElement('a');
-    //             var href = window.URL.createObjectURL(blob); // 创建链接对象
-    //             a.href =  href;
-    //             a.download = '';   // 自定义文件名
-    //             document.body.appendChild(a);
-    //             a.click();
-    //             window.URL.revokeObjectURL(href);  //移除链接对象
-    //             document.body.removeChild(a); // 移除a元素
             })
+        },
+        formatDateTime(date) {
+            let y = date.getFullYear();
+            let m = date.getMonth() + 1;
+            m = m < 10 ? ('0' + m) : m;
+            let d = date.getDate();
+            d = d < 10 ? ('0' + d) : d;
+            let h = date.getHours();
+            h=h < 10 ? ('0' + h) : h;
+            let minute = date.getMinutes();
+            minute = minute < 10 ? ('0' + minute) : minute;
+            let second=date.getSeconds();
+            second=second < 10 ? ('0' + second) : second;
+            return y + '-' + m + '-' + d+' '+h+':'+minute+':'+second;
         }
     }
 }

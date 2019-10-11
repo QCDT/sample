@@ -13,8 +13,8 @@
           :row-style="{height:'32px',textAlign: 'center',padding:'0px',}"
           :cell-style="{padding:'0px',textAlign: 'center'}"
           border
-          stripe
           ref="multipleTable"
+          max-height="340"
           :data="tableData"
           tooltip-effect="dark"
           :style="{width: '100%',margin:'0 auto',}"
@@ -110,7 +110,7 @@ export default {
           ope:item.sign,
           opePerson:item.userName,
           opeTime:item.operateTime,
-          person:item.userName,
+          person:item.borrower,
           expTime:item.predictTime,
           location:item.detailLocation,
           mark:item.remarks

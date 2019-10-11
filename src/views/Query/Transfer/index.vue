@@ -9,11 +9,12 @@
         <el-table
           :row-style="{height:'32px',textAlign: 'center',padding:'0px',}"
           :cell-style="{padding:'0px',textAlign: 'center'}"
+          :row-class-name="changeTrStyle"
           border
           ref="multipleTable"
           :data="tableData"
           tooltip-effect="dark"
-          :style="{width: '100%',margin:'0 auto',}"
+          :style="{width: '100%'}"
           @selection-change="handleSelectionChange"
         >
           <el-table-column type="selection" width="55"></el-table-column>
@@ -23,7 +24,7 @@
           </el-table-column>
           <el-table-column prop="name" label="样本名称" show-overflow-tooltip ></el-table-column>
           <el-table-column prop="address" label="原位置" show-overflow-tooltip></el-table-column>
-          <el-table-column label="现位置" show-overflow-tooltip>
+          <el-table-column label="现位置" width="160">
             <template slot-scope="scope">
               <span>{{locationList[scope.$index]}}</span>
             </template>
@@ -107,15 +108,10 @@ import goBack from '@/components/tmp/zhanglan/go-1'
 export default {
   props: {},
   components: { goBack},
+  inject:['reload'],
   data () {
     return {
-      tableData: [
-        // {
-        //   coding: '123', // 序号编码
-        //   name: 'Mark', // 样本名称
-        //   address: '海尔冰箱3-1-101海尔冰箱', // 位置信息
-        // }
-      ],
+      tableData: [],
       mapData: [
         { text: '已使用', bgc: '#00c9ff' },
         { text: '借用', bgc: '#FCFD01' },
@@ -124,6 +120,8 @@ export default {
       ],
       sampleStruList:[],
       locationList:[],
+      affirmTransfer:false, //是否已经转移
+      num:0,
       loading:false,
       hideTable:true,
       multipleSelection: [],
@@ -156,6 +154,7 @@ export default {
       console.log(data)
       data.data.forEach((item)=>{
         this.tableData.push({
+          num: this.num++,
           id: item.id,
           coding:item.rfidCode,
           name:item.name,
@@ -178,8 +177,27 @@ export default {
     })
   },
   methods: {
+    changeTrStyle({row,rowIndex}){
+      if(this.affirmTransfer && this.locationList[rowIndex] != undefined){
+        return 'bgColorOne'
+      }
+      for(let i=0; i<this.multipleSelection.length; i++){
+        if(row.coding == this.multipleSelection[i].coding){
+          return 'bgColorTwo'
+        }
+      }
+    },
     handleSelectionChange (val) {
       this.multipleSelection = val
+      this.multipleSelection.sort(this.compare('num'))
+      console.log(this.multipleSelection)
+    },
+    compare(property){
+      return function(a,b){
+          var value1 = a[property];
+          var value2 = b[property];
+          return value1 - value2;
+      }
     },
     transferSample(){
       if(this.labValue && this.labRow && this.labDrawer && this.sampleBoxValue && this.activeList.length){
@@ -207,7 +225,10 @@ export default {
               message: '转移成功！',
               type: 'success'
             });
-            this.$router.push('/scan')
+            this.showSample()
+            this.$refs.multipleTable.clearSelection();
+            this.affirmTransfer = true
+            // this.reload()
           }
         })
         .catch((error)=>{
@@ -298,7 +319,7 @@ export default {
       this.loanSampleArr = []
       this.normalSampleArr = []
       this.optionalLocation = []
-       this.activeList = []
+      this.activeList = []
       this.$axios({
         method:'post',
         url:'/sampleGuide/scan/findSampleStruBySampleBoxId',
@@ -353,7 +374,6 @@ export default {
       }else if(this.optionalLocation.length == this.multipleSelection.length){
           this.activeList = this.optionalLocation
       }else{
-        console.log(this.optionalLocation)
         let index = this.optionalLocation.findIndex((item)=>{
             return JSON.stringify(item) == JSON.stringify([row,col])
          })
@@ -364,16 +384,15 @@ export default {
              n++
              num = n
            }
-           console.log(num)
            this.activeList.push(this.optionalLocation[num])
          }
       }
       for(let i=0; i<this.activeList.length; i++){
-         let ref = ''
-         let tier = ''
-         let drawer = ''
-         let box = ''
-         let activeStr = this.showTable(this.activeList[i][0],this.activeList[i][1])
+         var ref = ''
+         var tier = ''
+         var drawer = ''
+         var box = ''
+         var activeStr = this.showTable(this.activeList[i][0],this.activeList[i][1])
          this.labOption.forEach((item)=>{
            if(this.labValue == item.value){
             //  console.log(item.label)
@@ -382,23 +401,28 @@ export default {
          })
         this.labRowOption.forEach((item)=>{
           if(this.labRow == item.value){
-            console.log(item.label)
+            // console.log(item.label)
             tier = item.label
           }
         })
         this.labDrawerOption.forEach((item)=>{
           if(this.labDrawer == item.value){
-            console.log(item.label)
+            // console.log(item.label)
             drawer = item.label
           }
         })
         this.sampleBoxOption.forEach((item)=>{
           if(this.sampleBoxValue == item.value){
-            console.log(item.label)
+            // console.log(item.label)
             box = item.label
           }
         })
-         this.locationList.push(ref+'-'+tier+'-'+drawer+'-'+box+'-'+activeStr)
+        // for(let j=0; j< this.multipleSelection.length; j++){
+          console.log(this.multipleSelection[i].num)
+         this.locationList[this.multipleSelection[i].num] = ref+'-'+tier+'-'+drawer+'-'+box+'-'+activeStr
+        // }
+        //  this.locationList.push(ref+'-'+tier+'-'+drawer+'-'+box+'-'+activeStr)
+         console.log(this.locationList)
       }
     },
     showSampleStatus(row,col){
@@ -441,6 +465,15 @@ export default {
 }
 </script>
 <style scoped lang='less'>
+/deep/.el-table .bgColorOne{
+  background: #ddd;
+}
+/deep/.el-table .bgColorTwo{
+  background: #00c9ff;
+}
+/deep/.el-table__body tr:hover>td {
+		background-color:transparent !important;
+}
 .transfer-wrap {
   display: flex;
   justify-content: space-evenly;
