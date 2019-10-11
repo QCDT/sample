@@ -28,8 +28,8 @@
         </div>
       </li>
     </ul>
-    <ul class="secondMenu" v-show="active === 1">
       <!-- 设置页 贮藏设备设置的二级导航 -->
+    <!-- <ul class="secondMenu" v-show="active === 1">
       <li v-for="(item,index) in setListItemB" :key="index">
         <div class="setItem">
           <router-link :to="item.link">
@@ -39,7 +39,7 @@
           </router-link>
         </div>
       </li>
-    </ul>
+    </ul> -->
   </div>
 </template>
 <script>
@@ -61,7 +61,7 @@ export default {
           imgUrl: require("@/assets/img/storage.png"),
           setTitle: "冰箱设置",
           setTitleE: "refrigerator setting",
-          link: ""
+          link: "set/refrigerator"
         },
         {
           imgUrl: require("@/assets/img/data_setting.png"),
