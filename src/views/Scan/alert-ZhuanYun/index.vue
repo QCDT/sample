@@ -1,5 +1,6 @@
 <template>
   <div class="zhuanyunbot-index">
+    <h1 class="top-title">样本盒转移</h1>
     <div class="title">
       <h1>
         位置信息:
@@ -240,9 +241,10 @@ export default {
 }
 </script>
 <style scoped lang='less'>
+
 .zhuanyunbot-index {
-  padding-top: 30px;
-  padding-left: 70px;
+  /*padding-top: 30px;*/
+  /*padding-left: 70px;*/
   .title {
     display: flex;
     align-items: center;
@@ -257,6 +259,17 @@ export default {
         margin-left: 30px;
         font-size: 14px;
     }
+  }
+  .top-title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 7px 0;
+    background-color: #e2e2e2;
+    margin-bottom: 10px;
+    font-size: 20px;
+    font-weight: 500;
+
   }
 }
 .item {

@@ -159,6 +159,7 @@
               v-model="refrigerator"
               placeholder="请选择"
               @change="selectIceBox"
+              @focus="hideTableSample = false"
             >
               <el-option
                 v-for="item in refrigeratorOption"
@@ -173,6 +174,7 @@
               v-model="layer"
               placeholder="请选择"
               @change="selectIcePlice"
+              @focus="hideTableSample = false"
             >
               <el-option
                 v-for="item in layerOption"
@@ -189,6 +191,7 @@
               v-model="chouTi"
               placeholder="请选择"
               @change="selectDrawer"
+              @focus="hideTableSample = false"
             >
               <el-option
                 v-for="item in chouTiOption"
@@ -214,7 +217,7 @@
           </li>
         </ul>
         <div class="bot">
-          <div class="matrix-box">
+          <div class="matrix-box" v-show="!hideTableSample">
             <table class="table">
               <tr v-for="row in rowValue" :key="row">
                 <!-- <template v-for="item in loanSampleArr"> -->
@@ -268,6 +271,7 @@
     components: {tmpButton, cardfile},
     data() {
       return {
+        hideTableSample:false,
         locationNowTwo: [],//位置信息
         locationNow: [],//位置信息
         rowValue: '',
@@ -572,6 +576,10 @@
             })
           }).then(({data})=>{
             console.log(data)
+            this.$alert('RFID芯片替换成功！', '提示', {
+              confirmButtonText: '确定',
+              type: 'success'
+            })
           })
         }else{
           this.$alert('不能扫描多个芯片！', '提示', {
@@ -733,6 +741,7 @@
         this.locationNow = []
         this.loanSampleArr = []
         this.normalSampleArr = []
+        this.hideTable = true
         this.$axios({
           method:'post',
           url:'/sampleGuide/scan/findSampleStruBySampleBoxId',

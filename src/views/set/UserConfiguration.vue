@@ -636,6 +636,10 @@ export default {
       // alert(recordCnt)
       if(recordCnt == 1){
         this.cardNub = sTagID
+        this.$alert('RFID芯片替换成功！', '提示', {
+          confirmButtonText: '确定',
+          type: 'success'
+        })
       }else{
         this.$alert('IC卡只能绑定一个！', '提示', {
           confirmButtonText: '确定',
