@@ -93,7 +93,8 @@
             </div>
         </div>    <!--确认按钮-->
         <div class="receiveBtnWrap">
-            <el-button type="primary" size="mini" class="receiveBtn" @click="submitForm">确认</el-button>
+            <button class="receiveBtn" @click="$router.go(-1)">返回</button>
+            <button class="receiveBtn btn" @click="submitForm">确认</button>
         </div>
           <!-- 验证登录-->
         <ChangeUser :dialogLogin='dialogLogin' btnText="验证" @close='close' @userName='changeUserName'></ChangeUser>
@@ -231,10 +232,12 @@
 import { setTimeout } from 'timers';
 import  ChangeUser from '@/components/ChangeUser'
 import cardfile from "@/components/cardfile"
+import goBack from '@/components/tmp/zhanglan/go-1'
 export default {
     components: {
         ChangeUser,
-        cardfile
+        cardfile,
+        goBack
     },
     data () {
         return {
@@ -456,7 +459,7 @@ export default {
                 }
             })
         },
-        submitForm() {  
+        submitForm() {
             if(this.formName == ''){
                 this.$alert(`表单名称不能为空!`,'提示', {
                     confirmButtonText: '确定',
@@ -749,6 +752,19 @@ export default {
     margin-top: 15px;
     .receiveBtn{
         width: 120px;
+        border:1px solid #00c9ff;
+        color: #00c9ff;
+        height: 25px;
+        background-color: #fff;
+        border-radius: 5px;
+        font-size: 18px;
     }
+  .btn{
+    margin-left: 20px;
+  }
+  .receiveBtn:hover{
+    background-color: #00c9ff;
+    color: #fff;
+  }
 }
 </style>

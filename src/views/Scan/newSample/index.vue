@@ -8,7 +8,7 @@
             <div class="left-box">
                 <el-form-item label="RFID编号">
                   <el-input v-model="RFID" disabled></el-input>
-                </el-form-item> 
+                </el-form-item>
                 <el-form-item label="样本名称" prop="sampleName" required>
                   <el-input v-model="ruleForm.sampleName" placeholder></el-input>
                 </el-form-item>
@@ -98,7 +98,7 @@
                 位置信息
                 <span class="msg" v-show="locationMsg">请完善位置信息</span>
               </h1>
-              <div> 
+              <div>
                 <div class="input-item-r">
                   <!-- <el-form-item label="冰箱"> -->
                     <span>冰箱</span>
@@ -170,7 +170,7 @@
                   v-model="mark"
                 ></el-input>
               </div>
-            </div>          
+            </div>
             </div>
         </el-form>
       <div class="bot-btn">
@@ -206,7 +206,7 @@ export default {
             callback(new Error('该样本名称已存在!'));
           }
         })
-        
+
       }
     };
     return {
@@ -259,19 +259,19 @@ export default {
         {
           label:'橙色',
           value:2
-        },        
+        },
         {
           label:'黄色',
           value:3
-        },        
+        },
         {
           label:'绿色',
           value:4
-        },        
+        },
         {
           label:'蓝色',
           value:5
-        },        
+        },
         {
           label:'紫色',
           value:6
@@ -572,7 +572,7 @@ export default {
            return 'normalColor'
         }
       }
-    },  
+    },
     showTable (row,col) {
       let res = ''
       if(this.showModel == 1){
@@ -602,7 +602,7 @@ export default {
               name: this.ruleForm.sampleName,
               sampleCategoryDictName:this.ruleForm.sampleType,
               sampleSource:this.ruleForm.sampleSource ,
-              samplingDate:this.ruleForm.samplingDate, 
+              samplingDate:this.ruleForm.samplingDate,
               capColor:this.ruleForm.pipeCap,
               warningDays:this.ruleForm.earlyWarning,
               sampleCentralLaboratoryNumber:this.ruleForm.project,

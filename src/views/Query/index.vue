@@ -43,7 +43,11 @@
           <el-table-column  width="70" label="序号">
             <template slot-scope="scope"><span>{{scope.$index+(currentPage - 1) * PageSize + 1}}</span></template>
           </el-table-column>
-          <el-table-column prop="color" label="帽色" show-overflow-tooltip></el-table-column>
+          <el-table-column prop="color" label="帽色" show-overflow-tooltip>
+            <template slot-scope="scope">
+              <span class="color" :class="{'colorOne' : scope.row.color == 0 ,'colorTwo' : scope.row.color == 1 ,'colorThree' : scope.row.color == 2 ,'colorFour' : scope.row.color == 4 ,'colorFive' : scope.row.color == 5 ,'colorSix' : scope.row.color == 6 ,'colorSeven' : scope.row.color == 7 }"></span>
+            </template>
+          </el-table-column>
 
           <!--  -->
           <el-table-column label="样本信息" show-overflow-tooltip>
@@ -139,6 +143,40 @@ export default {
       togegleZhuanYun: false, // 转运
       checkedlist:[],  //选中项的数组
       checkedBoxlist: [], //样本盒选中数组
+      pipeCapOption:[
+        {
+          label:'白色',
+          value:0
+        },
+        {
+          label:'黑色',
+          value:1
+        },
+        {
+          label:'橙色',
+          value:2
+        },
+        {
+          label:'黄色',
+          value:3
+        },
+        {
+          label:'绿色',
+          value:4
+        },
+        {
+          label:'蓝色',
+          value:5
+        },
+        {
+          label:'紫色',
+          value:6
+        },
+        {
+          label:'粉色',
+          value:7
+        }
+      ]
       //   ↑ 表单
     }
   },
@@ -251,10 +289,39 @@ export default {
   margin: 0 auto;
   padding-top: 20px;
 
+  .color{
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: 1px solid #ccc;
+  }
+
   img {
     width: 30px;
     height: 30px;
   }
+}
+.colorOne{
+  background-color: #fff;
+}
+.colorTwo{
+  background-color: black;
+}
+.colorThree{
+  background-color: #ffa724;
+}
+.colorFour{
+  background-color: #fffd30;
+}
+.colorFive{
+  background-color: #15ff13;
+}
+.colorSix{
+  background-color: #c621ff;
+}
+.colorSeven{
+  background-color: #ff99d3;
 }
 //  ↑
 
