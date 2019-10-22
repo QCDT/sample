@@ -582,7 +582,7 @@ export default {
             this.$axios({
                 method: 'post',
                 url: 'sampleGuide/sampleReceive/exportExcelSelect',
-                responseType: 'blod',
+                responseType: 'blob',
                 headers: {
                     'Access-Control-Expose-Headers': 'filename'
                 },

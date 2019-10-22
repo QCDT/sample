@@ -58,11 +58,12 @@
             <div class="refrigeratorBox">
                 <div class="addCentrifuge">
                     <span class="addA">贮藏设备名称</span>
-                    <el-input v-model="equipmentName" placeholder="请输入内容" size="mini" class="addB"></el-input>
+                    <el-input v-model="equipmentName" placeholder="请输入内容" size="mini" class="addB" @blur="verificationName"></el-input>
+                    <em v-show="repeatName">该名称已存在</em>
                 </div>
                 <div class="addCentrifuge">
                     <span class="addA">贮藏设备品牌</span>
-                    <el-select v-model="trademark" placeholder="请输入内容" size="mini" class="addB">
+                    <el-select v-model="trademark" placeholder="请输入内容" size="mini" class="addB" @change="changeModelNub">
                         <el-option
                           v-for="item in trademarkOption"
                           :key="item.value"
@@ -90,7 +91,7 @@
                 </div>
             </div>
             <span slot="footer" class="dialog-footer">
-                <el-button @click="DialogVisible = false" size="mini">保存</el-button>
+                <el-button @click="saveInfo" size="mini">保存</el-button>
                 <el-button type="primary" @click="DialogVisible = false" size="mini">返回</el-button>
             </span>
         </el-dialog>
@@ -103,6 +104,8 @@ export default {
   data () {
     return {
       DialogVisible: false,
+      repeatName:false,
+      equipmentId:'',
       equipmentName: '',
       trademark: '',
       temperature: '',
@@ -139,19 +142,89 @@ export default {
           laboratory: item.laboratoryDict.name,
           equipmentName: item.name,
           trademark:item.refrigeratorBrandTypeDict.name,
+          trademarkId:item.refrigeratorBrandTypeDict.id,
           temperature: item.temperature
         })
       })
       console.log(data)
     })
+    this.$axios({ // 查询所有冰箱品牌
+      method:'get',
+      url:'sampleGuide/refrigeratorBrandTypeDict/findAllBrand'
+    })
+    .then(({data})=>{
+      // console.log(data)
+      data.data.forEach((item)=>{
+        this.trademarkOption.push({
+          label: item.name,
+          value: item.id
+        })
+      })
+    })
   },
   methods: {
+    // 点击修改按钮时回显信息
     amendrefrigerator (index, row) {
       console.log(index, row)
       this.equipmentName = row.equipmentName
       this.temperature = row.temperature
       this.DialogVisible = true
-      
+      this.modelNub = row.trademarkId
+      this.equipmentId = row.id
+      // this.$axios({
+      //   method: 'post',
+      //   url:'sampleGuide/refrigeratorBrandTypeDict/findBrandNumber',
+      //   data:{
+      //     pid:row.trademark
+      //   }
+      // })
+      // .then(({data})=>{
+      //   data.data.forEach((item)=>{
+      //     this.modelNubOption.push({
+      //       label:item.name,
+      //       value:item.id
+      //     })
+      //   })
+      //   console.log(data)
+      // })
+    },
+    // 选择不同设备品牌显示不同的设备型号
+    changeModelNub(){
+      this.modelNub = ''
+      this.$axios({
+        method: 'post',
+        url:'sampleGuide/refrigeratorBrandTypeDict/findBrandNumber',
+        data:{
+          pid:this.trademark
+        }
+      })
+      .then(({data})=>{
+        data.data.forEach((item)=>{
+          this.modelNubOption.push({
+            label:item.name,
+            value:item.id
+          })
+        })
+        console.log(data)
+      })
+    },
+    // 修改时验证冰箱名称是否重复
+    verificationName(){
+      this.$axios({
+        method:'post',
+        url:'sampleGuide/refrigeratorStru/updateCheckRefrigeName',
+        data:({
+          id:this.equipmentId,
+          name:this.equipmentName
+        })
+      })
+      .then(({data})=>{
+        console.log(data)
+      })
+    },
+    // 修改设备信息的方法
+    saveInfo(){
+
     },
     handleDelete(index,row){
         this.$confirm(`确认删除该冰箱吗？`, '提示', {
@@ -237,9 +310,14 @@ export default {
       margin: 0 auto;
       .addCentrifuge{
         display: flex;
-        justify-content: center;
+        justify-content: flex-start;
         align-items: center;
         margin-bottom: 10px;
+        em{
+          font-size: 12px;
+          color: red;
+          margin-left: 5px;
+        }
         .addA{
           width: 28%;
         }

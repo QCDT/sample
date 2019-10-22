@@ -5,12 +5,18 @@
       <tr>
         <th class="title" colspan="4">{{title}}</th>
       </tr>
-      <tr v-for="(item,index) in 4" :key="index">
+      <tr v-for="(item,index) in addContentA" :key="index">
         <td colspan="2" width="50%">
-          <fromItem></fromItem>
+          <fromItem>
+            {{item}}
+            <input type="text" v-model="dataListA[index]" slot="input">
+          </fromItem>
         </td>
         <td colspan="2" width="50%">
-          <fromItem></fromItem>
+          <fromItem>
+             {{addContentB[index]}}
+             <input type="text" v-model="dataListA[index]" slot="input">
+          </fromItem>
         </td>
       </tr>
       <tr>
@@ -29,7 +35,7 @@
       <tr></tr>
     </table>
     <div class="ack-btn">
-      <tmpButton style="margin 0 auto" @click="$emit('confirm')">确认</tmpButton>
+      <tmpButton  @click="confirmAddOrder">确认</tmpButton>
     </div>
   </div>
 </template>
@@ -46,17 +52,25 @@ export default {
   },
   data () {
     return {
-      mark: ''
+      mark: '',
+      addContentA:["订单号","收件人","收件人联系方式","收件地址"],
+      addContentB:["订单名称","寄件人","寄件人联系方式","寄件地址"],
+      dataListA:[],
+      dataListB:[]
     }
   },
-  methods: {},
+  methods: {
+    confirmAddOrder(){
+      this.$emit('confirm')
+    }
+  },
   computed: {}
 }
 </script>
 <style scoped lang='less'>
 .transfer-order-box {
   width: 100%;
-  margin-top: 30px;
+  margin-top: 20px;
 }
 table {
   border-collapse: collapse;

@@ -1,7 +1,7 @@
 <template>
   <div class="out-change-index">
-    <TransferOrder @test="test" title="修改转出订单"></TransferOrder>
-    <h1 class="form-title">转出样本盒</h1>
+    <TransferOrder style="background:#fff; margin-top:10px" @test="test" title="修改转出订单"></TransferOrder>
+    <h1 class="form-title"> <img src="@/assets/img/zhuanchuyangbenhe.png"></h1>
     <div class="form-top-info">
       <div class="sum">
         <span>共有:</span>
@@ -9,10 +9,10 @@
         <span>个样本盒</span>
       </div>
       <div class="btn">
-        <tmpButton @click="addBox">
-          <i class="icon icon-sousuo"></i>
-          添加样本盒
-        </tmpButton>
+        <div @click="addBox"  class="searchIcon">
+            <img src="@/assets/img/addBox.png">
+            <span>添加样本盒</span>
+        </div>
       </div>
     </div>
     <div class="form">
@@ -20,12 +20,10 @@
         :row-style="{height:'32px',textAlign: 'center',padding:'0px',}"
         :cell-style="{padding:'0px',textAlign: 'center'}"
         border
-        stripe
         ref="multipleTable"
         :data="tableData"
         tooltip-effect="dark"
         :style="{width: '100%',margin:'0 auto',}"
-        :header-cell-style="getRowClass"
         @selection-change="handleSelectionChange"
       >
         <el-table-column type="index" label="序号" width="70"></el-table-column>
@@ -111,22 +109,6 @@ export default {
     changProject () {
       this.$message('修改')
     },
-    getRowClass ({ rowIndex }) {
-      if (rowIndex == 0) {
-        return {
-          background: '#3cd7ff',
-          padding: '0px 0',
-          height: '30px',
-          lineHeight: '1.875rem',
-          fontWeight: '900',
-          fontSize: '1rem',
-          color: '#fff',
-          textAlign: 'center'
-        }
-      } else {
-        return ''
-      }
-    },
     handleSelectionChange (val) {
       this.multipleSelection = val
     }
@@ -136,19 +118,31 @@ export default {
 </script>
 <style scoped lang='less'>
 .out-change-index {
-  padding: 0 20px;
+  padding: 10px 20px 0 20px;
+  background: #eee;
 }
 .form-title {
-  height: 100px;
-  display: flex;
-
-  justify-content: center;
-  align-items: center;
-  font-size: 20px;
+  text-align: center;
 }
 .form-top-info {
   display: flex;
   justify-content: space-between;
   margin-bottom: 10px;
+}
+.searchIcon{
+  background: #00c9ff;
+  color: white;
+  border: 1px solid #00c9ff;
+  line-height: 25px;
+  padding:0 2px;
+  border-radius: 5px;
+  cursor: pointer;
+  img{
+    width: 16px;
+    height: 16px;
+    vertical-align: top;
+    margin-top: 5px;
+    margin-right: 5px;
+  }
 }
 </style>

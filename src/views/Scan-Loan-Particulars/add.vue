@@ -24,14 +24,12 @@
               <div class="right">
                   <table class="table">
                       <tr v-for="row in rowValue" :key="row">
-                        <!-- <template v-for="item in loanSampleArr"> -->
                           <td
                             v-for="col in colValue"
                             :key="col"
                             :class="showSampleStatus(row, col)"
                           >{{showTable(row,col)}}
                           </td>
-                        <!-- </template> -->
                       </tr>
                   </table>
                   <div class="map">

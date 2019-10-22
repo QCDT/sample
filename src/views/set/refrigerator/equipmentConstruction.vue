@@ -151,19 +151,37 @@
                         </div>
                     </div>
                 </div>
-                <div class="showEquipment" >
-                    <div>
-                        <div class="showTierTitle" v-for="item in Number(TierNum)" :key="item" v-show="TierNum">
-                            <span>第{{item}}层</span>
+                <div>
+                    <div class="showEquipment" v-show='TierEach.length>0' >
+                        <div>
+                            <div class="showTierTitle" v-for="item in Number(TierNum)" :key="item" v-show="TierNum">
+                                <span>第{{item}}层</span>
+                            </div>
+                        </div>
+                        <div class="tier" v-show="TierNum">
+                            <div v-for="(item,index) in TierEach" :key="index" :style="'height:'+item+'%'">
+                                <table  class="table">
+                                    <tr v-for="(item,index) in row" :key="index">
+                                        <td v-for="(item,ind) in col" :key="ind">{{(index)*col+ind+1}}</td>
+                                    </tr>
+                                </table>
+                            </div>
                         </div>
                     </div>
-                    <div class="tier" v-show="TierNum">
-                        <div v-for="item in Number(TierNum)" :key="item" :style="'height:'+TierEach[item]+'%'">
-                            <table  class="table">
-                                <tr v-for="(item,index) in row" :key="index">
-                                    <td v-for="(item,ind) in col" :key="ind">{{(index)*col+ind+1}}</td>
-                                </tr>
-                            </table>
+                    <div class="showEquipment" style="height:40vw" v-show='TierEach.length==0'>
+                        <div>
+                            <div class="showTierTitle" v-for="item in Number(TierNum)" :key="item" v-show="TierNum">
+                                <span>第{{item}}层</span>
+                            </div>
+                        </div>
+                        <div class="tier" v-show="TierNum">
+                            <div v-for="(item,index) in Number(TierNum)" :key="index">
+                                <table  class="table">
+                                    <tr v-for="(item,index) in row" :key="index">
+                                        <td v-for="(item,ind) in col" :key="ind">{{(index)*col+ind+1}}</td>
+                                    </tr>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -290,6 +308,12 @@ export default {
               this.row = ''
               this.col = ''
           }
+      },
+      setTier(){
+          this.rowNub = []
+          this.colNub = []
+          this.row = ''
+          this.col = ''
       }
   },
   computed:{
@@ -358,9 +382,12 @@ export default {
                 }
             }
         }
+        // .showEquipmentWrap{
+        //     height:25vw;
+        // }
         .showEquipment{
             width:30%;
-            // height: 25vw;
+            // height: 45vw;
             // margin-top: 15px;
             display: flex;
             justify-content: space-between;
@@ -368,7 +395,7 @@ export default {
             .showTierTitle{
                 display: flex;
                 flex-direction: column;
-                justify-content: center;
+                justify-content: space-around;
                 align-items: space-around;
                 height: 100%;
                 // width:20%;
@@ -376,7 +403,6 @@ export default {
             .tier{
                 border: 1px solid #00c9ff;
                 margin-left: 30px;
-                width:50%;
                 height: 100%;
             //     width: 100%;
             //     display: flex;
@@ -390,7 +416,7 @@ export default {
                 }
                 .table {
                     border-spacing: 0;
-                    border: 2px solid #ccc;
+                    border: 1px solid #ccc;
                     border-collapse: collapse;
                     background-color: #fff;
                     width: 100%;

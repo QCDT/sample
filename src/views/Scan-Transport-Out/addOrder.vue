@@ -3,7 +3,7 @@
   <div class="add-order-tmp">
     <div class="in">
       <addOrder style="background:#fff" title="添加转出订单" @confirm="confirm"></addOrder>
-  <sampleBox></sampleBox>
+      <sampleBox v-show="showAddSampleBox"></sampleBox>
     </div>
   </div>
 </template>
@@ -14,12 +14,15 @@ export default {
   props: {},
   components: { addOrder, sampleBox },
   data () {
-    return {}
+    return {
+      showAddSampleBox:false,
+    }
   },
   methods: {
     confirm () {
-      console.log('11: ', '确认')
-    }
+      this.showAddSampleBox = true
+      // console.log('11: ', '确认')
+    },
   },
   computed: {}
 }
@@ -27,12 +30,11 @@ export default {
 <style scoped lang='less'>
 .add-order-tmp {
   width: 100%;
-
   background-color: #eee;
-  margin-top: 87px;
-  height: calc(100% - 87px);
+  margin-top:20px;
+  height: 90%;
 }
 .in {
-  padding: 20px 20px 0;
+  padding: 10px;
 }
 </style>
