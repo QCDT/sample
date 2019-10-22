@@ -69,7 +69,7 @@
         </div>
         <!-- 右边 -->
         <div class="right-box">
-          <div class="rightstyle"> 
+          <div class="rightstyle">
               <h1 class="location-info">
                 样本盒规格
               </h1>
@@ -125,7 +125,7 @@
 <script>
 import cardfile from "@/components/cardfile";
 import tmpButton from '@/components/tmp/zhanglan/tmpButton'
-export default { 
+export default {
   props: { title: String, boxRfid:String , sampleBoxId:{type:Number,default:-1}},
   components: {tmpButton,cardfile},
   inject:['reload'],
@@ -241,7 +241,7 @@ export default {
       }
     }
   },
-  
+
   created(){
     this.$axios({ // ........冰箱名称渲染
       method: 'get',
@@ -373,7 +373,7 @@ export default {
       console.log(devicetypeValue,OpentypeValue,comPortValue,comBaudRateValue,comFrameStructureValue,netIpAddress,netPort)
       let n = this.$store.state.OnOpen(this.elref , devicetypeValue,OpentypeValue,comPortValue,comBaudRateValue,comFrameStructureValue,netIpAddress,netPort)
       if (n!=0) {
-          return 
+          return
       }
       let nret=0;
       //盘点标签初始化,申请盘点标签所需要的内存空间。返回，成功：0 ；失败：非0 （查看错误代码表）。
@@ -414,6 +414,10 @@ export default {
         alert(recordCnt)
         if(recordCnt == 1){
             this.$emit('changeBoxRfid',sTagID)
+            this.$alert('RFID芯片替换成功！', '提示', {
+            confirmButtonText: '确定',
+            type: 'success'
+          })
           // this.boxRfid = sTagID
         }else{
           this.$alert('样本盒只能绑定一个！', '提示', {
@@ -549,7 +553,7 @@ export default {
   }
   /deep/.el-input{
     width:60%;
-  }  
+  }
 }
 
 .right-box {

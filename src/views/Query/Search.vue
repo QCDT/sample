@@ -239,7 +239,6 @@
                 range-separator="至"
                 start-placeholder="开始日期"
                 end-placeholder="结束日期"
-                :disabled="sampleItem == 1"
               ></el-date-picker>
             </i>
           </div>
@@ -332,9 +331,6 @@
               </el-select>
             </i>
           </div>
-          <tmpinput>
-
-          </tmpinput>
         </div>
       </div>
     </div>
@@ -431,7 +427,10 @@ export default {
       /* 状态 status */
       statusOption: [
         { value: 1, label: '正常' },
-        { value: 2, label: '借出' }
+        { value: 2, label: '借出' },
+        { value: 3, label: '销毁' },
+        { value: 4, label: '转入' },
+        { value: 5, label: '转出' }
       ],
       /* 样本类别 sampleItem */
       sampleItemOption: [

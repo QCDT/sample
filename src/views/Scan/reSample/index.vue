@@ -52,25 +52,6 @@
         </h1>
         <ul>
           <li class="item">
-            <span>项目名称:</span>
-            <el-select
-              size="small"
-              v-model="project"
-              placeholder="请选择"
-              class="newSample"
-              filterable
-              allow-create
-              default-first-option
-            >
-              <el-option
-                v-for="item in projectOption"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              ></el-option>
-            </el-select>
-          </li>
-          <li class="item">
             <span>RFID编号:</span>
             <el-input v-model="inputRfid" readonly="readonly" size="small" class="newSample"></el-input>
             <el-tooltip effect="dark" content="替换RFID" placement="right">
@@ -81,25 +62,6 @@
             <span>样本名称:</span>
             <el-input v-model="inputName" size="small" class="newSample" @blur="sampleName"></el-input>
             <span class="verifyMsg">{{inputNamemsg}}</span>
-          </li>
-          <li class="item">
-            <span>样本来源:</span>
-            <el-select
-              size="small"
-              v-model="source"
-              placeholder="请选择"
-              class="newSample"
-              filterable
-              allow-create
-              default-first-option
-            >
-              <el-option
-                v-for="item in sourceOption"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              ></el-option>
-            </el-select>
           </li>
           <li class="item">
             <span>样本类别:</span>
@@ -114,6 +76,25 @@
             >
               <el-option
                 v-for="item in testTubeCategoryOption"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              ></el-option>
+            </el-select>
+          </li>
+          <li class="item">
+            <span>样本来源:</span>
+            <el-select
+              size="small"
+              v-model="source"
+              placeholder="请选择"
+              class="newSample"
+              filterable
+              allow-create
+              default-first-option
+            >
+              <el-option
+                v-for="item in sourceOption"
                 :key="item.value"
                 :label="item.label"
                 :value="item.value"
@@ -145,9 +126,67 @@
             </el-date-picker>
           </li>
           <li class="item">
+            <span>管帽颜色:</span>
+            <el-select
+              size="small"
+              v-model="pipeCap"
+              placeholder="请选择"
+              class="newSample"
+              filterable
+              allow-create
+              default-first-option
+            >
+              <el-option
+                v-for="item in pipeCapOption"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              ></el-option>
+            </el-select>
+          </li>
+          <li class="item">
             <span>提前报警天数:</span>
             <el-input v-model="inputWarn" size="small" class="newSample"></el-input>
             天
+          </li>
+          <li class="item">
+            <span>所属项目:</span>
+            <el-select
+              size="small"
+              v-model="project"
+              placeholder="请选择"
+              class="newSample"
+              filterable
+              allow-create
+              default-first-option
+            >
+              <el-option
+                v-for="item in projectOption"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              ></el-option>
+            </el-select>
+          </li>
+          <li class="item">
+            <span>方案编号:</span>
+            <el-input v-model="fangan" size="small" class="newSample"></el-input>
+          </li>
+          <li class="item">
+            <span>剂量组:</span>
+            <el-input v-model="jiliang" size="small" class="newSample"></el-input>
+          </li>
+          <li class="item">
+            <span>受试者编号:</span>
+            <el-input v-model="patient" size="small" class="newSample"></el-input>
+          </li>
+          <li class="item">
+            <span>实验采血日期:</span>
+            <el-input v-model="bloodDate" size="small" class="newSample"></el-input>
+          </li>
+          <li class="item">
+            <span>基质描述:</span>
+            <el-input v-model="jizhi" size="small" class="newSample"></el-input>
           </li>
           <li>
             <span>位置信息:</span>
@@ -159,6 +198,7 @@
               v-model="refrigerator"
               placeholder="请选择"
               @change="selectIceBox"
+              @focus="hideTableSample = false"
             >
               <el-option
                 v-for="item in refrigeratorOption"
@@ -173,6 +213,7 @@
               v-model="layer"
               placeholder="请选择"
               @change="selectIcePlice"
+              @focus="hideTableSample = false"
             >
               <el-option
                 v-for="item in layerOption"
@@ -189,6 +230,7 @@
               v-model="chouTi"
               placeholder="请选择"
               @change="selectDrawer"
+              @focus="hideTableSample = false"
             >
               <el-option
                 v-for="item in chouTiOption"
@@ -214,7 +256,7 @@
           </li>
         </ul>
         <div class="bot">
-          <div class="matrix-box">
+          <div class="matrix-box" v-show="!hideTableSample">
             <table class="table">
               <tr v-for="row in rowValue" :key="row">
                 <!-- <template v-for="item in loanSampleArr"> -->
@@ -268,6 +310,7 @@
     components: {tmpButton, cardfile},
     data() {
       return {
+        hideTableSample:false,
         locationNowTwo: [],//位置信息
         locationNow: [],//位置信息
         rowValue: '',
@@ -281,6 +324,41 @@
         normalSampleArrTwo: [],//样本盒中正常样本集合
         activeRow:'',
         activeCol:'',
+        pipeCap:'',//管帽颜色
+        pipeCapOption:[
+          {
+            label:'白色',
+            value:0
+          },
+          {
+            label:'黑色',
+            value:1
+          },
+          {
+            label:'橙色',
+            value:2
+          },
+          {
+            label:'黄色',
+            value:3
+          },
+          {
+            label:'绿色',
+            value:4
+          },
+          {
+            label:'蓝色',
+            value:5
+          },
+          {
+            label:'紫色',
+            value:6
+          },
+          {
+            label:'粉色',
+            value:7
+          }
+        ],
         /* 来源 source */
         sourceOption: [
           /* { value: 'A来源', label: 'A来源' },
@@ -304,6 +382,11 @@
         source: '', //样本来源
         project:'',//项目名称
         testTubeCategory: '', //样本类别
+        fangan: '', // 方案编号
+        jiliang: '' ,//剂量组
+        patient: '', // 受试者编号
+        bloodDate: '', //实验采血日期
+        jizhi:'',// 基质描述
         refrigerator: '',//冰箱
         layer: '',//层数
         chouTi: '',//抽屉
@@ -329,14 +412,20 @@
           { value: 'styleBox2', label: 'styleBox2',id:'2' } */
         ],
         sample: [
-          {key: '项目名称', value: ''},
           {key: 'RFID编号', value: ''},
           {key: '样本名称', value: ''},
-          {key: '样本来源', value: ''},
           {key: '样本类别', value: ''},
+          {key: '样本来源', value: ''},
           {key: '采样日期', value: ''},
           {key: '有效日期', value: ''},
+          {key: '管帽颜色', value: ''},
           {key: '提前报警天数', value: ''},
+          {key: '所属项目', value: ''},
+          {key: '方案编号', value: ''},
+          {key: '剂量组', value: ''},
+          {key: '受试者编号', value: ''},
+          {key: '实验采血日期', value: ''},
+          {key: '基质描述', value: ''},
           {key: '位置信息', value: ''}
         ]
       }
@@ -363,16 +452,22 @@
       })
         .then(({data}) => {
           console.log(data)
-//当前信息
-          this.sample[0].value = data.data.rfidSample.project == null ? '' : data.data.rfidSample.project.name
-          this.sample[1].value = data.data.rfidSample.rfidCode
-          this.sample[2].value = data.data.rfidSample.name
+// 当前信息
+          this.sample[8].value = data.data.rfidSample.project == null ? '' : data.data.rfidSample.project.name
+          this.sample[0].value = data.data.rfidSample.rfidCode
+          this.sample[9].value = data.data.rfidSample.sampleStudy
+          this.sample[10].value = data.data.rfidSample.sampleTreatment
+          this.sample[11].value = data.data.rfidSample.sampleSubject
+          this.sample[12].value = data.data.rfidSample.sampleTime
+          this.sample[13].value = data.data.rfidSample.sampleMatrix
+          this.sample[1].value = data.data.rfidSample.name
           this.sample[3].value = data.data.rfidSample.sampleSource
-          this.sample[4].value = data.data.rfidSample.sampleCategoryDict.name
-          this.sample[5].value = data.data.rfidSample.samplingDate == null ? '' : data.data.rfidSample.samplingDate
-          this.sample[6].value = data.data.rfidSample.expireDate == null ? '' : data.data.rfidSample.expireDate
+          this.sample[2].value = data.data.rfidSample.sampleCategoryDict.name
+          this.sample[4].value = data.data.rfidSample.samplingDate == null ? '' : data.data.rfidSample.samplingDate
+          this.sample[5].value = data.data.rfidSample.expireDate == null ? '' : data.data.rfidSample.expireDate
           this.sample[7].value = data.data.rfidSample.warningDays
-          this.sample[8].value = data.data.rfidSample.sampleStru.detailLocation
+          this.sample[6].value = this.pipeCapOption[data.data.rfidSample.capColor].label
+          this.sample[14].value = data.data.rfidSample.sampleStru.detailLocation
 //修改信息
           this.project = data.data.rfidSample.project == null ? '' : data.data.rfidSample.project.id
           this.inputRfid = data.data.rfidSample.rfidCode
@@ -386,6 +481,12 @@
           this.layer = data.data.rfidSample.sampleStru.tierStruId
           this.chouTi = data.data.rfidSample.sampleStru.drawerStruId
           this.styleBox = data.data.rfidSample.sampleStru.sampleBoxStruId
+          this.pipeCap = this.pipeCapOption[data.data.rfidSample.capColor].label
+          this.fangan = data.data.rfidSample.sampleStudy
+          this.jiliang = data.data.rfidSample.sampleTreatment
+          this.patient = data.data.rfidSample.sampleSubject
+          this.bloodDate = data.data.rfidSample.sampleTime
+          this.jizhi = data.data.rfidSample.sampleMatrix
           //备注
           this.textareaOld = data.data.rfidSample.remarks
           this.textareaNew = data.data.rfidSample.remarks
@@ -449,7 +550,7 @@
             })
           })
           .then(({data}) => {
-            console.log(data)
+            // console.log(data)
             // this.sampleBoxValue = data.data.id
             data.data.forEach((item) => {
               this.styleBoxOption.push({
@@ -466,7 +567,7 @@
           url: 'sampleGuide/queryCategoryDict/selectSampleCategory',
         })
           .then(({data}) => {
-            console.log(data);
+            // console.log(data);
             data.data.forEach((item) => {
               this.testTubeCategoryOption.push(
                 {
@@ -482,7 +583,7 @@
           url: 'sampleGuide/querySampleSource/selectrfidSamplesource',
         })
           .then(({data}) => {
-            console.log(data);
+            // console.log(data);
             data.data.forEach((item) => {
               this.sourceOption.push({
                 label: item,
@@ -509,7 +610,7 @@
         this.elref = value
       },
       bindingCard(){
-        console.log(this.elref)
+        // console.log(this.elref)
         //console.log(this.$refs.MyActive)
         this.elref.RDR_Close()
         let devicetypeValue = this.$cookies.get('readerType')
@@ -571,7 +672,11 @@
               rfidCode:this.inputRfid
             })
           }).then(({data})=>{
-            console.log(data)
+            // console.log(data)
+            this.$alert('RFID芯片替换成功！', '提示', {
+              confirmButtonText: '确定',
+              type: 'success'
+            })
           })
         }else{
           this.$alert('不能扫描多个芯片！', '提示', {
@@ -593,7 +698,7 @@
               })
             })
               .then(({data})=>{
-                console.log(data)
+                // console.log(data)
                 if(data.data == false){
                   this.inputNamemsg = "样本名称已存在"
                 }else{
@@ -717,7 +822,7 @@
           })
         })
         .then(({data}) => {
-          console.log(data)
+          // console.log(data)
           // this.sampleBoxValue = data.data.id
           data.data.forEach((item) => {
             this.styleBoxOption.push({
@@ -733,6 +838,7 @@
         this.locationNow = []
         this.loanSampleArr = []
         this.normalSampleArr = []
+        this.hideTable = true
         this.$axios({
           method:'post',
           url:'/sampleGuide/scan/findSampleStruBySampleBoxId',
@@ -740,7 +846,7 @@
             sampleBoxStruId: this.styleBox
           })
         }).then(({data})=>{
-          console.log(data)
+          // console.log(data)
           this.rowValue = data.data.sampleBoxRow
           this.colValue = data.data.sampleBoxCol
           this.showModel = data.data.sampleBoxSpec
@@ -776,6 +882,7 @@
             id: this.selectedId ==0?this.multipleSelection[0].id:this.selectedId,
             projectId:this.project,
             rfidCode:this.inputRfid,
+            capColor:this.pipeCap,
             name:this.inputName,
             sampleSource:this.source,
             sampleCategoryDictName:this.testTubeCategory,
@@ -786,11 +893,16 @@
             tierStruId:this.layer,
             drawerStruId:this.chouTi,
             sampleBoxStruId:this.styleBox,
+            sampleStudy:this.fangan,
+            sampleTreatment:this.jiliang,
+            sampleSubject:this.patient,
+            sampleTime:this.bloodDate,
+            sampleMatrix:this.jizhi,
             row:this.activeRow,
             col:this.activeCol
           })
         }).then(({data})=>{
-          console.log(data)
+          // console.log(data)
           if(data.code == 200){
             this.$message({
               message: '修改样本成功',

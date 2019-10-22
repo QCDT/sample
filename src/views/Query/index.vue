@@ -1,6 +1,6 @@
 <template>
   <div class="searchWrap">
-    <Search v-show="!reMaskTran && !togegleZhuanYun"  @changeTable = changeTable @changeBoxTable = changeBoxTable @sampleItemValue="sampleItemValueChange"></Search>
+    <Search v-show="!reMaskTran && !togegleZhuanYun && !newBoxMaskTran"  @changeTable = changeTable @changeBoxTable = changeBoxTable @sampleItemValue="sampleItemValueChange"></Search>
     <!-- 表单 ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓ -->
 
     <!-- 修改样本 -->
@@ -15,8 +15,12 @@
       <alertZhuanYun :checkedBoxlist='checkedBoxlist' v-if="togegleZhuanYun"  @goBack="togegleZhuanYun=false"></alertZhuanYun>
       <!-- </maskTran> -->
     </transition>
+    <!-- 新建样本盒/修改样本盒 -->
+    <transition name="el-fade-in-linear">
+      <newSampleBox v-if="newBoxMaskTran" :sampleBoxId='sampleBoxId' :boxRfid='boxRfid'  :title="sampleBoxTitle" @changeBoxRfid="changeBoxRfid" @goBack="newBoxMaskTran=false"></newSampleBox>
+    </transition>
 
-    <div class="bot-form" v-show="!reMaskTran  && !togegleZhuanYun">
+    <div class="bot-form" v-show="!reMaskTran  && !togegleZhuanYun && !newBoxMaskTran">
       <div class="table-box">
         <FormTopMenu
           :count="sampleBoxValue == 0?Number(tableDataAll.length):Number(tableBoxDataAll.length)"
@@ -24,6 +28,7 @@
           :sampleBoxValue = "sampleBoxValue"
           :checkedBoxlist='checkedBoxlist'
           @reSample="reSampleShow"
+          @reSampleBox="reSampleBox"
           @zhuanyun="zhuanyun"
           v-show="!reMaskTran"
         ></FormTopMenu>
@@ -123,9 +128,10 @@ import Search from './Search';
 import FormTopMenu from './FormTopMenu';
 import reSample from '@/views/Scan/reSample';
 import alertZhuanYun from "@/views/Scan/alert-ZhuanYun";
+import newSampleBox from "@/views/Scan/newSampleBox";
 export default {
   props: {},
-  components: { Search, FormTopMenu, reSample, alertZhuanYun },
+  components: { Search, FormTopMenu, reSample, alertZhuanYun, newSampleBox },
   data () {
     return {
       // ↓   表单
@@ -143,6 +149,11 @@ export default {
       togegleZhuanYun: false, // 转运
       checkedlist:[],  //选中项的数组
       checkedBoxlist: [], //样本盒选中数组
+      newBoxMaskTran: false, // 修改样本盒
+      sampleBoxTitle: '修改样本盒',
+      // RFID: '',
+      boxRfid: '',
+      sampleBoxId:-1,
       pipeCapOption:[
         {
           label:'白色',
@@ -185,6 +196,9 @@ export default {
     reSampleShow(){
       this.reMaskTran = true
     },
+    reSampleBox(){
+      this.newBoxMaskTran = true
+    },
     zhuanyun() {
       this.togegleZhuanYun = true;
     },
@@ -219,6 +233,8 @@ export default {
     // },
     handleSelectionChangeTwo(selection) {
       this.checkedBoxlist = selection
+      this.boxRfid = this.checkedBoxlist[0].coding
+      this.sampleBoxId = this.checkedBoxlist[0].id
       console.log(this.checkedBoxlist)
     },
     changeTable(tableData,tableTotal){

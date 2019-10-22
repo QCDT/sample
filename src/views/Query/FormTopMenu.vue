@@ -420,18 +420,55 @@ export default {
       }
     },
     amendSample(){
-      if(this.multipleSelection.length == 0){
-        this.$message({
-          message: '请选择需要修改的样本',
-          type: 'warning'
-        });
-      }else if(this.multipleSelection.length > 1){
-        this.$message({
-          message: '只能勾选一个样本进行修改',
-          type: 'warning'
-        });
+      if(this.sampleBoxValue == 0){
+        if(this.multipleSelection.length == 0){
+          this.$message({
+            message: '请选择需要修改的样本',
+            type: 'warning'
+          });
+        }else if(this.multipleSelection.length > 1){
+          this.$message({
+            message: '只能勾选一个样本进行修改',
+            type: 'warning'
+          });
+        }else{
+          this.$emit("reSample")
+        }
       }else{
-        this.$emit("reSample")
+        if(this.checkedBoxlist.length == 0){
+          this.$message({
+            message: '请选择需要转移的样本盒',
+            type: 'warning'
+          });
+        }else if(this.checkedBoxlist.length > 1){
+          this.$message({
+            message: '只能对一个样本盒进行转移操作',
+            type: 'warning'
+          });
+        }else{
+          this.$axios({
+            method:'post',
+            url:'/sampleGuide/set/isCanBeUpdateSampleBox',
+            data:({
+              id: this.checkedBoxlist[0].id
+            })
+          })
+            .then(({data})=>{
+              console.log(data)
+              if(data.data==0){
+                this.$message({
+                  message: '该样本盒中存在非正常状态样本，不可修改！',
+                  type: 'warning'
+                });
+              }else{
+                this.$emit('reSampleBox')
+                // this.boxRfid = this.checkedBoxlist[0].coding
+                // this.newBoxMaskTran=true
+                // this.sampleBoxTitle = '修改样本盒'
+                // this.sampleBoxId = this.checkedBoxlist[0].id
+              }
+            })
+        }
       }
     },
     exportExcel(){
