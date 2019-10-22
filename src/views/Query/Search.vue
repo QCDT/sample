@@ -429,8 +429,6 @@ export default {
         { value: 1, label: '正常' },
         { value: 2, label: '借出' },
         { value: 3, label: '销毁' },
-        { value: 4, label: '转入' },
-        { value: 5, label: '转出' }
       ],
       /* 样本类别 sampleItem */
       sampleItemOption: [
@@ -589,41 +587,46 @@ export default {
           })
           .then(({data})=>{
             console.log(data);
-            data.data.forEach((item)=>{
-               // console.log(item);
-            if(this.sampleItem == 1){
-              this.searchTableBoxData.push({
-                id: item.id,
-                coding:item.rfidCode,
-                name:item.name,
-                enterName:item.inputUserName, // 录入人
-                address:item.sampleBoxStru.detailLocation // 位置信息
-              })
+            if(data.data == 0){
+              this.$emit('tiShi')
             }else{
-              this.searchTableData.push({
-                id: item.id,
-                rfId:item.rfidCode,
-                color:item.capColor, // 管帽颜色
-                // color:this.pipeCapOption[item.capColor].label, // 管帽颜色
-                sampleInfo:item.name, // 样本信息
-                enterName:item.inputUserName, // 录入人
-                enterData:item.inputTime, // 录入日期
-                sampleBloodData:item.samplingDate, // 采样日期
-                source:item.sampleSource, // 样本来源
-                pastTime:item.expireDate, // 过期日期
-                location:item.sampleStru.detailLocation, // 位置信息
-                status:item.status == 1 ? '正常' : '借出' , // 状态
-                classify:item.sampleCategoryDict.name, // 类别
-                loanPerson:item.loanUserName, // 借出人
-                loanTime:item.loanTime// 借出日期
-              })
+              data.data.forEach((item)=>{
+                // console.log(item);
+                if(this.sampleItem == 1){
+                  this.searchTableBoxData.push({
+                    id: item.id,
+                    coding:item.rfidCode,
+                    name:item.name,
+                    enterName:item.inputUserName, // 录入人
+                    address:item.sampleBoxStru.detailLocation // 位置信息
+                  })
+                }else{
+                  this.searchTableData.push({
+                    id: item.id,
+                    rfId:item.rfidCode,
+                    color:item.capColor, // 管帽颜色
+                    // color:this.pipeCapOption[item.capColor].label, // 管帽颜色
+                    sampleInfo:item.name, // 样本信息
+                    enterName:item.inputUserName, // 录入人
+                    enterData:item.inputTime, // 录入日期
+                    sampleBloodData:item.samplingDate, // 采样日期
+                    source:item.sampleSource, // 样本来源
+                    pastTime:item.expireDate, // 过期日期
+                    location:item.sampleStru.detailLocation, // 位置信息
+                    status:item.status == 1 ? '正常' : '借出' , // 状态
+                    classify:item.sampleCategoryDict.name, // 类别
+                    loanPerson:item.loanUserName, // 借出人
+                    loanTime:item.loanTime// 借出日期
+                  })
 
+                }
+
+              })
+              this.$emit('changeBoxTable', this.searchTableBoxData,data.data.length)
+              // this.$emit('sampleItemValue', this.sampleItem)
+              this.$emit('changeTable', this.searchTableData,data.data.length)
             }
 
-        })
-        this.$emit('changeBoxTable', this.searchTableBoxData,data.data.length)
-        // this.$emit('sampleItemValue', this.sampleItem)
-        this.$emit('changeTable', this.searchTableData,data.data.length)
         })
     },
     selectIceBox(){ //切换冰箱加载该冰箱层数

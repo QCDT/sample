@@ -1,6 +1,6 @@
 <template>
   <div class="searchWrap">
-    <Search v-show="!reMaskTran && !togegleZhuanYun && !newBoxMaskTran"  @changeTable = changeTable @changeBoxTable = changeBoxTable @sampleItemValue="sampleItemValueChange"></Search>
+    <Search v-show="!reMaskTran && !togegleZhuanYun && !newBoxMaskTran" @tiShi = tiShi @changeTable = changeTable @changeBoxTable = changeBoxTable @sampleItemValue="sampleItemValueChange"></Search>
     <!-- 表单 ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓ -->
 
     <!-- 修改样本 -->
@@ -193,6 +193,9 @@ export default {
   },
 
   methods: {
+    tiShi(){
+      this.$message("未搜索到相关数据");
+    },
     reSampleShow(){
       this.reMaskTran = true
     },
