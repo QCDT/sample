@@ -10,43 +10,60 @@
         <span>添加订单</span>
       </div>
     </tmpButton>
-    <!--  -->
-    <transition name="el-fade-in-linear">
-      <masking v-if="orderTmp" :rgba="0">
-        <addOrder></addOrder>
-        <tmpButton @click="closeMask">返回</tmpButton>
-      </masking>
-    </transition>
-    <!--  -->
-    <div class="form-box">
+    <div class="form-box" v-if="type === 'in'">
       <div class="item">
         <span>转入订单号码:</span>
         <el-input v-model="input" size="small" placeholder="请输入内容"></el-input>
       </div>
       <div class="item">
-        <span>转入订单号码:</span>
+        <span>转入订单名称:</span>
         <el-input v-model="input" size="small" placeholder="请输入内容"></el-input>
       </div>
       <div class="item">
-        <span>转入订单号码:</span>
+        <span>转入录入人员:</span>
         <el-input v-model="input" size="small" placeholder="请输入内容"></el-input>
       </div>
       <div class="item">
-        <span>转入订单号码:</span>
+        <span>转入寄件人员:</span>
         <el-input v-model="input" size="small" placeholder="请输入内容"></el-input>
       </div>
       <div class="item">
-        <span>转入订单号码:</span>
+        <span>转入寄件地址:</span>
         <el-input v-model="input" size="small" placeholder="请输入内容"></el-input>
       </div>
       <div class="item">
-        <span>转入订单号码:</span>
-        <tmpButton>
           <div class="search-box">
             <i class="icon icon-sousuo"></i>
             <b>查询</b>
           </div>
-        </tmpButton>
+      </div>
+    </div>
+    <div class="form-box" v-if="type === 'out'">
+      <div class="item">
+        <span>转出订单号码:</span>
+        <el-input v-model="input" size="small" placeholder="请输入内容"></el-input>
+      </div>
+      <div class="item">
+        <span>转出订单名称:</span>
+        <el-input v-model="input" size="small" placeholder="请输入内容"></el-input>
+      </div>
+      <div class="item">
+        <span>转出录入人员:</span>
+        <el-input v-model="input" size="small" placeholder="请输入内容"></el-input>
+      </div>
+      <div class="item">
+        <span>转出收件人员:</span>
+        <el-input v-model="input" size="small" placeholder="请输入内容"></el-input>
+      </div>
+      <div class="item">
+        <span>转出收货地址:</span>
+        <el-input v-model="input" size="small" placeholder="请输入内容"></el-input>
+      </div>
+      <div class="item">
+          <div class="search-box">
+            <i class="icon icon-sousuo"></i>
+            <b>查询</b>
+          </div>
       </div>
     </div>
   </div>
@@ -68,17 +85,19 @@ export default {
   data () {
     return {
       input: '',
-      orderTmp: false
+      orderTmp: false,
     }
   },
   methods: {
     addOrder () {
-      console.log('addorder: ', '添加订单')
-      this.orderTmp = true
+      this.$router.push('/scan/transport/out/add')
+      // this.orderTmp = true
+      // this.$emit('addOrder',this.orderTmp)
     },
-    closeMask () {
-      this.orderTmp = false
-    }
+    // closeMask () {
+    //   this.orderTmp = false
+    //   this.$emit('addOrder',this.orderTmp)
+    // }
   },
   computed: {}
 }
@@ -109,15 +128,32 @@ export default {
   }
 }
 .search-box {
-  padding: 0 40px;
+  background: #00c9ff;
+  border-radius: 5px;
+  padding: 5px 30px;
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-top: 25px;
+  color: white;
+  cursor: pointer;
   span {
     background-color: #fff;
   }
   b {
     padding: 4.5px;
   }
+}
+.rollOut{
+  width: 100%;
+  background: #fff;
+  position: absolute;
+  top: 11%;
+  left: 0;
+  z-index: 1;
+  // text-align: center;
+}
+.btn{
+  text-align: center;
 }
 </style>

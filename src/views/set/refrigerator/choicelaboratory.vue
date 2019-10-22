@@ -4,8 +4,8 @@
       <span>选择实验室</span>
     </div>
     <div class="operationlab">
-      <el-button type="primary" @click="addEl()" size="small">添加实验室</el-button>
-      <el-button type="primary" @click="delEl()" size="small">删除实验室</el-button>
+      <el-button type="primary" @click="addEl" size="small">添加实验室</el-button>
+      <el-button type="primary" @click="delEl" size="small">删除实验室</el-button>
     </div>
     <div class="labListWrap">
       <ul class="labList" :style="{'left':calleft + 'px'}">
@@ -36,12 +36,13 @@
       <el-button type="primary" @click="returnup()" size="small">返回</el-button>
 
     </div>
-    <el-button type="primary" size="small" class="labNext" @click="equipmentInfo">下一步</el-button>
+    <img type="primary" size="small" class="labNext" @click="equipmentInfo" src="@/assets/img/arrowRight.png">
   </div>
 </template>
 <script>
 // import { setTimeout } from "timers";
 export default {
+  inject:['reload'],
   data() {
     return {
       laboratoryName: "",
@@ -49,23 +50,39 @@ export default {
       activeClass: -1,
       delIndex: -1,
       list: [
-        {
-          id: Date.now(),
-          laboratoryName: "实验室1",
-          editing: false
-        },
-        {
-          id: Date.now(),
-          laboratoryName: "实验室2",
-          editing: false
-        }
+        // {
+        //   id: Date.now(),
+        //   laboratoryName: "实验室1",
+        //   editing: false
+        // },
+        // {
+        //   id: Date.now(),
+        //   laboratoryName: "实验室2",
+        //   editing: false
+        // }
       ]
     };
+  },
+  created(){
+    this.$axios({
+      method:'get',
+      url:'sampleGuide/laboratoryDict/findAllLabora',
+    })
+    .then(({data})=>{
+      console.log(data)
+      data.data.forEach((item)=>{
+        this.list.push({
+          id:item.id,
+          laboratoryName: item.name,
+          editing:false
+        })
+      })
+    })
   },
   methods: {
     chooselab(index) {
       console.log(index);
-      this.delIndex = index;
+      // this.delIndex = index;
       this.activeClass = index;
     },
     returnup(){
@@ -75,7 +92,14 @@ export default {
       this.list[index].editing = true;
     },
     equipmentInfo () {
+      if(this.activeClass == -1){
+        this.$message({
+          message: '请选择需要添加冰箱的实验室',
+          type: 'warning'
+        });
+      }else{
         this.$router.push('/set/refrigerator/equipmentInfo')
+      }
     },
     setFocus(index) {
       this.list.forEach(item => {
@@ -113,23 +137,36 @@ export default {
       // }, 0);
     },
     delEl() {
-      if (this.delIndex == -1) {
-        this.$alert("请选择删除的冰箱", "提示", {
+      if (this.activeClass == -1) {
+        this.$alert("请选择要删除实验室", "提示", {
           confirmButtonText: "确定"
         });
       } else {
-        this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
+        this.$confirm("确定删除该实验室吗?", "提示", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
           type: "warning"
         })
         .then(() => {
-          this.list.splice(this.delIndex, 1);
-          this.delIndex = -1;
-          this.$message({
-            type: "success",
-            message: "删除成功!"
-          });
+          this.$axios({
+            method:'post',
+            url:'sampleGuide/laboratoryDict/deleteLaboratoryDictByName',
+            data:({
+              name: this.list[this.activeClass].name
+            })
+          })
+          .then(({data})=>{
+              console.log(data)
+              if(data.code == 200){
+                this.reload()
+              }
+          })
+          // this.list.splice(this.delIndex, 1);
+          // this.delIndex = -1;
+          // this.$message({
+          //   type: "success",
+          //   message: "删除成功!"
+          // });
         })
         .catch(() => {
           this.$message({
@@ -219,8 +256,9 @@ export default {
     }
     .labNext{
         position: absolute;
-        top:50%;
+        top:55%;
         right:5%;
+        cursor: pointer;
     }
 }
 .arrow{

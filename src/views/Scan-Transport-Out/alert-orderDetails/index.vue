@@ -4,8 +4,8 @@
     <orderDatailsTable style="margin-bottom:25px" :detailData="detailData"></orderDatailsTable>
     <fromName>转入样本盒中样本信息</fromName>
     <div class="row">
-      <span>共有:&nbsp;&nbsp;</span>
-      <span style="color:#f42">10</span>
+      <span>共有:</span>
+      <span>5</span>
       <span>个样本盒</span>
     </div>
     <!-- 折叠面板 -->
@@ -43,5 +43,20 @@ export default {
 <style scoped lang='less'>
 .order-datails-box {
   padding-top: 30px;
+}
+.bot-btn{
+  text-align: center;
+  margin-top: 30px;
+  button{
+    width: 80px;
+    height: 25px;
+    border: 1px solid #00c9ff;
+    border-radius: 5px;
+    margin-right: 15px;
+    &:hover{
+      background: #00c9ff;
+      color: white;
+    }
+  }
 }
 </style>

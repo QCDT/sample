@@ -12,7 +12,7 @@
             </div>
             <div>
                 <span>贮藏设备品牌</span>
-                <el-select v-model="setBrand" placeholder="请选择" size="mini">
+                <el-select  filterable allow-create v-model="setBrand" class="selectStyle" placeholder="请选择" size="mini" @change="changeModelNub">
                     <el-option
                         v-for="item in setBrandOption"
                         :key="item.value"
@@ -23,9 +23,9 @@
             </div>
             <div>
                 <span>贮藏设备型号</span>
-                <el-select v-model="setTier" placeholder="请选择" size="mini">
+                <el-select filterable allow-create v-model="setModelNub" class="selectStyle" placeholder="请选择" size="mini">
                     <el-option
-                        v-for="item in setTierOption"
+                        v-for="item in setModelNubOption"
                         :key="item.value"
                         :label="item.label"
                         :value="item.value">
@@ -35,7 +35,8 @@
             </div>
             <div>
                 <span>贮藏设备温度</span>
-                <el-input v-model="equipmentName" placeholder="请输入内容" size="mini"></el-input>
+                <el-input class="temStyle" v-model="temperature" placeholder="请输入内容" size="mini"></el-input>
+                <em>℃</em>
             </div>
             <div>
                 <img src="@/assets/img/arrowLeft.png" class="prevBtn" @click="prevEquipment">
@@ -50,23 +51,66 @@
 export default {
   data () {
     return {
-      equipmentName: '',
-      setBrand:'',
+      equipmentName: '',//设备名称
+      setBrand:'',//设备品牌
+      setModelNub:'',//设备型号
+      temperature:'',//设备温度
       setBrandOption:[
         // {
         //   label:'',
         //   value: ''  
         // }
-      ]
+      ],
+      setModelNubOption:[]
     }
+  },
+  created(){
+    this.$axios({ // 查询所有冰箱品牌
+      method:'get',
+      url:'sampleGuide/refrigeratorBrandTypeDict/findAllBrand'
+    })
+    .then(({data})=>{
+      // console.log(data)
+      data.data.forEach((item)=>{
+        this.setBrandOption.push({
+          label: item.name,
+          value: item.id
+        })
+      })
+    })
   },
   methods: {
     prevEquipment () {
-      
       this.$router.push('/set/refrigerator/choicelaboratory')
     },
+    changeModelNub(){
+        this.setModelNub = ''
+        this.$axios({
+            method: 'post',
+            url:'sampleGuide/refrigeratorBrandTypeDict/findBrandNumber',
+            data:{
+            pid:this.trademark
+            }
+        })
+        .then(({data})=>{
+            data.data.forEach((item)=>{
+            this.setModelNubOption.push({
+                label:item.name,
+                value:item.id
+            })
+            })
+            console.log(data)
+        })
+    },
     nextEquipment () {
-      this.$router.push('/set/refrigerator/equipmentConstruction')
+     if(this.equipmentName == '' || this.setBrand == '' || this.setModelNub == '' || this.temperature == ''){
+        this.$message({
+          message: '请完善贮藏设备基本信息',
+          type: 'warning'
+        });
+     }else{
+        this.$router.push('/set/refrigerator/equipmentConstruction')
+     }
     }
   }
 }
@@ -88,6 +132,12 @@ export default {
             .el-input{
                 width: 20%;
             }
+            .temStyle{
+                width: 19%;
+            }
+            .selectStyle{
+                width:20%;
+            }
             margin-top: 15px;
             // text-align: center;
             >span{
@@ -101,11 +151,13 @@ export default {
         position: absolute;
         left: 20%;
         top: 22%;
+        cursor: pointer;
     }
     .nextBtn{
         position: absolute;
         right: 20%;
         top: 22%;
+        cursor: pointer;
     }
 }
 </style>

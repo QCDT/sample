@@ -1,11 +1,44 @@
 <template>
   <div class="add-box">
     <el-tabs type="border-card">
-      <el-tab-pane label="选择已有样本">
+      <el-tab-pane label="选择已有样本盒">
         <div class="one-box">
           <div class="left-twins">
-            <div class="item" v-for="(item,index) in forTheSampleData" :key="index">
-              <span>{{item.text}}</span>:
+            <div class="item">
+              <span>选择冰箱:</span>
+              <el-select v-model="value" placeholder="请选择" size="small" style="margin:0 10px">
+                <el-option
+                  v-for="item in options"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                ></el-option>
+              </el-select>
+            </div>
+            <div class="item">
+              <span>选择层:</span>
+              <el-select v-model="value" placeholder="请选择" size="small" style="margin:0 10px">
+                <el-option
+                  v-for="item in options"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                ></el-option>
+              </el-select>
+            </div>
+            <div class="item">
+              <span>选择抽屉:</span>
+              <el-select v-model="value" placeholder="请选择" size="small" style="margin:0 10px">
+                <el-option
+                  v-for="item in options"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                ></el-option>
+              </el-select>
+            </div>
+            <div class="item">
+              <span>选择样本盒:</span>
               <el-select v-model="value" placeholder="请选择" size="small" style="margin:0 10px">
                 <el-option
                   v-for="item in options"
@@ -18,18 +51,23 @@
           </div>
           <div class="right-twins">
             <h1 class="sample-boxTit">系统保存的样本盒信息</h1>
-            <div class="row">
-              <div class="item">
-                <b></b>
-                <span>已使用</span>
-              </div>
-              <div class="item">
-                <b></b>
-                <span>未使用</span>
-              </div>
-            </div>
             <div class="matrixTable-box">
-              <matrixTable :borderColor="`#333`" :borderWidth="`1px`"></matrixTable>
+              <table class="table">
+                <tr class="row" v-for="(index) in rowValue" :key="index">
+                  <td
+                    v-for="(ind) in colValue"
+                    :key="ind"
+                  >{{showTable(index,ind)}}</td>
+                </tr>
+              </table>
+              <div class="map">
+                <span
+                  v-for="(item,index) in mapData"
+                  :key="index"
+                  :style="{ backgroundColor: item.bgc}"
+                  v-text="item.text"
+                />
+              </div>
             </div>
           </div>
         </div>
@@ -38,19 +76,18 @@
         <div class="two-box">
           <div class="left-twins">
             <div class="row">
-              <span>*RFID编号</span>
-              <input type="text">
+              <span>RFID编号</span>
+              <el-input class="input" v-model="Rfid" size="mini" placeholder="请输入内容"></el-input>
               <div class="pic">
                 <img src="@/assets/img/saomiao.gif" alt>
               </div>
             </div>
             <div class="row">
-              <span>*样本盒名称</span>
-              <input type="text">
-              <span>*</span>
+              <span>样本盒名称</span>
+              <el-input class="input" size="mini" v-model="input" placeholder="请输入内容"></el-input>
             </div>
             <div class="mark-box">
-              <span>备注</span>:
+              <span>备注:</span>
               <el-input
                 type="textarea"
                 placeholder="请输入内容"
@@ -58,57 +95,68 @@
                 maxlength="30"
                 show-word-limit
               ></el-input>
-              <span>*</span>
             </div>
           </div>
           <div class="right-twins">
             <div class="row-top">
               <span>样本盒规格</span>
               <el-select
-                v-model="value"
-                placeholder="行"
-                size="small"
-                style="margin:0 10px;width:70px"
+                class="select"
+                v-model="row"
+                size="mini"
               >
                 <el-option
-                  v-for="item in options"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
+                  v-for="item in 10"
+                  :key="item"
+                  :label="item"
+                  :value="item"
                 ></el-option>
               </el-select>
               <span>行</span>
               <el-select
-                v-model="value"
-                placeholder="列"
-                size="small"
-                style="margin:0 10px;width:70px"
+                v-model="col"
+                size="mini"
+                class="select"
               >
                 <el-option
-                  v-for="item in options"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
+                  v-for="item in 10"
+                  :key="item"
+                  :label="item"
+                  :value="item"
                 ></el-option>
               </el-select>
               <span>列</span>
               <el-select
-                v-model="value"
-                placeholder="(显示模式)*"
-                size="small"
-                style="margin:0 10px;width:130px"
+                v-model="model"
+                size="mini"
+                class="select"
               >
                 <el-option
-                  v-for="item in options"
+                  v-for="item in modelOption"
                   :key="item.value"
                   :label="item.label"
                   :value="item.value"
                 ></el-option>
               </el-select>
-              <span>(显示模式)*</span>
+              <span>显示模式</span>
             </div>
-            <div class="matrixTable-box">
-              <matrixTable :borderColor="`#333`" :borderWidth="`1px`"></matrixTable>
+            <div class="matrixTable-box" v-show="row && col">
+              <table class="table">
+                <tr class="row" v-for="(index) in row" :key="index">
+                  <td
+                    v-for="(ind) in col"
+                    :key="ind"
+                  >{{showTable(index,ind)}}</td>
+                </tr>
+              </table>
+              <div class="map">
+                <span
+                  v-for="(item,index) in mapData"
+                  :key="index"
+                  :style="{ backgroundColor: item.bgc}"
+                  v-text="item.text"
+                />
+              </div>
             </div>
           </div>
         </div>
@@ -124,19 +172,23 @@
             <h6>位置信息:</h6>
           </div>
           <div class="right-twins">
-            <div class="row">
-              <div class="item">
-                <b></b>
-                <span>已使用</span>
-              </div>
-              <div class="item">
-                <b></b>
-                <span>未使用</span>
-              </div>
-            </div>
-
             <div class="matrixTable-box">
-              <matrixTable :borderColor="`#333`" :borderWidth="`1px`"></matrixTable>
+              <table class="table">
+                <tr class="row" v-for="(index) in rowValue" :key="index">
+                  <td
+                    v-for="(ind) in colValue"
+                    :key="ind"
+                  >{{showTable(index,ind)}}</td>
+                </tr>
+              </table>
+              <div class="map">
+                <span
+                  v-for="(item,index) in mapData"
+                  :key="index"
+                  :style="{ backgroundColor: item.bgc}"
+                  v-text="item.text"
+                />
+              </div>
             </div>
           </div>
         </div>
@@ -149,31 +201,66 @@
   </div>
 </template>
 <script>
-import matrixTable from '@/components/tmp/zhanglan/matrixTable'
 export default {
   props: {},
-  components: { matrixTable },
+  components: {  },
   data () {
     return {
-      forTheSampleData: [
-        { text: '选择冰箱', key: '', val: '' },
-        { text: '选择层', key: '', val: '' },
-        { text: '选择抽屉', key: '', val: '' },
-        { text: '选择样本盒', key: '', val: '' }
-      ],
-      options: [
+      value:'',
+      model:1,
+      Rfid:'',
+      row:'',
+      col:'',
+      rowValue:9,
+      colValue:9,
+      modelOption:[
         {
-          value: '冰柜',
-          label: '冰柜'
+          value: 1,
+          label: '数字*数字'
+        },
+        {
+          value: 2,
+          label: '数字*字母'
+        },
+        {
+          value:  3,
+          label: '字母*数字'
+        },
+        {
+          value:  4,
+          label: '字母*字母'
+        },
+        {
+          value:  5,
+          label: '内部数字'
         }
       ],
-      value: '',
-      mark: ''
+      mapData: [
+        { text: '已使用', bgc: '#00c9ff' },
+        { text: '借用', bgc: '#FCFD01' },
+        { text: '未使用', bgc: '#eee' }
+      ],
+      mark: '',
     }
   },
   methods: {
     goBack () {
       this.$emit('goBack')
+    },
+    showTable (row,col) {
+      let res = ''
+      if(this.model == 1){
+        res = row+'/'+col
+      }else if(this.model == 2){
+        res = row+'/'+String.fromCharCode(64 + col)
+      }else if(this.model == 3){
+        res = String.fromCharCode(64 + row)+'/'+col
+      }else if(this.model == 4){
+        res = String.fromCharCode(64 + row) +'/'+ String.fromCharCode(64 + col)
+      }else{
+        res = (row-1)*this.col+col
+      }
+      return res
     }
   },
   computed: {}
@@ -182,9 +269,9 @@ export default {
 <style scoped lang='less'>
 .add-box {
   height: 500px;
-  margin: 50px;
-  padding: 60px;
-
+  margin-top: 10px;
+  margin:10px 40px 40px 40px;
+  padding: 20px;
   background-color: #fff;
 }
 
@@ -194,7 +281,7 @@ export default {
   display: flex;
 
   height: 400px;
-  //   background-color: #333;
+    // background-color: #333;
 }
 
 .left-twins,
@@ -223,10 +310,7 @@ export default {
 
       span {
         display: inline-block;
-
-        width: 5rem;
-
-        text-align-last: justify;
+        width: 6rem;
       }
     }
   }
@@ -242,32 +326,6 @@ export default {
       font-size: 18px;
       font-weight: 500;
     }
-
-    .row {
-      display: flex;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-
-      margin-bottom: 10px;
-
-      .item {
-        display: flex;
-        align-items: center;
-
-        margin: 0 12px;
-
-        b {
-          display: inline-block;
-
-          width: 20px;
-          height: 20px;
-          margin: 0 7px;
-
-          background-color: gray;
-        }
-      }
-    }
   }
 }
 .two-box {
@@ -280,11 +338,16 @@ export default {
         width: 6rem;
         text-align-last: justify;
       }
+      .input{
+        width: 40%;
+      }
       .pic {
-        > img {
-          width: 20px;
-          height: 20px;
+         img {
+          width: 25px;
+          height: 25px;
+          cursor: pointer;
         }
+        margin-left: 10px;
       }
     }
     .mark-box {
@@ -300,6 +363,11 @@ export default {
   .right-twins {
     .row-top {
       margin-bottom: 30px;
+      .select{
+        width: 20%;
+        margin-left: 15px;
+        margin-right: 5px;
+      }
     }
   }
 }
@@ -309,11 +377,10 @@ export default {
     display: flex;
     flex-direction: column;
     .pic {
-      margin: 20px 0;
-      margin-bottom: 50px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      margin: 20px 20px 50px 35px;
+      img{
+        cursor: pointer;
+      }
     }
     h6 {
       font-weight: 500;
@@ -322,38 +389,60 @@ export default {
       padding-left: 50px;
     }
   }
-  .right-twins {
-    .row {
-      display: flex;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-
-      margin-bottom: 10px;
-
-      .item {
-        display: flex;
-        align-items: center;
-
-        margin: 0 12px;
-
-        b {
-          display: inline-block;
-
-          width: 20px;
-          height: 20px;
-          margin: 0 7px;
-
-          background-color: gray;
-        }
-      }
+}
+.bot-b{
+  text-align: center;
+  margin-top: 10px;
+  button{
+    margin-right: 10px;
+    // background: #00c9ff;
+    border: 1px solid #00c9ff;
+    background: #fff;
+    width: 120px;
+    height:25px;
+    border-radius: 5px;
+    &:hover{
+      background: #00c9ff;
+      color: white;
     }
-
+  }
+}
+.map {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 60px;
+  height: 90px;
+  cursor: pointer;
+  white-space: nowrap;
+  font-size: 14px;
+  margin-left: 15px;
+  span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2px 3px;
+    color: #333;
+    border-radius: 3px;
+    font-size: 14px;
+  }
+}
+.table {
+  border-spacing: 0;
+  border: 1px solid  rgb(134, 134, 134);
+  border-collapse: collapse;
+  width: 80%;
+  margin: 0 auto;
+  td {
+    padding: 5px;
+    border: 1px solid rgb(134, 134, 134);
+    text-align: center;
+    font-size: 12px;
   }
 }
 .matrixTable-box {
-
   display: flex;
   justify-content: center;
+  align-items: center;
 }
 </style>

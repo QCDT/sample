@@ -3,8 +3,7 @@
   <div>
     <div class="title">
       <h1>
-        <i class="icon icon-sousuo"></i>
-        转出样本盒
+        <img src="@/assets/img/zhuanchuyangbenhe.png">
       </h1>
     </div>
     <div class="form-table-box">
@@ -13,9 +12,10 @@
           <span>共有: 0个样本盒</span>
         </div>
         <div class="right">
-          <button @click="addSampleBox">
-            <i class="icon icon-sousuo">添加样本盒</i>
-          </button>
+          <div @click="addSampleBox" class="searchIcon">
+            <img src="@/assets/img/addBox.png">
+            <span>添加样本盒</span>
+          </div>
         </div>
       </div>
       <div class="form-table">
@@ -23,12 +23,10 @@
           :row-style="{height:'32px',textAlign: 'center',padding:'0px',}"
           :cell-style="{padding:'0px',textAlign: 'center'}"
           border
-          stripe
           ref="multipleTable"
           :data="tableData"
           tooltip-effect="dark"
           :style="{width: '100%',margin:'0 auto',}"
-          :header-cell-style="getRowClass"
         >
           <el-table-column type="index" label="序号" width="70"></el-table-column>
           <el-table-column prop="name" label="项目名称" width="120"></el-table-column>
@@ -40,18 +38,18 @@
       </div>
     </div>
     <transition name="el-fade-in-linear">
-      <masking :rgba="0" v-if="ifAddSampleBox">
-        <addSampleBox @close="ifAddSampleBox=false" @save='save'></addSampleBox>
+      <masking v-if="ifAddSampleBox">
+        <addBox @goBack="goBack" ></addBox>
       </masking>
     </transition>
   </div>
 </template>
 <script>
-import masking from '@/components/tmp/zhanglan/maskTran'
-import addSampleBox from './addSampleBox/index'
+import masking from '@/components/tmp/zhanglan/masking'
+import addBox from '@/views/Scan-Transport-Out-Change/addBox.vue'
 export default {
-  props: {},
-  components: { masking, addSampleBox },
+  props:{},
+  components: { masking, addBox },
   data () {
     return {
       ifAddSampleBox: false,
@@ -69,17 +67,12 @@ export default {
     }
   },
   methods: {
-    save () {
-      this.ifAddSampleBox = false
-      this.$message('save')
-    },
-    getRowClass ({ rowIndex }) {
-      /*  设置表头样式 */
-      return rowIndex == 0 ? this.$store.getters.formTheme : ''
-    },
     addSampleBox () {
-      this.$message('添加样本盒')
+      // this.$message('添加样本盒')
       this.ifAddSampleBox = true
+    },
+    goBack(){
+      this.ifAddSampleBox = false
     }
   },
   computed: {}
@@ -103,6 +96,24 @@ export default {
   .row {
     display: flex;
     justify-content: space-between;
+    align-items: center;
   }
 }
+.searchIcon{
+  background: #00c9ff;
+  color: white;
+  border: 1px solid #00c9ff;
+  line-height: 25px;
+  padding:0 2px;
+  border-radius: 5px;
+  cursor: pointer;
+  img{
+    width: 16px;
+    height: 16px;
+    vertical-align: top;
+    margin-top: 5px;
+    margin-right: 5px;
+  }
+}
+
 </style>

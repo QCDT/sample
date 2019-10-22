@@ -25,21 +25,103 @@
               </div>
             </div>
           </div>
-
           <matrixTable borderWidth="1px" border-color="#333"></matrixTable>
         </div>
       </div>
       <div class="form-select">
         <div class="top">
-          <span>样品添加方式</span>
-          <el-select v-model="value" placeholder="请选择" size="mini">
+          <span>样本添加方式</span>
+          <el-select v-model="addWay" placeholder="请选择" size="mini">
             <el-option
-              v-for="item in options"
+              v-for="item in addWayOption"
               :key="item.value"
               :label="item.label"
               :value="item.value"
             ></el-option>
           </el-select>
+        </div>
+        <div class="top" v-show="addWay === 1">
+          <span>单个样本添加途径</span>
+          <el-select v-model="addSample" placeholder="请选择" size="mini">
+            <el-option
+              v-for="item in addSampleOption"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            ></el-option>
+          </el-select>
+        </div>
+        <div  class="top" v-show="addWay === 2">
+          <span>批量添加</span>
+          <img src="@/assets/img/saomiao.gif">
+        </div>
+        <div class="searchSample" v-show="addSample === 1">
+          <p>
+            <span>样本名称:</span>
+            <el-input class="input" v-model="sampleName" size="mini"></el-input>
+            <span>样本来源</span>
+            <el-select class="input" v-model="addSample" placeholder="请选择" size="mini">
+              <el-option
+                v-for="item in addSampleOption"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              ></el-option>
+            </el-select>
+            <span>样本类别</span>
+            <el-select class="input" v-model="addSample" placeholder="请选择" size="mini">
+              <el-option
+                v-for="item in addSampleOption"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              ></el-option>
+            </el-select>
+          </p>
+          <p>
+            <span>选择冰箱</span>
+            <el-select class="input" v-model="addSample" placeholder="请选择" size="mini">
+              <el-option
+                v-for="item in addSampleOption"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              ></el-option>
+            </el-select>
+            <span>选择层</span>
+            <el-select class="input" v-model="addSample" placeholder="请选择" size="mini">
+              <el-option
+                v-for="item in addSampleOption"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              ></el-option>
+            </el-select>
+            <span>选择抽屉</span>
+            <el-select class="input" v-model="addSample" placeholder="请选择" size="mini">
+              <el-option
+                v-for="item in addSampleOption"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              ></el-option>
+            </el-select>
+          </p>
+          <p>
+            <span>选择样本盒</span>
+            <el-select class="input" v-model="addSample" placeholder="请选择" size="mini">
+              <el-option
+                v-for="item in addSampleOption"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              ></el-option>
+            </el-select>
+            <el-button class="btn" size="mini" type="primary" icon="el-icon-search">搜索</el-button>
+          </p>
+        </div>
+        <div class="top" v-show="addSample === 2">
+          <img src="@/assets/img/saomiao.gif">
         </div>
         <div class="form">
           <el-table
@@ -58,10 +140,6 @@
             <el-table-column label="序号" show-overflow-tooltip>
               <template slot-scope="scope">{{ scope.row.coding }}</template>
             </el-table-column>
-
-            <!--  -->
-
-            <!--  -->
             <el-table-column prop="enterName" label="录入人" show-overflow-tooltip></el-table-column>
             <el-table-column prop="loanPerson" label="借出人" show-overflow-tooltip></el-table-column>
             <el-table-column prop="loanTime" label="借出日期" show-overflow-tooltip></el-table-column>
@@ -82,17 +160,12 @@
           :data="tableData"
           tooltip-effect="dark"
           :style="{width: '100%',margin:'0 auto',}"
-          :header-cell-style="getRowClass"
           @selection-change="handleSelectionChange"
         >
           <el-table-column type="selection" show-overflow-tooltip></el-table-column>
           <el-table-column label="序号" show-overflow-tooltip>
             <template slot-scope="scope">{{ scope.row.coding }}</template>
           </el-table-column>
-
-          <!--  -->
-
-          <!--  -->
           <el-table-column prop="enterName" label="录入人" show-overflow-tooltip></el-table-column>
           <el-table-column prop="loanPerson" label="借出人" show-overflow-tooltip></el-table-column>
           <el-table-column prop="loanTime" label="借出日期" show-overflow-tooltip></el-table-column>
@@ -114,6 +187,28 @@ export default {
   components: { matrixTable, tmpButton },
   data () {
     return {
+      addWay:'',
+      addSample:'',
+      addWayOption:[
+        {
+          label:'单个添加',
+          value:1
+        },
+        {
+          label:'批量添加',
+          value:2
+        }
+      ],
+      addSampleOption:[
+        {
+          label:'选择已有样本',
+          value:1
+        },
+        {
+          label:'扫描已有样本',
+          value:2
+        }
+      ],
       options: [
         {
           value: '橘子',
@@ -143,20 +238,6 @@ export default {
     }
   },
   methods: {
-    getRowClass ({ rowIndex }) {
-      if (rowIndex == 0) {
-        return {
-          background: '#3cd7ff',
-          padding: '0px 0px',
-          height: '30px',
-
-          fontWeight: '600',
-
-          color: '#fff',
-          textAlign: 'center'
-        }
-      }
-    },
     handleClick (row, index) {
       console.log(row, index)
     },
@@ -182,6 +263,35 @@ export default {
       width: 62%;
       padding: 10px;
       background-color: #fff;
+      .top{
+        align-items: center;
+        margin-bottom: 10px;
+        img{
+          width: 60px;
+          cursor: pointer;
+        }
+        >span{
+          display: flex;
+          width: 9vw;
+        }
+      }
+      .searchSample{
+        p{
+          margin-bottom: 10px;
+          >span{
+            display: inline-block;
+            width: 6vw;
+          }
+          .btn{
+            border: 1px solid #00c9ff;
+            background: #00c9ff;
+          }
+        }
+        .input{
+          width:20%;
+          margin-right: 10px;
+        }
+      }
     }
   }
   .bot-form {

@@ -2,23 +2,21 @@
   <!-- 转出主页 -->
   <div class="scan-transport-out-index">
     <fromName>转出订单查询</fromName>
-    <addAndSearch type="out"></addAndSearch>
+    <addAndSearch type="out" @addOrder='addOrder'></addAndSearch>
     <div class="count">
       <span>共有:</span>
       <span>{{tableData.length}}</span>
       <span style="margin:0 0.3em">条数据</span>
     </div>
-    <div class="form-box">
+    <div class="form-box" v-show="orderTmp">
       <el-table
         :row-style="{height:'32px',textAlign: 'center',padding:'0px',}"
         :cell-style="{padding:'0px',textAlign: 'center'}"
         border
-        stripe
         ref="multipleTable"
         :data="tableData"
         tooltip-effect="dark"
         :style="{width: '100%',margin:'0 auto',}"
-        :header-cell-style="getRowClass"
         @selection-change="handleSelectionChange"
         @row-click="orderDetails"
         :show-overflow-tooltip='true'
@@ -65,9 +63,9 @@
       </el-table>
     </div>
     <!-- 订单详情页 -->
-    <maskTran :rgba="0" bgc="#eee" v-if="ifOrderDetails">
+    <div class="OrderDetailsWrap"  v-if="ifOrderDetails">
       <orderDetails @close="ifOrderDetails=false" :detailData="detailData"></orderDetails>
-    </maskTran>
+    </div>
   </div>
 </template>
 <script>
@@ -81,6 +79,7 @@ export default {
   data () {
     return {
       ifOrderDetails: false,
+      orderTmp: true,
       detailData:[], //点击行的订单信息
       tableData: [
         {
@@ -114,11 +113,14 @@ export default {
     }
   },
   methods: {
+    addOrder(val){
+      this.orderTmp = !val;
+    },
     orderDetails (row) {
         this.ifOrderDetails = true;
         this.$message('订单详情orderDetails');
         this.detailData = row;
-      console.log(this.detailData);
+        console.log(this.detailData);
     },
     toggleSelection (rows) {
       if (rows) {
@@ -131,27 +133,6 @@ export default {
     },
     handleSelectionChange (val) {
       this.multipleSelection = val
-    },
-    /**
-     * @description: 设置表头样式
-     * @param {type}
-     * @return:
-     */
-    getRowClass ({ rowIndex }) {
-      if (rowIndex == 0) {
-        return {
-          background: '#3cd7ff',
-          padding: '0px 0',
-          height: '30px',
-          lineHeight: '1.875rem',
-          fontWeight: '900',
-          fontSize: '1rem',
-          color: '#fff',
-          textAlign: 'center'
-        }
-      } else {
-        return ''
-      }
     },
     open () {
       /*  删除确认 */ this.$confirm(
@@ -177,6 +158,16 @@ export default {
 <style scoped lang='less'>
 .scan-transport-out-index {
   padding: 0 20px;
+  margin-top: 10px;
+}
+.OrderDetailsWrap{
+  position: absolute;
+  left: 0;
+  top: 9%;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  background: #eee;
 }
 .count {
   padding: 20px 0 10px;
