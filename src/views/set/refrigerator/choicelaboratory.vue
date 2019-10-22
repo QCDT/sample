@@ -176,20 +176,26 @@ export default {
       margin: 0 auto;
       overflow: hidden;
       position: relative;
-      height: 180px;
+      height: 240px;
+      /*display:table-cell;*/
+      /*vertical-align:middle;*/
+      /*text-align: center;*/
       /*&:hover .arrow{*/
         /*opacity: 1;*/
       /*}*/
     }
     .labList{
         width: 50000px;
-        height: 100%;
+        height: 230px;
         position: absolute;
         // display: flex;
         // justify-content: center;
         text-align: center;
         left: 0px;
+        /*top: 50%;*/
         transition: 1s;
+        /*display: inline-block;*/
+        /*transform: translateY(-50%);*/
         // margin-top: 30px;
         li{
             width: 200PX;
@@ -231,9 +237,9 @@ export default {
     transition: 3s;
 }
 .arrowL{
-  left:25%;
+  left:15%;
 }
 .arrowR{
-  right: 25%;
+  right: 15%;
 }
 </style>
