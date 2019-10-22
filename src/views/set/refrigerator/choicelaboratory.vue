@@ -48,7 +48,6 @@ export default {
       laboratoryName: "",
       calleft: 0,
       activeClass: -1,
-      delIndex: -1,
       list: [
         // {
         //   id: Date.now(),
@@ -112,13 +111,26 @@ export default {
     },
 
     blur(index) {
-      console.log("视角时间: ", index);
-      this.list[index].editing = false;
-      this.list.forEach(item => {
-        if (item.laboratoryName == "") {
-          alert('请输入实验室名称');
-        }
-      });
+      console.log(this.list[index].laboratoryName)
+        if (this.list[index].laboratoryName == "") {
+          this.$message({
+            message: '请输入实验室名称！',
+            type: 'warning'
+          });
+          return;
+        }else{
+          this.list[index].editing = false;
+          this.$axios({
+            method:'post',
+            url:'sampleGuide/laboratoryDict/checkLaboraNameReset',
+            data:({
+              name:this.list[index].laboratoryName
+            })
+          })
+          .then(({data})=>{
+            console.log(data)
+          })
+        };
     },
     addEl() {
       if(this.list.length >=3){
@@ -132,9 +144,9 @@ export default {
         laboratoryName: "",
         editing: true
       });
-      // setTimeout(() => {
-      //   document.getElementById("focus" + (this.list.length - 1)).focus();
-      // }, 0);
+      setTimeout(() => {
+        document.getElementById("focus" + (this.list.length - 1)).focus();
+      }, 0);
     },
     delEl() {
       if (this.activeClass == -1) {
