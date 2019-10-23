@@ -489,8 +489,8 @@ export default {
           data.data.forEach((item)=>{
             this.testTubeCategoryOption.push(
               {
-                label:item,
-                value:item
+                label:item.name,
+                value:item.id
               }
             )
           })
@@ -567,7 +567,7 @@ export default {
               name :this.name,//样本名称
               loanUserName:this.lender,//借出人
               inputUserId:this.enterClerk,//录入人id
-              sampleCategoryDictId:this.sampleItem,//样本类别
+              sampleCategoryDictId:this.testTubeCategory,//样本类别
               sampleSource:this.source,//样本来源
               status:this.status,//状态
               ProjectId:this.itemClass,//项目名称
@@ -587,11 +587,11 @@ export default {
           })
           .then(({data})=>{
             console.log(data);
+            // console.log(this.testTubeCategory)
             if(data.data == 0){
-              this.$emit('tiShi')
+              this.$message("未搜索到相关数据");
             }else{
               data.data.forEach((item)=>{
-                // console.log(item);
                 if(this.sampleItem == 1){
                   this.searchTableBoxData.push({
                     id: item.id,
@@ -601,6 +601,7 @@ export default {
                     address:item.sampleBoxStru.detailLocation // 位置信息
                   })
                 }else{
+
                   this.searchTableData.push({
                     id: item.id,
                     rfId:item.rfidCode,
@@ -612,8 +613,8 @@ export default {
                     sampleBloodData:item.samplingDate, // 采样日期
                     source:item.sampleSource, // 样本来源
                     pastTime:item.expireDate, // 过期日期
-                    location:item.sampleStru.detailLocation, // 位置信息
-                    status:item.status == 1 ? '正常' : '借出' , // 状态
+                    location:item.sampleStru == null ? item.detailLocation : item.sampleStru.detailLocation, // 位置信息
+                    status:item.status == 3 ? '销毁' : item.status == 1 ? '正常' : '借出' , // 状态
                     classify:item.sampleCategoryDict.name, // 类别
                     loanPerson:item.loanUserName, // 借出人
                     loanTime:item.loanTime// 借出日期
