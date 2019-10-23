@@ -112,6 +112,18 @@ export default {
       multipleSelection: []
     }
   },
+  created(){
+    this.$axios({
+      method:'post',
+      url:'/sampleGuide/trans/selectOrderInfo',
+      data:({
+        
+      })
+    })
+    .then(({data})=>{
+      console.log(data)
+    })
+  },
   methods: {
     addOrder(val){
       this.orderTmp = !val;

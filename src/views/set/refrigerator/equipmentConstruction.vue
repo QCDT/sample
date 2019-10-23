@@ -187,7 +187,7 @@
                 </div>
             </div>
             <div class="footerBtn">
-                <el-button type="primary"  size="mini">保存</el-button>
+                <el-button type="primary"  size="mini" @click="save">保存</el-button>
                 <el-button type="primary"  size="mini">返回</el-button>
             </div>
             <img src="@/assets/img/arrowLeft.png" class="prevBtn" @click="prevEquipment">
@@ -291,6 +291,15 @@ export default {
   methods: {
     prevEquipment () {
       this.$router.push('/set/refrigerator/equipmentInfo')
+    },
+    save(){
+        // this.$axios({
+        //     method:'post',
+        //     url:'sampleGuide/refrigeratorStru/insertRefrigeratorStru',
+        //     data:({
+
+        //     })
+        // })
     }
   },
   watch:{

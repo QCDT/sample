@@ -3,7 +3,7 @@
     <em>*</em>
     <span><slot></slot></span>
     <slot name="input"></slot>
-    <!-- <input type="text" v-model="value"> -->
+    <slot name="inputAddress"></slot>
   </div>
 </template>
 <script>
@@ -22,21 +22,21 @@ export default {
 <style scoped lang='less'>
 .tmp-fromItem-box {
   display: flex;
-  padding: 0 50px;
+  align-items: center;
+  padding: 10px 50px;
 }
 em{
   color: red
 }
 span {
-  width: 7rem;
+  width: 8rem;
   text-align: left
 }
 input {
   outline: none;
   border: 0;
-  border-radius: 3px;
-  border: 1px solid #999;
-  height: 20px;
-  margin: 0 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  height: 27px;
 }
 </style>

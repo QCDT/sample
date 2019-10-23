@@ -109,7 +109,17 @@ export default {
           type: 'warning'
         });
      }else{
-        this.$router.push('/set/refrigerator/equipmentConstruction')
+        this.$axios({
+           method:'post',
+           url:'sampleGuide/refrigeratorStru/checkRefrigeName',
+           data:({
+               name:this.equipmentName
+           })
+        })
+        .then(({data})=>{
+            console.log(data)
+            this.$router.push('/set/refrigerator/equipmentConstruction')
+        })
      }
     }
   }
