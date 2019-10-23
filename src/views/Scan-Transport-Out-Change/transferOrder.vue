@@ -28,12 +28,10 @@
               size="mini"
               slot="input"
               :options="options"
-              v-model="selectedOptionA"
-              @change="handleChange">
+              v-model="selectedOptionA">
             </el-cascader>
             <input type="text" slot="inputAddress" v-model="addressA">
           </fromItem>
-
         </td>
         <td colspan="2">
            <fromItem>
@@ -43,8 +41,7 @@
                 size="mini"
                 slot="input"
                 :options="options"
-                v-model="selectedOptionB"
-                @change="handleChange">
+                v-model="selectedOptionB">
               </el-cascader>
               <input type="text" slot="inputAddress" v-model="addressB">
             </fromItem>
@@ -70,7 +67,7 @@
   </div>
 </template>
 <script>
-import { provinceAndCityData } from 'element-china-area-data'
+import { provinceAndCityData ,CodeToText} from 'element-china-area-data'
 import fromItem from './tmp-fromItem'
 import tmpButton from '@/components/tmp/zhanglan/tmpButton'
 export default {
@@ -82,13 +79,30 @@ export default {
     tmpButton
   },
   created(){
-
+  },
+  watch:{
+    selectedOptionA(){
+      this.areaA = this.selectedOptionA.map((item)=>{
+        return CodeToText[item]
+      }).join('')
+      console.log(this.areaA)
+    },
+    selectedOptionB(){
+      this.areaB = this.selectedOptionB.map((item)=>{
+        return CodeToText[item]
+      }).join('')
+      console.log(this.areaB)
+    }
   },
   data () {
     return {
       mark: '',
       addContentA:["订单号","收件人","收件人联系方式"],
       addContentB:["订单名称","寄件人","寄件人联系方式"],
+      addressA:'',
+      addressB:'',
+      areaA:'',
+      areaB:'',
       dataListA:[],
       dataListB:[],
       options: provinceAndCityData,
@@ -98,10 +112,7 @@ export default {
   },
   methods: {
     confirmAddOrder(){
-      // this.$emit('confirm')
-    },
-    handleChange (value) {
-      console.log(value)
+      this.$emit('confirm')
     }
   },
   computed: {}
