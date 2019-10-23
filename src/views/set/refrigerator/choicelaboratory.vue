@@ -29,8 +29,8 @@
         </li>
       </ul>
     </div>
-    <img @click="zuohua" src="@/assets/img/arrowLeft.png" class="arrowL arrow" v-show="list.length  > 3 && calleft > -(list.length - 3) * 232">
-    <img @click="youhua" src="@/assets/img/arrowRight.png" class="arrowR arrow" v-show="list.length > 3 && calleft < 0">
+    <img @click="youhua" src="@/assets/img/arrowLeft.png" class="arrowL arrow" v-show="list.length > 3 && calleft < 0">
+    <img @click="zuohua" src="@/assets/img/arrowRight.png" class="arrowR arrow" v-show="list.length  > 3 && calleft > -(list.length - 3) * 232">
     <div class="labBtn">
       <el-button type="primary" size="small">保存</el-button>
       <el-button type="primary" @click="returnup()" size="small">返回</el-button>
@@ -149,10 +149,12 @@ export default {
         };
     },
     addEl() {
-      if(this.list.length >=3){
-        this.calleft -= 232;
-      }else{
+      if(this.calleft == 0 && this.list.length < 3){
         this.calleft = 0
+      } else if(this.calleft == 0 && this.list.length >= 3){
+        this.calleft -= this.list.length * 232
+      }else if(this.calleft < 0 && this.list.length >= 3){
+        this.calleft -= this.calleft + this.list.length * 232;
       }
       this.list.push({
         id: Date.now(),
@@ -183,6 +185,10 @@ export default {
           .then(({data})=>{
               console.log(data)
               if(data.code == 200){
+                this.$message({
+                  type: "success",
+                  message: "删除成功"
+                });
                 this.reload()
               }
           })
@@ -238,7 +244,7 @@ export default {
       margin: 0 auto;
       overflow: hidden;
       position: relative;
-      height: 240px;
+      height: 250px;
       /*display:table-cell;*/
       /*vertical-align:middle;*/
       /*text-align: center;*/

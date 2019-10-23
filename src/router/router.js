@@ -320,14 +320,6 @@ export default new Router({
         navbar: Header
       }
     },
-    // 转出中添加订单
-    {
-      path: '/scan/transport/out/add',
-      components: {
-        default: () => import(/* webpackChunkName: "scan" */ '@/views/Scan-Transport-Out/addOrder.vue'),
-        navbar: Header
-      }
-    },
     // 转出里边的修改
     {
       path: '/scan/transport/out/change',

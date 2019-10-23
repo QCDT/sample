@@ -4,8 +4,8 @@
       <!-- 实验室展示层-->
       <div class="labList" :class="{'labList-2': labRefrigerator, 'labList-3': refrigeratorInfo}">
         <p><span class="tatol">实验室总数:</span><span class="labNum">{{labList.length}}</span></p>
-        <img @click="youhua" src="@/assets/img/arrowRight.png" class="arrowR arrow" :class="{'arrowR-2': labImgfangda }" v-show="labList.length > 3 && calleft < 0">
-        <img @click="zuohua" src="@/assets/img/arrowLeft.png" class="arrowL arrow" :class="{'arrowL-2': labImgfangda }" v-show="labList.length  > 3 && calleft > -(labList.length - 3) * 300">
+        <img @click="zuohua" src="@/assets/img/arrowRight.png" class="arrowR arrow" :class="{'arrowR-2': labImgfangda }" v-show="labList.length  > 3 && calleft > -(labList.length - 3) * 300">
+        <img @click="youhua" src="@/assets/img/arrowLeft.png" class="arrowL arrow" :class="{'arrowL-2': labImgfangda }" v-show="labList.length > 3 && calleft < 0">
         <div class="labWrap" :class="{'labWrap-2': labImgfangda }" >
           <ul :style="{'left':calleft + 'px'}">
             <li v-for="(item,index) in labList" :key="index">
@@ -18,8 +18,8 @@
       <!-- 冰箱展示-->
       <div class="refrigeratorList" v-show="labRefrigerator" :class="{'refrigeratorList-2':refrigeratorInfo }">
         <p><span class="tatol">冰箱总数:</span><span class="labNum">{{refrigeratorList.length}}</span></p>
-        <img @click="refYouhua" src="@/assets/img/arrowRight.png" class="arrowR arrow" :class="{'arrowR-2': labImgfangda }" v-show="refrigeratorList.length > 3 && refCalleft < 0">
-        <img @click="refZuohua" src="@/assets/img/arrowLeft.png" class="arrowL arrow" :class="{'arrowL-2': labImgfangda }" v-show="refrigeratorList.length  > 3 && refCalleft > -(refrigeratorList.length - 3) * 300">
+        <img @click="refZuohua" src="@/assets/img/arrowRight.png" class="arrowR arrow" :class="{'arrowR-2': labImgfangda }" v-show="refrigeratorList.length  > 3 && refCalleft > -(refrigeratorList.length - 3) * 300">
+        <img @click="refYouhua" src="@/assets/img/arrowLeft.png" class="arrowL arrow" :class="{'arrowL-2': labImgfangda }" v-show="refrigeratorList.length > 3 && refCalleft < 0">
         <div class="labWrap">
           <!--<ul :style="{'left':refCalleft + 'px'}">-->
           <ul :style="{'left':refCalleft + 'px'}">
