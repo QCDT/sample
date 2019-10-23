@@ -224,7 +224,13 @@ export default {
     },
     // 修改设备信息的方法
     saveInfo(){
-
+        this.$axios({
+          method:'post',
+          url:'sampleGuide/refrigeratorStru/updateRefrigeratorStru',
+          data:({
+            
+          })
+        })
     },
     handleDelete(index,row){
         this.$confirm(`确认删除该冰箱吗？`, '提示', {

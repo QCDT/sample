@@ -6,17 +6,48 @@
         <th class="title" colspan="4">{{title}}</th>
       </tr>
       <tr v-for="(item,index) in addContentA" :key="index">
-        <td colspan="2" width="50%">
+        <td colspan="2">
           <fromItem>
             {{item}}
-            <input type="text" v-model="dataListA[index]" slot="input">
+            <input type="text" v-model="dataListA[index]" slot="input" :disabled='index==0'>
           </fromItem>
         </td>
-        <td colspan="2" width="50%">
+        <td colspan="2">
           <fromItem>
              {{addContentB[index]}}
-             <input type="text" v-model="dataListA[index]" slot="input">
+             <input type="text" v-model="dataListB[index]" slot="input">
           </fromItem>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2">
+           <fromItem>
+              收件人地址
+            <!-- <span>收件人地址</span> -->
+            <el-cascader
+              size="mini"
+              slot="input"
+              :options="options"
+              v-model="selectedOptionA"
+              @change="handleChange">
+            </el-cascader>
+            <input type="text" slot="inputAddress" v-model="addressA">
+          </fromItem>
+
+        </td>
+        <td colspan="2">
+           <fromItem>
+              寄件人地址
+            <!-- <span>收件人地址</span> -->
+              <el-cascader
+                size="mini"
+                slot="input"
+                :options="options"
+                v-model="selectedOptionB"
+                @change="handleChange">
+              </el-cascader>
+              <input type="text" slot="inputAddress" v-model="addressB">
+            </fromItem>
         </td>
       </tr>
       <tr>
@@ -32,7 +63,6 @@
           ></el-input>
         </td>
       </tr>
-      <tr></tr>
     </table>
     <div class="ack-btn">
       <tmpButton  @click="confirmAddOrder">确认</tmpButton>
@@ -40,6 +70,7 @@
   </div>
 </template>
 <script>
+import { provinceAndCityData } from 'element-china-area-data'
 import fromItem from './tmp-fromItem'
 import tmpButton from '@/components/tmp/zhanglan/tmpButton'
 export default {
@@ -50,18 +81,27 @@ export default {
     fromItem,
     tmpButton
   },
+  created(){
+
+  },
   data () {
     return {
       mark: '',
-      addContentA:["订单号","收件人","收件人联系方式","收件地址"],
-      addContentB:["订单名称","寄件人","寄件人联系方式","寄件地址"],
+      addContentA:["订单号","收件人","收件人联系方式"],
+      addContentB:["订单名称","寄件人","寄件人联系方式"],
       dataListA:[],
-      dataListB:[]
+      dataListB:[],
+      options: provinceAndCityData,
+      selectedOptionA: [],
+      selectedOptionB: []
     }
   },
   methods: {
     confirmAddOrder(){
-      this.$emit('confirm')
+      // this.$emit('confirm')
+    },
+    handleChange (value) {
+      console.log(value)
     }
   },
   computed: {}
@@ -79,6 +119,7 @@ table {
 td {
   height: 40px;
   border: 1px solid #999;
+  // text-align: center;
 }
 .title {
   height: 40px;

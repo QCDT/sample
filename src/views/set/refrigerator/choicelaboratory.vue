@@ -15,7 +15,7 @@
           :class="{active:activeClass == index}"
           @click="chooselab(index)"
         >
-          <img src="@/assets/img/lab.png" @dblclick="setFocus(index)">
+          <img src="@/assets/img/lab.png">
           <div @dblclick="editLabName(index)" class="labName">
             <span v-show="!item.editing">{{item.laboratoryName}}</span>
             <el-input
@@ -48,6 +48,7 @@ export default {
       laboratoryName: "",
       calleft: 0,
       activeClass: -1,
+      addLab:false,
       list: [
         // {
         //   id: Date.now(),
@@ -100,16 +101,6 @@ export default {
         this.$router.push('/set/refrigerator/equipmentInfo')
       }
     },
-    setFocus(index) {
-      this.list.forEach(item => {
-        item.editing = false;
-      });
-      this.list[index].editing = true;
-      // setTimeout(() => {
-      //   document.getElementById("focus" + index).focus();
-      // }, 0);
-    },
-
     blur(index) {
       console.log(this.list[index].laboratoryName)
         if (this.list[index].laboratoryName == "") {
@@ -119,7 +110,6 @@ export default {
           });
           return;
         }else{
-          this.list[index].editing = false;
           this.$axios({
             method:'post',
             url:'sampleGuide/laboratoryDict/checkLaboraNameReset',
@@ -128,6 +118,32 @@ export default {
             })
           })
           .then(({data})=>{
+            if(data.data == 0){
+              this.$message({
+                message: '实验室名称已存在！',
+                type: 'warning'
+              })
+              return;
+            }else{
+              this.list[index].editing = false;
+              if(this.addLab){
+                this.$axios({
+                  method:'post',
+                  url:'sampleGuide/laboratoryDict/insertLaboratoryDict',
+                  data:({
+                    name:this.list[index].laboratoryName
+                  })
+                })
+                .then(({data})=>{
+                    console.log(data)
+                    if(data.code == 200){
+                      this.reload();
+                    }
+                })
+              }else{
+
+              }
+            }
             console.log(data)
           })
         };
@@ -138,15 +154,12 @@ export default {
       }else{
         this.calleft = 0
       }
-      // this.calleft -= 232;
       this.list.push({
         id: Date.now(),
         laboratoryName: "",
         editing: true
       });
-      setTimeout(() => {
-        document.getElementById("focus" + (this.list.length - 1)).focus();
-      }, 0);
+      this.addLab = true
     },
     delEl() {
       if (this.activeClass == -1) {
@@ -164,7 +177,7 @@ export default {
             method:'post',
             url:'sampleGuide/laboratoryDict/deleteLaboratoryDictByName',
             data:({
-              name: this.list[this.activeClass].name
+              name: this.list[this.activeClass].laboratoryName
             })
           })
           .then(({data})=>{

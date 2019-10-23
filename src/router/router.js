@@ -323,7 +323,6 @@ export default new Router({
     // 转出中添加订单
     {
       path: '/scan/transport/out/add',
-      name: 'zhuanchu',
       components: {
         default: () => import(/* webpackChunkName: "scan" */ '@/views/Scan-Transport-Out/addOrder.vue'),
         navbar: Header
