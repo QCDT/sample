@@ -556,6 +556,7 @@ export default {
       }
     },
     startSearch () {
+      this.$emit('loadingStart')
       this.searchTableData=[]
       this.searchTableBoxData=[]
       /* 开始搜索 */
@@ -627,8 +628,9 @@ export default {
               // this.$emit('sampleItemValue', this.sampleItem)
               this.$emit('changeTable', this.searchTableData,data.data.length)
             }
-
+            this.$emit('loadingEnd')
         })
+
     },
     selectIceBox(){ //切换冰箱加载该冰箱层数
       this.layerOption = []

@@ -1,6 +1,6 @@
 <template>
   <div class="searchWrap">
-    <Search v-show="!reMaskTran && !togegleZhuanYun && !newBoxMaskTran" @changeTable = changeTable @changeBoxTable = changeBoxTable @sampleItemValue="sampleItemValueChange"></Search>
+    <Search v-show="!reMaskTran && !togegleZhuanYun && !newBoxMaskTran" @loadingStart=loadingStart @loadingEnd=loadingEnd @changeTable = changeTable @changeBoxTable = changeBoxTable @sampleItemValue="sampleItemValueChange"></Search>
     <!-- 表单 ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓ -->
 
     <!-- 修改样本 -->
@@ -43,6 +43,7 @@
           style="width:100%"
           @selection-change="handleSelectionChange"
           v-show="sampleBoxValue == 0"
+          v-loading="loading"
         >
           <el-table-column type="selection"></el-table-column>
           <el-table-column  width="70" label="序号">
@@ -135,6 +136,7 @@ export default {
   data () {
     return {
       // ↓   表单
+      loading: false,
       total: 0,//查询到样本总数
       currentPage:1,//默认显示第几页
       PageSize:40,//每页显示条数
@@ -193,9 +195,6 @@ export default {
   },
 
   methods: {
-    // tiShi(){
-    //   this.$message("未搜索到相关数据");
-    // },
     reSampleShow(){
       this.reMaskTran = true
     },
@@ -253,6 +252,12 @@ export default {
       this.tableBoxDataAll = tableData
       this.tableBoxData = this.tableBoxDataAll.slice((this.currentPage-1)*this.PageSize,this.currentPage*this.PageSize)
       this.total = tableTotal
+    },
+    loadingStart(){
+      this.loading = true
+    },
+    loadingEnd(){
+      this.loading = false
     },
     sampleInfoClick(index,row){//样本信息展示
       this.$router.push({

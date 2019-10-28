@@ -197,8 +197,8 @@
               size="small"
               v-model="refrigerator"
               placeholder="请选择"
+              @focus="hideTableSample = true"
               @change="selectIceBox"
-              @focus="hideTableSample = false"
             >
               <el-option
                 v-for="item in refrigeratorOption"
@@ -212,8 +212,8 @@
               size="small"
               v-model="layer"
               placeholder="请选择"
+              @focus="hideTableSample = true"
               @change="selectIcePlice"
-              @focus="hideTableSample = false"
             >
               <el-option
                 v-for="item in layerOption"
@@ -229,8 +229,8 @@
               size="small"
               v-model="chouTi"
               placeholder="请选择"
+              @focus="hideTableSample=true"
               @change="selectDrawer"
-              @focus="hideTableSample = false"
             >
               <el-option
                 v-for="item in chouTiOption"
@@ -838,7 +838,7 @@
         this.locationNow = []
         this.loanSampleArr = []
         this.normalSampleArr = []
-        this.hideTable = true
+        this.hideTableSample = false
         this.$axios({
           method:'post',
           url:'/sampleGuide/scan/findSampleStruBySampleBoxId',

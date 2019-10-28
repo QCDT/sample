@@ -14,7 +14,9 @@ export default {
   },
   components: {},
   data () {
-    return {}
+    return {
+      loading: false
+    }
   },
   methods: {},
   computed: {}
