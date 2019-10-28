@@ -34,7 +34,7 @@ export default {
   data () {
     return {
       //  左边导航: 长度 方向 图片
-      L_FangXiang: false,
+      L_FangXiang: true,
       L_Pic: [
         //   转运 分组核验 患者采血 自动录入 离心机 样本接收
         { pic: require('@/assets/img/zhuangyun1.png'), linkName: 'zhuanyun' },

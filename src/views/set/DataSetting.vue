@@ -258,22 +258,22 @@ export default {
                 font-size: 16px;
             }
         }
-        .addBox{
-            width: 80%;
-            margin: 0 auto;
-            .addContent{
-                margin-top: 10px;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                span{
-                    display: inline-block;
-                    width: 25%;
-                    font-size: 16px;
-                }
-                .addInput{
-                    width: 50%;
-                }
+    }
+    .addBox{
+        width: 80%;
+        margin: 0 auto;
+        .addContent{
+            margin-top: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            span{
+                display: inline-block;
+                width: 25%;
+                font-size: 16px;
+            }
+            .addInput{
+                width: 50%;
             }
         }
     }

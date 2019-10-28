@@ -36,18 +36,14 @@
     <!-- 底部的按钮(二) -->
     <div class="bot-group" v-show="switchSaoMiao">
       <div class="item">
-        <!-- <router-link :to="{name:botGroupPic[3].link}"> -->
           <el-tooltip class="item" effect="dark" content="标签" >
             <img :src="botGroupPic[3].pic" alt  @click="printitemBox">
           </el-tooltip>
-        <!-- </router-link> -->
       </div>
       <div class="item">
-        <!-- <router-link :to="{name:botGroupPic[4].link}"> -->
           <el-tooltip class="item" effect="dark" content="转移">
             <img :src="botGroupPic[4].pic"   @click="zhuanyunClickBox">
           </el-tooltip>
-        <!-- </router-link> -->
       </div>
       <div class="item">
         <!-- <router-link :to="{name:botGroupPic[2].link}"> -->

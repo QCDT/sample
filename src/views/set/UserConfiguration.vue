@@ -245,7 +245,7 @@ export default {
       repeatPasswordMsg: '', // 二次密码验证
       compellationMsg:'',// 姓名验证提示信息
       compellation: '', //姓名值
-      Userdisabled: true, //添加保存按钮禁用
+      Userdisabled: false, //添加保存按钮禁用
       roleValue: '', // 角色下拉框的value
       roleOptionValue: '', // 添加和修改中角色下拉框的value
       cardNub: '', // 绑定IC卡值
@@ -826,7 +826,7 @@ export default {
       }
     },
     handleEdit (index, row) {
-      if (this.userType) { // ...........修改用户时获取该用户的用户名和密码
+      if (this.userType) { // ...........修改用户时获取相应信息
         this.UserDialogVisible = true
         this.userNamemsg = ''
           this.$axios({

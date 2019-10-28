@@ -76,8 +76,6 @@
           <el-table-column prop="classify" label="类别" show-overflow-tooltip></el-table-column>
           <el-table-column prop="loanPerson" label="借出人" show-overflow-tooltip></el-table-column>
           <el-table-column prop="loanTime" label="借出日期" show-overflow-tooltip></el-table-column>
-
-
           <el-table-column label="日志信息"  fixed="right">
             <template slot-scope="scope">
                 <span class="cellStyle" @click="sampleLog(scope.$index,scope.row)">查看</span>
@@ -238,6 +236,9 @@ export default {
       this.boxRfid = this.checkedBoxlist[0].coding
       this.sampleBoxId = this.checkedBoxlist[0].id
       console.log(this.checkedBoxlist)
+    },
+    changeBoxRfid(val){
+      this.boxRfid = val
     },
     changeTable(tableData,tableTotal){
         this.total = 0
