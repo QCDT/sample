@@ -38,5 +38,7 @@ input {
   border-radius: 5px;
   border: 1px solid #ccc;
   height: 27px;
+  width: 170px;
+  padding-left: 10px;
 }
 </style>

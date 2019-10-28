@@ -4,6 +4,7 @@
     <div class="in">
       <addOrder style="background:#fff" title="添加转出订单" @confirm="confirm"></addOrder>
       <sampleBox v-show="showAddSampleBox"></sampleBox>
+      <div class="btn"><button @click="$router.go(-1)">返回</button></div>
     </div>
   </div>
 </template>
@@ -36,5 +37,20 @@ export default {
 }
 .in {
   padding: 10px;
+}
+.btn{
+  text-align: center;
+  button{
+    width: 100px;
+    height: 25px;
+    color: #00c9ff;
+    background: transparent;
+    border: 1px solid #00c9ff;
+    border-radius: 5px;
+    &:hover{
+      background: #00c9ff;
+      color: white;
+    }
+  }
 }
 </style>

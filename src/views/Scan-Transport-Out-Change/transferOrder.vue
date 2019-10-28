@@ -79,18 +79,33 @@ export default {
     tmpButton
   },
   created(){
+    if(this.title == '添加转出订单'){
+      this.$axios({
+        method:'get',
+        url:'/sampleGuide/trans/autoTransportOrder'
+      })
+      .then(({data})=>{
+        console.log(data)
+        if(data.code == 200){
+          this.dataListA.push(data.data)
+          console.log(this.dataListA)
+        }
+      })
+    }else{
+      
+    }
   },
   watch:{
     selectedOptionA(){
       this.areaA = this.selectedOptionA.map((item)=>{
         return CodeToText[item]
-      }).join('')
+      })
       console.log(this.areaA)
     },
     selectedOptionB(){
       this.areaB = this.selectedOptionB.map((item)=>{
         return CodeToText[item]
-      }).join('')
+      })
       console.log(this.areaB)
     }
   },
@@ -112,7 +127,79 @@ export default {
   },
   methods: {
     confirmAddOrder(){
-      this.$emit('confirm')
+      if(this.dataListA.length === 3 && this.dataListB.length ===3 && this.areaA && this.areaB && this.addressA && this.addressB ){
+        let  reg=11 && /^((13|14|15|17|18)[0-9]{1}\d{8})$/;
+        if(!reg.test(this.dataListA[2])){
+            alert("收件人手机格式不正确");
+            return;
+        }
+        if(!reg.test(this.dataListB[2])){
+            alert("寄件人手机格式不正确");
+            return;
+        }
+        this.$axios({
+          method:'post',
+          url:'/sampleGuide/trans/selectOrderByNameOrNumber',
+          data:({
+            orderName:this.dataListB[0]
+          })
+        })
+        .then(({data})=>{
+          console.log(data)
+          if(data.code == 200){
+            if(data.data == 0){
+              this.$message({
+                message: '订单名称已存在!',
+                type: 'warning'
+              });
+            }else{
+              this.$axios({
+                method:'post',
+                url:'/sampleGuide/trans/addTransportOrder',
+                data:({
+                  orderNumber: this.dataListA[0],
+                  recipients:this.dataListA[1],
+                  recipientsTel:this.dataListA[2],
+                  orderName:this.dataListB[0],
+                  sender:this.dataListB[1],
+                  senderTel:this.dataListB[2],
+                  recipientsAddress:this.addressA,
+                  recipientsProvince: this.areaA[0],
+                  recipientsCity:this.areaA[1],
+                  senderProvince: this.areaB[0],
+                  senderCity: this.areaB[1],
+                  remarks: this.mark
+                })
+              })
+              .then(({data})=>{
+                console.log(data)
+                if(data.code==200){
+                  this.$message({
+                    message: '新增转运订单成功!',
+                    type: 'success'
+                  });
+                  this.$emit('confirm')
+                }else{
+                  this.$message({
+                    message:data.message,
+                    type: 'warning'
+                  });
+                }
+              })
+            }
+          }else{
+            this.$message({
+              message:data.message,
+              type: 'warning'
+            });
+          }
+        })
+      }else{
+        this.$message({
+          message: '请完善订单信息！',
+          type: 'warning'
+        });
+      }
     }
   },
   computed: {}

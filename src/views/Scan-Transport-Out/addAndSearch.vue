@@ -41,26 +41,26 @@
     <div class="form-box" v-if="type === 'out'">
       <div class="item">
         <span>转出订单号码:</span>
-        <el-input v-model="input" size="small" placeholder="请输入内容"></el-input>
+        <el-input v-model="outNumber" size="small" placeholder="请输入内容"></el-input>
       </div>
       <div class="item">
         <span>转出订单名称:</span>
-        <el-input v-model="input" size="small" placeholder="请输入内容"></el-input>
+        <el-input v-model="outName" size="small" placeholder="请输入内容"></el-input>
       </div>
       <div class="item">
         <span>转出录入人员:</span>
-        <el-input v-model="input" size="small" placeholder="请输入内容"></el-input>
+        <el-input v-model="outInputUserName" size="small" placeholder="请输入内容"></el-input>
       </div>
       <div class="item">
         <span>转出收件人员:</span>
-        <el-input v-model="input" size="small" placeholder="请输入内容"></el-input>
+        <el-input v-model="recipients" size="small" placeholder="请输入内容"></el-input>
       </div>
       <div class="item">
         <span>转出收货地址:</span>
-        <el-input v-model="input" size="small" placeholder="请输入内容"></el-input>
+        <el-input v-model="recipientsAddress" size="small" placeholder="请输入内容"></el-input>
       </div>
       <div class="item">
-          <div class="search-box">
+          <div class="search-box" @click="searchOrder">
             <i class="icon icon-sousuo"></i>
             <b>查询</b>
           </div>
@@ -72,7 +72,6 @@
 import fromName from '@/components/tmp/zhanglan/fromName'
 import tmpButton from '@/components/tmp/zhanglan/tmpButton'
 import masking from '@/components/tmp/zhanglan/masking'
-import addOrder from './addOrder'
 import name from '@/components/tmp/zhanglan/tmpButton'
 import upLoad from '@/components/tmp/zhanglan/upLoad.vue'
 export default {
@@ -81,19 +80,56 @@ export default {
       type: String
     }
   },
-  components: { fromName, tmpButton, masking, addOrder, upLoad },
+  components: { fromName, tmpButton, masking, upLoad },
   data () {
     return {
       input: '',
       orderTmp: false,
+      outNumber:'',//转出订单号码
+      outName:'',//转出订单名称
+      outInputUserName:'', //转出录入人员
+      recipients:'', //转出收件人员
+      recipientsAddress:'', //转出收件地址
+      tableData:[]
     }
   },
   methods: {
     addOrder () {
       this.$router.push('/scan/transport/out/add')
-      // this.orderTmp = true
-      // this.$emit('addOrder',this.orderTmp)
+
     },
+    searchOrder(){
+      this.tableData=[]
+      if(this.type ==='out'){
+        this.$axios({
+          method:'post',
+          url:'/sampleGuide/trans/selectOrderInfo',
+          data:({
+            orderName:this.outName,
+            orderNumber: this.outNumber,
+            inputUserName: this.outInputUserName,
+            recipients:this.recipients,
+            recipientsAddress:this.recipientsAddress
+          })
+        })
+        .then(({data})=>{
+          console.log(data)
+          data.data.forEach((item)=>{
+            this.tableData.push({
+              id:item.id,
+              order: item.orderNumber, // 订单号
+              orderName: item.orderName, // 订单名称
+              recipients: item.recipients, // 收件人
+              site: item.recipientsAddress, // 收件地址
+              contactWay: item.recipientsTel, // 联系方式
+              entryClerk: item.inputUserName, // 录入人
+              remarks: item.remarks, //备注
+            }) 
+            this.$emit('changeTable', this.tableData)
+          })
+        })
+      }
+    }
     // closeMask () {
     //   this.orderTmp = false
     //   this.$emit('addOrder',this.orderTmp)
