@@ -773,9 +773,9 @@
         this.styleBoxOption = []
         this.$axios({
           method: 'post',
-          url: 'sampleGuide/set/selectTier',
+          url: 'sampleGuide/scan/getTireSturRowList',
           data: ({
-            refrigeratorStruId: this.refrigerator
+            id: this.refrigerator
           })
         })
         .then(({data}) => {
@@ -795,11 +795,9 @@
         this.styleBoxOption = []
         this.$axios({
           method: 'post',
-          url: '/sampleGuide/guest/selectDrawerStruByTierStru',
+          url: '/sampleGuide/scan/getDrawerStruNumberList',
           data: ({
-            tierStruId: {
-              id: this.layer
-            }
+            id: this.layer
           })
         })
           .then(({data}) => {
