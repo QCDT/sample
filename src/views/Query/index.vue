@@ -51,7 +51,7 @@
           </el-table-column>
           <el-table-column prop="color" label="帽色" show-overflow-tooltip>
             <template slot-scope="scope">
-              <span class="color" :class="{'colorOne' : scope.row.color == 0 ,'colorTwo' : scope.row.color == 1 ,'colorThree' : scope.row.color == 2 ,'colorFour' : scope.row.color == 4 ,'colorFive' : scope.row.color == 5 ,'colorSix' : scope.row.color == 6 ,'colorSeven' : scope.row.color == 7 }"></span>
+              <span class="color" :class="{'colorOne' : scope.row.color == 0 ,'colorTwo' : scope.row.color == 1 ,'colorThree' : scope.row.color == 2 ,'colorFour' : scope.row.color == 3 ,'colorFive' : scope.row.color == 4 ,'colorSix' : scope.row.color == 5 ,'colorSeven' : scope.row.color == 6 ,'colorEight' : scope.row.color == 7 }"></span>
             </template>
           </el-table-column>
 
@@ -343,9 +343,12 @@ export default {
   background-color: #15ff13;
 }
 .colorSix{
-  background-color: #c621ff;
+  background-color: #31d4ff;
 }
 .colorSeven{
+  background-color: #c621ff;
+}
+.colorEight{
   background-color: #ff99d3;
 }
 //  ↑

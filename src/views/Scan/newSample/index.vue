@@ -102,7 +102,7 @@
                 <div class="input-item-r">
                   <!-- <el-form-item label="冰箱"> -->
                     <span>冰箱</span>
-                    <el-select size="mini" class="lab" @change="showlabRow" v-model="labValue" placeholder="请选择">
+                    <el-select @focus="hideTable = true" size="mini" class="lab" @change="showlabRow" v-model="labValue" placeholder="请选择">
                       <el-option
                         v-for="item in labOption"
                         :key="item.value"
@@ -138,7 +138,7 @@
                         ></el-option>
                     </el-select>
               </div>
-              <div class="tableWrap" v-loading="loading">
+              <div class="tableWrap" v-loading="loading" v-show="!hideTable">
                 <table class="table">
                     <tr v-for="row in rowValue" :key="row">
                         <td
@@ -212,6 +212,7 @@ export default {
     return {
       input: '',
       mark: '',
+      hideTable: false,
       locationMsg:false,
       fullscreenLoading: true,
       loading:false,
@@ -450,13 +451,13 @@ export default {
       this.sampleBoxOption = []
       this.$axios({
         method: 'post',
-        url:'sampleGuide/set/selectTier',
+        url:'sampleGuide/scan/getTireSturRowList',
         data:({
-          refrigeratorStruId: this.labValue
+          id: this.labValue
         })
       })
       .then(({data})=>{
-        //console.log(data)
+        console.log(data)
         data.data.forEach((item)=>{
           this.labRowOption.push({
             value: item.id,
@@ -472,15 +473,13 @@ export default {
       this.sampleBoxOption = []
       this.$axios({
         method: 'post',
-        url:'/sampleGuide/guest/selectDrawerStruByTierStru',
+        url:'/sampleGuide/scan/getDrawerStruNumberList',
         data:({
-          tierStruId:{
-            id:this.labRow
-	        }
+          id:this.labRow
         })
       })
       .then(({data})=>{
-          //console.log(data)
+          console.log(data)
           data.data.forEach((item)=>{
             this.labDrawerOption.push({
               value:item.id,
@@ -501,7 +500,7 @@ export default {
         })
       })
       .then(({data})=>{
-       // console.log(data)
+       console.log(data)
         data.data.forEach((item)=>{
           this.sampleBoxOption.push({
             label:item.row,
@@ -512,6 +511,7 @@ export default {
     },
     showSample(){ //.......根据样本盒查询样本信息
       this.loading = true
+      this.hideTable = false
       this.activeRow = ''
       this.activeCol = ''
       this.loanSampleArr = []
