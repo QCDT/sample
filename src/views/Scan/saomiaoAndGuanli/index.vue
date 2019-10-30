@@ -85,7 +85,7 @@ export default {
         return
       }
       recordCnt = this.elref.RDR_GetRecordCnt()
-      alert(recordCnt)
+      // alert(recordCnt)
       for(let j=0;j<recordCnt;j++){
         	let sTagInfo = this.elref.GetRecord(j).split("-")
           let sTagID = sTagInfo[sTagInfo.length-1]
@@ -101,6 +101,12 @@ export default {
           })
         })
         .then(({data})=>{
+            if(data.data.rfidMap.newRfidCode.length == 0 && data.data.sampleBoxMap.SampleBoxInfo.length ==0){
+              this.$message({
+                message: '未扫描到相关样本！',
+                type: 'warning'
+              });
+            }
             data.data.rfidMap.newRfidCode.forEach((item)=>{
               this.boxData.push({
                 id:'',
@@ -132,6 +138,12 @@ export default {
         })
           .then(({data})=>{
             console.log(data)
+            if(data.data.new.length ==0 && data.data.old.length == 0){
+              this.$message({
+                message: '未扫描到相关样本！',
+                type: 'warning'
+              });
+            }
             data.data.new.forEach((item)=>{
               this.tableData.push({
                 id:'',

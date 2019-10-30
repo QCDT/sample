@@ -411,14 +411,13 @@ export default {
         // console.log(recordCnt)
         let sTagInfo = this.elref.GetRecord(j).split("-");
         let sTagID = sTagInfo[sTagInfo.length-1];
-        alert(recordCnt)
+        // alert(recordCnt)
         if(recordCnt == 1){
             this.$emit('changeBoxRfid',sTagID)
             this.$alert('RFID芯片替换成功！', '提示', {
             confirmButtonText: '确定',
             type: 'success'
           })
-          // this.boxRfid = sTagID
         }else{
           this.$alert('样本盒只能绑定一个！', '提示', {
             confirmButtonText: '确定',

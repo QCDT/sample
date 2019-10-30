@@ -622,7 +622,7 @@
         let netPort = this.$cookies.get('netPortNo')
         //console.log(devicetypeValue,OpentypeValue,comPortValue,comBaudRateValue,comFrameStructureValue,netIpAddress,netPort)
         let n = this.$store.state.OnOpen(this.elref,devicetypeValue,OpentypeValue,comPortValue,comBaudRateValue,comFrameStructureValue,netIpAddress,netPort)
-        alert(n);
+        // alert(n);
         if (n!=0) {
           return
         }
@@ -662,7 +662,7 @@
         // console.log(recordCnt)
         let sTagInfo = this.elref.GetRecord(j).split("-");
         let sTagID = sTagInfo[sTagInfo.length-1];
-        alert(recordCnt)
+        // alert(recordCnt)
         if(recordCnt == 1){
           this.inputRfid = sTagID
           this.$axios({

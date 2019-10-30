@@ -72,56 +72,6 @@ export default {
       labDrawerOption:[], //冰箱抽屉
       sampleBox:'',//样本盒位置id
       sampleBoxOption:[], //样本盒位置
-      matrixData: [
-        [
-          { bgc: '#fff' },
-          { bgc: '#fff' },
-          { bgc: '#fff' },
-          { bgc: '#fff' },
-          { bgc: '#fff' },
-          { bgc: '#fff' }
-        ],
-        [
-          { bgc: '#fff' },
-          { bgc: '#fff' },
-          { bgc: '#fff' },
-          { bgc: '#fff' },
-          { bgc: '#fff' },
-          { bgc: '#fff' }
-        ],
-        [
-          { bgc: '#fff' },
-          { bgc: '#fff' },
-          { bgc: '#fff' },
-          { bgc: '#fff' },
-          { bgc: '#fff' },
-          { bgc: '#fff' }
-        ],
-        [
-          { bgc: '#fff' },
-          { bgc: '#fff' },
-          { bgc: '#fff' },
-          { bgc: '#fff' },
-          { bgc: '#fff' },
-          { bgc: '#fff' }
-        ],
-        [
-          { bgc: '#fff' },
-          { bgc: '#fff' },
-          { bgc: '#fff' },
-          { bgc: '#fff' },
-          { bgc: '#fff' },
-          { bgc: '#fff' }
-        ],
-        [
-          { bgc: '#fff' },
-          { bgc: '#fff' },
-          { bgc: '#fff' },
-          { bgc: '#fff' },
-          { bgc: '#fff' },
-          { bgc: '#fff' }
-        ]
-      ]
     }
   },
   created(){

@@ -14,8 +14,6 @@ import choicelaboratory from '@/views/set/refrigerator/choicelaboratory'
 import equipmentInfo from '@/views/set/refrigerator/equipmentInfo'
 import equipmentConstruction from '@/views/set/refrigerator/equipmentConstruction'
 import receive from '@/views/Scan/saomiao/receive'
-import sampleBox from '@/views/set/sampleBox'
-
 import { zlRouter } from './zl'
 Vue.use(Router)
 
@@ -82,14 +80,6 @@ export default new Router({
       path: '/set/refrigerator',
       components: {
         default: refrigerator,
-        navbar: Header
-      }
-    },
-    // 样本盒设置
-    {
-      path: '/set/sampleBox',
-      components: {
-        default: sampleBox,
         navbar: Header
       }
     },

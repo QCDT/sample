@@ -593,7 +593,7 @@ export default {
       let netPort = this.$cookies.get('netPortNo')
       //console.log(devicetypeValue,OpentypeValue,comPortValue,comBaudRateValue,comFrameStructureValue,netIpAddress,netPort)
       let n = this.$store.state.OnOpen(this.elref,devicetypeValue,OpentypeValue,comPortValue,comBaudRateValue,comFrameStructureValue,netIpAddress,netPort)
-      alert(n);
+      // alert(n);
       if (n!=0) {
           return
       }

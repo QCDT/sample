@@ -36,6 +36,7 @@
         <el-table-column
           prop="name"
           label="项目名称"
+          show-overflow-tooltip
         >
         </el-table-column>
         <el-table-column
@@ -46,6 +47,7 @@
         <el-table-column
           prop="shenban"
           label="申办方"
+          show-overflow-tooltip
         >
         </el-table-column>
         <el-table-column
