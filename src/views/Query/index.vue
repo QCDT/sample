@@ -1,26 +1,8 @@
 <template>
   <div class="searchWrap">
-    <Search v-show="!reMaskTran && !togegleZhuanYun && !newBoxMaskTran" @loadingStart=loadingStart @loadingEnd=loadingEnd @changeTable = changeTable @changeBoxTable = changeBoxTable @sampleItemValue="sampleItemValueChange"></Search>
+    <Search v-show="!reMaskTran && !togegleZhuanYun && !newBoxMaskTran && !showSampleBoxInfo" @loadingStart=loadingStart @loadingEnd=loadingEnd @changeTable = changeTable @changeBoxTable = changeBoxTable @sampleItemValue="sampleItemValueChange"></Search>
     <!-- 表单 ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓ -->
-
-    <!-- 修改样本 -->
-    <transition name="el-fade-in-linear">
-      <!-- rgba:透明度 -->
-      <reSample v-if="reMaskTran" :multipleSelection="multipleSelection" title="修改样本" @changeSave="changeSave" @goBack="reMaskTran=false"></reSample>
-    </transition>
-    <!-- 转移样本盒 -->
-    <transition name="el-fade-in-linear">
-      <!-- <maskTran :rgba="0"> -->
-      <!-- rgba:透明度 -->
-      <alertZhuanYun :checkedBoxlist='checkedBoxlist' v-if="togegleZhuanYun"  @goBack="togegleZhuanYun=false"></alertZhuanYun>
-      <!-- </maskTran> -->
-    </transition>
-    <!-- 新建样本盒/修改样本盒 -->
-    <transition name="el-fade-in-linear">
-      <newSampleBox v-if="newBoxMaskTran" :sampleBoxId='sampleBoxId' :boxRfid='boxRfid'  :title="sampleBoxTitle" @changeBoxRfid="changeBoxRfid" @goBack="newBoxMaskTran=false"></newSampleBox>
-    </transition>
-
-    <div class="bot-form" v-show="!reMaskTran  && !togegleZhuanYun && !newBoxMaskTran">
+    <div class="bot-form" v-show="!reMaskTran  && !togegleZhuanYun && !newBoxMaskTran && !showSampleBoxInfo">
       <div class="table-box">
         <FormTopMenu
           :count="sampleBoxValue == 0?Number(tableDataAll.length):Number(tableBoxDataAll.length)"
@@ -99,7 +81,11 @@
           <el-table-column  width="70" label="序号">
             <template slot-scope="scope"><span>{{scope.$index+(currentPage - 1) * PageSize + 1}}</span></template>
           </el-table-column>
-          <el-table-column prop="name" label="样本盒名称" show-overflow-tooltip></el-table-column>
+          <el-table-column prop="name" label="样本盒名称" show-overflow-tooltip>
+            <template slot-scope="scope">
+              <span class="infoStyle" v-show="scope.row.address ? true : false"  @click="sampleBoxInfo(scope.row, scope.$index)">{{tableBoxData[scope.$index].name}}</span>
+            </template>
+          </el-table-column>
           <!--  -->
           <el-table-column prop="enterName" label="录入人" show-overflow-tooltip></el-table-column>
           <el-table-column prop="address" label="位置信息" show-overflow-tooltip></el-table-column>
@@ -118,6 +104,26 @@
       </div>
     </div>
     <!-- 表单 ↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑ -->
+    <!-- 修改样本 -->
+    <transition name="el-fade-in-linear">
+      <!-- rgba:透明度 -->
+      <reSample v-if="reMaskTran" :multipleSelection="multipleSelection" title="修改样本" @changeSave="changeSave" @goBack="reMaskTran=false"></reSample>
+    </transition>
+    <!-- 转移样本盒 -->
+    <transition name="el-fade-in-linear">
+      <!-- <maskTran :rgba="0"> -->
+      <!-- rgba:透明度 -->
+      <alertZhuanYun :checkedBoxlist='checkedBoxlist' v-if="togegleZhuanYun"  @goBack="togegleZhuanYun=false"></alertZhuanYun>
+      <!-- </maskTran> -->
+    </transition>
+    <!-- 样本盒详情-->
+    <transition name="el-fade-in-linear">
+      <showInfo v-if="showSampleBoxInfo" :sampleBoxId='sampleBoxId' @goBack="showSampleBoxInfo=false"></showInfo>
+    </transition>
+    <!-- 新建样本盒/修改样本盒 -->
+    <transition name="el-fade-in-linear">
+      <newSampleBox v-if="newBoxMaskTran" :sampleBoxId='sampleBoxId' :boxRfid='boxRfid'  :title="sampleBoxTitle" @changeBoxRfid="changeBoxRfid" @goBack="newBoxMaskTran=false"></newSampleBox>
+    </transition>
     <div class='backBtn' @click="backLoanPage" v-show="$route.params.id != 1">返回</div>
   </div>
 
@@ -128,9 +134,10 @@ import FormTopMenu from './FormTopMenu';
 import reSample from '@/views/Scan/reSample';
 import alertZhuanYun from "@/views/Scan/alert-ZhuanYun";
 import newSampleBox from "@/views/Scan/newSampleBox";
+import showInfo from '@/views/Scan/newSampleBox/showInfo'
 export default {
   props: {},
-  components: { Search, FormTopMenu, reSample, alertZhuanYun, newSampleBox },
+  components: { Search, FormTopMenu, reSample, alertZhuanYun, newSampleBox, showInfo},
   data () {
     return {
       // ↓   表单
@@ -149,6 +156,7 @@ export default {
       togegleZhuanYun: false, // 转运
       checkedlist:[],  //选中项的数组
       checkedBoxlist: [], //样本盒选中数组
+      showSampleBoxInfo: false, //样本盒详细信息
       newBoxMaskTran: false, // 修改样本盒
       sampleBoxTitle: '修改样本盒',
       // RFID: '',
@@ -193,6 +201,10 @@ export default {
   },
 
   methods: {
+    sampleBoxInfo(row,index){
+      this.sampleBoxId = row.id
+      this.showSampleBoxInfo = true
+    },
     reSampleShow(){
       this.reMaskTran = true
     },
@@ -350,6 +362,9 @@ export default {
 }
 .colorEight{
   background-color: #ff99d3;
+}
+.infoStyle{
+  cursor: pointer;
 }
 //  ↑
 
