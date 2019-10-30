@@ -101,11 +101,13 @@ export default {
           })
         })
         .then(({data})=>{
-            if(data.data.rfidMap.newRfidCode.length == 0 && data.data.sampleBoxMap.SampleBoxInfo.length ==0){
+          console.log(data)
+            if(data.data.rfidMap.newRfidCode.length == 0 && data.data.sampleBoxMap.length ==0){
               this.$message({
-                message: '未扫描到相关样本！',
+                message: '未扫描到相关样本盒！',
                 type: 'warning'
               });
+              return
             }
             data.data.rfidMap.newRfidCode.forEach((item)=>{
               this.boxData.push({

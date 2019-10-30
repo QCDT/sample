@@ -162,7 +162,7 @@ export default {
               expectedreturndate:this.ruleForm.date,//预计归还时间
               loanremarks:this.ruleForm.desc,//备注
             })
-          }).then((data)=>{
+          }).then(({data})=>{
             console.log(data);
             if(data.data.code==200){
               this.$message({ type: 'success', message:'创建借出订单成功' })

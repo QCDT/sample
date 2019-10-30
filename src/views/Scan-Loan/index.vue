@@ -5,6 +5,8 @@
     </transition>
     <div class="top">
       <fromName>借出订单列表</fromName>
+      <div>
+        <span class="projectStyle">所属项目:</span>
         <el-select v-model="projectValue" clearable placeholder="请选择" size="mini" @change="searchDingdan">
           <el-option
             v-for="item in projectOption"
@@ -12,7 +14,8 @@
             :label="item.label"
             :value="item.value">
           </el-option>
-        </el-select>
+      </el-select>
+      </div>
       <tmpButton @click="showAdd" style="height:36px">添加订单</tmpButton>
     </div>
 
@@ -221,22 +224,30 @@ export default {
       this.$axios({
         method:'post',
         url:'sampleGuide/scan/exportLoanExcel',
-        responseType: 'arraybuffer',
+        responseType: 'blob',
+        headers: {
+        'Access-Control-Expose-Headers': 'filename'
+        },
         data:({
-          id:row.id,// 当前要删除的订单ID
+          id:row.id,// 当前订单ID
         })
       })
       .then(({data})=>{
         console.log(data);
-        var blob = new Blob([data], {type: 'application/vnd.ms-excel;charset=UTF-8'});
-        var a = document.createElement('a');
-        var href = window.URL.createObjectURL(blob); // 创建链接对象
-        a.href =  href;
-        a.download = '';   // 自定义文件名
-        document.body.appendChild(a);
-        a.click();
-        window.URL.revokeObjectURL(href);  //移除链接对象
-        document.body.removeChild(a); // 移除a元素
+        let fileName = data.headers.filename;
+        let blob = new Blob([data.data], {type: 'application/vnd.ms-excel;charset=UTF-8'});
+        if(window.navigator.msSaveBlob){
+          window.navigator.msSaveBlob(blob,fileName);
+        }else{
+          let a = document.createElement('a');
+          let href = window.URL.createObjectURL(blob); // 创建链接对象
+          a.href =  href;
+          a.download = fileName;   // 自定义文件名
+          document.body.appendChild(a);
+          a.click();
+          window.URL.revokeObjectURL(href);  //移除链接对象
+          document.body.removeChild(a);
+        }
       })
     },
 
@@ -283,8 +294,13 @@ export default {
   padding: 0;
   text-align: left
 }
+.projectStyle{
+  margin-right: 5px;
+}
 .orderName{
   cursor: pointer;
+  display: block;
+  width: 100%;
 }
 .del{
   font-size:16px;
