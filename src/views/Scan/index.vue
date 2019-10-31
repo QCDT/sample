@@ -9,7 +9,7 @@
       <div class="table-box">
         <formTopContent :count="!switchSaoMiao ? tableData.length : boxData.length" :switchSaoMiao="switchSaoMiao">
           <el-switch v-model="switchSaoMiao" slot="saomiao"></el-switch>
-          <el-switch v-model="switchGuanLi" slot="guanli"></el-switch>
+          <!--<el-switch v-model="switchGuanLi" slot="guanli"></el-switch>-->
         </formTopContent>
           <!-- 扫描样本 -->
             <div  v-show="!switchSaoMiao" >

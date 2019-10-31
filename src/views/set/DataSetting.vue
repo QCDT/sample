@@ -2,11 +2,11 @@
   <div class="SettingWrap">
       <div class="SettingContent">
         <div class="SettingTitle"> <!-- 数据设置的header -->
-            <span class="DataInfo">备份表单信息</span>
+            <span class="DataInfo">备份数据表单信息</span>
             <div>
                 <el-button type="primary" size="mini" @click="addbackups">添加</el-button>
                 <el-button type="danger" size="mini" @click="delbackups">删除</el-button>
-            </div> 
+            </div>
         </div>
         <div>       <!-- 表格结构 样式中 :cell-style 单元格样式 :row-style 行样式 :header-cell-style 表头单元格样式 -->
             <el-table
@@ -232,7 +232,7 @@ export default {
             });
             this.reload()
           })
-        }).catch(() => {        
+        }).catch(() => {
         });
       }
     }

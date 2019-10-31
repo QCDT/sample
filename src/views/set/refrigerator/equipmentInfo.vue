@@ -39,8 +39,8 @@
                 <em>℃</em>
             </div>
             <div>
-                <img src="@/assets/img/arrowLeft.png" class="prevBtn" @click="prevEquipment">
-                <img src="@/assets/img/arrowRight.png" class="nextBtn" @click="nextEquipment">
+                <img src="@/assets/img/arrowLeft2.png" class="prevBtn" @click="prevEquipment">
+                <img src="@/assets/img/arrowRight2.png" class="nextBtn" @click="nextEquipment">
                 <!-- <el-button type="primary" size="small" class="prevBtn" @click="prevEquipment">上一步</el-button>
                 <el-button type="primary" class="nextBtn" @click="nextEquipment">下一步</el-button> -->
             </div>
@@ -58,7 +58,7 @@ export default {
       setBrandOption:[
         // {
         //   label:'',
-        //   value: ''  
+        //   value: ''
         // }
       ],
       setModelNubOption:[]
