@@ -1,5 +1,6 @@
 <template>
   <div class="loginWrap">
+    <cardfile  @reception= 'refData'></cardfile>
     <div class="loginHeader">
       <a href="http://www.sampleguide.cn">
         <img src="@/assets/img/logo.png" />
@@ -68,6 +69,7 @@ export default {
   },
   data() {
     return {
+      elref: '',
       userName: "",
       userPassword: "",
       LoginTab: true,
@@ -334,6 +336,7 @@ export default {
     }
     .loginScan {
       text-align: center;
+      cursor: pointer;
       img {
         width: 128px;
         height: 128px;

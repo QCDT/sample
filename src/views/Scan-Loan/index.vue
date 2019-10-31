@@ -57,7 +57,10 @@
         </template>
       </el-table-column>
     </el-table>
-    <goBack></goBack>
+    <div class="btn">
+      <button @click="goBack">返回</button>
+    </div>
+    <!-- <goBack></goBack> -->
     <!-- 蒙版 -->
   </div>
 </template>
@@ -202,7 +205,9 @@ export default {
           this.$message({ type: 'info', message: '已取消删除' })
         })
     },
-
+    goBack(){
+      this.$router.push('/scan')
+    },
     //导出借出订单PDF
     /* exportPdf(row, index){
       console.log(row,indeex);
@@ -301,6 +306,23 @@ export default {
   cursor: pointer;
   display: block;
   width: 100%;
+}
+.btn{
+  text-align: center;
+  margin-top: 20px;
+  button{
+    width: 100px;
+    height: 30px;
+    background: #fff;
+    border: 1px solid #00c9ff;
+    color: #00c9ff;
+    border-radius: 5px;
+    cursor: pointer;
+    &:hover{
+      background: #00c9ff;
+      color: #fff;
+    }
+  }
 }
 .del{
   font-size:16px;

@@ -299,7 +299,6 @@
 <script>
   import tmpButton from '@/components/tmp/zhanglan/tmpButton'
   import cardfile from "@/components/cardfile";
-  // import matrix9x9 from '@/components/tmp/zhanglan/matrix-9x9'
   export default {
     inject:['reload'],
     props: {
@@ -481,7 +480,7 @@
           this.layer = data.data.rfidSample.sampleStru.tierStruId
           this.chouTi = data.data.rfidSample.sampleStru.drawerStruId
           this.styleBox = data.data.rfidSample.sampleStru.sampleBoxStruId
-          this.pipeCap = this.pipeCapOption[data.data.rfidSample.capColor].label
+          this.pipeCap = data.data.rfidSample.capColor
           this.fangan = data.data.rfidSample.sampleStudy
           this.jiliang = data.data.rfidSample.sampleTreatment
           this.patient = data.data.rfidSample.sampleSubject
@@ -567,7 +566,7 @@
           url: 'sampleGuide/queryCategoryDict/selectSampleCategory',
         })
           .then(({data}) => {
-            // console.log(data);
+            console.log(data);
             data.data.forEach((item) => {
               this.testTubeCategoryOption.push(
                 {
@@ -645,6 +644,7 @@
         this.elref.RDR_Close()
       },
       readRfid(){
+        let rfid = ''
         let nret = 0
         let recordCnt = ''
         let j =0
@@ -664,19 +664,29 @@
         let sTagID = sTagInfo[sTagInfo.length-1];
         // alert(recordCnt)
         if(recordCnt == 1){
-          this.inputRfid = sTagID
+          // rfid = sTagID
+          // this.inputRfid = sTagID
           this.$axios({
             method:'post',
             url:'sampleGuide/scan/updateRfidCodeById',
             data:({
-              rfidCode:this.inputRfid
+              rfidCode:sTagID,
+              id:this.selectedId ==0?this.multipleSelection[0].id:this.selectedId
             })
           }).then(({data})=>{
-            // console.log(data)
-            this.$alert('RFID芯片替换成功！', '提示', {
-              confirmButtonText: '确定',
-              type: 'success'
-            })
+            console.log(data)
+            if(data.data == true){
+              this.inputRfid  = sTagID
+              this.$message({
+                message: '替换RFID成功！',
+                type: 'success'
+              });
+            }else{
+              this.$message({
+                message: '该芯片已被占用！',
+                type: 'warning'
+              });
+            }
           })
         }else{
           this.$alert('不能扫描多个芯片！', '提示', {

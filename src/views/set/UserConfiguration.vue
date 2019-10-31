@@ -713,7 +713,7 @@ export default {
                 username: this.userName,
                 password: this.repeatPassword,
                 visible_strategy: this.selectValue,
-                rfid_code : this.cardNub,
+                rfidCode : this.cardNub,
                 visible_data_user_id: this.showUserList.join(','),
                 visible_data_laboratory_id: this.labListid.join(','),
                 addUserRoleId: this.roleOptionValue,

@@ -1,5 +1,5 @@
 <template>
-  <!-- 新建/修改 样本盒:扫描页面的表单里的 新建，修改按钮 -->
+  <!-- 新建/修改 样本盒 -->
   <div class="change-wrap-1">
     <cardfile  @reception= 'refData'></cardfile>
     <h1 class="top-title" v-if="title">{{title}}</h1>

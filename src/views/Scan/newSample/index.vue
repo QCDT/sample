@@ -321,7 +321,7 @@ export default {
       url:'sampleGuide/transSample/selectAllSampleDict'
     })
     .then(({data})=>{
-      // console.log(data)
+      console.log(data)
       data.data.forEach((item)=>{
         this.sampleTypeOption.push({
           label:item.name,
@@ -360,9 +360,9 @@ export default {
       url:'/sampleGuide/scan/findLastSample'
     })
     .then(({data})=>{
-      //console.log(data)
+      console.log(data)
       this.ruleForm.sampleName = data.data.rfidSample.name
-      this.ruleForm.sampleType = data.data.rfidSample.sampleCategoryDict.id
+      this.ruleForm.sampleType = data.data.rfidSample.sampleCategoryDict.name
       this.ruleForm.sampleSource = data.data.rfidSample.sampleSource
       this.ruleForm.samplingDate = data.data.rfidSample.samplingDate
       this.ruleForm.pipeCap = data.data.rfidSample.capColor

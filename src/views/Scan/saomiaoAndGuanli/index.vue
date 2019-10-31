@@ -102,7 +102,7 @@ export default {
         })
         .then(({data})=>{
           console.log(data)
-            if(data.data.rfidMap.newRfidCode.length == 0 && data.data.sampleBoxMap.length ==0){
+            if(data.data.rfidMap.newRfidCode.length == 0 && data.data.sampleBoxMap.SampleBoxInfo == null){
               this.$message({
                 message: '未扫描到相关样本盒！',
                 type: 'warning'

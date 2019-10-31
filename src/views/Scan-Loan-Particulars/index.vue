@@ -97,7 +97,7 @@
       </div>
       <div class="footer">
         <el-button  class="enter-btn" type="primary" size="small" :disabled="checked"  v-show="status==0" @click="queRenHeYan">确认借出</el-button>
-        <el-button  class="enter-btn" type="primary" size="small"  @click="$router.go(-1)">返回</el-button>
+        <el-button  class="enter-btn" type="primary" size="small"  @click="$router.push('/scan/loan')">返回</el-button>
       </div>
     </div>
     <!-- 添加扫描样本盒 -->

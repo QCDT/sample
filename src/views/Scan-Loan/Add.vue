@@ -164,7 +164,7 @@ export default {
             })
           }).then(({data})=>{
             console.log(data);
-            if(data.data.code==200){
+            if(data.code==200){
               this.$message({ type: 'success', message:'创建借出订单成功' })
               this.reload();
             }

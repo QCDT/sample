@@ -111,7 +111,7 @@
     <!-- 相关事件报警 -->
     <div class="sampleWarning"  :style="{ transform:  `translateX(${sampleWarningShow? '0' : '85%'})`}">
       <div class="sampleWarningL" @click="warningShow">
-        <el-badge :value="warningAll">
+        <el-badge :value="warningAll" v-show="warningAll">
           <span>相关事件报警</span>
         </el-badge>
       </div>

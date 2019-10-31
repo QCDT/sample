@@ -234,6 +234,7 @@ import  ChangeUser from '@/components/ChangeUser'
 import cardfile from "@/components/cardfile"
 import goBack from '@/components/tmp/zhanglan/go-1'
 export default {
+    inject:['reload'],
     components: {
         ChangeUser,
         cardfile,
@@ -371,6 +372,7 @@ export default {
         },
         sampleReceive(){ // 扫描按钮点击事件
             this.rfidCodeList = []
+            this.sampleData = []
             this.elref.RDR_Close()
             let devicetypeValue = this.$cookies.get('readerType')
             let OpentypeValue = this.$cookies.get('portType')
@@ -414,7 +416,7 @@ export default {
                 return
             }
             recordCnt = this.elref.RDR_GetRecordCnt()
-            alert(recordCnt)
+            // alert(recordCnt)
             for(let j=0;j<recordCnt;j++){
                     let sTagInfo = this.elref.GetRecord(j).split("-")
                 let sTagID = sTagInfo[sTagInfo.length-1]
@@ -430,7 +432,7 @@ export default {
             })
             .then(({data})=>{
                 console.log(data)
-                if(data.data.checknull == 0 && data.data.existing == null){
+                if(data.data.checknull == 0 && data.data.existing != '存在已接收样本'){
                     this.scanNum = data.data.rfidSampleList.length
                     this.formName = data.data.newReceiveTable.tableName
                     this.dataValue = this.formatDateTime(new Date())
@@ -446,13 +448,8 @@ export default {
                         confirmButtonText: '确定',
                         type: 'error'
                     });
-                }else if(data.data.existing instanceof Array){
-                    let addedSample = []
-                    data.data.existing.forEach((item)=>{
-                        addedSample.push(item.name)
-                    })
-                    addedSample.join('')
-                    this.$alert(`${addedSample}样本已添加，请重新确认接收样本！`,'提示', {
+                }else if(data.data.existing == '存在已接收样本'){
+                    this.$alert('样本已添加，请重新确认接收样本！','提示', {
                         confirmButtonText: '确定',
                         type: 'error'
                     });
@@ -528,6 +525,7 @@ export default {
                             message: '接收成功!',
                             type: 'success'
                         });
+                        this.reload()
                     }
                 })
                 .catch((error)=>{
