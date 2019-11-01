@@ -34,7 +34,7 @@
                             </div>
                             <span>剩余空间{{residue}}%</span>
                         </div>
-                    </div>              
+                    </div>
                     <div>
                         <div><span>层结构:</span></div>
                         <div>
@@ -190,7 +190,7 @@
                 <el-button type="primary"  size="mini" @click="save">保存</el-button>
                 <el-button type="primary"  size="mini">返回</el-button>
             </div>
-            <img src="@/assets/img/arrowLeft.png" class="prevBtn" @click="prevEquipment">
+            <img src="@/assets/img/arrowLeft2.png" class="prevBtn" @click="prevEquipment">
         </div>
     </div>
 </template>

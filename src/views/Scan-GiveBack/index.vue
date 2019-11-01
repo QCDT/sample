@@ -285,7 +285,7 @@ export default {
         })
       })
         .then(({data})=>{
-          // console.log(data)
+          console.log(data)
           this.formNum = data.data.length
           data.data.forEach((item)=>{
             this.sampleDataForm.push({ // 样本表单内容渲染

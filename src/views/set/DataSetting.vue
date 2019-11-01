@@ -2,11 +2,11 @@
   <div class="SettingWrap">
       <div class="SettingContent">
         <div class="SettingTitle"> <!-- 数据设置的header -->
-            <span class="DataInfo">备份表单信息</span>
+            <span class="DataInfo">备份数据表单信息</span>
             <div>
                 <el-button type="primary" size="mini" @click="addbackups">添加</el-button>
                 <el-button type="danger" size="mini" @click="delbackups">删除</el-button>
-            </div> 
+            </div>
         </div>
         <div>       <!-- 表格结构 样式中 :cell-style 单元格样式 :row-style 行样式 :header-cell-style 表头单元格样式 -->
             <el-table
@@ -58,6 +58,7 @@
                 </el-table-column>
             </el-table>
         </div>
+        <div class="btn"><button @click="$router.push('/set')">返回</button></div>
       </div>
       <!-- 添加的弹窗 -->
       <el-dialog
@@ -232,7 +233,7 @@ export default {
             });
             this.reload()
           })
-        }).catch(() => {        
+        }).catch(() => {
         });
       }
     }
@@ -276,6 +277,23 @@ export default {
                 width: 50%;
             }
         }
+    }
+    .btn{
+      text-align: center;
+      margin-top: 20px;
+      button{
+        width: 120px;
+        height: 30px;
+        border: 1px solid #00c9ff;
+        background: #fff;
+        color: #00c9ff;
+        border-radius: 5px;
+        cursor: pointer;
+        &:hover{
+          background: #00c9ff;
+          color: #fff;
+        }
+      }
     }
 }
 </style>

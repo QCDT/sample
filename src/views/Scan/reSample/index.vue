@@ -465,7 +465,7 @@
           this.sample[4].value = data.data.rfidSample.samplingDate == null ? '' : data.data.rfidSample.samplingDate
           this.sample[5].value = data.data.rfidSample.expireDate == null ? '' : data.data.rfidSample.expireDate
           this.sample[7].value = data.data.rfidSample.warningDays
-          this.sample[6].value = this.pipeCapOption[data.data.rfidSample.capColor].label
+          this.sample[6].value = data.data.rfidSample.capColor == null ? '' : this.pipeCapOption[data.data.rfidSample.capColor].label
           this.sample[14].value = data.data.rfidSample.sampleStru.detailLocation
 //修改信息
           this.project = data.data.rfidSample.project == null ? '' : data.data.rfidSample.project.id

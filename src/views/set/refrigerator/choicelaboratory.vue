@@ -36,7 +36,7 @@
       <el-button type="primary" @click="returnup()" size="small">返回</el-button>
 
     </div>
-    <img type="primary" size="small" class="labNext" @click="equipmentInfo" src="@/assets/img/arrowRight.png">
+    <img type="primary" size="small" class="labNext" @click="equipmentInfo" src="@/assets/img/arrowRight2.png">
   </div>
 </template>
 <script>

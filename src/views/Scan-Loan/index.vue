@@ -16,7 +16,7 @@
           </el-option>
       </el-select>
       </div>
-      <tmpButton @click="showAdd" style="height:36px">添加订单</tmpButton>
+      <button @click="showAdd">添加订单</button>
     </div>
 
     <el-table
@@ -237,7 +237,7 @@ export default {
           id:row.id,// 当前订单ID
         })
       })
-      .then(({data})=>{
+      .then((data)=>{
         console.log(data);
         let fileName = data.headers.filename;
         let blob = new Blob([data.data], {type: 'application/vnd.ms-excel;charset=UTF-8'});
@@ -332,9 +332,20 @@ export default {
 .top {
   display: flex;
   justify-content: space-between;
+  align-items: center;
 
   button {
     cursor: pointer;
+    width: 110px;
+    height: 28px;
+    border-radius: 5px;
+    border: 1px solid #00c9ff;
+    background: #fff;
+    color: #00c9ff;
+    &:hover{
+      background: #00c9ff;
+      color: #fff
+    }
   }
 }
 </style>

@@ -131,19 +131,19 @@
           {
             label:'橙色',
             value:2
-          },        
+          },
           {
             label:'黄色',
             value:3
-          },        
+          },
           {
             label:'绿色',
             value:4
-          },        
+          },
           {
             label:'蓝色',
             value:5
-          },        
+          },
           {
             label:'紫色',
             value:6
@@ -192,7 +192,7 @@
         this.centerData[5].value = data.data.rfidSample.inputTime
         this.centerData[6].value = data.data.rfidSample.expireDate
         this.centerData[7].value = data.data.rfidSample.warningDays
-        this.centerData[8].value = this.pipeCapOption[data.data.rfidSample.capColor].label 
+        this.centerData[8].value = data.data.rfidSample.capColor == null ? '' : this.pipeCapOption[data.data.rfidSample.capColor].label
         this.centerData[9].value = data.data.rfidSample.project == null ? '' : data.data.rfidSample.project.name
         this.centerData[10].value = data.data.rfidSample.sampleStudy
         this.centerData[11].value = data.data.rfidSample.sampleTreatment
@@ -325,7 +325,7 @@
     justify-content: space-around;
 
     .item {
-      margin-bottom: 10px;
+      margin-bottom: 5px;
 
       font-size: 16px;
     }

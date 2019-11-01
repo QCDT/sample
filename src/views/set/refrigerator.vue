@@ -96,6 +96,9 @@
             </span>
         </el-dialog>
       </div>
+    <div class="bot">
+      <button @click="goLast">返回</button>
+    </div>
   </div>
 </template>
 <script>
@@ -228,7 +231,7 @@ export default {
           method:'post',
           url:'sampleGuide/refrigeratorStru/updateRefrigeratorStru',
           data:({
-            
+
           })
         })
     },
@@ -271,16 +274,19 @@ export default {
                 this.reload()
               })
             }
-          })        
+          })
         }).catch(() => {
           this.$message({
             type: 'info',
             message: '已取消删除'
-          });          
+          });
         });
     },
     addrefrigerator () {
       this.$router.push('/set/refrigerator/choicelaboratory')
+    },
+    goLast(){
+      this.$router.push('/set')
     }
   }
 }
@@ -291,6 +297,27 @@ export default {
     width: 100%;
     margin-top: 20px;
     font-size: 16px;
+
+  .bot {
+    text-align: center;
+    margin-top: 30px;
+    button {
+      width: 6.25rem;
+      height: 1.875rem;
+      cursor: pointer;
+      color: #00c9ff;
+      border: 0;
+      border: 1px #00c9ff solid;
+      border-radius: 5px;
+      outline: none;
+      background-color: #fff;
+      font-size: 14px;
+      &:hover {
+        color: #fff;
+        background-color: #00c9ff;
+      }
+    }
+  }
     .SettingContent{
         margin: 0 auto;
         width: 95%;
