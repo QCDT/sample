@@ -300,8 +300,9 @@ export default {
           type: item.brandModel.modelNumber
         })
       })
-      this.querySample()
+      this.centrifugeId = this.centrifugeList[0].id
       this.queryTime()
+      this.querySample()
     })
   },
   updated () {
@@ -319,7 +320,7 @@ export default {
     },
     handleCurrentChange(val) {
         // 改变默认的页数
-        console.log(val)
+        // console.log(val)
         this.currentPage=val
     },
     change (v) { // 切换离心机时显示相应离心机信息
@@ -374,7 +375,7 @@ export default {
                   if(data.code == 200){
                     this.centrifugeTime = this.time                  
                   }
-                    console.log(data)
+                    // console.log(data)
                 })
               }
               this.centrifugeTime = t/60 +'min'
@@ -390,7 +391,7 @@ export default {
         url:'sampleGuide/centrifuge/findResidueCentrifugeTime',
       })
       .then(({data})=>{
-        console.log(data)
+        // console.log(data)
         data.data.forEach((item)=>{
            if(item.centrifugeSurplusTime !=0 ){
             //  this.startCentrifuge = true
@@ -426,7 +427,6 @@ export default {
           var t = Number(this.residueTime)
           this.timer = setInterval(()=>{
               t--
-              console.log(t)
               if(t <= 0){
                 // t = 0
                 clearInterval(this.timer)
@@ -462,7 +462,7 @@ export default {
         })
       })
       .then(({data})=>{
-        // console.log(data)
+        console.log(data)
         if(data.data == true){
           this.startCentrifuge = true
           this.unableCentrifuge = false
@@ -550,9 +550,7 @@ export default {
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-         clearInterval(this.timer)
-          this.centrifugeStop = true
-          this.centrifugeRun = false
+      
           this.$axios({
             method:'post',
             url:'sampleGuide/centrifuge/stopCen',
@@ -563,6 +561,12 @@ export default {
           })
           .then(({data})=>{
               console.log(data)
+              if(data.code == 200){
+                clearInterval(this.timer)
+                this.centrifugeStop = true
+                this.centrifugeRun = false
+              }
+           
           })
         })
     },
@@ -618,7 +622,8 @@ export default {
         url:'sampleGuide/centrifuge/restartCen',
         data:({
           remainderSecond: residue,
-          id:this.orderId
+          id:this.orderId,
+          centrifugeId: this.centrifugeId
         })
       })
       .then(({data})=>{
@@ -671,7 +676,6 @@ export default {
             orderName: item.rfidSampleName
           })
         })
-        console.log(data)
       })
     },
     exportPDF(){ // 导出PDF
@@ -689,7 +693,7 @@ export default {
     },
     searchSample(){ //通过搜索样本名称查询样本
       this.dialogSampleData = []
-      console.log(this.findValue)
+      // console.log(this.findValue)
       this.$axios({
         method: 'post',
         url:'sampleGuide/centrifuge/findSampleByNameNoCen',
@@ -698,7 +702,7 @@ export default {
         })
       })
       .then(({data})=>{
-        console.log(data)
+        // console.log(data)
         data.data.forEach((item)=>{
           this.dialogSampleData.push({
             id:item.id,
@@ -813,7 +817,7 @@ export default {
         })
       })
       .then(({data})=>{
-        console.log(data)
+        // console.log(data)
         this.$message({
           message: '添加成功！',
           type: 'success'
@@ -850,9 +854,9 @@ export default {
           this.Ordersdetail()
           this.querySample()
         }
-        console.log(data)
+        // console.log(data)
       })
-      console.log(index,row)
+      // console.log(index,row)
     },
     updateSet(){ // 修改离心机信息
       this.$axios({
@@ -866,7 +870,7 @@ export default {
         })
       })
       .then(({data})=>{
-        console.log(data)
+        // console.log(data)
         this.$message({
           message: '修改成功！',
           type: 'success'
@@ -899,7 +903,7 @@ export default {
           })
         })
         .then(({data})=>{
-          console.log(data)
+          // console.log(data)
           data.data.forEach((item)=>{
             this.dialogOrderData.push({
               id: item.rfidSample.id,

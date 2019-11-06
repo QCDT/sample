@@ -319,7 +319,7 @@ export default new Router({
     },
     // 转出里边的修改
     {
-      path: '/scan/transport/out/change',
+      path: '/scan/transport/out/change/:id',
       name: 'outchange',
       components: {
         default: () => import(/* webpackChunkName: "scan" */ '@/views/Scan-Transport-Out-Change/index.vue'),
