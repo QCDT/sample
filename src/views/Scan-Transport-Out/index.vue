@@ -18,7 +18,7 @@
         tooltip-effect="dark"
         :style="{width: '100%',margin:'0 auto',}"
         @selection-change="handleSelectionChange"
-        @row-click="orderDetails"
+        @row-click ='orderDetails'
         :show-overflow-tooltip='true'
       >
         <el-table-column type="index" label="序号" width="70"></el-table-column>
@@ -44,11 +44,11 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column label="操作" width="100">
+        <el-table-column label="操作" width="80">
           <template slot-scope="scope">
             <div class="flex">
               <!-- <router-link :to="{name:'outchange'}" > -->
-              <i class="icon icon-edit btn"></i>
+              <i class="icon icon-edit btn" @click="amendOrder(scope.row)"></i>
               <!-- </router-link> -->
               <i class="icon icon-shanchu" @click="delOrder(scope.row,scope.$index)" @click.stop></i>
             </div>
@@ -75,7 +75,7 @@ export default {
     return {
       ifOrderDetails: false,
       orderTmp: true,
-      detailData:[], //点击行的订单信息
+      detailData:'', //点击行的订单信息
       tableData: [
        
       ],
@@ -108,11 +108,19 @@ export default {
     changeTable(val){
       this.tableData = val
     },
-    orderDetails (row) {
-        this.ifOrderDetails = true;
-        this.$message('订单详情orderDetails');
-        this.detailData = row;
-        console.log(this.detailData);
+    orderDetails(row){
+      this.ifOrderDetails = true;
+      // this.$message('订单详情orderDetails');
+      this.detailData = row.id;
+      // console.log(this.detailData);
+    },
+    amendOrder (row) {
+      this.$router.push({
+        name:'outchange',
+        params:{
+           id:row.id
+          }
+      })
     },
     handleSelectionChange (val) {
       this.multipleSelection = val
@@ -159,10 +167,11 @@ export default {
   position: absolute;
   left: 0;
   top: 9%;
-  width: 100%;
+  width: 95%;
   height: 100%;
   z-index: 1;
-  background: #eee;
+  background: rgba(245, 252, 255, 1);
+  padding: 0 30px;
 }
 .count {
   padding: 20px 0 10px;
@@ -170,10 +179,11 @@ export default {
 }
 .flex {
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
   align-items: center;
 }
 .icon {
   font-size: 18px;
+  cursor: pointer;
 }
 </style>
