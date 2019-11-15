@@ -67,7 +67,7 @@
   </div>
 </template>
 <script>
-import { provinceAndCityData ,CodeToText} from 'element-china-area-data'
+import { provinceAndCityData ,CodeToText,regionData} from 'element-china-area-data'
 import fromItem from './tmp-fromItem'
 import tmpButton from '@/components/tmp/zhanglan/tmpButton'
 export default {
@@ -168,6 +168,7 @@ export default {
                   recipientsCity:this.areaA[1],
                   senderProvince: this.areaB[0],
                   senderCity: this.areaB[1],
+                  senderAddress:this.addressB,
                   remarks: this.mark
                 })
               })

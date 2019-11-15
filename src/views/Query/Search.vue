@@ -485,15 +485,15 @@ export default {
       url:'sampleGuide/queryCategoryDict/selectSampleCategory',
     })
     .then(({data})=>{
-         // console.log(data);
-          data.data.forEach((item)=>{
-            this.testTubeCategoryOption.push(
-              {
-                label:item.name,
-                value:item.id
-              }
-            )
-          })
+        console.log(data);
+        data.data.forEach((item)=>{
+          this.testTubeCategoryOption.push(
+            {
+              label:item,
+              value:item
+            }
+          )
+        })
     }),
     //来源
       this.$axios({
@@ -588,11 +588,10 @@ export default {
           })
           .then(({data})=>{
             console.log(data);
-            // console.log(this.testTubeCategory)
             if(data.data == 0){
               this.$message("未搜索到相关数据");
             }else{
-              data.data.forEach((item)=>{
+              data.data.forEach((item,index)=>{
                 if(this.sampleItem == 1){
                   this.searchTableBoxData.push({
                     id: item.id,
@@ -602,7 +601,7 @@ export default {
                     address:item.sampleBoxStru.detailLocation // 位置信息
                   })
                 }else{
-
+                  console.log(item.sampleCategoryDict)
                   this.searchTableData.push({
                     id: item.id,
                     rfId:item.rfidCode,
@@ -641,9 +640,9 @@ export default {
       this.styleBoxOption =[]
       this.$axios({
         method: 'post',
-        url:'sampleGuide/set/selectTier',
+        url:'sampleGuide/scan/getTireSturRowList',
         data:({
-          refrigeratorStruId: this.refrigerator
+          id: this.refrigerator
         })
       })
       .then(({data})=>{
@@ -663,11 +662,9 @@ export default {
       this.styleBoxOption =[]
       this.$axios({
         method: 'post',
-        url:'/sampleGuide/guest/selectDrawerStruByTierStru',
+        url:'/sampleGuide/scan/getDrawerStruNumberList',
         data:({
-          tierStruId:{
             id:this.layer
-	        }
         })
       })
       .then(({data})=>{

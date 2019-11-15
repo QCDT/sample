@@ -157,6 +157,11 @@ export default {
                 message: '已取消删除'
               });
             });
+          }else{
+              this.$message({
+                message: '借出状态样本不可删除！',
+                type: 'warning'
+              });
           }
         }
       }else{

@@ -78,10 +78,10 @@
           <div class="checkLeft">
             <p><span>异常详情</span></p>
             <p v-show="sampleYanBen2.length != 0">
-              <span>该芯片未被录入</span>
+              <span class="errInfo">该芯片未被录入</span>
             </p>
             <p v-show="sampleYanBen.length != 0">
-              <span>该样本不属于此表单里的样本</span>
+              <span class="errInfo">该样本不属于此表单里的样本</span>
             </p>
           </div>
           <div class="checkRight">
@@ -343,6 +343,8 @@ export default {
             confirmButtonText: '确定',
             type: 'success'
           })
+        }else{
+          this.checked = true
         }
         data.data.yes.forEach((item)=>{
           this.checkArr.push(item.rfidCode)
@@ -397,7 +399,8 @@ export default {
   color:#333;
 }
 /deep/.el-table__body tr:hover>td {
-		background-color:#fff !important;
+  background: rgba(139, 251, 139, 0.7)!important;
+  // color:#333!important;
 }
 .red{
   color: red;
@@ -501,6 +504,9 @@ h2{
     height: 100%;
     p{
       border-right: none;
+      .errInfo{
+        color: red;
+      }
       /*height: 20px;*/
     }
   }

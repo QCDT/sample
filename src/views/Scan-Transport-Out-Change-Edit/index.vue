@@ -55,7 +55,7 @@
           <span>批量添加</span>
           <img src="@/assets/img/saomiao.gif">
         </div>
-        <div class="searchSample" v-show="addSample === 1">
+        <div class="searchSample" v-show="addSample === 1 && addWay === 1">
           <p>
             <span>样本名称:</span>
             <el-input class="input" v-model="sampleName" size="mini"></el-input>
@@ -120,7 +120,7 @@
             <el-button class="btn" size="mini" type="primary" icon="el-icon-search">搜索</el-button>
           </p>
         </div>
-        <div class="top" v-show="addSample === 2">
+        <div class="top" v-show="addSample === 2 && addWay === 1">
           <img src="@/assets/img/saomiao.gif">
         </div>
         <div class="form">

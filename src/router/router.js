@@ -328,7 +328,7 @@ export default new Router({
     },
     // 修改转运样本盒
     {
-      path: '/scan/transport/out/change/eidt',
+      path: '/scan/transport/out/eidt',
       name: 'outchangeedit',
       components: {
         default: () => import(/* webpackChunkName: "scan" */ '@/views/Scan-Transport-Out-Change-Edit/index.vue'),

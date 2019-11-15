@@ -38,7 +38,6 @@
               <!-- outchangeedit -->
               <router-link :to="{name:'outchangeedit'}" style="color:#333;">修改</router-link>
               <router-link :to="{name:'check'}" style="color:#333;">盘点</router-link>
-
               <el-button type="text" @click="open(scope.row,scope.$index)">删除</el-button>
             </div>
           </template>

@@ -24,7 +24,7 @@
               :timestamp="activity.timestamp"
               placement="top"
             >
-              <el-card>
+              <el-card class="logWrap">
                 <h4 >{{opeSign[activity.content]}}</h4>
               </el-card>
             </el-timeline-item>
@@ -268,18 +268,14 @@
 <style scoped lang='less'>
   .yangben-wrap {
     display: flex;
-
-    height: 70vh;
     padding: 0 150px;
     padding-top: 3vh;
-    padding-bottom: 3vh;
-
+    padding-bottom: 8vh;
     background-color: #eee;
-
+    position: relative;
     .left {
-      overflow: auto;
       flex: 1;
-      padding: 0 20px;
+      padding: 10px 20px;
 
       border-right: 1px solid #bbb;
       background-color: #fff;
@@ -300,20 +296,20 @@
         padding-top: 5px;
         border-bottom: 2px solid #e4e7ed;
       }
+      /deep/.el-card__body{
+        padding: 10px;
+      }
     }
 
     .center {
       flex: 1;
-
       padding: 0 20px;
-
       border-right: 1px solid #bbb;
     }
 
     .right {
       flex: 1;
-
-      padding: 0 20px;
+      padding: 10px 20px;
     }
   }
 
@@ -325,7 +321,7 @@
     justify-content: space-around;
 
     .item {
-      margin-bottom: 5px;
+      margin-bottom: 15px;
 
       font-size: 16px;
     }
@@ -413,16 +409,13 @@
   .bottom {
     position: absolute;
     bottom: 0;
-
     display: flex;
     overflow: hidden;
     align-items: center;
     justify-content: center;
     left: 0;
     right: 0;
-
     height: 60px;
-
     button {
       width: 6.25rem;
       height: 1.875rem;
@@ -436,9 +429,7 @@
       border-radius: 5px;
       outline: none;
       background-color: #fff;
-
       font-size: 14px;
-
       &:hover {
         color: #fff;
         background-color: #01c8ff;

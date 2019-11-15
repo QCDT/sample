@@ -662,7 +662,7 @@ export default {
 }
 .receiveCenter{
     width: 85%;
-    border-bottom: 1px solid #ddd;
+    // border-bottom: 1px solid #ddd;
     padding-bottom: 5px;
     display: flex;
     justify-content: space-between;

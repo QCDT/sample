@@ -124,6 +124,7 @@ export default {
               contactWay: item.recipientsTel, // 联系方式
               entryClerk: item.inputUserName, // 录入人
               remarks: item.remarks, //备注
+              status:item.status==2?'已转出':item.status
             }) 
             this.$emit('changeTable', this.tableData)
           })

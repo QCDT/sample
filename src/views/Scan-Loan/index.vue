@@ -3,22 +3,21 @@
     <transition name="el-fade-in-linear">
       <Add :showDingdan="showDingdan" :projectOption='projectOption' @clearAdd="clearAdd" @submitForm="submitForm"/>
     </transition>
+    <div class="title"><h1>借出订单列表</h1></div>
     <div class="top">
-      <fromName>借出订单列表</fromName>
-      <div>
-        <span class="projectStyle">所属项目:</span>
-        <el-select v-model="projectValue" clearable placeholder="请选择" size="mini" @change="searchDingdan">
-          <el-option
-            v-for="item in projectOption"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value">
-          </el-option>
-      </el-select>
-      </div>
-      <button @click="showAdd">添加订单</button>
+        <div>
+          <span class="projectStyle">所属项目:</span>
+          <el-select v-model="projectValue" clearable placeholder="请选择" size="mini" @change="searchDingdan">
+            <el-option
+              v-for="item in projectOption"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+        </div>
+        <button @click="showAdd">添加订单</button>
     </div>
-
     <el-table
       :row-style="{height:'32px',textAlign: 'center',padding:'0px',}"
       :cell-class-name="cellStyle"
@@ -66,14 +65,14 @@
 </template>
 <script>
 import goBack from '@/components/tmp/zhanglan/go-1'
-import fromName from '@/components/tmp/zhanglan/fromName'
+// import fromName from '@/components/tmp/zhanglan/fromName'
 import Add from '@/views/Scan-Loan/Add'
 import tmpButton from '@/components/tmp/zhanglan/tmpButton'
 import { deflate } from 'zlib';
 export default {
   props: {},
   inject:['reload'],
-  components: { goBack, fromName, Add, tmpButton },
+  components: { goBack, Add, tmpButton },
   data () {
     return {
       projectValue:'', //项目value
@@ -291,6 +290,12 @@ export default {
   height: 36vw;
   position: relative;
 }
+.title{
+  text-align: center;
+  h1{
+    font-size: 18px;
+  }
+}
 /deep/.el-table .columnStyle{
   padding: 0px;
   text-align: center
@@ -333,7 +338,7 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
-
+  margin-bottom: 10px;
   button {
     cursor: pointer;
     width: 110px;

@@ -1,6 +1,6 @@
 <template>
   <!-- 修改样本 -->
-  <div>
+  <div class="wrap">
     <cardfile  @reception= 'refData'></cardfile>
     <h1 class="top-title" v-if="title">{{title}}</h1>
     <div class="sample-box">
@@ -933,12 +933,15 @@
   }
 </script>
 <style scoped lang='less'>
+  .wrap{
+    background: rgba(0, 201, 255, 0.1)
+  }
   .top-title {
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 7px 0;
-    background-color: #e2e2e2;
+    // background-color: #e2e2e2;
     margin-bottom: 10px;
     font-size: 20px;
     font-weight: 500;
@@ -1009,14 +1012,14 @@
   }
 
   .bot {
-    display: flex;
-    justify-content: space-between;
+    // display: flex;
+    // justify-content: space-between;
     width: 600px;
     margin-top: 20px;
     .matrix-box {
       display: flex;
-      justify-content: space-between;
-
+      justify-content: flex-start;
+      align-items: center;
       /*.matrix{*/
       /*border: 1px solid #333;*/
       /*}*/

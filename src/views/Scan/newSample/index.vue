@@ -243,7 +243,7 @@ export default {
         ]
       },
       mapData: [
-        { text: '已使用', bgc: '#7D7C7F' },
+        { text: '已使用', bgc: '#00c9ff' },
         { text: '借用', bgc: '#FCFD01' },
         { text: '已选中',bgc:'#86D647'},
         { text: '未使用', bgc: '#eee' }

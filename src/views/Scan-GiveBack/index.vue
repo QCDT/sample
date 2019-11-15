@@ -210,13 +210,13 @@ export default {
       url:'sampleGuide/scan/getOrderName',
     })
       .then(({data})=>{
-        console.log(data);
+        // console.log(data);
         this.ruleForm.formName = data.data
       })
   },
   methods: {
     activeRow({row}){
-      console.log(this.activeIndex)
+      // console.log(this.activeIndex)
       if(row.id == this.activeIndex){
         return 'rowColor'
       }
@@ -298,7 +298,7 @@ export default {
         })
     },
     showSampleItem(row){ // 归还记录中样本表单中样本内容
-      console.log(row.id)
+      // console.log(row.id)
       this.sampleDataItem = []
       this.activeIndex = row.id
       this.$axios({
@@ -413,10 +413,12 @@ export default {
 </script>
 <style scoped lang='less'>
 /deep/ .el-table .rowColor{
-  background: #00c9ff;
+    background:#00c9ff;
+    color:#fff;
 }
 /deep/.el-table__body tr:hover>td {
-		background-color:#00c9ff  !important;
+      background: #00c9ff!important;
+      color:#fff!important;
 }
 .guihuan-wrap {
    width: 50%;

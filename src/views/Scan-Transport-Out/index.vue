@@ -46,12 +46,11 @@
         </el-table-column>
         <el-table-column label="操作" width="80">
           <template slot-scope="scope">
-            <div class="flex">
-              <!-- <router-link :to="{name:'outchange'}" > -->
+            <div class="flex" v-show="scope.row.status == 0">
               <i class="icon icon-edit btn" @click="amendOrder(scope.row)"></i>
-              <!-- </router-link> -->
               <i class="icon icon-shanchu" @click="delOrder(scope.row,scope.$index)" @click.stop></i>
             </div>
+            <span v-show="scope.row.status != 0">{{scope.row.status}}</span>
           </template>
         </el-table-column>
       </el-table>
@@ -100,6 +99,7 @@ export default {
           contactWay: item.recipientsTel, // 联系方式
           entryClerk: item.inputUserName, // 录入人
           remarks: item.remarks, //备注
+          status:item.status==2?'已转出':item.status //订单状态
         }) 
       })
     })

@@ -426,6 +426,7 @@ export default {
         }
     },
     showlabRow(){ //切换冰箱加载该冰箱层数
+    alert(this.labValue)
       this.labRow = []
       this.labRowValue = ''
       this.labDrawerValue = ''
@@ -450,6 +451,7 @@ export default {
       })
     },
     showDrawer(){   //层数切换时加载相应的抽屉
+    alert(this.labRowValue)
       this.labDrawerValue = ''
       this.labDrawer = []
       this.sampleBoxOption = []
@@ -474,6 +476,7 @@ export default {
       })
     },
     showSampleBox(){ //抽屉切换时加载相应可选的样本盒位置
+      alert(this.labDrawerValue)
       this.sampleBoxOption = []
       this.sampleBox = ''
       this.$axios({
