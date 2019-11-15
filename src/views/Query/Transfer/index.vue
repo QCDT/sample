@@ -1,90 +1,90 @@
 <template>
   <!-- 转移 -->
   <div class="transfer-wrap">
-    <!-- 左边 -->
-
-    <div class="left-box">
-      <div class="table-box">
-        <!-- row-style  cell-style 表格样式 -->
-        <el-table
-          :row-style="{height:'32px',textAlign: 'center',padding:'0px',}"
-          :cell-style="{padding:'0px',textAlign: 'center'}"
-          :row-class-name="changeTrStyle"
-          border
-          ref="multipleTable"
-          :data="tableData"
-          tooltip-effect="dark"
-          :style="{width: '100%'}"
-          @selection-change="handleSelectionChange"
-        >
-          <el-table-column type="selection" width="55"></el-table-column>
-          <el-table-column type="index" width="70" label="序号" ></el-table-column>
-          <el-table-column label="RFID编号" show-overflow-tooltip>
-            <template slot-scope="scope">{{ scope.row.coding }}</template>
-          </el-table-column>
-          <el-table-column prop="name" label="样本名称" show-overflow-tooltip ></el-table-column>
-          <el-table-column prop="address" label="原位置" show-overflow-tooltip></el-table-column>
-          <el-table-column label="现位置" width="160">
-            <template slot-scope="scope">
-              <span>{{locationList[scope.$index]}}</span>
-            </template>
-          </el-table-column>
-        </el-table>
+    <h1 class="top-title">样本转移</h1>
+      <!-- 左边 -->
+      <div class="left-box">
+        <div class="table-box">
+          <!-- row-style  cell-style 表格样式 -->
+          <el-table
+            :row-style="{height:'32px',textAlign: 'center',padding:'0px',}"
+            :cell-style="{padding:'0px',textAlign: 'center'}"
+            :row-class-name="changeTrStyle"
+            border
+            ref="multipleTable"
+            :data="tableData"
+            tooltip-effect="dark"
+            :style="{width: '100%'}"
+            @selection-change="handleSelectionChange"
+          >
+            <el-table-column type="selection" width="55"></el-table-column>
+            <el-table-column type="index" width="70" label="序号" ></el-table-column>
+            <el-table-column label="RFID编号" show-overflow-tooltip>
+              <template slot-scope="scope">{{ scope.row.coding }}</template>
+            </el-table-column>
+            <el-table-column prop="name" label="样本名称" show-overflow-tooltip ></el-table-column>
+            <el-table-column prop="address" label="原位置" show-overflow-tooltip></el-table-column>
+            <el-table-column label="现位置" width="160">
+              <template slot-scope="scope">
+                <span>{{locationList[scope.$index]}}</span>
+              </template>
+            </el-table-column>
+          </el-table>
+        </div>
       </div>
-    </div>
-    <!-- 右边 -->
-    <div class="right-box">
-      <h1>选择修改位置</h1>
-      <div class="input-item">
-        <span>*冰箱名称</span>
-        <el-select size="mini" @change="showlabRow" @focus="hideTable=true" v-model="labValue" placeholder="请选择">
-          <el-option
-            v-for="item in labOption"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          ></el-option>
-        </el-select>
-        <span>*层数</span>
-        <el-select size="mini" v-model="labRow" @focus="hideTable=true" @change="showDrawer" placeholder="请选择">
-          <el-option
-            v-for="item in labRowOption"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          ></el-option>
-        </el-select>
-      </div>
-      <div class="input-item">
-        <span>*抽屉</span>
-        <el-select size="mini" v-model="labDrawer" @focus="hideTable=true" @change="showSampleBox" placeholder="请选择">
-          <el-option
-            v-for="item in labDrawerOption"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          ></el-option>
-        </el-select>
-        <span>*样本盒</span>
-        <el-select size="mini"  v-model="sampleBoxValue" @change="showSample"  placeholder="请选择">
-          <el-option
-            v-for="item in sampleBoxOption"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          ></el-option>
-        </el-select>
-      </div>
-      <div class="row" v-show="!hideTable"  v-loading="loading">
+      <!-- 右边 -->
+      <div class="right-box">
+        <h1>选择修改位置</h1>
+        <div class="input-item">
+          <span>*冰箱名称</span>
+          <el-select size="mini" @change="showlabRow" @focus="hideTable=true" v-model="labValue" placeholder="请选择">
+            <el-option
+              v-for="item in labOption"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            ></el-option>
+          </el-select>
+          <span>*层数</span>
+          <el-select size="mini" v-model="labRow" @focus="hideTable=true" @change="showDrawer" placeholder="请选择">
+            <el-option
+              v-for="item in labRowOption"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            ></el-option>
+          </el-select>
+        </div>
+        <div class="input-item">
+          <span>*抽屉</span>
+          <el-select size="mini" v-model="labDrawer" @focus="hideTable=true" @change="showSampleBox" placeholder="请选择">
+            <el-option
+              v-for="item in labDrawerOption"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            ></el-option>
+          </el-select>
+          <span>*样本盒</span>
+          <el-select size="mini"  v-model="sampleBoxValue" @change="showSample"  placeholder="请选择">
+            <el-option
+              v-for="item in sampleBoxOption"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            ></el-option>
+          </el-select>
+        </div>
+        <div class="row" v-show="!hideTable"  v-loading="loading">
           <table class="table">
             <tr v-for="row in rowValue" :key="row">
-                <td
-                  v-for="col in colValue"
-                  :key="col"
-                  :class="showSampleStatus(row, col)"
-                  @click="chooseLocation(row,col)"
-                >{{showTable(row,col)}}
-                </td>
+              <td
+                v-for="col in colValue"
+                :key="col"
+                :class="showSampleStatus(row, col)"
+                @click="chooseLocation(row,col)"
+              >{{showTable(row,col)}}
+              </td>
             </tr>
           </table>
           <div class="map">
@@ -95,8 +95,8 @@
               v-text="item.text"
             />
           </div>
+        </div>
       </div>
-    </div>
     <div class="btn">
       <button @click="$router.go(-1)">返回</button>
       <button @click="transferSample">确认</button>
@@ -378,7 +378,7 @@ export default {
             return JSON.stringify(item) == JSON.stringify([row,col])
          })
          let n = -1
-         for(let i=0; i<this.multipleSelection.length; i++){         
+         for(let i=0; i<this.multipleSelection.length; i++){
            let num = index+i
            if( num > this.optionalLocation.length-1){
              n++
@@ -475,10 +475,23 @@ export default {
 		background-color:transparent !important;
 }
 .transfer-wrap {
-  display: flex;
-  justify-content: space-evenly;
+  /*display: flex;*/
+  /*justify-content: space-evenly;*/
 
-  padding-top: 40px;
+  /*padding-top: 40px;*/
+
+
+}
+.top-title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 7px 0;
+  background-color: #e2e2e2;
+  margin-bottom: 10px;
+  font-size: 20px;
+  font-weight: 500;
+
 }
 .normalColor{
   background: #00c9ff
@@ -528,13 +541,16 @@ export default {
 }
 .left-box {
   width: 60%;
-  padding: 0 20px;
+  padding: 0 10px;
+  float: left;
 
   // background-color: #888;
 }
 
 .right-box {
-  width: 50%;
+  width: 37%;
+  float: right;
+  margin-right: 15px;
   // background-color: #999;
   h1{
     margin-bottom: 15px;
