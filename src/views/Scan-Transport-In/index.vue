@@ -1,31 +1,31 @@
 <template>
   <!-- 转入主页 -->
   <div class="transport-in-index">
-    <fromName>转出订单查询</fromName>
+    <fromName>转入订单查询</fromName>
     <addAndSearch type="in"></addAndSearch>
     <div class="count">
       <span>共有:</span>
       <span>{{tableData.length}}</span>
       <span style="margin:0 0.3em">条数据</span>
     </div>
-    <el-table :row-style="{height:'32px',textAlign: 'center',padding:'0px',}" :cell-style="{padding:'0px',textAlign: 'center'}" border  ref="multipleTable" :data="tableData" tooltip-effect="dark" :style="{width: '100%',margin:'0 auto',}" > 
+    <el-table :row-style="{height:'32px',textAlign: 'center',padding:'0px',}" :cell-style="{padding:'0px',textAlign: 'center'}" border  ref="multipleTable" :data="tableData" tooltip-effect="dark" :style="{width: '100%',margin:'0 auto',}" >
       <el-table-column type="index" label="序号" width="70"></el-table-column>
-      <el-table-column prop="orderId" label="订单号" width="120"></el-table-column> 
+      <el-table-column prop="orderId" label="订单号" width="200"></el-table-column>
       <el-table-column label="订单名称" width="200" show-overflow-tooltip>
         <template slot-scope="scope">
            <span class="OrderName" @click="showOrderInfo(scope.row,scope.$index)">{{tableData[scope.$index].orderName}}</span>
         </template>
-      </el-table-column> 
-      <el-table-column prop="address" label="收件人" show-overflow-tooltip></el-table-column> 
-      <el-table-column prop="consigneeAddress" label="收件地址" show-overflow-tooltip></el-table-column> 
-      <el-table-column prop="contactWay" label="联系方式" show-overflow-tooltip></el-table-column> 
-      <el-table-column prop="entryClerk" label="录入人" show-overflow-tooltip></el-table-column> 
-      <el-table-column prop="status" label="冰箱状态" show-overflow-tooltip></el-table-column> 
-      <el-table-column fixed="right" label="操作" width="100"> 
-        <template slot-scope="scope"> 
-          <el-button @click="handleClick(scope.row,scope.$index)" type="text" size="small">123</el-button> 
-        </template> 
-      </el-table-column> 
+      </el-table-column>
+      <el-table-column prop="address" label="发货人" show-overflow-tooltip></el-table-column>
+      <el-table-column prop="consigneeAddress" label="发货地址" show-overflow-tooltip></el-table-column>
+      <el-table-column prop="contactWay" label="联系方式" show-overflow-tooltip></el-table-column>
+      <el-table-column prop="entryClerk" label="录入人" show-overflow-tooltip></el-table-column>
+      <el-table-column prop="status" label="存入冰箱状态" show-overflow-tooltip></el-table-column>
+      <el-table-column fixed="right" label="操作" width="100">
+        <template slot-scope="scope">
+          <el-button @click="handleClick(scope.row,scope.$index)" type="text" size="small">123</el-button>
+        </template>
+      </el-table-column>
     </el-table>
   </div>
 </template>
