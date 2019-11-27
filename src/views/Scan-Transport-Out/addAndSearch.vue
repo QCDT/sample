@@ -4,12 +4,12 @@
     <div v-if="type==='in'">
       <upLoad></upLoad>
     </div>
-    <tmpButton style="margin-bottom:20px" @click="addOrder" v-if="type==='out'">
-      <div class="btn-box">
+    <!-- <tmpButton style="margin-bottom:20px" > -->
+      <div class="btn-box" @click="addOrder" v-if="type==='out'">
         <i class="icon icon-add"></i>
         <span>添加订单</span>
       </div>
-    </tmpButton>
+    <!-- </tmpButton> -->
     <div class="form-box" v-if="type === 'in'">
       <div class="item">
         <span>转入订单号码:</span>
@@ -143,12 +143,20 @@ export default {
 .btn-box {
   padding: 1px 25px;
   display: flex;
-
   align-items: center;
-
+  border: 1px solid #00c9ff;
+  color: #fff;
+  background: #00c9ff;
+  width: 90px;
+  line-height: 25px;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  cursor: pointer;
   i {
     font-size: 19px;
     padding: 0 2px;
+    vertical-align: top;
+    margin-top: 3px;
   }
   font-size: 15px;
 }

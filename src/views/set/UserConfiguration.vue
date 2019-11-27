@@ -733,7 +733,6 @@ export default {
              this.$message.error('新增用户失败，请重试');
           })
         }else{
-          // console.log(this.userId);
           this.$axios({ //............修改用户
             method: 'post',
             url: 'sampleGuide/userOther/updateUserById',
@@ -870,6 +869,7 @@ export default {
                     if(item.id == option){
                         console.log(item)
                        item.checked = true
+                      this.labListid.push(option)
                     }
                 })
              })

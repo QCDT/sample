@@ -59,7 +59,7 @@ export default {
     height: 15.625rem;
     margin: 0 100px;
 
-    border: 1px #ccc solid;
+    // border: 1px #ccc solid;
     border-radius: 10px;
   }
 
