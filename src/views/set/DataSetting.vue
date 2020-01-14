@@ -202,7 +202,7 @@ export default {
       // console.log(this.delbackupsList)
     },
     delbackups() {
-      console.log(this.delbackupsList)
+      alert(111)
       if(this.delbackupsList.length == 0){
         this.$message({
           message: '请先选择需要删除的信息！',
