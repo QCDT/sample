@@ -203,6 +203,7 @@ export default {
     },
     delbackups() {
       alert(111)
+      alert(222)
       if(this.delbackupsList.length == 0){
         this.$message({
           message: '请先选择需要删除的信息！',
