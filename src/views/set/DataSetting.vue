@@ -202,7 +202,6 @@ export default {
       // console.log(this.delbackupsList)
     },
     delbackups() {
-      alert(111)
       alert(222)
       if(this.delbackupsList.length == 0){
         this.$message({
