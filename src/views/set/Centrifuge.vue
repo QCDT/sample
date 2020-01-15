@@ -410,7 +410,6 @@ export default {
       console.log(this.eqNumber)
       console.log(111)
       console.log(11223)
-      console.log('aaa')
       this.$axios({
         method: 'post',
         url:'sampleGuide/centrifuge/updateCentrifuge',
