@@ -408,7 +408,9 @@ export default {
     // 修改离心机信息
     putProject () {
       console.log(this.eqNumber)
+      console.log(111)
       console.log(11223)
+      console.log('aaa')
       this.$axios({
         method: 'post',
         url:'sampleGuide/centrifuge/updateCentrifuge',
